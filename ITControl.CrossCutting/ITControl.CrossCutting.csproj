@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.17" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.17" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\ITControl.Application\ITControl.Application.csproj" />
+      <ProjectReference Include="..\ITControl.Domain\ITControl.Domain.csproj" />
+      <ProjectReference Include="..\ITControl.Infrastructure\ITControl.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>
