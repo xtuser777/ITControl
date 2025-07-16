@@ -10,10 +10,12 @@ namespace ITControl.Application.Services;
 public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
 {
     private IPositionsRepository? _positionsRepository;
+    private IPagesRepository? _pagesRepository;
     
     public ApplicationDbContext Context => context;
     public IDbContextTransaction BeginTransaction => context.Database.BeginTransaction();
     public IPositionsRepository PositionsRepository => _positionsRepository ?? new PositionsRepository(context);
+    public IPagesRepository PagesRepository => _pagesRepository ?? new PagesRepository(context);
     
     public async Task Commit(IDbContextTransaction transaction)
     {

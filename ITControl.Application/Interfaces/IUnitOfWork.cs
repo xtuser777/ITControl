@@ -9,6 +9,7 @@ public interface IUnitOfWork
     ApplicationDbContext Context { get; }
     IDbContextTransaction BeginTransaction { get; }
     IPositionsRepository PositionsRepository { get; }
+    IPagesRepository PagesRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }

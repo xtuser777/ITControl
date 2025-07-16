@@ -6,6 +6,7 @@ namespace ITControl.Infrastructure.Contexts;
 public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): DbContext(options)
 {
     public DbSet<Position> Positions { get; set; }
+    public DbSet<Page> Pages { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
