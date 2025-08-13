@@ -10,6 +10,8 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
     {
         builder.HasKey(t => t.Id);
         builder.Property(p => p.Description).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.CreatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt).IsRequired();
         builder.HasIndex(p => p.Description).IsUnique();
     }
 }

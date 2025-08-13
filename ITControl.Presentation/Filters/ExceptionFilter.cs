@@ -33,6 +33,14 @@ public class ExceptionFilter : IExceptionFilter
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 context.Result = new NotFoundObjectResult(new ErrorJsonResponse(context.Exception.Message));
                 break;
+            case ConflictException:
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
+                context.Result = new ConflictObjectResult(new ErrorJsonResponse(context.Exception.Message));
+                break;
+            case ExistenceException:
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                context.Result = new NotFoundObjectResult(new ErrorJsonResponse(context.Exception.Message));
+                break;
         }
     }
 

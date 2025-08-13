@@ -10,6 +10,13 @@ public interface IUnitOfWork
     IDbContextTransaction BeginTransaction { get; }
     IPositionsRepository PositionsRepository { get; }
     IPagesRepository PagesRepository { get; }
+    IRolesRepository RolesRepository { get; }
+    IRolesPagesRepository RolesPagesRepository { get; }
+    IUsersRepository UsersRepository { get; }   
+    IDepartmentsRepository DepartmentsRepository { get; }
+    IDivisionsRepository DivisionsRepository { get; }
+    IUnitsRepository UnitsRepository { get; }
+    ILocationsRepository LocationsRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }

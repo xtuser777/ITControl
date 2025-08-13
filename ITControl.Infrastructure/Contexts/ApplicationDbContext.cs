@@ -7,6 +7,13 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
 {
     public DbSet<Position> Positions { get; set; }
     public DbSet<Page> Pages { get; set; }
+    public DbSet<Role> Roles { get; set; }
+    public DbSet<RolePage> RolesPages { get; set; }
+    public DbSet<User> Users { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Division> Divisions { get; set; }
+    public DbSet<Unit> Units { get; set; }
+    public DbSet<Location> Locations { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

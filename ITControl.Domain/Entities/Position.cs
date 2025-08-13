@@ -27,6 +27,7 @@ public sealed class Position : Entity
     }
     
     public string Description { get; private set; }
+    public ICollection<User> Users { get; set; }
 
     public void Update(string? description)
     {

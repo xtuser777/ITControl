@@ -77,7 +77,6 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PagesRepository.DeleteAsync(page);
         await unitOfWork.Commit(transaction);
-
     }
 
     private async Task CheckConflicts(Guid? id = null, string? name = null)

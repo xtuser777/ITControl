@@ -1,0 +1,15 @@
+using ITControl.Domain.Entities;
+
+namespace ITControl.Domain.Interfaces;
+
+public interface IRolesRepository
+{
+    Task<Role?> FindOneAsync(Guid id, bool? includeRolesPages = null);
+    Task<IEnumerable<Role>> FindManyAsync(string? name = null, bool? active = null, string? orderByName = null, string? orderByActive = null, int? page = null, int? size = null);
+    Task CreateAsync(Role role);
+    Task UpdateAsync(Role role);
+    Task DeleteAsync(Role role);
+    Task<int> CountAsync(Guid? id = null, string? name = null, bool? active = null);
+    Task<bool> ExistAsync(Guid? id = null, string? name = null, bool? active = null);
+    Task<bool> ExclusiveAsync(Guid id, string? name = null);
+}

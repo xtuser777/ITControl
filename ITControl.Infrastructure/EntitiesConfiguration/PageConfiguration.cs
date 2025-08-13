@@ -10,6 +10,8 @@ public class PageConfiguration : IEntityTypeConfiguration<Page>
     {
         builder.HasKey(t => t.Id);
         builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
+        builder.Property(x => x.CreatedAt).IsRequired();
+        builder.Property(x => x.UpdatedAt).IsRequired();
         builder.HasIndex(p => p.Name).IsUnique();
     }
 }
