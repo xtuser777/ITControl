@@ -16,6 +16,6 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.HasIndex(p => p.Alias).IsUnique();
         builder.HasIndex(p => p.Name).IsUnique();
         
-        builder.HasOne(x=> x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+        builder.HasOne(x=> x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
     }
 }
