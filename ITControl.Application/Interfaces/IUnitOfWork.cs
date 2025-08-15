@@ -17,6 +17,8 @@ public interface IUnitOfWork
     IDivisionsRepository DivisionsRepository { get; }
     IUnitsRepository UnitsRepository { get; }
     ILocationsRepository LocationsRepository { get; }
+    IContractsRepository ContractsRepository { get; }
+    IContractsContactsRepository ContractsContactsRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }

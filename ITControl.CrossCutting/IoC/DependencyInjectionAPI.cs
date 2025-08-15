@@ -16,10 +16,9 @@ public static class DependencyInjectionApi
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(
-            options => options.UseSqlServer(
-            "Server=localhost,1433;Database=ITControl;User ID=sa;Password=1q2w3e4r@#$;Trusted_Connection=False; TrustServerCertificate=True;"
-            )
+            options => options.UseSqlServer(connectionString)
         );
 
         services.AddScoped<IPositionsRepository, PositionsRepository>();
@@ -44,9 +43,10 @@ public static class DependencyInjectionApi
         services.AddScoped<IUnitsRepository, UnitsRepository>();
         services.AddScoped<IUnitsService, UnitsService>();
         services.AddScoped<IUnitsView, UnitsView>();
-        services.AddScoped<ILocationsRepository, LocationsRepository>();
-        services.AddScoped<ILocationsService, LocationsService>();
-        services.AddScoped<ILocationsView, LocationsView>();
+        services.AddScoped<IContractsRepository, ContractsRepository>();
+        services.AddScoped<IContractsContactsRepository, ContractsContactsRepository>();
+        services.AddScoped<IContractsService, ContractsService>();
+        services.AddScoped<IContractsView, ContractsView>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

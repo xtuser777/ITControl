@@ -14,6 +14,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Division> Divisions { get; set; }
     public DbSet<Unit> Units { get; set; }
     public DbSet<Location> Locations { get; set; }
+    public DbSet<Contract> Contracts { get; set; }
+    public DbSet<ContractContact> ContractContacts { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
