@@ -47,6 +47,9 @@ public static class DependencyInjectionApi
         services.AddScoped<IContractsContactsRepository, ContractsContactsRepository>();
         services.AddScoped<IContractsService, ContractsService>();
         services.AddScoped<IContractsView, ContractsView>();
+        services.AddScoped<ISystemsRepository, SystemsRepository>();
+        services.AddScoped<ISystemsService, SystemsService>();
+        services.AddScoped<ISystemsView, SystemsView>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         return services;

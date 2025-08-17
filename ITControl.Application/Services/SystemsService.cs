@@ -1,0 +1,115 @@
+using ITControl.Application.Interfaces;
+using ITControl.Application.Tools;
+using ITControl.Communication.Shared.Responses;
+using ITControl.Communication.Systems.Requests;
+using ITControl.Domain.Exceptions;
+
+namespace ITControl.Application.Services;
+
+public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
+{
+    public async Task<Domain.Entities.System?> FindOneAsync(Guid id, bool? includeContractsContacts = null)
+    {
+        return await unitOfWork.SystemsRepository.FindOneAsync(id, includeContractsContacts);
+    }
+
+    public async Task<Domain.Entities.System> FindOneOrThrowAsync(Guid id, bool? includeContractsContacts = null)
+    {
+        var system = await FindOneAsync(id);
+        if (system == null)
+            throw new NotFoundException("System not found");
+        
+        return system;
+    }
+
+    public async Task<IEnumerable<Domain.Entities.System>> FindManyAsync(FindManySystemsRequest request)
+    {
+        int? page = request.Page != null ? int.Parse(request.Page) : null;
+        int? size = request.Size != null ? int.Parse(request.Size) : null;
+        return await unitOfWork.SystemsRepository.FindManyAsync(
+            name: request.Name,
+            version: request.Version,
+            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
+            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
+            own: request.Own == "true",
+            orderByName: request.OrderByName,
+            orderByVersion: request.OrderByVersion,
+            orderByImplementedAt: request.OrderByImplementedAt,
+            orderByEndedAt: request.OrderByEndedAt,
+            orderByOwn: request.OrderByOwn,
+            page: page,
+            size: size);
+    }
+
+    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManySystemsRequest request)
+    {
+        if (request.Page == null || request.Size == null) return null;
+        
+        var count = await unitOfWork.SystemsRepository.CountAsync(
+            name: request.Name,
+            version: request.Version,
+            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
+            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
+            own: request.Own == "true");
+        
+        var pagination = Pagination.Build(request.Page, request.Size, count);
+        
+        return pagination;
+    }
+
+    public async Task<Domain.Entities.System?> CreateAsync(CreateSystemsRequest request)
+    {
+        await CheckExistence(request.ContractId != null ? Guid.Parse(request.ContractId) : null);
+        var system = new Domain.Entities.System(
+            request.Name,
+            request.Version,
+            DateOnly.Parse(request.ImplementedAt),
+            request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
+            request.Own,
+            request.ContractId != null ? Guid.Parse((ReadOnlySpan<char>)request.ContractId) : null);
+        await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.SystemsRepository.CreateAsync(system);
+        await unitOfWork.Commit(transaction);
+        
+        return system;
+    }
+
+    public async Task UpdateAsync(Guid id, UpdateSystemsRequest request)
+    {
+        await CheckExistence(request.ContractId != null ? Guid.Parse(request.ContractId) : null);
+        var system = await FindOneOrThrowAsync(id);
+        system.Update(
+            name: request.Name,
+            version: request.Version,
+            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
+            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
+            own: request.Own);
+        await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.SystemsRepository.UpdateAsync(system);
+        await unitOfWork.Commit(transaction);
+    }
+
+    public async Task DeleteAsync(Guid id)
+    {
+        var system = await FindOneOrThrowAsync(id);
+        await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.SystemsRepository.DeleteAsync(system);
+        await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckExistence(Guid? contractId)
+    {
+        var messages = new List<string>();
+
+        if (contractId != null) await CheckContractExistence((Guid)contractId, messages);
+        
+        if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
+    }
+
+    private async Task CheckContractExistence(Guid contractId, List<string> messages)
+    {
+        var exists = await unitOfWork.ContractsRepository.ExistsAsync(contractId);
+        if (!exists)
+            messages.Add("Contract not found");
+    }
+}
