@@ -21,6 +21,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     private IContractsRepository? _contractsRepository;
     private IContractsContactsRepository? _contractsContactsRepository;
     private ISystemsRepository? _systemsRepository;
+    private IEquipmentsRepository? _equipmentsRepository;
     
     public ApplicationDbContext Context => context;
     public IDbContextTransaction BeginTransaction => context.Database.BeginTransaction();
@@ -36,6 +37,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     public IContractsRepository ContractsRepository => _contractsRepository ?? new ContractsRepository(context);
     public IContractsContactsRepository ContractsContactsRepository => _contractsContactsRepository ?? new ContractsContactsRepository(context);
     public ISystemsRepository SystemsRepository => _systemsRepository ?? new SystemsRepository(context);
+    public IEquipmentsRepository EquipmentsRepository => _equipmentsRepository ?? new EquipmentsRepository(context);
     
     public async Task Commit(IDbContextTransaction transaction)
     {

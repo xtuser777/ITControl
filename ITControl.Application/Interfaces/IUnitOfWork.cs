@@ -20,6 +20,7 @@ public interface IUnitOfWork
     IContractsRepository ContractsRepository { get; }
     IContractsContactsRepository ContractsContactsRepository { get; }
     ISystemsRepository SystemsRepository { get; }
+    IEquipmentsRepository EquipmentsRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }

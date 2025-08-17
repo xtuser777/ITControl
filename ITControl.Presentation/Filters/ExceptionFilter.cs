@@ -26,6 +26,7 @@ public class ExceptionFilter : IExceptionFilter
         switch (context.Exception)
         {
             case DomainException:
+            case BadRequestException:
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
                 context.Result = new BadRequestObjectResult(new ErrorJsonResponse(context.Exception.Message));
                 break;

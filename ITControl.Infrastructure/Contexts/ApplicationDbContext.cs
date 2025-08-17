@@ -17,6 +17,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<ContractContact> ContractContacts { get; set; }
     public DbSet<Domain.Entities.System> Systems { get; set; }
+    public DbSet<Equipment> Equipments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
