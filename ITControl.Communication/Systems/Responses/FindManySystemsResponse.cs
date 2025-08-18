@@ -8,5 +8,5 @@ public class FindManySystemsResponse
     public string ImplementedAt { get; set; } = string.Empty;
     public string? EndedAt { get; set; }
     public bool Own { get; set; }
-    public string ContractId { get; set; } = string.Empty;
+    public string? ContractId { get; set; } = string.Empty;
 }

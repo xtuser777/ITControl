@@ -31,12 +31,12 @@ public class SystemsView : ISystemsView
             Contract = system.Contract != null ? new FindOneSystemsContractResponse()
             {
                 Id = system.Contract.Id.ToString(),
-                ObjectName = system.Contract.Object,
+                ObjectName = system.Contract.ObjectName,
             } : null,
         };
     }
 
-    public IEnumerable<FindManySystemsResponse>? FindMany(IEnumerable<Domain.Entities.System>? systems)
+    public IEnumerable<FindManySystemsResponse> FindMany(IEnumerable<Domain.Entities.System>? systems)
     {
         if (systems == null) return [];
 
@@ -48,7 +48,7 @@ public class SystemsView : ISystemsView
             ImplementedAt = system.ImplementedAt.ToString(),
             EndedAt = system.EndedAt.ToString(),
             Own = system.Own,
-            ContractId = system.ContractId != null ? system.ContractId.ToString() : null,
+            ContractId = system.ContractId?.ToString(),
         };
     }
 }

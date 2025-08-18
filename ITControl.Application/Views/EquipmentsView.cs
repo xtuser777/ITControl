@@ -40,7 +40,7 @@ public class EquipmentsView : IEquipmentsView
             Contract = equipment.Contract != null ? new FindOneEquipmentsContractResponse()
             {
                 Id = equipment.Contract.Id.ToString(),
-                ObjectName = equipment.Contract.Object
+                ObjectName = equipment.Contract.ObjectName
             } : null,
         };
     }
