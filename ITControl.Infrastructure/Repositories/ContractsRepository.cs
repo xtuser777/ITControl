@@ -17,10 +17,10 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
-        string? objectValue = null, 
+        string? objectName = null, 
         DateOnly? startedAt = null, 
         DateOnly? endedAt = null, 
-        string? orderByObject = null,
+        string? orderByObjectName = null,
         string? orderByStartedAt = null,
         string? orderByEndedAt = null,
         int? page = null,
@@ -29,10 +29,10 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         var query = context.Contracts.AsNoTracking();
         query = BuildQuery(
             query: query,
-            objectValue: objectValue,
+            objectName: objectName,
             startedAt: startedAt,
             endedAt: endedAt);
-        query = BuildOrderBy(query, orderByObject, orderByStartedAt, orderByEndedAt);
+        query = BuildOrderBy(query, orderByObjectName, orderByStartedAt, orderByEndedAt);
         
         return await query.ToListAsync();
     }
@@ -57,7 +57,7 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
 
     public async Task<int> CountAsync(
         Guid? id = null, 
-        string? objectValue = null, 
+        string? objectName = null, 
         DateOnly? startedAt = null, 
         DateOnly? endedAt = null)
     {
@@ -65,7 +65,7 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         query = BuildQuery(
             query: query,
             id: id,
-            objectValue: objectValue,
+            objectName: objectName,
             startedAt: startedAt,
             endedAt: endedAt);
         
@@ -74,18 +74,18 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
 
     public async Task<bool> ExistsAsync(
         Guid? id = null, 
-        string? objectValue = null, 
+        string? objectName = null, 
         DateOnly? startedAt = null, 
         DateOnly? endedAt = null)
     {
-        var count = await CountAsync(id, objectValue, startedAt, endedAt);
+        var count = await CountAsync(id, objectName, startedAt, endedAt);
         
         return count > 0;
     }
 
     public async Task<bool> ExclusiveAsync(
         Guid id, 
-        string? objectValue = null, 
+        string? objectName = null, 
         DateOnly? startedAt = null, 
         DateOnly? endedAt = null)
     {
@@ -93,7 +93,7 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         query = query.Where(x => x.Id != id);
         query = BuildQuery(
             query: query,
-            objectValue: objectValue,
+            objectName: objectName,
             startedAt: startedAt,
             endedAt: endedAt);
         var count = await query.CountAsync();
@@ -104,12 +104,12 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
     private IQueryable<Contract> BuildQuery(
         IQueryable<Contract> query,
         Guid? id = null,
-        string? objectValue = null,
+        string? objectName = null,
         DateOnly? startedAt = null,
         DateOnly? endedAt = null)
     {
         if (id != null) query = query.Where(x => x.Id == id);
-        if (objectValue != null) query = query.Where(x => x.Object.Contains(objectValue));
+        if (objectName != null) query = query.Where(x => x.ObjectName.Contains(objectName));
         if (startedAt != null) query = query.Where(x => x.StartedAt.Equals(startedAt));
         if (endedAt != null) query = query.Where(x => x.EndedAt.Equals(endedAt));
         
@@ -118,14 +118,14 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
 
     private IQueryable<Contract> BuildOrderBy(
         IQueryable<Contract> query, 
-        string? orderByObject = null,
+        string? orderByObjectName = null,
         string? orderByStartedAt = null,
         string? orderByEndedAt = null)
     {
-        query = orderByObject switch
+        query = orderByObjectName switch
         {
-            "a" => query.OrderBy(p => p.Object),
-            "d" => query.OrderByDescending(p => p.Object),
+            "a" => query.OrderBy(p => p.ObjectName),
+            "d" => query.OrderByDescending(p => p.ObjectName),
             _ => query
         };
         query = orderByStartedAt switch

@@ -28,10 +28,10 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
         int? page = request.Page != null ? int.Parse(request.Page) : null;
         int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.ContractsRepository.FindManyAsync(
-            objectValue: request.Object,
+            objectName: request.ObjectName,
             startedAt: request.StartedAt != null ? DateOnly.Parse(request.StartedAt) : null,
             endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
-            orderByObject: request.OrderByObject,
+            orderByObjectName: request.OrderByObjectName,
             orderByStartedAt: request.OrderByStartedAt,
             orderByEndedAt: request.OrderByEndedAt,
             page: page,
@@ -43,7 +43,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
         if (request.Page == null || request.Size == null) return null;
         
         var count = await unitOfWork.ContractsRepository.CountAsync(
-            objectValue: request.Object,
+            objectName: request.ObjectName,
             startedAt: request.StartedAt != null ? DateOnly.Parse(request.StartedAt) : null,
             endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null);
         
@@ -55,7 +55,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
     public async Task<Contract?> CreateAsync(CreateContractsRequest request)
     {
         var contract = new Contract(
-            request.Object,
+            request.ObjectName,
             DateOnly.Parse(request.StartedAt),
             request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null);
         await using var transaction = unitOfWork.BeginTransaction;
@@ -69,7 +69,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
     {
         var contract = await FindOneOrThrowAsync(id);
         contract.Update(
-            request.Object, 
+            request.ObjectName, 
             request.StartedAt != null ? DateOnly.Parse(request.StartedAt) : null, 
             request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null);
         await using var transaction = unitOfWork.BeginTransaction;

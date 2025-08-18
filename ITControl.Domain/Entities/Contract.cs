@@ -4,32 +4,32 @@ namespace ITControl.Domain.Entities;
 
 public sealed class Contract : Entity
 {
-    private string _object = string.Empty;
+    private string _objectName = string.Empty;
     private DateOnly _startedAt;
     private DateOnly? _endedAt;
 
-    public Contract(string objectValue, DateOnly startedAt, DateOnly? endedAt)
+    public Contract(string objectName, DateOnly startedAt, DateOnly? endedAt)
     {
         Id = Guid.NewGuid();
-        Object = objectValue;
+        ObjectName = objectName;
         StartedAt = _startedAt;
         EndedAt = _endedAt;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public string Object
+    public string ObjectName
     {
-        get => _object;
+        get => _objectName;
         set
         {
             DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_object),
+                string.IsNullOrEmpty(_objectName),
                 "Object don't be null or empty");
             DomainExceptionValidation.When(
-                _object.Length > 100,
+                _objectName.Length > 100,
                 "Object length must be less than 100");
-            _object = value;
+            _objectName = value;
         }
     }
 
@@ -59,9 +59,9 @@ public sealed class Contract : Entity
 
     public IEnumerable<ContractContact>? ContractContacts { get; set; }
 
-    public void Update(string? objectValue = null, DateOnly? startedAt = null, DateOnly? endedAt = null)
+    public void Update(string? objectName = null, DateOnly? startedAt = null, DateOnly? endedAt = null)
     {
-        Object = objectValue ?? Object;
+        ObjectName = objectName ?? ObjectName;
         StartedAt = startedAt ?? StartedAt;
         EndedAt = endedAt ?? EndedAt;
         UpdatedAt = DateTime.Now;

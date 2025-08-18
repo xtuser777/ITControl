@@ -23,7 +23,7 @@ public class ContractsView : IContractsView
         return new FindOneContractsResponse()
         {
             Id = contract.Id.ToString(),
-            Object = contract.Object,
+            ObjectName = contract.ObjectName,
             StartedAt = contract.StartedAt.ToString(),
             EndedAt = contract.EndedAt.ToString(),
             ContractsContacts = contract.ContractContacts != null ? 
@@ -46,7 +46,7 @@ public class ContractsView : IContractsView
         return from contract in contracts select new FindManyContractsResponse()
         {
             Id = contract.Id.ToString(),
-            Object = contract.Object,
+            ObjectName = contract.ObjectName,
             StartedAt = contract.StartedAt.ToString(),
             EndedAt = contract.EndedAt.ToString(),
         };
