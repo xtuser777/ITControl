@@ -27,7 +27,7 @@ namespace ITControl.Presentation.Controllers
         [HttpGet("{id:guid}")]
         public async Task<FindOneRolesResponse?> Show(Guid id)
         {
-            var role = await rolesService.FindOneAsync(id);
+            var role = await rolesService.FindOneAsync(id, true);
             var data = rolesView.FindOne(role);
             
             return data;

@@ -2,23 +2,24 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class UsersRepository(ApplicationDbContext context) : IUsersRepository
 {
-    public async Task<User?> FindOneAsync(Guid id, bool? includePosition, bool? includeRole)
+    public async Task<User?> FindOneAsync(Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole)
     {
         var query = context.Users.AsQueryable();
         if (includePosition is true)
         {
-            query = query.Include(x => x.Position);
+            query = query.Include(x => x.Position );
         }
         if (includeRole is true)
         {
             query = query.Include(x => x.Role);
         }
-        var user = await query.FirstOrDefaultAsync(x => x.Id == id);
+        var user = await query.SingleOrDefaultAsync(predicate);
         
         return user;
     }

@@ -94,7 +94,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     {
         var exists = id != null 
             ? await unitOfWork.PositionsRepository.ExclusiveAsync((Guid)id, description) 
-            : await unitOfWork.PositionsRepository.ExistAsync(description: description);
+            : await unitOfWork.PositionsRepository.ExistsAsync(description: description);
 
         if (exists)
         {

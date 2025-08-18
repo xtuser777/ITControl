@@ -29,7 +29,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.RolesRepository.FindManyAsync(
             name: request.Name,
-            active: request.Active == "true",
+            active: request.Active != null ? request.Active == "true" : null,
             orderByName: request.OrderByName,
             orderByActive: request.OrderByActive,
             page,
@@ -104,7 +104,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         var exists = id != null 
             ? await unitOfWork.RolesRepository.ExclusiveAsync((Guid)id, name) 
-            : await unitOfWork.RolesRepository.ExistAsync(name: name);
+            : await unitOfWork.RolesRepository.ExistsAsync(name: name);
 
         if (exists)
         {
@@ -131,7 +131,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 
     private async Task CheckPageExistence(Guid pageId, List<string> messages)
     {
-        var exists = await unitOfWork.RolesRepository.ExistAsync(pageId);
+        var exists = await unitOfWork.PagesRepository.ExistAsync(id: pageId);
         if (exists == false)
             messages.Add("Page not exists");
     }

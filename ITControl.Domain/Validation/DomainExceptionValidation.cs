@@ -57,6 +57,12 @@ public class DomainExceptionValidation
             throw new BadRequestException($"the field {_property} length must be less than or equal to {value}.");
     }
 
+    public void LengthMustBeGreaterThanOrEqualTo(int value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} length must be greater than or equal to {value}.");
+    }
+
     public void MustBeLessThanOrEqualTo(int value)
     {
         if (_hasError)
@@ -67,6 +73,30 @@ public class DomainExceptionValidation
     {
         if (_hasError)
             throw new BadRequestException($"the field {_property} must be less than or equal to {value}.");
+    }
+
+    public void MustBeGreaterThanOrEqualTo(int value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must be greater than or equal to {value}.");
+    }
+
+    public void MustBeGreaterThanOrEqualTo(decimal value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must be greater than or equal to {value}.");
+    }
+
+    public void MustBeGreaterThan(int value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must be greater than {value}.");
+    }
+
+    public void MustBeGreaterThan(decimal value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must be greater than {value}.");
     }
 
     public void MustBeAOneOfFollowingValues(string enumName)

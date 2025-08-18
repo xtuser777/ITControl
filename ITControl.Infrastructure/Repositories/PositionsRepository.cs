@@ -56,7 +56,7 @@ public class PositionsRepository(ApplicationDbContext context) : IPositionsRepos
         return count;
     }
 
-    public async Task<bool> ExistAsync(Guid? id = null, string? description = null)
+    public async Task<bool> ExistsAsync(Guid? id = null, string? description = null)
     {
         var count = await CountAsync(id, description);
         

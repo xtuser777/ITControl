@@ -2,27 +2,128 @@ using ITControl.Domain.Validation;
 
 namespace ITControl.Domain.Entities;
 
-public sealed class User(
-    string username,
-    string password,
-    string email,
-    string name,
-    bool active,
-    int enrollment)
-    : Entity
+public sealed class User : Entity
 {
-    public string Username { get; private set; } = username;
-    public string Password { get; private set; } = password;
-    public string Email { get; private set; } = email;
-    public string Name { get; private set; } = name;
-    public bool Active { get; private set; } = active;
-    public int Enrollment { get; private set; } = enrollment;
-    public Guid PositionId { get; set; }
+    private string _username = string.Empty;
+    private string _password = string.Empty;
+    private string _email = string.Empty;
+    private string _name = string.Empty;
+    private bool _active;
+    private int _enrollment;
+    private Guid _positionId;
+    private Guid _roleId;
+
+    public string Username 
+    { 
+        get => _username; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
+            _username = value;
+        }
+    }
+    public string Password 
+    { 
+        get => _password; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Password")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length < 6)
+                .Property("Password")
+                .LengthMustBeGreaterThanOrEqualTo(6);
+            DomainExceptionValidation
+                .When(value.Length > 128)
+                .Property("Password")
+                .LengthMustBeLessThanOrEqualTo(128);
+            _password = value;
+        } 
+    }
+    public string Email 
+    { 
+        get => _email; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Email")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Email")
+                .LengthMustBeLessThanOrEqualTo(100);
+            _email = value;
+        } 
+    }
+    public string Name 
+    { 
+        get => _name; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
+            _name = value;
+        } 
+    }
+    public bool Active 
+    { 
+        get => _active; 
+        set
+        {
+            DomainExceptionValidation.When(
+                CreatedAt == UpdatedAt && value == false,
+                "O usuário deve estar ativo."
+            );
+            _active = value;
+        } 
+    }
+    public int Enrollment 
+    { 
+        get => _enrollment; 
+        set
+        {
+            DomainExceptionValidation.When(value <= 0).Property("Enrollment").MustBeGreaterThanOrEqualTo(0);
+            _enrollment = value;
+        } 
+    }
+    public Guid PositionId 
+    { 
+        get => _positionId; 
+        set
+        {
+            DomainExceptionValidation.When(value == Guid.Empty).Property("PositionId").MustNotBeEmpty();
+            _positionId = value;
+        } 
+    }
     public Position? Position { get; set; }
-    public Guid RoleId { get; set; }
+    public Guid RoleId 
+    { 
+        get => _roleId; 
+        set
+        {
+            DomainExceptionValidation.When(value == Guid.Empty).Property("RoleId").MustNotBeEmpty();
+            _roleId = value;
+        } 
+    }
     public Role? Role { get; set; }
 
-    public static User Create(
+    public User(
         string username, 
         string password, 
         string email, 
@@ -32,25 +133,17 @@ public sealed class User(
         Guid roleId
     )
     {
-        var user = new User(
-            username: username,
-            password: password,
-            email: email,
-            name: name,
-            active: false,
-            enrollment: enrollment
-        )
-        {
-            Id = Guid.NewGuid(),
-            PositionId = positionId,
-            RoleId = roleId,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-
-        user.Validate();
-        
-        return user;
+        Id = Guid.NewGuid();
+        Username = username;
+        Password = password;
+        Email = email;
+        Name = name;
+        Active = true; // Default to active
+        Enrollment = enrollment;
+        PositionId = positionId;
+        RoleId = roleId;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
     }
 
     public void Update(
@@ -74,40 +167,5 @@ public sealed class User(
         RoleId = roleId ?? RoleId;
         
         UpdatedAt = DateTime.Now;
-        
-        Validate();
-    }
-
-    private void Validate()
-    {
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Username),
-            "Nome de usuário não pode estar vazio."
-        );
-        
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Password),
-            "A senha não pode estar vazio."
-        );
-        
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Email),
-            "O E-mail não pode estar vazio."
-        );
-        
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Name),
-            "O nome do usuário não pode estar vazio."
-        );
-        
-        DomainExceptionValidation.When(
-            Enrollment <= 0,
-            "O número de matrícula deve ser maior que zero."
-        );
-        
-        DomainExceptionValidation.When(
-            PositionId == Guid.Empty,
-            "O id do cargo não pode estar vazio."
-        );
     }
 }

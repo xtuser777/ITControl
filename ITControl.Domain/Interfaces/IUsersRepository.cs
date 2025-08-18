@@ -1,10 +1,11 @@
 using ITControl.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IUsersRepository
 {
-    Task<User?> FindOneAsync(Guid id, bool? includePosition, bool? includeRole);
+    Task<User?> FindOneAsync(Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole);
     Task<IEnumerable<User>> FindManyAsync(
         string? username = null, 
         string? name = null, 

@@ -10,6 +10,6 @@ public interface IRolesRepository
     Task UpdateAsync(Role role);
     Task DeleteAsync(Role role);
     Task<int> CountAsync(Guid? id = null, string? name = null, bool? active = null);
-    Task<bool> ExistAsync(Guid? id = null, string? name = null, bool? active = null);
+    Task<bool> ExistsAsync(Guid? id = null, string? name = null, bool? active = null);
     Task<bool> ExclusiveAsync(Guid id, string? name = null);
 }

@@ -67,7 +67,7 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
         return count;
     }
 
-    public async Task<bool> ExistAsync(Guid? id = null, string? name = null, bool? active = null)
+    public async Task<bool> ExistsAsync(Guid? id = null, string? name = null, bool? active = null)
     {
         var count = await CountAsync(id, name, active);
         

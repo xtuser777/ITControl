@@ -1,5 +1,6 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
+using ITControl.Application.Utils;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
 using ITControl.Domain.Entities;
@@ -9,17 +10,17 @@ namespace ITControl.Application.Services;
 
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
-    public async Task<User?> FindOneAsync(Guid id)
+    public async Task<User?> FindOneAsync(Guid id, bool? includePosition, bool? includeRole)
     {
-        return await unitOfWork.UsersRepository.FindOneAsync(id, includePosition: true, includeRole: true);
+        return await unitOfWork.UsersRepository
+            .FindOneAsync(x => x.Id == id, includePosition: true, includeRole: true);
     }
 
     private async Task<User> FindOneOrThrowAsync(Guid id)
     {
-        var user = await FindOneAsync(id);
-        if (user == null) throw new NotFoundException("Usuário não encontrado");
-        
-        return user;
+        var user = await FindOneAsync(id, null, null);
+
+        return user ?? throw new NotFoundException("Usuário não encontrado");
     }
 
     public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
@@ -56,37 +57,73 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     public async Task<User?> CreateAsync(CreateUsersRequest request)
     {
-        var user = User.Create(
+        await using var transaction = unitOfWork.BeginTransaction;
+        await CheckExistence(
+            positionId: Parser.ToGuid(request.PositionId),
+            roleId: Parser.ToGuid(request.RoleId));
+        var user = new User(
             username: request.Username,
             email: request.Email,
             name: request.Name,
-            password: request.Password,
+            password: Crypt.HashPassword(request.Password),
             enrollment: request.Enrollment,
-            positionId: Guid.Parse(request.PositionId),
-            roleId: Guid.Parse(request.RoleId));
+            positionId: (Guid)Parser.ToGuid(request.PositionId),
+            roleId: (Guid)Parser.ToGuid(request.RoleId));
         await unitOfWork.UsersRepository.CreateAsync(user);
+        await unitOfWork.Commit(transaction);
 
         return user;
     }
 
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
+        await CheckExistence(
+            positionId: Parser.ToGuid(request.PositionId),
+            roleId: Parser.ToGuid(request.RoleId));
         var user = await FindOneOrThrowAsync(id);
         user.Update(
             username: request.Username,
             email: request.Email,
             name: request.Name,
-            password: request.Password,
+            password: request.Password != null ? Crypt.HashPassword(request.Password) : null,
             enrollment: request.Enrollment,
-            positionId: request.PositionId != null ? Guid.Parse(request.PositionId) : null,
-            roleId: request.RoleId != null ? Guid.Parse(request.RoleId) : null,
+            positionId: Parser.ToGuid(request.PositionId),
+            roleId: Parser.ToGuid(request.RoleId),
             active: request.Active);
-        await unitOfWork.UsersRepository.UpdateAsync(user); 
+        await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.UsersRepository.UpdateAsync(user);
+        await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var user = await FindOneOrThrowAsync(id);
+        await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersRepository.DeleteAsync(user);
+        await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckExistence(Guid? positionId, Guid? roleId)
+    {
+        var messages = new List<string>();
+
+        if (positionId != null) await CheckPositionExistence((Guid)positionId, messages);
+        if (roleId != null) await CheckRoleExistence((Guid)roleId, messages);
+
+        if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
+    }
+
+    private async Task CheckPositionExistence(Guid positionId, List<string> messages)
+    {
+        var exists = await unitOfWork.PositionsRepository.ExistsAsync(id: positionId);
+        if (!exists)
+            messages.Add("Position not found");
+    }
+
+    private async Task CheckRoleExistence(Guid roleId, List<string> messages)
+    {
+        var exists = await unitOfWork.RolesRepository.ExistsAsync(id: roleId);
+        if (!exists)
+            messages.Add("Role not found");
     }
 }
