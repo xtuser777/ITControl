@@ -21,7 +21,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasIndex(p => p.Username).IsUnique();
         builder.HasIndex(p => p.Email).IsUnique();
 
-        builder.HasOne(u => u.Position).WithMany(p => p.Users).HasForeignKey(u => u.PositionId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(u => u.Position).WithMany().HasForeignKey(u => u.PositionId).OnDelete(DeleteBehavior.Restrict);
         builder.HasOne(u => u.Role).WithMany().HasForeignKey(u => u.RoleId).OnDelete(DeleteBehavior.Restrict);
     }
 }

@@ -1,11 +1,12 @@
 using ITControl.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface ILocationsRepository
 {
     Task<Location?> FindOneAsync(
-        Guid id,
+        Expression<Func<Location?, bool>> predicate,
         bool? includeUnit = null,
         bool? includeUser = null,
         bool? includeDepartment = null,
@@ -24,8 +25,8 @@ public interface ILocationsRepository
         int? page = null,
         int? size = null);
     Task CreateAsync(Location location);
-    Task UpdateAsync(Location location);
-    Task DeleteAsync(Location location);
+    void Update(Location location);
+    void Delete(Location location);
     Task<int> CountAsync(
         Guid? id = null,
         string? description = null,

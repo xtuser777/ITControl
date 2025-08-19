@@ -3,17 +3,19 @@ using ITControl.Domain.Enums;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRepository
 {
-    public async Task<Equipment?> FindOneAsync(Guid id, bool? includeContract)
+    public async Task<Equipment?> FindOneAsync(
+        Expression<Func<Equipment?, bool>> predicate, bool? includeContract)
     {
         var query = context.Equipments.AsQueryable();
         if (includeContract.HasValue) query = query.Include(x => x.Contract);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(
@@ -35,7 +37,17 @@ public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRep
     {
         var query = context.Equipments.AsNoTracking();
         query = BuildWhere(query, null, name, description, ip, mac, tag, rented, type);
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        query = BuildOrderBy(
+            query, 
+            orderByName, 
+            orderByDescription, 
+            orderByIp, 
+            orderByMac, 
+            orderByTag, 
+            orderByRented, 
+            orderByType);
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -43,19 +55,16 @@ public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRep
     public async Task CreateAsync(Equipment equipment)
     {
         await context.Equipments.AddAsync(equipment);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Equipment equipment)
+    public void Update(Equipment equipment)
     {
         context.Equipments.Update(equipment);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Equipment equipment)
+    public void Delete(Equipment equipment)
     {
         context.Equipments.Remove(equipment);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(

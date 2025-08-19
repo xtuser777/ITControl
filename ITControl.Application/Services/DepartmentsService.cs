@@ -1,5 +1,6 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
+using ITControl.Application.Utils;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
@@ -11,16 +12,15 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 {
     public async Task<Department?> FindOneAsync(Guid id)
     {
-        return await unitOfWork.DepartmentsRepository.FindOneAsync(id, true);
+        return await unitOfWork
+            .DepartmentsRepository
+            .FindOneAsync(x => x.Id == id, true);
     }
 
     public async Task<Department> FindOneOrThrowAsync(Guid id)
     {
-        var department = await FindOneAsync(id);
-        if (department == null)
-            throw new NotFoundException("department not found");
-        
-        return department;
+        return await FindOneAsync(id) 
+            ?? throw new NotFoundException("department not found");
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request)
@@ -30,7 +30,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         return await unitOfWork.DepartmentsRepository.FindManyAsync(
             alias: request.Alias,
             name: request.Name,
-            userId: Guid.Parse((ReadOnlySpan<char>)request.UserId),
+            userId: Parser.ToGuidOptional(request.UserId),
             orderByAlias: request.OrderByAlias,
             orderByName: request.OrderByName,
             orderByUser: request.OrderByUser,
@@ -45,7 +45,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         var count = await unitOfWork.DepartmentsRepository.CountAsync(
             alias: request.Alias,
             name: request.Name,
-            userId: Guid.Parse((ReadOnlySpan<char>)request.UserId));
+            userId: Parser.ToGuidOptional(request.UserId));
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -54,28 +54,58 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task<Department?> CreateAsync(CreateDepartmentsRequest request)
     {
-        var department = Department.Create(
+        await CheckExistence(Parser.ToGuid(request.UserId));
+        var department = new Department(
             alias: request.Alias,
             name: request.Name,
-            userId: Guid.Parse((ReadOnlySpan<char>)request.UserId));
+            userId: Parser.ToGuid(request.UserId));
+        await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.DepartmentsRepository.CreateAsync(department);
+        await unitOfWork.Commit(transaction);
 
         return department;
     }
 
     public async Task UpdateAsync(Guid id, UpdateDepartmentsRequest request)
     {
+        await CheckExistence(Parser.ToGuidOptional(request.UserId));
         var department = await FindOneOrThrowAsync(id);
         department.Update(
             alias: request.Alias,
             name: request.Name,
-            userId: Guid.Parse((ReadOnlySpan<char>)request.UserId));
-        await unitOfWork.DepartmentsRepository.UpdateAsync(department);
+            userId: Parser.ToGuidOptional(request.UserId));
+        await using var transaction = unitOfWork.BeginTransaction;
+        unitOfWork.DepartmentsRepository.Update(department);
+        await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var department = await FindOneOrThrowAsync(id);
-        await unitOfWork.DepartmentsRepository.DeleteAsync(department);
+        await using var transaction = unitOfWork.BeginTransaction;
+        unitOfWork.DepartmentsRepository.Delete(department);
+        await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckExistence(Guid? userId)
+    {
+        var messages = new List<string>();
+        if (userId.HasValue)
+        {
+            await CheckUserExistence(userId.Value, messages);
+        }
+        if (messages.Count > 0)
+        {
+            throw new NotFoundException(string.Join(", ", messages));
+        }
+    }
+
+    private async Task CheckUserExistence(Guid userId, List<string> messages)
+    {
+        var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
+        if (user == false)
+        {
+            messages.Add("the user does not exist");
+        }
     }
 }

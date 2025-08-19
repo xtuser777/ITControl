@@ -1,5 +1,6 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
+using ITControl.Application.Utils;
 using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
@@ -11,16 +12,14 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 {
     public async Task<Role?> FindOneAsync(Guid id, bool? includeRolesPages = null)
     {
-        return await unitOfWork.RolesRepository.FindOneAsync(id, includeRolesPages);
+        return await unitOfWork
+            .RolesRepository.FindOneAsync(x => x.Id == id, includeRolesPages);
     }
     
     private async Task<Role> FindOneOrThrowAsync(Guid id, bool? includeRolesPages = null)
     {
-        var role = await FindOneAsync(id, includeRolesPages);
-        if (role == null)
-            throw new NotFoundException("Role not found");
-        
-        return role;
+        return await FindOneAsync(id, includeRolesPages) 
+            ?? throw new NotFoundException("Role not found");
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(FindManyRolesRequest request)
@@ -29,7 +28,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.RolesRepository.FindManyAsync(
             name: request.Name,
-            active: request.Active != null ? request.Active == "true" : null,
+            active: Parser.ToBoolOptional(request.Active),
             orderByName: request.OrderByName,
             orderByActive: request.OrderByActive,
             page,
@@ -40,7 +39,9 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.RolesRepository.CountAsync(name: request.Name, active: request.Active == "true");
+        var count = await unitOfWork.RolesRepository.CountAsync(
+            name: request.Name, 
+            active: Parser.ToBoolOptional(request.Active));
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -51,11 +52,11 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         await CheckConflicts(name: request.Name);
         await CheckConnections((List<CreateRolesPagesRequest>)request.RolesPages);
-        var role = Role.Create(name: request.Name, active: true);
+        var role = new Role(name: request.Name, active: true);
         var rolesPages = from page in request.RolesPages
-            select RolePage.Create(
+            select new RolePage(
                 roleId: role.Id,
-                pageId: Guid.Parse((ReadOnlySpan<char>)page.PageId));
+                pageId: Parser.ToGuid(page.PageId));
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.RolesRepository.CreateAsync(role);
         await unitOfWork.RolesPagesRepository.CreateMany(rolesPages);
@@ -69,15 +70,15 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         await CheckConflicts(name: request.Name);
         await CheckConnections((List<CreateRolesPagesRequest>?)request.RolesPages);
         var role = await FindOneOrThrowAsync(id);
-        role.Update(name: request.Name);
+        role.Update(name: request.Name, active: request.Active);
         var rolesPages = from page in request.RolesPages
-            select RolePage.Create(
+            select new RolePage(
                 roleId: role.Id,
-                pageId: Guid.Parse((ReadOnlySpan<char>)page.PageId));
+                pageId: Parser.ToGuid(page.PageId));
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.RolesPagesRepository.DeleteMany(role);
         await unitOfWork.RolesPagesRepository.CreateMany(rolesPages);
-        await unitOfWork.RolesRepository.UpdateAsync(role);
+        unitOfWork.RolesRepository.Update(role);
         await unitOfWork.Commit(transaction);
     }
 
@@ -85,7 +86,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         var role = await FindOneOrThrowAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.RolesRepository.DeleteAsync(role);
+        unitOfWork.RolesRepository.Delete(role);
         await unitOfWork.Commit(transaction);
     }
 

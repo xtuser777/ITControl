@@ -2,17 +2,19 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsRepository
 {
-    public async Task<Department?> FindOneAsync(Guid id, bool? includeUser = null)
+    public async Task<Department?> FindOneAsync(
+        Expression<Func<Department?, bool>> predicate, bool? includeUser = null)
     {
         var query = context.Departments.AsQueryable();
         if (includeUser != null) query = query.Include(x => x.User);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(
@@ -44,19 +46,16 @@ public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsR
     public async Task CreateAsync(Department department)
     {
         await context.Departments.AddAsync(department);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Department department)
+    public void Update(Department department)
     {
         context.Departments.Update(department);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Department department)
+    public void Delete(Department department)
     {
         context.Departments.Remove(department);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(
@@ -105,7 +104,12 @@ public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsR
         return count > 0;
     }
 
-    private IQueryable<Department> BuildQuery(IQueryable<Department> query, Guid? id = null, string? alias = null, string? name = null, Guid? userId = null)
+    private IQueryable<Department> BuildQuery(
+        IQueryable<Department> query, 
+        Guid? id = null, 
+        string? alias = null, 
+        string? name = null, 
+        Guid? userId = null)
     {
         if (id is not null) query = query.Where(x => x.Id == id);
         if (alias is not null) query = query.Where(x => x.Alias.Contains(alias));
@@ -121,9 +125,24 @@ public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsR
         string? orderByName = null,
         string? orderByUser = null)
     {
-        if (orderByAlias is not null) query = query.OrderBy(x => x.Name);
-        if (orderByName is not null) query = query.OrderBy(x => x.Name);
-        if (orderByUser is not null) query = query.Include(x => x.User).OrderBy(x => x.User!.Name);
+        query = orderByAlias switch
+        {
+            "a" => query.OrderBy(p => p.Alias),
+            "d" => query.OrderByDescending(p => p.Alias),
+            _ => query
+        };
+        query = orderByName switch
+        {
+            "a" => query.OrderBy(p => p.Name),
+            "d" => query.OrderByDescending(p => p.Name),
+            _ => query
+        };
+        query = orderByUser switch
+        {
+            "a" => query.Include(x => x.User).OrderBy(p => p.User!.Name),
+            "d" => query.Include(x => x.User).OrderByDescending(p => p.User!.Name),
+            _ => query
+        };
         
         return query;
     }

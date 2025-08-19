@@ -2,14 +2,15 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class PositionsRepository(ApplicationDbContext context) : IPositionsRepository
 {
-    public async Task<Position?> FindOneAsync(Guid id)
+    public async Task<Position?> FindOneAsync(Expression<Func<Position?, bool>> predicate)
     {
-        var position = await context.Positions.FindAsync(id);
+        var position = await context.Positions.FindAsync(predicate);
         return position;
     }
 
@@ -31,19 +32,16 @@ public class PositionsRepository(ApplicationDbContext context) : IPositionsRepos
     public async Task CreateAsync(Position position)
     {
         await context.Positions.AddAsync(position);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Position position)
+    public void Update(Position position)
     {
         context.Positions.Update(position);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Position position)
+    public void Delete(Position position)
     {
         context.Positions.Remove(position);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(Guid? id = null, string? description = null)

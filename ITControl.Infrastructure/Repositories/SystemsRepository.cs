@@ -1,17 +1,20 @@
+using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class SystemsRepository(ApplicationDbContext context) : ISystemsRepository
 {
-    public async Task<Domain.Entities.System?> FindOneAsync(Guid id, bool? includeContract = null)
+    public async Task<Domain.Entities.System?> FindOneAsync(
+        Expression<Func<Domain.Entities.System?, bool>> predicate, bool? includeContract = null)
     {
         var query = context.Systems.AsQueryable();
         if (includeContract != null) query = query.Include(x => x.Contract);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Domain.Entities.System>> FindManyAsync(
@@ -50,19 +53,16 @@ public class SystemsRepository(ApplicationDbContext context) : ISystemsRepositor
     public async Task CreateAsync(Domain.Entities.System system)
     {
         await context.Systems.AddAsync(system);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Domain.Entities.System system)
+    public void Update(Domain.Entities.System system)
     {
         context.Systems.Update(system);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Domain.Entities.System system)
+    public void Delete(Domain.Entities.System system)
     {
         context.Systems.Remove(system);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(

@@ -5,12 +5,11 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Presentation.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("equipments")]
     [ApiController]
     [PermissionsFilter]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

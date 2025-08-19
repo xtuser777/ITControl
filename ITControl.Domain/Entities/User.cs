@@ -111,7 +111,6 @@ public sealed class User : Entity
             _positionId = value;
         } 
     }
-    public Position? Position { get; set; }
     public Guid RoleId 
     { 
         get => _roleId; 
@@ -121,6 +120,7 @@ public sealed class User : Entity
             _roleId = value;
         } 
     }
+    public Position? Position { get; set; }
     public Role? Role { get; set; }
 
     public User(

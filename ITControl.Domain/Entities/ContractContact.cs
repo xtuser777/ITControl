@@ -27,12 +27,14 @@ public sealed class ContractContact : Entity
         get => _name;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_name),
-                "Name can not be null or empty");
-            DomainExceptionValidation.When(
-                _name.Length > 100,
-                "Name can not be longer than 100 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
             _name = value;
         }
     }
@@ -42,12 +44,14 @@ public sealed class ContractContact : Entity
         get => _email;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_email),
-                "Email can not be null or empty");
-            DomainExceptionValidation.When(
-                _email.Length > 100,
-                "Email can not be longer than 100 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Email")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Email")
+                .LengthMustBeLessThanOrEqualTo(100);
             _email = value;
         }
     }
@@ -57,12 +61,14 @@ public sealed class ContractContact : Entity
         get => _phone;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_phone),
-                "Phone can not be null or empty");
-            DomainExceptionValidation.When(
-                _phone.Length > 10,
-                "Phone can not be longer than 10 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Phone")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 10)
+                .Property("Phone")
+                .LengthMustBeLessThanOrEqualTo(10);
             _phone = value;
         }
     }
@@ -72,12 +78,14 @@ public sealed class ContractContact : Entity
         get => _cellphone;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_cellphone),
-                "Cellphone can not be null or empty");
-            DomainExceptionValidation.When(
-                _cellphone.Length > 11,
-                "Cellphone can not be longer than 11 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Cellphone")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 11)
+                .Property("Cellphone")
+                .LengthMustBeLessThanOrEqualTo(11);
             _cellphone = value;
         }
     }
@@ -87,9 +95,10 @@ public sealed class ContractContact : Entity
         get => _contractId;
         set
         {
-            DomainExceptionValidation.When(
-                _contractId == Guid.Empty,
-                "Contract Id can not be empty");
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("ContractId")
+                .MustNotBeEmpty();
             _contractId = value;
         }
     }

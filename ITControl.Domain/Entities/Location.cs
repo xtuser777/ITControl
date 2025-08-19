@@ -32,12 +32,14 @@ public sealed class Location : Entity
         get => _description;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_description),
-                "Description can not be empty");
-            DomainExceptionValidation.When(
-                _description.Length > 100,
-                "Description can not be longer than 100 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Description")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Description")
+                .LengthMustBeLessThanOrEqualTo(100);
             _description = value;
         }
     }
@@ -47,9 +49,10 @@ public sealed class Location : Entity
         get => _unitId;
         set
         {
-            DomainExceptionValidation.When(
-                _unitId == Guid.Empty,
-                "UnitId can not be empty");
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("UnitId")
+                .MustNotBeEmpty();
             _unitId = value;
         }
     }
@@ -59,9 +62,10 @@ public sealed class Location : Entity
         get => _userId;
         set
         {
-            DomainExceptionValidation.When(
-                _userId == Guid.Empty,
-                "UserId can not be empty");
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("UserId")
+                .MustNotBeEmpty();
             _userId = value;
         }
     }
@@ -71,9 +75,10 @@ public sealed class Location : Entity
         get => _departmentId;
         set
         {
-            DomainExceptionValidation.When(
-                _departmentId == Guid.Empty,
-                "DepartmentId can not be empty");
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("DepartmentId")
+                .MustNotBeEmpty();
             _departmentId = value;
         }
     }
@@ -83,9 +88,10 @@ public sealed class Location : Entity
         get => _divisionId;
         set
         {
-            DomainExceptionValidation.When(
-                _divisionId != null && _divisionId != Guid.Empty,
-                "DivisionId can not be empty");
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("DivisionId")
+                .MustNotBeEmpty();
             _divisionId = value;
         }
     }

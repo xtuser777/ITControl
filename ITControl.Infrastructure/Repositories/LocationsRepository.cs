@@ -2,13 +2,14 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class LocationsRepository(ApplicationDbContext context) : ILocationsRepository
 {
     public async Task<Location?> FindOneAsync(
-        Guid id,
+        Expression<Func<Location?, bool>> predicate,
         bool? includeUnit = null,
         bool? includeUser = null,
         bool? includeDepartment = null,
@@ -20,7 +21,7 @@ public class LocationsRepository(ApplicationDbContext context) : ILocationsRepos
         if (includeDepartment != null) query = query.Include(x => x.Department);
         if (includeDivision != null) query = query.Include(x => x.Division);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Location>> FindManyAsync(
@@ -59,19 +60,16 @@ public class LocationsRepository(ApplicationDbContext context) : ILocationsRepos
     public async Task CreateAsync(Location location)
     {
         await context.Locations.AddAsync(location);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Location location)
+    public void Update(Location location)
     {
         context.Locations.Update(location);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Location location)
+    public void Delete(Location location)
     {
         context.Locations.Remove(location);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(

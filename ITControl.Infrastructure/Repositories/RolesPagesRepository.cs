@@ -19,12 +19,10 @@ public class RolesPagesRepository(ApplicationDbContext context) : IRolesPagesRep
     public async Task CreateMany(IEnumerable<RolePage> rolePages)
     {
         await context.RolesPages.AddRangeAsync(rolePages);
-        await context.SaveChangesAsync();
     }
 
     public async Task DeleteMany(Role role)
     {
         await context.RolesPages.Where(x => x.RoleId == role.Id).ExecuteDeleteAsync();
-        await context.SaveChangesAsync();
     }
 }

@@ -45,6 +45,12 @@ public class DomainExceptionValidation
             throw new BadRequestException($"the field {_property} must not be null.");
     }
 
+    public void MustBeTrue()
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must be true.");
+    }
+
     public void MustBeAUuid()
     {
         if (_hasError)
@@ -91,6 +97,18 @@ public class DomainExceptionValidation
     {
         if (_hasError)
             throw new BadRequestException($"the field {_property} must be greater than {value}.");
+    }
+
+    public void DateMustNotBeGreaterThanCurrent()
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must not be greater than current date.");
+    }
+
+    public void DateMustNotBeLessThan(DateOnly value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must not be less than {value}.");
     }
 
     public void MustBeGreaterThan(decimal value)

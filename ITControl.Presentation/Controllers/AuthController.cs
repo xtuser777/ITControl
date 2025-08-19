@@ -5,7 +5,6 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Controllers

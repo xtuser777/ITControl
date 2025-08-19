@@ -11,16 +11,12 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 {
     public async Task<Unit?> FindOneAsync(Guid id)
     {
-        return await unitOfWork.UnitsRepository.FindOneAsync(id);
+        return await unitOfWork.UnitsRepository.FindOneAsync( x => x.Id == id);
     }
     
     public async Task<Unit> FindOneOrThrowAsync(Guid id)
     {
-        var unit = await FindOneAsync(id);
-        if (unit == null)
-            throw new NotFoundException("Unit not found");
-        
-        return unit;
+        return await FindOneAsync(id) ?? throw new NotFoundException("Unit not found");
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(FindManyUnitsRequest request)
@@ -55,8 +51,10 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
             streetName: request.StreetName,
             postalCode: request.PostalCode,
             phone: request.Phone);
+        await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UnitsRepository.CreateAsync(unit);
-        
+        await unitOfWork.Commit(transaction);
+
         return unit;
     }
 
@@ -70,12 +68,16 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
             streetName: request.StreetName,
             postalCode: request.PostalCode,
             phone: request.Phone);
-        await unitOfWork.UnitsRepository.UpdateAsync(unit);
+        await using var transaction = unitOfWork.BeginTransaction;
+        unitOfWork.UnitsRepository.Update(unit);
+        await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(Guid id)
     {
         var unit = await FindOneOrThrowAsync(id);
-        await unitOfWork.UnitsRepository.DeleteAsync(unit);
+        await using var transaction = unitOfWork.BeginTransaction;
+        unitOfWork.UnitsRepository.Delete(unit);
+        await unitOfWork.Commit(transaction);
     }
 }

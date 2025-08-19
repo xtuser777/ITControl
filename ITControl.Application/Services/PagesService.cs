@@ -36,24 +36,18 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 
     public async Task<Page?> FindOne(Guid id)
     {
-        var page = await unitOfWork.PagesRepository.FindOneAsync(id: id);
-        
-        return page;
+        return await unitOfWork.PagesRepository.FindOneAsync(x => x.Id == id);
     }
 
     private async Task<Page> FindOneOrThrow(Guid id)
     {
-        var page = await FindOne(id);
-        if (page == null)
-            throw new NotFoundException("Page not found");
-        
-        return page;
+        return await FindOne(id) ?? throw new NotFoundException("Page not found");
     }
 
     public async Task<Page?> Create(CreatePagesRequest request)
     {
         await CheckConflicts(name: request.Name);
-        var page = Page.Create(name: request.Name);
+        var page = new Page(name: request.Name);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
@@ -67,7 +61,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         var page = await FindOneOrThrow(id);
         page.Update(name: request.Name);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.PagesRepository.UpdateAsync(page);
+        unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);
     }
 
@@ -75,7 +69,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
     {
         var page = await FindOneOrThrow(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.PagesRepository.DeleteAsync(page);
+        unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);
     }
 

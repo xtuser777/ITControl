@@ -1,11 +1,12 @@
 using ITControl.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IContractsRepository
 {
     Task<Contract?> FindOneAsync(
-        Guid id, 
+        Expression<Func<Contract?, bool>> predicate, 
         bool? includeContractsContacts = null);
     Task<IEnumerable<Contract>> FindManyAsync(
         string? objectName = null,
@@ -17,8 +18,8 @@ public interface IContractsRepository
         int? page = null,
         int? size = null);
     Task CreateAsync(Contract contract);
-    Task UpdateAsync(Contract contract);
-    Task DeleteAsync(Contract contract);
+    void Update(Contract contract);
+    void Delete(Contract contract);
     Task<int> CountAsync(
         Guid? id = null,
         string? objectName = null,

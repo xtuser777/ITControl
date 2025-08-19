@@ -23,8 +23,8 @@ public interface IUsersRepository
         int? page = null, 
         int? size = null);
     Task CreateAsync(User user);
-    Task UpdateAsync(User user);
-    Task DeleteAsync(User user);
+    void Update(User user);
+    void Delete(User user);
     Task<int> CountAsync(
         string? username = null, 
         string? name = null, 

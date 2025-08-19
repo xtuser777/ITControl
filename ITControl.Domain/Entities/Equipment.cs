@@ -41,8 +41,14 @@ public sealed class Equipment : Entity
         get => _name; 
         set
         {
-            DomainExceptionValidation.When(string.IsNullOrEmpty(_name)).Property("name").MustNotBeEmpty();
-            DomainExceptionValidation.When(_name.Length > 100).Property("name").LengthMustBeLessThanOrEqualTo(100);
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("name")
+                .LengthMustBeLessThanOrEqualTo(100);
             _name = value;
         } 
     }
@@ -51,8 +57,14 @@ public sealed class Equipment : Entity
         get => _description; 
         set
         {
-            DomainExceptionValidation.When(string.IsNullOrEmpty(_description)).Property("description").MustNotBeEmpty();
-            DomainExceptionValidation.When(_description.Length > 255).Property("description").LengthMustBeLessThanOrEqualTo(255);
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("description")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 255)
+                .Property("description")
+                .LengthMustBeLessThanOrEqualTo(255);
             _description = value;
         } 
     }
@@ -62,8 +74,14 @@ public sealed class Equipment : Entity
         get => _ip; 
         set
         {
-            DomainExceptionValidation.When(string.IsNullOrEmpty(_ip)).Property("ip").MustNotBeEmpty();
-            DomainExceptionValidation.When(_ip.Length > 15).Property("ip").LengthMustBeLessThanOrEqualTo(15);
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("ip")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 15)
+                .Property("ip")
+                .LengthMustBeLessThanOrEqualTo(15);
             _ip = value;
         } 
     }
@@ -72,8 +90,14 @@ public sealed class Equipment : Entity
         get => _mac; 
         set
         {
-            DomainExceptionValidation.When(string.IsNullOrEmpty(_mac)).Property("mac").MustNotBeEmpty();
-            DomainExceptionValidation.When(_mac.Length > 17).Property("mac").LengthMustBeLessThanOrEqualTo(17);
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("mac")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 17)
+                .Property("mac")
+                .LengthMustBeLessThanOrEqualTo(17);
             _mac = value;
         } 
     }
@@ -82,8 +106,14 @@ public sealed class Equipment : Entity
         get => _tag; 
         set
         {
-            DomainExceptionValidation.When(string.IsNullOrEmpty(_tag)).Property("tag").MustNotBeEmpty();
-            DomainExceptionValidation.When(_tag.Length > 15).Property("tag").LengthMustBeLessThanOrEqualTo(15);
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("tag")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 15)
+                .Property("tag")
+                .LengthMustBeLessThanOrEqualTo(15);
             _tag = value;
         } 
     }
@@ -92,7 +122,10 @@ public sealed class Equipment : Entity
         get => _rented; 
         set
         {
-            DomainExceptionValidation.When(_contractId != null && _rented == false).Property("rented").MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(_contractId != null && value == false)
+                .Property("rented")
+                .MustNotBeEmpty();
             _rented = value;
         } 
     }
@@ -101,7 +134,10 @@ public sealed class Equipment : Entity
         get => _contractId; 
         set
         {
-            DomainExceptionValidation.When(_rented == true && _contractId == null).Property("contractId").MustNotBeNull();
+            DomainExceptionValidation
+                .When(_rented == true && value == null)
+                .Property("contractId")
+                .MustNotBeNull();
             _contractId = value;
         } 
     }

@@ -2,13 +2,14 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepository
 {
     public async Task<Division?> FindOneAsync(
-        Guid id, 
+        Expression<Func<Division?, bool>> predicate, 
         bool? includeDepartment = null, 
         bool? includeUser = null)
     {
@@ -18,7 +19,7 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         if (includeUser is not null) 
             query = query.Include(x => x.User);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Division>> FindManyAsync(
@@ -42,19 +43,16 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
     public async Task CreateAsync(Division division)
     {
         await context.Divisions.AddAsync(division);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Division division)
+    public void Update(Division division)
     {
         context.Divisions.Update(division);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Division division)
+    public void Delete(Division division)
     {
         context.Divisions.Remove(division);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(
@@ -115,15 +113,25 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         string? orderByDepartment = null,
         string? orderByUser = null)
     {
-        if (orderByName is not null) 
-            query = query.OrderBy(x => x.Name);
-        if (orderByDepartment is not null) 
-            query = query.Include(x => x.Department)
-                .OrderBy(x => x.Department!.Name);
-        if (orderByUser is not null) 
-            query = query.Include(x => x.User)
-                .OrderBy(x => x.User!.Name);
-        
+        query = orderByName switch
+        {
+            "a" => query.OrderBy(p => p.Name),
+            "d" => query.OrderByDescending(p => p.Name),
+            _ => query
+        };
+        query = orderByDepartment switch
+        {
+            "a" => query.Include(x => x.Department).OrderBy(p => p.Department!.Alias),
+            "d" => query.Include(x => x.Department).OrderByDescending(p => p.Department!.Alias),
+            _ => query
+        };
+        query = orderByUser switch
+        {
+            "a" => query.Include(x => x.User).OrderBy(p => p.User!.Name),
+            "d" => query.Include(x => x.User).OrderByDescending(p => p.User!.Name),
+            _ => query
+        };
+
         return query;
     }
 }

@@ -8,7 +8,8 @@ namespace ITControl.Infrastructure.Repositories;
 
 public class UsersRepository(ApplicationDbContext context) : IUsersRepository
 {
-    public async Task<User?> FindOneAsync(Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole)
+    public async Task<User?> FindOneAsync(
+        Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole)
     {
         var query = context.Users.AsQueryable();
         if (includePosition is true)
@@ -59,7 +60,8 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
             orderByEnrollment: orderByEnrollment,
             orderByActive: orderByActive,
             orderByPosition: orderByPosition);
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -67,19 +69,16 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
     public async Task CreateAsync(User user)
     {
         await context.Users.AddAsync(user);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(User user)
+    public void Update(User user)
     {
         context.Users.Update(user);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(User user)
+    public void Delete(User user)
     {
         context.Users.Remove(user);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(

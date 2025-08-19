@@ -1,5 +1,6 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
+using ITControl.Application.Utils;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Systems.Requests;
 using ITControl.Domain.Exceptions;
@@ -8,18 +9,18 @@ namespace ITControl.Application.Services;
 
 public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
 {
-    public async Task<Domain.Entities.System?> FindOneAsync(Guid id, bool? includeContractsContacts = null)
+    public async Task<Domain.Entities.System?> FindOneAsync(
+        Guid id, bool? includeContractsContacts = null)
     {
-        return await unitOfWork.SystemsRepository.FindOneAsync(id, includeContractsContacts);
+        return await unitOfWork.SystemsRepository
+            .FindOneAsync( x => x.Id == id, includeContractsContacts);
     }
 
-    public async Task<Domain.Entities.System> FindOneOrThrowAsync(Guid id, bool? includeContractsContacts = null)
+    public async Task<Domain.Entities.System> FindOneOrThrowAsync(
+        Guid id, bool? includeContractsContacts = null)
     {
-        var system = await FindOneAsync(id);
-        if (system == null)
-            throw new NotFoundException("System not found");
-        
-        return system;
+        return await FindOneAsync(id) 
+            ?? throw new NotFoundException("System not found");
     }
 
     public async Task<IEnumerable<Domain.Entities.System>> FindManyAsync(FindManySystemsRequest request)
@@ -29,9 +30,9 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
         return await unitOfWork.SystemsRepository.FindManyAsync(
             name: request.Name,
             version: request.Version,
-            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
-            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
-            own: request.Own == "true",
+            implementedAt: Parser.ToDateOnlyOptional(request.ImplementedAt),
+            endedAt: Parser.ToDateOnlyOptional(request.EndedAt),
+            own: Parser.ToBoolOptional(request.Own),
             orderByName: request.OrderByName,
             orderByVersion: request.OrderByVersion,
             orderByImplementedAt: request.OrderByImplementedAt,
@@ -48,9 +49,9 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
         var count = await unitOfWork.SystemsRepository.CountAsync(
             name: request.Name,
             version: request.Version,
-            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
-            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
-            own: request.Own == "true");
+            implementedAt: Parser.ToDateOnlyOptional(request.ImplementedAt),
+            endedAt: Parser.ToDateOnlyOptional(request.EndedAt),
+            own: Parser.ToBoolOptional(request.Own));
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -63,10 +64,10 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
         var system = new Domain.Entities.System(
             request.Name,
             request.Version,
-            DateOnly.Parse(request.ImplementedAt),
-            request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
+            implementedAt: Parser.ToDateOnly(request.ImplementedAt),
+            endedAt: Parser.ToDateOnlyOptional(request.EndedAt),
             request.Own,
-            request.ContractId != null ? Guid.Parse((ReadOnlySpan<char>)request.ContractId) : null);
+            Parser.ToGuidOptional(request.ContractId));
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SystemsRepository.CreateAsync(system);
         await unitOfWork.Commit(transaction);
@@ -81,11 +82,12 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
         system.Update(
             name: request.Name,
             version: request.Version,
-            implementedAt: request.ImplementedAt != null ? DateOnly.Parse(request.ImplementedAt) : null,
-            endedAt: request.EndedAt != null ? DateOnly.Parse(request.EndedAt) : null,
-            own: request.Own);
+            implementedAt: Parser.ToDateOnlyOptional(request.ImplementedAt),
+            endedAt: Parser.ToDateOnlyOptional(request.EndedAt),
+            own: request.Own,
+            Parser.ToGuidOptional(request.ContractId));
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.SystemsRepository.UpdateAsync(system);
+        unitOfWork.SystemsRepository.Update(system);
         await unitOfWork.Commit(transaction);
     }
 
@@ -93,7 +95,7 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
     {
         var system = await FindOneOrThrowAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.SystemsRepository.DeleteAsync(system);
+        unitOfWork.SystemsRepository.Delete(system);
         await unitOfWork.Commit(transaction);
     }
 

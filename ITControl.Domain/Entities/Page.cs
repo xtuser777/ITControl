@@ -4,43 +4,36 @@ namespace ITControl.Domain.Entities;
 
 public class Page : Entity
 {
-    public string Name { get; private set; }
+    private string _name = string.Empty;
 
-    public Page(Guid id, string name, DateTime createdAt, DateTime updatedAt)
-    {
-        Id = id;
-        Name = name;
-        CreatedAt = createdAt;
-        UpdatedAt = updatedAt;
+    public string Name 
+    { 
+        get => _name; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
+            _name = value;
+        } 
     }
 
-    public static Page Create(string name)
+    public Page(string name)
     {
-        var page = new Page(Guid.NewGuid(), name, DateTime.Now, DateTime.Now);
-        page.Validate();
-        
-        return page;
+        Id = Guid.NewGuid();
+        Name = name;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
     }
 
     public void Update(string? name = null)
     {
         Name = name ?? Name;
         UpdatedAt = DateTime.Now;
-        
-        Validate();
-    }
-
-    private void Validate()
-    {
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Name), 
-            "O campo nome não pode estar vazio."
-        );
-        DomainExceptionValidation.When(
-            Name.Length > 100, 
-            "O campo nome não pode conter mais que 100 caracteres."
-        );
-        
-        DomainExceptionValidation.Throw();
     }
 }

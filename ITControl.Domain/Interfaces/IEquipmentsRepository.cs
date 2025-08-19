@@ -1,11 +1,13 @@
 using ITControl.Domain.Entities;
 using ITControl.Domain.Enums;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IEquipmentsRepository
 {
-    Task<Equipment?> FindOneAsync(Guid id, bool? includeContract = false);
+    Task<Equipment?> FindOneAsync(
+        Expression<Func<Equipment?, bool>> predicate, bool? includeContract = false);
     Task<IEnumerable<Equipment>> FindManyAsync(
         string? name = null,
         string? description = null,
@@ -24,8 +26,8 @@ public interface IEquipmentsRepository
         int? page = null,
         int? size = null);
     Task CreateAsync(Equipment equipment);
-    Task UpdateAsync(Equipment equipment);
-    Task DeleteAsync(Equipment equipment);
+    void Update(Equipment equipment);
+    void Delete(Equipment equipment);
     Task<int> CountAsync(
         Guid? id = null,
         string? name = null,

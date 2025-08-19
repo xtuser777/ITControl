@@ -12,8 +12,8 @@ public sealed class Contract : Entity
     {
         Id = Guid.NewGuid();
         ObjectName = objectName;
-        StartedAt = _startedAt;
-        EndedAt = _endedAt;
+        StartedAt = startedAt;
+        EndedAt = endedAt;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
@@ -23,12 +23,14 @@ public sealed class Contract : Entity
         get => _objectName;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_objectName),
-                "Object don't be null or empty");
-            DomainExceptionValidation.When(
-                _objectName.Length > 100,
-                "Object length must be less than 100");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("ObjectName")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("ObjectName")
+                .MustBeLessThanOrEqualTo(100);
             _objectName = value;
         }
     }

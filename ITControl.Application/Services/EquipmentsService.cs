@@ -1,5 +1,6 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
+using ITControl.Application.Utils;
 using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
@@ -12,16 +13,15 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 {
     public async Task<Equipment?> FindOneAsync(Guid id, bool? includeContract = null)
     {
-        return await unitOfWork.EquipmentsRepository.FindOneAsync(id, includeContract);
+        return await unitOfWork
+            .EquipmentsRepository
+            .FindOneAsync(x => x.Id == id, includeContract);
     }
 
     private async Task<Equipment> FindOneOrThrowAsync(Guid id, bool? includeContract = null)
     {
-        var equipment = await FindOneAsync(id, includeContract);
-        if (equipment == null)
-            throw new NotFoundException("Equipamento não encontrado");
-        
-        return equipment;
+        return await FindOneAsync(id, includeContract) 
+            ?? throw new NotFoundException("Equipamento não encontrado");
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(FindManyEquipmentsRequest request)
@@ -34,8 +34,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
             request.Ip,
             request.Mac,
             request.Tag,
-            request.Rented == "true",
-            request.Type != null ? (EquipmentType)request.Type : null,
+            Parser.ToBoolOptional(request.Rented),
+            Parser.ToEnumOptional<EquipmentType>(request.Type?.ToString()),
             request.OrderByName,
             request.OrderByDescription,
             request.OrderByIp,
@@ -58,8 +58,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
             request.Ip,
             request.Mac,
             request.Tag,
-            request.Rented == "true",
-            request.Type != null ? (EquipmentType)request.Type : null);
+            Parser.ToBoolOptional(request.Rented),
+            Parser.ToEnumOptional<EquipmentType>(request.Type?.ToString()));
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -68,16 +68,16 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task<Equipment?> CreateAsync(CreateEquipmentsRequest request)
     {
-        await CheckExistence(request.ContractId != null ? Guid.Parse(request.ContractId) : null);
+        await CheckExistence(Parser.ToGuidOptional(request.ContractId));
         var equipment = new Equipment(
             request.Name, 
-            request.Description, 
-            (EquipmentType)request.Type, 
+            request.Description,
+            Parser.ToEnum<EquipmentType>(request.Type.ToString()), 
             request.Ip, 
             request.Mac, 
             request.Tag, 
             request.Rented, 
-            request.ContractId != null ? Guid.Parse((ReadOnlySpan<char>)request.ContractId) : null);
+            Parser.ToGuidOptional(request.ContractId));
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.EquipmentsRepository.CreateAsync(equipment);
         await unitOfWork.Commit(transaction);
@@ -87,19 +87,19 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task UpdateAsync(Guid id, UpdateEquipmentsRequest request)
     {
-        await CheckExistence(request.ContractId != null ? Guid.Parse(request.ContractId) : null);
+        await CheckExistence(Parser.ToGuidOptional(request.ContractId));
         var equipment = await FindOneOrThrowAsync(id);
         equipment.Update(
             request.Name, 
-            request.Description, 
-            request.Type != null ? (EquipmentType)request.Type : null, 
+            request.Description,
+            Parser.ToEnumOptional<EquipmentType>(request.Type?.ToString()), 
             request.Ip, 
             request.Mac, 
             request.Tag, 
             request.Rented, 
-            request.ContractId != null ? Guid.Parse((ReadOnlySpan<char>)request.ContractId) : null);
+            Parser.ToGuidOptional(request.ContractId));
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.EquipmentsRepository.UpdateAsync(equipment);
+        unitOfWork.EquipmentsRepository.Update(equipment);
         await unitOfWork.Commit(transaction);
     }
 
@@ -107,7 +107,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
     {
         var equipment = await FindOneOrThrowAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.EquipmentsRepository.DeleteAsync(equipment);
+        unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);
     }
 

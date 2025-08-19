@@ -1,8 +1,11 @@
+using System.Linq.Expressions;
+
 namespace ITControl.Domain.Interfaces;
 
 public interface ISystemsRepository
 {
-    Task<Entities.System?> FindOneAsync(Guid id, bool? includeContract = null);
+    Task<Entities.System?> FindOneAsync(
+        Expression<Func<Domain.Entities.System?, bool>> predicate, bool? includeContract = null);
     Task<IEnumerable<Entities.System>> FindManyAsync(
         string? name = null,
         string? version = null,
@@ -17,8 +20,8 @@ public interface ISystemsRepository
         int? page = null,
         int? size = null);
     Task CreateAsync(Entities.System system);
-    Task UpdateAsync(Entities.System system);
-    Task DeleteAsync(Entities.System system);
+    void Update(Entities.System system);
+    void Delete(Entities.System system);
     Task<int> CountAsync(
         Guid? id = null,
         string? name = null,

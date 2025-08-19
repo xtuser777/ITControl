@@ -36,24 +36,18 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
 
     public async Task<Position?> FindOne(Guid id)
     {
-        var position = await unitOfWork.PositionsRepository.FindOneAsync(id);
-        
-        return position;
+        return await unitOfWork.PositionsRepository.FindOneAsync(x => x.Id == id);
     }
 
     private async Task<Position> FindOneOrThrow(Guid id)
     {
-        var position = await FindOne(id);
-        if (position == null) 
-            throw new NotFoundException("Position not found");
-        
-        return position;
+        return await FindOne(id) ?? throw new NotFoundException("Position not found");
     }
 
     public async Task<Position?> Create(CreatePositionsRequest request)
     {
         await CheckConflicts(description: request.Description);
-        var position = Position.Create(request.Description);
+        var position = new Position(request.Description);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PositionsRepository.CreateAsync(position);
         await unitOfWork.Commit(transaction);
@@ -67,7 +61,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
         var position = await FindOneOrThrow(id);
         position.Update(request.Description);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.PositionsRepository.UpdateAsync(position);
+        unitOfWork.PositionsRepository.Update(position);
         await unitOfWork.Commit(transaction);
     }
 
@@ -75,7 +69,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     {
         var position = await FindOneOrThrow(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.PositionsRepository.DeleteAsync(position);
+        unitOfWork.PositionsRepository.Delete(position);
         await unitOfWork.Commit(transaction);
     }
 

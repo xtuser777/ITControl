@@ -37,9 +37,9 @@ public class AuthService(
 
     public async Task<PermissionsResponse> Permissions(Guid userId, PermissionsRequest request)
     {
-        Guid roleId = Parser.ToGuid(request.RoleId) 
+        Guid roleId = Parser.ToGuidOptional(request.RoleId) 
             ?? throw new UnauthorizedAccessException("Perfil inválido.");
-        var role = await unitOfWork.RolesRepository.FindOneAsync(roleId, true) 
+        var role = await unitOfWork.RolesRepository.FindOneAsync(x => x.Id == roleId, true) 
             ?? throw new UnauthorizedAccessException("Perfil não encontrado.");
         if (!role.Active)
         {
@@ -51,7 +51,7 @@ public class AuthService(
         List<Page?> pages = [];
         foreach (var pageId in pagesIds)
         {
-            var page = await unitOfWork.PagesRepository.FindOneAsync(pageId);
+            var page = await unitOfWork.PagesRepository.FindOneAsync(x => x.Id == pageId);
             pages.Add(page);
         }
 
@@ -82,7 +82,7 @@ public class AuthService(
 
     private async Task<User> Validate(string username, string password)
     {
-        var user = await unitOfWork.UsersRepository.FindOneAsync(x=>x.Username == username, null, true) 
+        var user = await unitOfWork.UsersRepository.FindOneAsync(x => x.Username == username, null, true) 
             ?? throw new UnauthorizedAccessException("Usuário inválido.");
         if (!user.Active)
         {

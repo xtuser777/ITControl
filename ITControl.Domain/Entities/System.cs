@@ -35,12 +35,14 @@ public class System : Entity
         get => _name;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_name),
-                "Name can not be empty");
-            DomainExceptionValidation.When(
-                _name.Length > 100,
-                "Name can not be longer than 100 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
             _name = value;
         }
     }
@@ -50,12 +52,14 @@ public class System : Entity
         get => _version;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(_version),
-                "Version can not be empty");
-            DomainExceptionValidation.When(
-                _version.Length > 15,
-                "Version can not be longer than 15 characters");
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Version")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 15)
+                .Property("Version")
+                .LengthMustBeLessThanOrEqualTo(15);
             _version = value;
         }
     }
@@ -65,9 +69,10 @@ public class System : Entity
         get => _implementedAt;
         set
         {
-            DomainExceptionValidation.When(
-                _implementedAt > DateOnly.FromDateTime(DateTime.Now),
-                "ImplementedAt can not be greater than current date");
+            DomainExceptionValidation
+                .When(value > DateOnly.FromDateTime(DateTime.Now))
+                .Property("ImplementedAt")
+                .DateMustNotBeGreaterThanCurrent();
             _implementedAt = value;
         }
     }
@@ -77,9 +82,10 @@ public class System : Entity
         get => _endedAt;
         set
         {
-            DomainExceptionValidation.When(
-                _endedAt < _implementedAt,
-                "EndedAt can not be less than current date");
+            DomainExceptionValidation
+                .When(value < _implementedAt)
+                .Property("EndedAt")
+                .DateMustNotBeLessThan(_implementedAt);
             _endedAt = value;
         }
     }
@@ -89,9 +95,10 @@ public class System : Entity
         get => _own;
         set
         {
-            DomainExceptionValidation.When(
-                _contractId != null && _own == false,
-                "Own can not be false when contract id is not null");
+            DomainExceptionValidation
+                .When(_contractId != null && value == false)
+                .Property("Own")
+                .MustBeTrue();
             _own = value;
         }
     }
@@ -101,9 +108,10 @@ public class System : Entity
         get => _contractId;
         set
         {
-            DomainExceptionValidation.When(
-                _own == false || _contractId == null,
-                "Contract Id can not be empty");
+            DomainExceptionValidation
+                .When( _own == false || value == null)
+                .Property("ContractId")
+                .MustNotBeEmpty();
             _contractId = value;
         }
     }

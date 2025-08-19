@@ -10,7 +10,8 @@ namespace ITControl.Application.Services;
 
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
-    public async Task<User?> FindOneAsync(Guid id, bool? includePosition, bool? includeRole)
+    public async Task<User?> FindOneAsync(
+        Guid id, bool? includePosition, bool? includeRole)
     {
         return await unitOfWork.UsersRepository
             .FindOneAsync(x => x.Id == id, includePosition: true, includeRole: true);
@@ -18,9 +19,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     private async Task<User> FindOneOrThrowAsync(Guid id)
     {
-        var user = await FindOneAsync(id, null, null);
-
-        return user ?? throw new NotFoundException("Usuário não encontrado");
+        return await FindOneAsync(id, null, null) 
+            ?? throw new NotFoundException("Usuário não encontrado");
     }
 
     public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
@@ -31,7 +31,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             username: request.Username,
             email: request.Email,
             name: request.Name,
-            active: request.Active != null ? request.Active == "true" : null,
+            active: Parser.ToBoolOptional(request.Active),
             orderByUsername: request.OrderByUsername,
             orderByName: request.OrderByName,
             orderByEmail: request.OrderByEmail,
@@ -48,7 +48,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             username: request.Username,
             email: request.Email,
             name: request.Name,
-            active: request.Active == "true");
+            active: Parser.ToBoolOptional(request.Active));
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -67,8 +67,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             name: request.Name,
             password: Crypt.HashPassword(request.Password),
             enrollment: request.Enrollment,
-            positionId: (Guid)Parser.ToGuid(request.PositionId),
-            roleId: (Guid)Parser.ToGuid(request.RoleId));
+            positionId: Parser.ToGuid(request.PositionId),
+            roleId: Parser.ToGuid(request.RoleId));
         await unitOfWork.UsersRepository.CreateAsync(user);
         await unitOfWork.Commit(transaction);
 
@@ -78,8 +78,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
         await CheckExistence(
-            positionId: Parser.ToGuid(request.PositionId),
-            roleId: Parser.ToGuid(request.RoleId));
+            positionId: Parser.ToGuidOptional(request.PositionId),
+            roleId: Parser.ToGuidOptional(request.RoleId));
         var user = await FindOneOrThrowAsync(id);
         user.Update(
             username: request.Username,
@@ -87,11 +87,11 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             name: request.Name,
             password: request.Password != null ? Crypt.HashPassword(request.Password) : null,
             enrollment: request.Enrollment,
-            positionId: Parser.ToGuid(request.PositionId),
-            roleId: Parser.ToGuid(request.RoleId),
+            positionId: Parser.ToGuidOptional(request.PositionId),
+            roleId: Parser.ToGuidOptional(request.RoleId),
             active: request.Active);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.UsersRepository.UpdateAsync(user);
+        unitOfWork.UsersRepository.Update(user);
         await unitOfWork.Commit(transaction);
     }
 
@@ -99,7 +99,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     {
         var user = await FindOneOrThrowAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.UsersRepository.DeleteAsync(user);
+        unitOfWork.UsersRepository.Delete(user);
         await unitOfWork.Commit(transaction);
     }
 

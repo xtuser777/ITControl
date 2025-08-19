@@ -4,33 +4,72 @@ namespace ITControl.Domain.Entities;
 
 public class Department : Entity
 {
-    public string Alias { get; private set; }
-    public string Name { get; private set; }
-    public Guid UserId { get; set; }
+    private string _alias = string.Empty;
+    private string _name = string.Empty;
+    private Guid _userId;
+
+    public string Alias 
+    { 
+        get => _alias; 
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Alias")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 10)
+                .Property("Alias")
+                .LengthMustBeLessThanOrEqualTo(10);
+            _alias = value;
+        } 
+    }
+    public string Name 
+    { 
+        get => _name;
+        set
+        {
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
+            _name = value;
+        } 
+    }
+    public Guid UserId
+    { 
+        get => _userId; 
+        set
+        {
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("UserId")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value == default)
+                .Property("UserId")
+                .MustNotBeNull();
+            DomainExceptionValidation
+                .When(!Guid.TryParse(value.ToString(), out _))
+                .Property("UserId")
+                .MustBeAUuid();
+            _userId = value;
+        } 
+    }
     public User? User { get; set; }
 
-    public Department(string alias, string name)
+    public Department(string alias, string name, Guid userId)
     {
+        Id = Guid.NewGuid();
         Alias = alias;
         Name = name;
-        Validate();
-    }
-
-    public static Department Create(string alias, string name, Guid userId)
-    {
-        var department = new Department(alias, name)
-        {
-            Id = Guid.NewGuid(),
-            Alias = alias,
-            Name = name,    
-            UserId = userId,
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now,
-        };
-        
-        department.Validate();
-        
-        return department;
+        UserId = userId;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
     }
 
     public void Update(string? alias = null, string? name = null, Guid? userId = null)
@@ -39,16 +78,5 @@ public class Department : Entity
         Name = name ?? Name;
         UserId = userId ?? UserId;
         UpdatedAt = DateTime.Now;
-        
-        Validate();
-    }
-
-    private void Validate()
-    {
-        DomainExceptionValidation.When(string.IsNullOrEmpty(Alias), "O campo sigla não pode ser vazio");
-        DomainExceptionValidation.When(Alias.Length > 10, "O campo sigla deve ter 10 ou menos caracteres");
-        
-        DomainExceptionValidation.When(string.IsNullOrEmpty(Name), "O campo nome não pode ser vazio");
-        DomainExceptionValidation.When(Name.Length > 100, "O campo nome deve ter 100 ou menos caracteres");
     }
 }

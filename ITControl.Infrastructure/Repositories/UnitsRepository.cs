@@ -2,14 +2,15 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class UnitsRepository(ApplicationDbContext context) : IUnitsRepository
 {
-    public async Task<Unit?> FindOneAsync(Guid id)
+    public async Task<Unit?> FindOneAsync(Expression<Func<Unit?, bool>> predicate)
     {
-        return await context.Units.FindAsync(id);
+        return await context.Units.FindAsync(predicate);
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(
@@ -53,19 +54,16 @@ public class UnitsRepository(ApplicationDbContext context) : IUnitsRepository
     public async Task CreateAsync(Unit unit)
     {
         await context.Units.AddAsync(unit);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Unit unit)
+    public void Update(Unit unit)
     {
         context.Units.Update(unit);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Unit unit)
+    public void Delete(Unit unit)
     {
         context.Units.Remove(unit);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(
@@ -166,12 +164,42 @@ public class UnitsRepository(ApplicationDbContext context) : IUnitsRepository
         string? orderByNeighborhood,
         string? orderByAddressNumber)
     {
-        if (orderByName != null) query = query.OrderBy(x => x.Name);
-        if (orderByPhone != null) query = query.OrderBy(x => x.Phone);
-        if (orderByPostalCode != null) query = query.OrderBy(x => x.PostalCode);
-        if (orderByStreetName != null) query = query.OrderBy(x => x.StreetName);
-        if (orderByNeighborhood != null) query = query.OrderBy(x => x.Neighborhood);
-        if (orderByAddressNumber != null) query = query.OrderBy(x => x.AddressNumber);
+        query = orderByName switch
+        {
+            "a" => query.OrderBy(p => p.Name),
+            "d" => query.OrderByDescending(p => p.Name),
+            _ => query
+        };
+        query = orderByPhone switch
+        {
+            "a" => query.OrderBy(p => p.Phone),
+            "d" => query.OrderByDescending(p => p.Phone),
+            _ => query
+        };
+        query = orderByPostalCode switch
+        {
+            "a" => query.OrderBy(p => p.PostalCode),
+            "d" => query.OrderByDescending(p => p.PostalCode),
+            _ => query
+        };
+        query = orderByStreetName switch
+        {
+            "a" => query.OrderBy(p => p.StreetName),
+            "d" => query.OrderByDescending(p => p.StreetName),
+            _ => query
+        };
+        query = orderByNeighborhood switch
+        {
+            "a" => query.OrderBy(p => p.Neighborhood),
+            "d" => query.OrderByDescending(p => p.Neighborhood),
+            _ => query
+        };
+        query = orderByAddressNumber switch
+        {
+            "a" => query.OrderBy(p => p.AddressNumber),
+            "d" => query.OrderByDescending(p => p.AddressNumber),
+            _ => query
+        };
         
         return query;
     }

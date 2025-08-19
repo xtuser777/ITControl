@@ -19,12 +19,10 @@ public class ContractsContactsRepository(ApplicationDbContext context) : IContra
     public async Task CreateManyAsync(IEnumerable<ContractContact> contractContacts)
     {
         await context.ContractContacts.AddRangeAsync(contractContacts);
-        await context.SaveChangesAsync();
     }
 
     public async Task DeleteManyByContractAsync(Contract contract)
     {
         await context.ContractContacts.Where(x => x.ContractId == contract.Id).ExecuteDeleteAsync();
-        await context.SaveChangesAsync();
     }
 }

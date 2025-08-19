@@ -2,16 +2,18 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class RolesRepository(ApplicationDbContext context): IRolesRepository
 {
-    public async Task<Role?> FindOneAsync(Guid id, bool? includeRolesPages = null)
+    public async Task<Role?> FindOneAsync(
+        Expression<Func<Role?, bool>> predicate, bool? includeRolesPages = null)
     {
         var query = context.Roles.AsQueryable();
         if (includeRolesPages != null) query = query.Include(x => x.RolesPages);
-        var page = await query.Where(x => x.Id == id).FirstOrDefaultAsync();
+        var page = await query.Where(predicate).FirstOrDefaultAsync();
         
         return page;
     }
@@ -19,21 +21,10 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
     public async Task<IEnumerable<Role>> FindManyAsync(string? name = null, bool? active = null, string? orderByName = null, string? orderByActive = null, int? page = null, int? size = null)
     {
         var query = context.Roles.AsNoTracking();
-        if (name != null) query = query.Where(r => r.Name.Contains(name));
-        if (active != null) query = query.Where(r => r.Active == active);
-        query = orderByName switch
-        {
-            "a" => query.OrderBy(p => p.Name),
-            "d" => query.OrderByDescending(p => p.Name),
-            _ => query
-        };
-        query = orderByActive switch
-        {
-            "a" => query.OrderBy(p => p.Active),
-            "d" => query.OrderByDescending(p => p.Active),
-            _ => query
-        };
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        query = BuildQuery(query, name, active);
+        query = BuildOrderBy(query, orderByName, orderByActive);
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -41,19 +32,16 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
     public async Task CreateAsync(Role page)
     {
         await context.Roles.AddAsync(page);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Role page)
+    public void Update(Role page)
     {
         context.Update(page);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Role page)
+    public void Delete(Role page)
     {
         context.Roles.Remove(page);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(Guid? id = null, string? name = null, bool? active = null)
@@ -83,5 +71,37 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
         var count = await query.CountAsync();
         
         return count > 0;
+    }
+
+    private IQueryable<Role> BuildQuery(
+        IQueryable<Role> query, 
+        string? name = null, 
+        bool? active = null)
+    {
+        if (name != null) query = query.Where(r => r.Name.Contains(name));
+        if (active != null) query = query.Where(r => r.Active == active);
+        
+        return query;
+    }
+
+    private IQueryable<Role> BuildOrderBy(
+        IQueryable<Role> query, 
+        string? orderByName = null, 
+        string? orderByActive = null)
+    {
+        query = orderByName switch
+        {
+            "a" => query.OrderBy(p => p.Name),
+            "d" => query.OrderByDescending(p => p.Name),
+            _ => query
+        };
+        query = orderByActive switch
+        {
+            "a" => query.OrderBy(p => p.Active),
+            "d" => query.OrderByDescending(p => p.Active),
+            _ => query
+        };
+        
+        return query;
     }
 }

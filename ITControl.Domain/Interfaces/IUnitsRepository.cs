@@ -1,10 +1,11 @@
 using ITControl.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IUnitsRepository
 {
-    Task<Unit?> FindOneAsync(Guid id);
+    Task<Unit?> FindOneAsync(Expression<Func<Unit?, bool>> predicate);
     Task<IEnumerable<Unit>> FindManyAsync(
         string? name = null,
         string? phone = null,
@@ -21,8 +22,8 @@ public interface IUnitsRepository
         int? page = null,
         int? size = null);
     Task CreateAsync(Unit unit);
-    Task UpdateAsync(Unit unit);
-    Task DeleteAsync(Unit unit);
+    void Update(Unit unit);
+    void Delete(Unit unit);
     Task<int> CountAsync(
         Guid? id = null,
         string? name = null,

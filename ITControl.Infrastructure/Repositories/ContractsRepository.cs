@@ -2,18 +2,20 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class ContractsRepository(ApplicationDbContext context) : IContractsRepository
 {
-    public async Task<Contract?> FindOneAsync(Guid id, bool? includeContractsContacts = null)
+    public async Task<Contract?> FindOneAsync(
+        Expression<Func<Contract?, bool>> predicate, bool? includeContractsContacts = null)
     {
         var query = context.Contracts.AsQueryable();
         if (includeContractsContacts != null) 
             query = query.Include(x => x.ContractContacts);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
@@ -40,19 +42,16 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
     public async Task CreateAsync(Contract contract)
     {
         await context.Contracts.AddAsync(contract);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Contract contract)
+    public void Update(Contract contract)
     {
         context.Contracts.Update(contract);
-        await context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(Contract contract)
+    public void Delete(Contract contract)
     {
         context.Contracts.Remove(contract);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(

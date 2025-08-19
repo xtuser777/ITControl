@@ -1,10 +1,12 @@
 using ITControl.Domain.Entities;
+using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IDepartmentsRepository
 {
-    Task<Department?> FindOneAsync(Guid id, bool? includeUser = null);
+    Task<Department?> FindOneAsync(
+        Expression<Func<Department?, bool>> predicate, bool? includeUser = null);
     Task<IEnumerable<Department>> FindManyAsync(
         string? alias = null, 
         string? name = null, 
@@ -15,8 +17,8 @@ public interface IDepartmentsRepository
         int? page = null, 
         int? size = null);
     Task CreateAsync(Department department);
-    Task UpdateAsync(Department department);
-    Task DeleteAsync(Department department);
+    void Update(Department department);
+    void Delete(Department department);
     Task<int> CountAsync(
         Guid? id = null,
         string? alias = null, 

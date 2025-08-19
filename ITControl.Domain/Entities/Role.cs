@@ -2,42 +2,55 @@ using ITControl.Domain.Validation;
 
 namespace ITControl.Domain.Entities;
 
-public sealed class Role(string name, bool active) : Entity
+public sealed class Role : Entity
 {
-    public string Name { get; private set; } = name;
-    public bool Active { get; private set; } = active;
+    private string _name = string.Empty;
+    private bool _active;
 
-    public IEnumerable<RolePage>? RolesPages { get; set; } 
-
-    public static Role Create(string name, bool active)
-    {
-        var role = new Role(name, active)
+    public string Name 
+    { 
+        get => _name; 
+        set
         {
-            Id = Guid.NewGuid(),
-            CreatedAt = DateTime.Now,
-            UpdatedAt = DateTime.Now
-        };
-        
-        return role;
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 64)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(64);
+            _name = value;
+        } 
+    }
+    public bool Active 
+    { 
+        get => _active; 
+        set
+        {
+            DomainExceptionValidation
+                .When(CreatedAt == UpdatedAt && value == false)
+                .Property("Active")
+                .MustBeTrue();
+            _active = value;
+        } 
+    }
+
+    public ICollection<RolePage>? RolesPages { get; set; } 
+
+    public Role(string name, bool active)
+    {
+        Id = Guid.NewGuid();
+        Name = name;
+        Active = active;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
     }
 
     public void Update(string? name = null, bool? active = null)
     {
         Name = name ?? Name;
         Active = active ?? Active;
-        
         UpdatedAt = DateTime.Now;
-    }
-
-    private void Validate()
-    {
-        DomainExceptionValidation.When(
-            string.IsNullOrEmpty(Name),
-            "O campo nome não pode estar vazio.");
-        DomainExceptionValidation.When(
-            Name.Length > 64,
-            "O campo nome deve conter 64 ou menos caracteres.");
-        
-        DomainExceptionValidation.Throw();
     }
 }

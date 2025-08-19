@@ -17,8 +17,8 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         config => config.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
+                        .AllowAnyMethod()
+                        .AllowAnyHeader());
 });
 
 builder.Services.AddInfrastructureApi(builder.Configuration);
@@ -26,7 +26,7 @@ builder.Services.AddInfrastructureApi(builder.Configuration);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiCatalogo", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ITControl", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
@@ -78,7 +78,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddMvc(options =>
 {
     options.Filters.Add(typeof(ExceptionFilter));
-    options.Filters.Add(typeof(PermissionsFilter));
+    //options.Filters.Add(typeof(PermissionsFilter));
 });
 
 var app = builder.Build();

@@ -35,13 +35,14 @@ public sealed class Unit : Entity
         get => _name;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Name can not be null or empty");
-            DomainExceptionValidation.When(
-                value.Length > 100,
-                "Name can not be longer than 100 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Name")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("Name")
+                .LengthMustBeLessThanOrEqualTo(100);
             _name = value;
         }
     }
@@ -51,16 +52,18 @@ public sealed class Unit : Entity
         get => _phone;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Phone can not be null or empty");
-            DomainExceptionValidation.When(
-                _phone.Length > 10,
-                "Phone can not be longer than 10 characters");
-            DomainExceptionValidation.When(
-                _phone.Length < 10,
-                "Phone can not be less than 10 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Phone")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length < 10)
+                .Property("Phone")
+                .LengthMustBeGreaterThanOrEqualTo(10);
+            DomainExceptionValidation
+                .When(value.Length > 10)
+                .Property("Phone")
+                .LengthMustBeLessThanOrEqualTo(10);
             _phone = value;
         }
     }
@@ -70,16 +73,18 @@ public sealed class Unit : Entity
         get => _postalCode;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Postal can not be null or empty");
-            DomainExceptionValidation.When(
-                _postalCode.Length > 8,
-                "Postal can not be longer than 8 characters");
-            DomainExceptionValidation.When(
-                _postalCode.Length < 8,
-                "Postal can not be less than 8 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("PostalCode")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length < 8)
+                .Property("PostalCode")
+                .LengthMustBeGreaterThanOrEqualTo(8);
+            DomainExceptionValidation
+                .When(value.Length > 8)
+                .Property("PostalCode")
+                .LengthMustBeLessThanOrEqualTo(8);
             _postalCode = value;
         }
     }
@@ -89,13 +94,14 @@ public sealed class Unit : Entity
         get => _streetName;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Street name can not be null or empty");
-            DomainExceptionValidation.When(
-                _streetName.Length > 100,
-                "Street name can not be longer than 100 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("StreetName")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 100)
+                .Property("StreetName")
+                .LengthMustBeLessThanOrEqualTo(100);
             _streetName = value;
         }
     }
@@ -105,13 +111,14 @@ public sealed class Unit : Entity
         get => _neighborhood;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Neighborhood can not be null or empty");
-            DomainExceptionValidation.When(
-                _neighborhood.Length > 80,
-                "Neighborhood can not be longer than 80 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("Neighborhood")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 80)
+                .Property("Neighborhood")
+                .LengthMustBeLessThanOrEqualTo(80);
             _neighborhood = value;
         }
     }
@@ -121,13 +128,14 @@ public sealed class Unit : Entity
         get => _addressNumber;
         set
         {
-            DomainExceptionValidation.When(
-                string.IsNullOrEmpty(value),
-                "Address number can not be null or empty");
-            DomainExceptionValidation.When(
-                _addressNumber.Length > 5,
-                "Address number can not be longer than 5 characters");
-            DomainExceptionValidation.Throw();
+            DomainExceptionValidation
+                .When(string.IsNullOrEmpty(value))
+                .Property("AddressNumber")
+                .MustNotBeEmpty();
+            DomainExceptionValidation
+                .When(value.Length > 5)
+                .Property("AddressNumber")
+                .LengthMustBeLessThanOrEqualTo(5);
             _addressNumber = value;
         }
     }

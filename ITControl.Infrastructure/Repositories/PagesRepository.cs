@@ -2,14 +2,15 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class PagesRepository(ApplicationDbContext context): IPagesRepository
 {
-    public async Task<Page?> FindOneAsync(Guid id)
+    public async Task<Page?> FindOneAsync(Expression<Func<Page?, bool>> predicate)
     {
-        var page = await context.Pages.FindAsync(id);
+        var page = await context.Pages.SingleOrDefaultAsync(predicate);
         return page;
     }
 
@@ -23,7 +24,8 @@ public class PagesRepository(ApplicationDbContext context): IPagesRepository
             "d" => query.OrderByDescending(p => p.Name),
             _ => query
         };
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -31,19 +33,16 @@ public class PagesRepository(ApplicationDbContext context): IPagesRepository
     public async Task CreateAsync(Page page)
     {
         await context.Pages.AddAsync(page);
-        await context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(Page page)
+    public void Update(Page page)
     {
-        context.Update(page);
-        await context.SaveChangesAsync();
+        context.Pages.Update(page);
     }
 
-    public async Task DeleteAsync(Page page)
+    public void Delete(Page page)
     {
         context.Pages.Remove(page);
-        await context.SaveChangesAsync();
     }
 
     public async Task<int> CountAsync(Guid? id = null, string? name = null)
