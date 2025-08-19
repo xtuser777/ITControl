@@ -31,7 +31,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             username: request.Username,
             email: request.Email,
             name: request.Name,
-            active: request.Active == "true",
+            active: request.Active != null ? request.Active == "true" : null,
             orderByUsername: request.OrderByUsername,
             orderByName: request.OrderByName,
             orderByEmail: request.OrderByEmail,

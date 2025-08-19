@@ -3,6 +3,8 @@ using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +31,7 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPost("{userId:guid}/permissions")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<FindOneResponse<PermissionsResponse>> Permissions(
             [FromRoute] Guid userId, 
             [FromBody] PermissionsRequest request)

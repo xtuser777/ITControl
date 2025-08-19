@@ -2,13 +2,18 @@ using ITControl.Application.Interfaces;
 using ITControl.Communication.Locations.Requests;
 using ITControl.Communication.Locations.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("locations")]
     [ApiController]
+    [PermissionsFilter]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class LocationsController(
         ILocationsService locationsService,
         ILocationsView locationsView) : ControllerBase
@@ -29,33 +34,41 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<FindOneLocationsResponse?> Show(Guid id)
+        public async Task<FindOneResponse<FindOneLocationsResponse?>> Show(Guid id)
         {
             var location = await locationsService.FindOneAsync(id);
             var data = locationsView.FindOne(location);
             
-            return data;
+            return new FindOneResponse<FindOneLocationsResponse?>()
+            {
+                Data = data,
+            };
         }
 
         [HttpPost]
-        public async Task<CreateLocationsResponse?> Create(CreateLocationsRequest request)
+        public async Task<FindOneResponse<CreateLocationsResponse?>> Create(CreateLocationsRequest request)
         {
             var location = await locationsService.CreateAsync(request);
             var data = locationsView.Create(location);
-            
-            return data;
+            Response.StatusCode = 201;
+            return new FindOneResponse<CreateLocationsResponse?>()
+            {
+                Data = data,
+            };
         }
 
         [HttpPut("{id:guid}")]
         public async Task Update(Guid id, UpdateLocationsRequest request)
         {
             await locationsService.UpdateAsync(id, request);
+            Response.StatusCode = 204;
         }
 
         [HttpDelete("{id:guid}")]
         public async Task Delete(Guid id)
         {
             await locationsService.DeleteAsync(id);
+            Response.StatusCode = 204;
         }
     }
 }

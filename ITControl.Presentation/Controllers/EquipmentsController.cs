@@ -2,6 +2,9 @@ using ITControl.Application.Interfaces;
 using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Filters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,6 +12,8 @@ namespace ITControl.Presentation.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [PermissionsFilter]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class EquipmentsController(
         IEquipmentsService equipmentsService,
         IEquipmentsView equipmentsView) : ControllerBase
@@ -29,33 +34,41 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<FindOneEquipmentsResponse?> Show(Guid id)
+        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> Show(Guid id)
         {
             var equipment = await equipmentsService.FindOneAsync(id, true);
             var data = equipmentsView.FindOne(equipment);
             
-            return data;
+            return new FindOneResponse<FindOneEquipmentsResponse?>()
+            {
+                Data = data,
+            };
         }
 
         [HttpPost]
-        public async Task<CreateEquipmentsResponse?> Create(CreateEquipmentsRequest request)
+        public async Task<FindOneResponse<CreateEquipmentsResponse?>> Create(CreateEquipmentsRequest request)
         {
             var equipment = await equipmentsService.CreateAsync(request);
             var data = equipmentsView.Create(equipment);
-            
-            return data;
+            Response.StatusCode = 201;
+            return new FindOneResponse<CreateEquipmentsResponse?>()
+            {
+                Data = data,
+            };
         }
 
         [HttpPut("{id:guid}")]
         public async Task Update(Guid id, UpdateEquipmentsRequest request)
         {
             await equipmentsService.UpdateAsync(id, request);
+            Response.StatusCode = 204;
         }
 
         [HttpDelete("{id:guid}")]
         public async Task Delete(Guid id)
         {
             await equipmentsService.DeleteAsync(id);
+            Response.StatusCode = 204;
         }
     }
 }
