@@ -17,7 +17,14 @@ public class ExceptionFilter : IExceptionFilter
         }
         else
         {
-            ThrowUnknowError(context);
+            if (context.Exception is UnauthorizedAccessException)
+            {
+                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                context.Result = new UnauthorizedObjectResult(new ErrorJsonResponse(context.Exception.Message));
+                return;
+            }
+            else
+                ThrowUnknowError(context);
         }
     }
 
