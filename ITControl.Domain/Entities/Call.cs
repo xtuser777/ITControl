@@ -7,6 +7,7 @@ public sealed class Call : Entity
 {
     private string _title = string.Empty;
     private string _description = string.Empty;
+    private Guid _callStatusId;
     private Guid _userId;
     private Guid _locationId;
     private Guid? _systemId;
@@ -45,6 +46,18 @@ public sealed class Call : Entity
         }
     }
     public CallReason Reason { get; set; }
+    public Guid CallStatusId
+    {
+        get => _callStatusId;
+        set
+        {
+            DomainExceptionValidation
+                .When(value == Guid.Empty)
+                .Property("CallStatusId")
+                .MustNotBeEmpty();
+            _callStatusId = value;
+        }
+    }
     public Guid UserId
     {
         get => _userId;
@@ -94,6 +107,7 @@ public sealed class Call : Entity
         }
     }
 
+    public CallStatus? CallStatus { get; set; }
     public User? User { get; set; }
     public Location? Location { get; set; }
     public System? System { get; set; }

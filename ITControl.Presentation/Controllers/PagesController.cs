@@ -13,7 +13,9 @@ namespace ITControl.Presentation.Controllers
     [ApiController]
     [PermissionsFilter]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class PagesController(IPagesService pagesService, IPagesView pagesView) : ControllerBase
+    public class PagesController(
+        IPagesService pagesService, 
+        IPagesView pagesView) : ControllerBase
     {
         [HttpGet]
         public async Task<FindManyResponse<FindManyPagesResponse>> Index([FromQuery] FindManyPagesRequest request)

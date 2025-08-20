@@ -55,6 +55,10 @@ public static class DependencyInjectionApi
         services.AddScoped<IEquipmentsRepository, EquipmentsRepository>();
         services.AddScoped<IEquipmentsService, EquipmentsService>();
         services.AddScoped<IEquipmentsView, EquipmentsView>();
+        services.AddScoped<ICallsRepository, CallsRepository>();
+        services.AddScoped<ICallsStatusesRepository, CallsStatusesRepository>();
+        services.AddScoped<ICallsService, CallsService>();
+        services.AddScoped<ICallsView, CallsView>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

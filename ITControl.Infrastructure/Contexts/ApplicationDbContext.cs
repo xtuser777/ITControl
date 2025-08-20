@@ -20,6 +20,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<UserEquipment> UsersEquipments { get; set; }
     public DbSet<UserSystem> UsersSystems { get; set; }
+    public DbSet<Call> Calls { get; set; }
+    public DbSet<CallStatus> CallsStatuses { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
