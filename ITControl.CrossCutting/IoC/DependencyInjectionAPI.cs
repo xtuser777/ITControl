@@ -32,6 +32,8 @@ public static class DependencyInjectionApi
         services.AddScoped<IRolesService, RolesService>();
         services.AddScoped<IRolesView, RolesView>();
         services.AddScoped<IUsersRepository, UsersRepository>();
+        services.AddScoped<IUsersEquipmentsRepository, UsersEquipmentsRepository>();
+        services.AddScoped<IUsersSystemsRepository, UsersSystemsRepository>();
         services.AddScoped<IUsersService, UsersService>();
         services.AddScoped<IUsersView, UsersView>();
         services.AddScoped<IDepartmentsRepository, DepartmentsRepository>();

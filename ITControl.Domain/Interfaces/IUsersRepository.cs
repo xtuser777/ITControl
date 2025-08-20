@@ -5,7 +5,12 @@ namespace ITControl.Domain.Interfaces;
 
 public interface IUsersRepository
 {
-    Task<User?> FindOneAsync(Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole);
+    Task<User?> FindOneAsync(
+        Expression<Func<User?, bool>> predicate, 
+        bool? includePosition, 
+        bool? includeRole,
+        bool? includeUsersEquipments,
+        bool? includeUsersSystems);
     Task<IEnumerable<User>> FindManyAsync(
         string? username = null, 
         string? name = null, 

@@ -13,6 +13,8 @@ public interface IUnitOfWork
     IRolesRepository RolesRepository { get; }
     IRolesPagesRepository RolesPagesRepository { get; }
     IUsersRepository UsersRepository { get; }   
+    IUsersEquipmentsRepository UsersEquipmentsRepository { get; }   
+    IUsersSystemsRepository UsersSystemsRepository { get; }   
     IDepartmentsRepository DepartmentsRepository { get; }
     IDivisionsRepository DivisionsRepository { get; }
     IUnitsRepository UnitsRepository { get; }

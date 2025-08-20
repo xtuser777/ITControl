@@ -6,7 +6,12 @@ namespace ITControl.Application.Interfaces;
 
 public interface IUsersService
 {
-    Task<User?> FindOneAsync(Guid id, bool? includePosition, bool? includeRole);
+    Task<User?> FindOneAsync(
+        Guid id, 
+        bool? includePosition, 
+        bool? includeRole, 
+        bool? includeUsersEquipments,
+        bool? includeUsersSystems);
     Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyUsersRequest request);
     Task<User?> CreateAsync(CreateUsersRequest request);

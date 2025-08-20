@@ -122,6 +122,8 @@ public sealed class User : Entity
     }
     public Position? Position { get; set; }
     public Role? Role { get; set; }
+    public ICollection<UserEquipment>? UsersEquipments { get; set; }
+    public ICollection<UserSystem>? UsersSystems { get; set; }
 
     public User(
         string username, 

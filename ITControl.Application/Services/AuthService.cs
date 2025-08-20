@@ -82,7 +82,12 @@ public class AuthService(
 
     private async Task<User> Validate(string username, string password)
     {
-        var user = await unitOfWork.UsersRepository.FindOneAsync(x => x.Username == username, null, true) 
+        var user = await unitOfWork.UsersRepository.FindOneAsync(
+                       x => x.Username == username, 
+                       null, 
+                       true, 
+                       null, 
+                       null) 
             ?? throw new UnauthorizedAccessException("Usuário inválido.");
         if (!user.Active)
         {

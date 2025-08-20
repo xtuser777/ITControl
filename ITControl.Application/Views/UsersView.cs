@@ -49,7 +49,25 @@ public class UsersView : IUsersView
                     Id = user.RoleId.ToString(),
                     Name = user.Role.Name,
                 } 
-                : null
+                : null,
+            UsersEquipments = user.UsersEquipments != null 
+                ? from equipment in user.UsersEquipments select 
+                    new FindOneUsersEquipmentsResponse()
+                    {
+                        Id = equipment.Id.ToString(),
+                        EquipmentId = equipment.EquipmentId.ToString(),
+                        StartedAt = equipment.StartedAt.ToString(),
+                        EndedAt = equipment.EndedAt.ToString(),
+                    }
+                    : null,
+            UsersSystems = user.UsersSystems != null
+                ? from system in user.UsersSystems select
+                    new FindOneUsersSystemsResponse()
+                    {
+                        Id = system.Id.ToString(),
+                        SystemId = system.SystemId.ToString(),
+                    }
+                : null,
         };
     }
 

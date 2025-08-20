@@ -12,4 +12,6 @@ public class FindOneUsersResponse
     public string RoleId { get; set; } = string.Empty;  
     public FindOneUsersPositionResponse? Position { get; set; }
     public FindOneUsersRoleResponse? Role { get; set; }
+    public IEnumerable<FindOneUsersEquipmentsResponse>? UsersEquipments { get; set; }
+    public IEnumerable<FindOneUsersSystemsResponse>? UsersSystems { get; set; }
 }

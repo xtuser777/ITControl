@@ -34,7 +34,7 @@ namespace ITControl.Presentation.Controllers
         [HttpGet("{id:guid}")]
         public async Task<FindOneResponse<FindOneUsersResponse?>> Show(Guid id)
         {
-            var user = await usersService.FindOneAsync(id, true, true);
+            var user = await usersService.FindOneAsync(id, true, true, true, true);
             var data = usersView.FindOne(user);
             
             return new FindOneResponse<FindOneUsersResponse?>()

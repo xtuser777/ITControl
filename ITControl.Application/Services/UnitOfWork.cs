@@ -14,6 +14,8 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     private IRolesRepository? _rolesRepository;
     private IRolesPagesRepository? _rolesPagesRepository;
     private IUsersRepository? _usersRepository;
+    private IUsersEquipmentsRepository? _usersEquipmentsRepository;
+    private IUsersSystemsRepository? _usersSystemsRepository;
     private IDepartmentsRepository? _departmentsRepository;
     private IDivisionsRepository? _divisionsRepository;
     private IUnitsRepository? _unitsRepository;
@@ -30,6 +32,8 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     public IRolesRepository RolesRepository => _rolesRepository ?? new RolesRepository(context);
     public IRolesPagesRepository RolesPagesRepository => _rolesPagesRepository ?? new RolesPagesRepository(context);
     public IUsersRepository UsersRepository => _usersRepository ?? new UsersRepository(context);
+    public IUsersEquipmentsRepository UsersEquipmentsRepository => _usersEquipmentsRepository ?? new UsersEquipmentsRepository(context);
+    public IUsersSystemsRepository UsersSystemsRepository => _usersSystemsRepository ?? new UsersSystemsRepository(context);
     public IDepartmentsRepository DepartmentsRepository => _departmentsRepository ?? new DepartmentsRepository(context);
     public IDivisionsRepository DivisionsRepository => _divisionsRepository ?? new DivisionsRepository(context);
     public IUnitsRepository UnitsRepository => _unitsRepository ?? new UnitsRepository(context);

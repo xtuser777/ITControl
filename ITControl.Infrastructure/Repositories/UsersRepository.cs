@@ -9,7 +9,11 @@ namespace ITControl.Infrastructure.Repositories;
 public class UsersRepository(ApplicationDbContext context) : IUsersRepository
 {
     public async Task<User?> FindOneAsync(
-        Expression<Func<User?, bool>> predicate, bool? includePosition, bool? includeRole)
+        Expression<Func<User?, bool>> predicate, 
+        bool? includePosition, 
+        bool? includeRole,
+        bool? includeUsersEquipments,
+        bool? includeUsersSystems)
     {
         var query = context.Users.AsQueryable();
         if (includePosition is true)
@@ -19,6 +23,14 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
         if (includeRole is true)
         {
             query = query.Include(x => x.Role);
+        }
+        if (includeUsersEquipments is true)
+        {
+            query = query.Include(x => x.UsersEquipments);
+        }
+        if (includeUsersSystems is true)
+        {
+            query = query.Include(x => x.UsersSystems);
         }
         var user = await query.SingleOrDefaultAsync(predicate);
         

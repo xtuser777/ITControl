@@ -11,15 +11,24 @@ namespace ITControl.Application.Services;
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
     public async Task<User?> FindOneAsync(
-        Guid id, bool? includePosition, bool? includeRole)
+        Guid id, 
+        bool? includePosition, 
+        bool? includeRole,
+        bool? includeUsersEquipments,
+        bool? includeUsersSystems)
     {
         return await unitOfWork.UsersRepository
-            .FindOneAsync(x => x.Id == id, includePosition: true, includeRole: true);
+            .FindOneAsync(
+                x => x.Id == id, 
+                true, 
+                true, 
+                true, 
+                true);
     }
 
     private async Task<User> FindOneOrThrowAsync(Guid id)
     {
-        return await FindOneAsync(id, null, null) 
+        return await FindOneAsync(id, null, null, null, null) 
             ?? throw new NotFoundException("Usuário não encontrado");
     }
 
@@ -69,7 +78,19 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             enrollment: request.Enrollment,
             positionId: Parser.ToGuid(request.PositionId),
             roleId: Parser.ToGuid(request.RoleId));
+        var usersEquipments = from equipment in request.Equipments
+            select
+                new UserEquipment(
+                    user.Id, 
+                    Parser.ToGuid(equipment.EquipmentId), 
+                    Parser.ToDateOnly(equipment.StartedAt),
+                    Parser.ToDateOnlyOptional(equipment.EndedAt));
+        var usersSystems = from system in request.Systems
+            select
+                new UserSystem(user.Id, Parser.ToGuid(system.SystemId));
         await unitOfWork.UsersRepository.CreateAsync(user);
+        await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);
+        await unitOfWork.UsersSystemsRepository.CreateManyAsync(usersSystems);
         await unitOfWork.Commit(transaction);
 
         return user;
@@ -90,7 +111,21 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             positionId: Parser.ToGuidOptional(request.PositionId),
             roleId: Parser.ToGuidOptional(request.RoleId),
             active: request.Active);
+        var usersEquipments = from equipment in request.Equipments
+            select
+                new UserEquipment(
+                    user.Id, 
+                    Parser.ToGuid(equipment.EquipmentId), 
+                    Parser.ToDateOnly(equipment.StartedAt),
+                    Parser.ToDateOnlyOptional(equipment.EndedAt));
+        var usersSystems = from system in request.Systems
+            select
+                new UserSystem(user.Id, Parser.ToGuid(system.SystemId));
         await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
+        await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
+        await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);
+        await unitOfWork.UsersSystemsRepository.CreateManyAsync(usersSystems);
         unitOfWork.UsersRepository.Update(user);
         await unitOfWork.Commit(transaction);
     }
@@ -99,6 +134,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     {
         var user = await FindOneOrThrowAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
+        await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         unitOfWork.UsersRepository.Delete(user);
         await unitOfWork.Commit(transaction);
     }

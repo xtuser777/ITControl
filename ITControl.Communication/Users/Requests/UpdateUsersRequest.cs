@@ -10,4 +10,6 @@ public class UpdateUsersRequest
     public int? Enrollment { get; set; }
     public string? PositionId { get; set; }
     public string? RoleId { get; set; }
+    public IEnumerable<CreateUsersEquipmentsRequest> Equipments { get; set; } = [];
+    public IEnumerable<CreateUsersSystemsRequest> Systems { get; set; } = [];
 }

@@ -18,6 +18,8 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<ContractContact> ContractContacts { get; set; }
     public DbSet<Domain.Entities.System> Systems { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
+    public DbSet<UserEquipment> UsersEquipments { get; set; }
+    public DbSet<UserSystem> UsersSystems { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
