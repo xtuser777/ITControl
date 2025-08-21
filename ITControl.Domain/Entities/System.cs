@@ -109,7 +109,7 @@ public class System : Entity
         set
         {
             DomainExceptionValidation
-                .When( _own == false || value == null)
+                .When( _own == false && value == null)
                 .Property("ContractId")
                 .MustNotBeEmpty();
             _contractId = value;

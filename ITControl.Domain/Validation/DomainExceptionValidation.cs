@@ -111,6 +111,18 @@ public class DomainExceptionValidation
             throw new BadRequestException($"the field {_property} must not be less than {value}.");
     }
 
+    public void TimeMustNotBeGreaterThanCurrent()
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must not be greater than current time.");
+    }
+
+    public void TimeMustNotBeLessThan(TimeOnly value)
+    {
+        if (_hasError)
+            throw new BadRequestException($"the field {_property} must not be less than {value}.");
+    }
+
     public void MustBeGreaterThan(decimal value)
     {
         if (_hasError)

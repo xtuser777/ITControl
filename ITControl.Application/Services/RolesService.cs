@@ -67,7 +67,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 
     public async Task UpdateAsync(Guid id, UpdateRolesRequest request)
     {
-        await CheckConflicts(name: request.Name);
+        await CheckConflicts(id, name: request.Name);
         await CheckConnections((List<CreateRolesPagesRequest>?)request.RolesPages);
         var role = await FindOneOrThrowAsync(id);
         role.Update(name: request.Name, active: request.Active);
