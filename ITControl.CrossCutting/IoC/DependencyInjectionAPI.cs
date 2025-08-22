@@ -65,6 +65,9 @@ public static class DependencyInjectionApi
         services.AddScoped<ITreatmentsRepository, TreatmentsRepository>();
         services.AddScoped<ITreatmentsService, TreatmentsService>();
         services.AddScoped<ITreatmentsView, TreatmentsView>();
+        services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
+        services.AddScoped<IAppointmentsService, AppointmentsService>();
+        services.AddScoped<IAppointmentsView, AppointmentsView>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

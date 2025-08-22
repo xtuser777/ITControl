@@ -23,6 +23,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Call> Calls { get; set; }
     public DbSet<CallStatus> CallsStatuses { get; set; }
     public DbSet<Treatment> Treatments { get; set; }
+    public DbSet<Appointment> Appointments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

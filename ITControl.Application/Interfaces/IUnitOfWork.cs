@@ -26,6 +26,7 @@ public interface IUnitOfWork
     ICallsRepository CallsRepository { get; }
     ICallsStatusesRepository CallsStatusesRepository { get; }
     ITreatmentsRepository TreatmentsRepository { get; }
+    IAppointmentsRepository AppointmentsRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }
