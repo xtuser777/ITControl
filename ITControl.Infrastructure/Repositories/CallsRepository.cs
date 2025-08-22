@@ -24,7 +24,7 @@ public class CallsRepository(
         }
         if (includeLocation == true)
         {
-            query = query.Include(c => c.Location);
+            query = query.Include(c => c.Location!).ThenInclude(l => l.Unit);
         }
         if (includeEquipment == true)
         {

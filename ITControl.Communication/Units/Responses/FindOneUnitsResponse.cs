@@ -9,6 +9,4 @@ public class FindOneUnitsResponse
     public string StreetName { get; set; } = string.Empty;
     public string Neighborhood { get; set; } = string.Empty;
     public string AddressNumber { get; set; } = string.Empty;
-    public IEnumerable<FindOneUnitsDepartmentsResponse>? UnitsDepartments { get; set; }
-    public IEnumerable<FindOneUnitsDivisionsResponse>? UnitsDivisions { get; set; }
 }

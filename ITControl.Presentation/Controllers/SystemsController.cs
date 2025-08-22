@@ -23,7 +23,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManySystemsResponse>> Index(FindManySystemsRequest request)
+        public async Task<FindManyResponse<FindManySystemsResponse>> Index(
+            [FromQuery] FindManySystemsRequest request)
         {
             var systems = await systemsService.FindManyAsync(request);
             var pagination = await systemsService.FindManyPaginationAsync(request);
@@ -58,7 +59,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateSystemsResponse?>> Create(CreateSystemsRequest request)
+        public async Task<FindOneResponse<CreateSystemsResponse?>> Create(
+            [FromBody]CreateSystemsRequest request)
         {
             var system = await systemsService.CreateAsync(request);
             var data = systemsView.Create(system);
@@ -75,7 +77,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, UpdateSystemsRequest request)
+        public async Task Update(Guid id, [FromBody]UpdateSystemsRequest request)
         {
             await systemsService.UpdateAsync(id, request);
             Response.StatusCode = 204;

@@ -10,7 +10,7 @@ public class PositionsRepository(ApplicationDbContext context) : IPositionsRepos
 {
     public async Task<Position?> FindOneAsync(Expression<Func<Position?, bool>> predicate)
     {
-        var position = await context.Positions.FindAsync(predicate);
+        var position = await context.Positions.SingleOrDefaultAsync(predicate);
         return position;
     }
 

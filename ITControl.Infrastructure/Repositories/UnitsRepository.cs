@@ -10,7 +10,7 @@ public class UnitsRepository(ApplicationDbContext context) : IUnitsRepository
 {
     public async Task<Unit?> FindOneAsync(Expression<Func<Unit?, bool>> predicate)
     {
-        return await context.Units.FindAsync(predicate);
+        return await context.Units.SingleOrDefaultAsync(predicate);
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(

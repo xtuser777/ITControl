@@ -8,6 +8,4 @@ public class UpdateUnitsRequest
     public string? StreetName { get; set; }
     public string? Neighborhood { get; set; }
     public string? AddressNumber { get; set; }
-    public IEnumerable<CreateUnitsDepartmentsRequest>? Departments { get; set; }
-    public IEnumerable<CreateUnitsDivisionsRequest>? Divisions { get; set; }
 }

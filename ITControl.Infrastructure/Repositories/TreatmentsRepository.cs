@@ -64,7 +64,11 @@ public class TreatmentsRepository(
         string? orderByUser = null, 
         int? page = null, int? size = null)
     {
-        var query = context.Treatments.AsNoTracking();
+        var query = context
+            .Treatments
+            .Include(t => t.Call)
+            .Include(t => t.User)
+            .AsNoTracking();
         query = BuildQuery(
             query, 
             null, 

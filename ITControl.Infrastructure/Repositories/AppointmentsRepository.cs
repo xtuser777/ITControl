@@ -22,12 +22,18 @@ public class AppointmentsRepository(
 
         if (includeCall != null)
         {
-            query = query.Include(x => x.Call);
+            query = query.Include(x => x.Call!).ThenInclude(c => c.User);
         }
 
         if (includeLocation != null)
         {
-            query = query.Include(x => x.Location);
+            query = query
+                .Include(x => x.Location!)
+                .ThenInclude(l => l.Unit)
+                .Include(a => a.Location!)
+                .ThenInclude(l => l.Department)
+                .Include(a => a.Location!)
+                .ThenInclude(l => l.Division);
         }
         
         return await query.FirstOrDefaultAsync(x => x.Id == id);
@@ -50,7 +56,12 @@ public class AppointmentsRepository(
         string? orderByLocation = null, 
         int? page = null, int? size = null)
     {
-        var query = context.Appointments.AsNoTracking();
+        var query = context
+            .Appointments
+            .Include(x => x.User)
+            .Include(x => x.Call)
+            .Include(x => x.Location)
+            .AsNoTracking();
         query = BuildQuery(
             query, 
             null, 

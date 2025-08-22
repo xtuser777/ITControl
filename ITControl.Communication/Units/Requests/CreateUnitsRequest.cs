@@ -8,6 +8,4 @@ public class CreateUnitsRequest
     public string StreetName { get; set; } = string.Empty;
     public string Neighborhood { get; set; } = string.Empty;
     public string AddressNumber { get; set; } = string.Empty;
-    public IEnumerable<CreateUnitsDepartmentsRequest>? Departments { get; set; }
-    public IEnumerable<CreateUnitsDivisionsRequest>? Divisions { get; set; }
 }

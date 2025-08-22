@@ -29,8 +29,6 @@ public class UnitsView : IUnitsView
             StreetName = unit.StreetName,
             AddressNumber = unit.AddressNumber,
             Neighborhood = unit.Neighborhood,
-            UnitsDepartments = [],
-            UnitsDivisions = [],
         };
     }
 
