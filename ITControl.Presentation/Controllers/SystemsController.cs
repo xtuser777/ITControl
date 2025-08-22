@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Systems.Requests;
 using ITControl.Communication.Systems.Responses;
@@ -18,6 +19,10 @@ namespace ITControl.Presentation.Controllers
         ISystemsView systemsView) : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(FindManyResponse<FindManySystemsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManySystemsResponse>> Index(FindManySystemsRequest request)
         {
             var systems = await systemsService.FindManyAsync(request);
@@ -32,6 +37,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(FindOneResponse<FindOneSystemsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<FindOneSystemsResponse?>> Show(Guid id)
         {
             var system = await systemsService.FindOneAsync(id);
@@ -44,6 +54,10 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(FindOneResponse<CreateSystemsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<CreateSystemsResponse?>> Create(CreateSystemsRequest request)
         {
             var system = await systemsService.CreateAsync(request);
@@ -56,6 +70,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Update(Guid id, UpdateSystemsRequest request)
         {
             await systemsService.UpdateAsync(id, request);
@@ -63,6 +82,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Delete(Guid id)
         {
             await systemsService.DeleteAsync(id);

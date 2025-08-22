@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Units.Requests;
 using ITControl.Communication.Units.Responses;
@@ -18,6 +19,10 @@ namespace ITControl.Presentation.Controllers
         IUnitsView unitsView) : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(FindManyResponse<FindManyUnitsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyUnitsResponse>> Index([FromQuery] FindManyUnitsRequest request)
         {
             var units = await unitsService.FindManyAsync(request);
@@ -32,6 +37,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(FindOneResponse<FindOneUnitsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<FindOneUnitsResponse?>> FindOne([FromRoute] Guid id)
         {
             var unit = await unitsService.FindOneAsync(id);
@@ -44,6 +54,10 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(FindOneResponse<CreateUnitsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<CreateUnitsResponse?>> Create(CreateUnitsRequest request)
         {
             var unit = await unitsService.CreateAsync(request);
@@ -56,6 +70,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Update([FromRoute] Guid id, UpdateUnitsRequest request)
         {
             await unitsService.UpdateAsync(id, request);
@@ -63,6 +82,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Delete([FromRoute] Guid id)
         {
             await unitsService.DeleteAsync(id);

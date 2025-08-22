@@ -18,6 +18,10 @@ namespace ITControl.Presentation.Controllers
         IAppointmentsView appointmentsView) : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(FindManyResponse<FindManyAppointmentsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyAppointmentsResponse>> Index(
             [FromQuery] FindManyAppointmentsRequest request)
         {
@@ -33,6 +37,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(FindOneResponse<FindOneAppointmentsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<FindOneAppointmentsResponse?>> FindOne(Guid id)
         {
             var appointment = await appointmentsService.FindOneAsync(id, true, true, true);
@@ -45,6 +54,10 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(FindOneResponse<CreateAppointmentsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<CreateAppointmentsResponse?>> Create(
             [FromBody] CreateAppointmentsRequest request)
         {
@@ -58,6 +71,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Update(Guid id, [FromBody] UpdateAppointmentsRequest request)
         {
             await appointmentsService.UpdateAsync(id, request);
@@ -65,6 +83,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Delete(Guid id)
         {
             await appointmentsService.DeleteAsync(id);

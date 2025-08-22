@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Positions.Requests;
 using ITControl.Communication.Positions.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -16,6 +17,10 @@ namespace ITControl.Presentation.Controllers;
 public class PositionsController(IPositionsService positionsService, IPositionsView positionsView) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(typeof(FindManyResponse<FindManyPositionsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindManyResponse<FindManyPositionsResponse>> Index([FromQuery] FindManyPositionsRequest request)
     {
         var positions = await positionsService.FindMany(request);
@@ -30,6 +35,11 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(FindOneResponse<FindOnePositionsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<FindOnePositionsResponse?>> Show(Guid id)
     {
         var position = await positionsService.FindOne(id);
@@ -42,6 +52,10 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(FindOneResponse<CreatePositionsResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<CreatePositionsResponse?>> Create([FromBody] CreatePositionsRequest request)
     {
         var position = await positionsService.Create(request);
@@ -54,6 +68,11 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     }
 
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> Update(Guid id, [FromBody] UpdatePositionsRequest request)
     {
         await positionsService.Update(id, request);
@@ -62,6 +81,11 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> Delete(Guid id)
     {
         await positionsService.Delete(id);

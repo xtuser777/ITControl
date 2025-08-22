@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Departments.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -18,6 +19,10 @@ namespace ITControl.Presentation.Controllers
         IDepartmentsView departmentsView) : ControllerBase
     {
         [HttpGet]
+        [ProducesResponseType(typeof(FindManyResponse<FindManyDepartmentsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyDepartmentsResponse>> Index([FromQuery] FindManyDepartmentsRequest request)
         {
             var departments = await departmentsService.FindManyAsync(request);
@@ -32,6 +37,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<FindOneDepartmentsResponse?>> Show(Guid id)
         {
             var department = await departmentsService.FindOneAsync(id);
@@ -44,6 +54,10 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(FindOneResponse<CreateDepartmentsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindOneResponse<CreateDepartmentsResponse?>> Create(CreateDepartmentsRequest request)
         {
             var department = await departmentsService.CreateAsync(request);
@@ -56,6 +70,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpPut("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Update(Guid id, UpdateDepartmentsRequest request)
         {
             await departmentsService.UpdateAsync(id, request);
@@ -63,6 +82,11 @@ namespace ITControl.Presentation.Controllers
         }
 
         [HttpDelete("{id:guid}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task Delete(Guid id)
         {
             await departmentsService.DeleteAsync(id);

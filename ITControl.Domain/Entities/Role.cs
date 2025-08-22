@@ -36,7 +36,7 @@ public sealed class Role : Entity
         } 
     }
 
-    public ICollection<RolePage>? RolesPages { get; set; } 
+    public ICollection<RolePage>? RolesPages { get; set; }
 
     public Role(string name, bool active)
     {

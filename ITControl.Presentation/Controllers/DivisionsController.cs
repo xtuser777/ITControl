@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Divisions.Requests;
 using ITControl.Communication.Divisions.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -18,6 +19,10 @@ public class DivisionsController(
     IDivisionsView divisionsView) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(typeof(FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindManyResponse<FindManyDivisionsResponse>> Index([FromQuery] FindManyDivisionsRequest request)
     {
         var divisions = await divisionsService.FindManyAsync(request);
@@ -32,6 +37,11 @@ public class DivisionsController(
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(FindOneResponse<FindOneDivisionsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<FindOneDivisionsResponse?>> Show([FromRoute] Guid id)
     {
         var division = await divisionsService.FindOneAsync(id); 
@@ -44,6 +54,10 @@ public class DivisionsController(
     }
 
     [HttpPost]
+    [ProducesResponseType(typeof(FindOneResponse<CreateDivisionsResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<CreateDivisionsResponse?>> Create([FromBody] CreateDivisionsRequest request)
     {
         var division = await divisionsService.CreateAsync(request);
@@ -56,6 +70,11 @@ public class DivisionsController(
     }
 
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task Update([FromRoute] Guid id, [FromBody] UpdateDivisionsRequest request)
     {
         await divisionsService.UpdateAsync(id, request);
@@ -63,6 +82,11 @@ public class DivisionsController(
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task Delete([FromRoute] Guid id)
     {
         await divisionsService.DeleteAsync(id);

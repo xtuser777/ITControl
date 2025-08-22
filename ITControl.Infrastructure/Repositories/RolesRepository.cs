@@ -12,13 +12,21 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
         Expression<Func<Role?, bool>> predicate, bool? includeRolesPages = null)
     {
         var query = context.Roles.AsQueryable();
-        if (includeRolesPages != null) query = query.Include(x => x.RolesPages);
-        var page = await query.Where(predicate).FirstOrDefaultAsync();
-        
-        return page;
+        if (includeRolesPages != null)
+        {
+            query = query.Include(x => x.RolesPages!).ThenInclude(rp => rp.Page);
+        }
+
+        return await query.Where(predicate).FirstOrDefaultAsync();
     }
 
-    public async Task<IEnumerable<Role>> FindManyAsync(string? name = null, bool? active = null, string? orderByName = null, string? orderByActive = null, int? page = null, int? size = null)
+    public async Task<IEnumerable<Role>> FindManyAsync(
+        string? name = null, 
+        bool? active = null, 
+        string? orderByName = null, 
+        string? orderByActive = null, 
+        int? page = null, 
+        int? size = null)
     {
         var query = context.Roles.AsNoTracking();
         query = BuildQuery(query, name, active);
@@ -47,12 +55,8 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
     public async Task<int> CountAsync(Guid? id = null, string? name = null, bool? active = null)
     {
         var query = context.Roles.AsNoTracking();
-        if (id != null) query = query.Where(r => r.Id == id);
-        if (name != null) query = query.Where(r => r.Name.Contains(name));
-        if (active != null) query = query.Where(r => r.Active == active);
-        var count = await query.CountAsync();
-        
-        return count;
+        query = BuildQuery(query, name, active);
+        return await query.CountAsync();
     }
 
     public async Task<bool> ExistsAsync(Guid? id = null, string? name = null, bool? active = null)
@@ -67,7 +71,7 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
         var query = context.Roles
             .AsNoTracking()
             .Where(p => p.Id != id);
-        if (name != null) query = query.Where(p => p.Name.Contains(name));
+        query = BuildQuery(query, name);
         var count = await query.CountAsync();
         
         return count > 0;

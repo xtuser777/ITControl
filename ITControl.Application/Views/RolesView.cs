@@ -25,16 +25,22 @@ public class RolesView : IRolesView
             Id = role.Id.ToString(),
             Name = role.Name,
             Active = role.Active,
-            RolesPages = role.RolesPages != null ? from rolePage in role.RolesPages select new FindOneRolesPagesResponse()
-            {
-                Id = rolePage.Id.ToString(),
-                PageId = rolePage.PageId.ToString(),
-                Page = rolePage.Page != null ? new FindOneRolesPagesPageResponse()
-                {
-                    Id = rolePage.PageId.ToString(),
-                    Name = rolePage.Page.Name,
-                } : null,
-            }: null,
+            RolesPages = role.RolesPages != null 
+                ? from rolePage in role.RolesPages 
+                    select new FindOneRolesPagesResponse()
+                    {
+                        Id = rolePage.Id,
+                        PageId = rolePage.PageId.ToString(),
+                    }
+                    : null,
+            Pages = role.RolesPages != null 
+                ? from rolePage in role.RolesPages 
+                    select new FindOneRolesPageResponse()
+                    {
+                        Id = rolePage.Page?.Id ?? Guid.Empty,
+                        Name = rolePage.Page?.Name ?? string.Empty,
+                    }
+                    : null,
         };
     }
 
