@@ -8,9 +8,9 @@ namespace ITControl.Infrastructure.Repositories;
 
 public class UnitsRepository(ApplicationDbContext context) : IUnitsRepository
 {
-    public async Task<Unit?> FindOneAsync(Expression<Func<Unit?, bool>> predicate)
+    public async Task<Unit?> FindOneAsync(Guid id)
     {
-        return await context.Units.SingleOrDefaultAsync(predicate);
+        return await context.Units.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(

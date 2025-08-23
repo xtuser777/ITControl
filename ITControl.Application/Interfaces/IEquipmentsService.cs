@@ -6,7 +6,9 @@ namespace ITControl.Application.Interfaces;
 
 public interface IEquipmentsService
 {
-    Task<Equipment?> FindOneAsync(Guid id, bool? includeContract = null);
+    Task<Equipment> FindOneAsync(
+        Guid id, 
+        bool? includeContract = null);
     Task<IEnumerable<Equipment>> FindManyAsync(FindManyEquipmentsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyEquipmentsRequest request);
     Task<Equipment?> CreateAsync(CreateEquipmentsRequest request);

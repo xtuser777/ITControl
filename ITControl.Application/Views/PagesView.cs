@@ -12,7 +12,7 @@ public class PagesView : IPagesView
 
         return new CreatePagesResponse()
         {
-            Id = page.Id.ToString(),
+            Id = page.Id,
         };
     }
 
@@ -22,7 +22,7 @@ public class PagesView : IPagesView
 
         return new FindOnePagesResponse()
         {
-            Id = page.Id.ToString(),
+            Id = page.Id,
             Name = page.Name,
         };
     }
@@ -34,7 +34,7 @@ public class PagesView : IPagesView
         return from page in pages
             select new FindManyPagesResponse()
             {
-                Id = page.Id.ToString(),
+                Id = page.Id,
                 Name = page.Name,
             }; 
     }

@@ -9,12 +9,12 @@ namespace ITControl.Infrastructure.Repositories;
 public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsRepository
 {
     public async Task<Department?> FindOneAsync(
-        Expression<Func<Department?, bool>> predicate, bool? includeUser = null)
+        Guid id, bool? includeUser = null)
     {
         var query = context.Departments.AsQueryable();
         if (includeUser != null) query = query.Include(x => x.User);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(

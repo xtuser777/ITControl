@@ -14,7 +14,8 @@ namespace ITControl.Presentation.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
         [HttpPost]
-        public async Task<FindOneResponse<LoginResponse>> Login([FromBody] LoginRequest request)
+        public async Task<FindOneResponse<LoginResponse>> LoginAsync(
+            [FromBody] LoginRequest request)
         {
             if (request == null)
             {
@@ -31,7 +32,7 @@ namespace ITControl.Presentation.Controllers
 
         [HttpPost("{userId:guid}/permissions")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        public async Task<FindOneResponse<PermissionsResponse>> Permissions(
+        public async Task<FindOneResponse<PermissionsResponse>> PermissionsAsync(
             [FromRoute] Guid userId, 
             [FromBody] PermissionsRequest request)
         {

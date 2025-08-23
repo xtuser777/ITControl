@@ -1,6 +1,5 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
-using ITControl.Application.Utils;
 using ITControl.Communication.Divisions.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
@@ -10,19 +9,13 @@ namespace ITControl.Application.Services;
 
 public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 {
-    public async Task<Division?> FindOneAsync(
+    public async Task<Division> FindOneAsync(
         Guid id, bool? includeDepartment = null, bool? includeUser = null)
     {
         return await unitOfWork
             .DivisionsRepository
-            .FindOneAsync(x => x.Id == id, includeDepartment, includeUser);
-    }
-
-    private async Task<Division> FindOneOrThrowAsync(
-        Guid id, bool? includeDepartment = null, bool? includeUser = null)
-    {
-        return await FindOneAsync(id, includeDepartment, includeUser) 
-            ?? throw new NotFoundException("divisão não encontrada");
+            .FindOneAsync(id, includeDepartment, includeUser)
+               ?? throw new NotFoundException("divisão não encontrada");
     }
     
     public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRequest request)
@@ -31,8 +24,8 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.DivisionsRepository.FindManyAsync(
             name: request.Name,
-            departmentId: Parser.ToGuidOptional(request.DepartmentId),
-            userId: Parser.ToGuidOptional(request.UserId),
+            departmentId: request.DepartmentId,
+            userId: request.UserId,
             orderByName: request.OrderByName,
             orderByDepartment: request.OrderByDepartment,
             orderByUser: request.OrderByUser,
@@ -46,8 +39,8 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         
         var count = await unitOfWork.DivisionsRepository.CountAsync(
             name: request.Name,
-            departmentId: Parser.ToGuidOptional(request.DepartmentId),
-            userId: Parser.ToGuidOptional(request.UserId));
+            departmentId: request.DepartmentId,
+            userId: request.UserId);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -56,13 +49,14 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 
     public async Task<Division?> CreateAsync(CreateDivisionsRequest request)
     {
+        await CheckConflicts(name: request.Name);
         await CheckExistence(
-            Parser.ToGuid(request.UserId), 
-            Parser.ToGuid(request.DepartmentId));
+            request.UserId, 
+            request.DepartmentId);
         var division = new Division(
             request.Name, 
-            Parser.ToGuid(request.DepartmentId), 
-            Parser.ToGuid(request.UserId));
+            request.DepartmentId, 
+            request.UserId);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.DivisionsRepository.CreateAsync(division);
         await unitOfWork.Commit(transaction);
@@ -72,14 +66,15 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 
     public async Task UpdateAsync(Guid id, UpdateDivisionsRequest request)
     {
+        await CheckConflicts(id, request.Name);
         await CheckExistence(
-            Parser.ToGuidOptional(request.UserId), 
-            Parser.ToGuidOptional(request.DepartmentId));
-        var division = await FindOneOrThrowAsync(id);
+            request.UserId, 
+            request.DepartmentId);
+        var division = await FindOneAsync(id);
         division.Update(
             request.Name,
-            Parser.ToGuidOptional(request.DepartmentId),
-            Parser.ToGuidOptional(request.UserId));
+            request.DepartmentId,
+            request.UserId);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DivisionsRepository.Update(division);
         await unitOfWork.Commit(transaction);
@@ -87,10 +82,33 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var division = await FindOneOrThrowAsync(id);
+        var division = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DivisionsRepository.Delete(division);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckConflicts(Guid? id = null, string? name = null)
+    {
+        var messages = new List<string>();
+        
+        if (name != null)
+            await CheckNameConflict(id, name, messages);
+        
+        if (messages.Count > 0)
+            throw new ConflictException(string.Join(", ", messages));
+    }
+
+    private async Task CheckNameConflict(Guid? id, string name, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.DivisionsRepository.ExclusiveAsync((Guid)id, name) 
+            : await unitOfWork.DivisionsRepository.ExistsAsync(name: name);
+
+        if (exists)
+        {
+            messages.Add("Page with this name already exists");
+        }
     }
 
     private async Task CheckExistence(Guid? userId, Guid? departmentId)

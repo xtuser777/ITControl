@@ -10,26 +10,21 @@ namespace ITControl.Application.Services;
 
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
-    public async Task<User?> FindOneAsync(
+    public async Task<User> FindOneAsync(
         Guid id, 
-        bool? includePosition, 
-        bool? includeRole,
-        bool? includeUsersEquipments,
-        bool? includeUsersSystems)
+        bool? includePosition = null, 
+        bool? includeRole = null,
+        bool? includeUsersEquipments = null,
+        bool? includeUsersSystems = null)
     {
         return await unitOfWork.UsersRepository
             .FindOneAsync(
-                x => x.Id == id, 
+                id, 
                 true, 
                 true, 
                 true, 
-                true);
-    }
-
-    private async Task<User> FindOneOrThrowAsync(Guid id)
-    {
-        return await FindOneAsync(id, null, null, null, null) 
-            ?? throw new NotFoundException("Usuário não encontrado");
+                true) 
+               ?? throw new NotFoundException("Usuário não encontrado");
     }
 
     public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
@@ -66,28 +61,29 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     public async Task<User?> CreateAsync(CreateUsersRequest request)
     {
+        await CheckConflicts(null, request.Name, request.Username, request.Email);
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistence(
-            positionId: Parser.ToGuid(request.PositionId),
-            roleId: Parser.ToGuid(request.RoleId));
+            positionId: request.PositionId,
+            roleId: request.RoleId);
         var user = new User(
             username: request.Username,
             email: request.Email,
             name: request.Name,
             password: Crypt.HashPassword(request.Password),
             enrollment: request.Enrollment,
-            positionId: Parser.ToGuid(request.PositionId),
-            roleId: Parser.ToGuid(request.RoleId));
+            positionId: request.PositionId,
+            roleId: request.RoleId);
         var usersEquipments = from equipment in request.Equipments
             select
                 new UserEquipment(
                     user.Id, 
-                    Parser.ToGuid(equipment.EquipmentId), 
-                    Parser.ToDateOnly(equipment.StartedAt),
-                    Parser.ToDateOnlyOptional(equipment.EndedAt));
+                    equipment.EquipmentId, 
+                    equipment.StartedAt,
+                    equipment.EndedAt);
         var usersSystems = from system in request.Systems
             select
-                new UserSystem(user.Id, Parser.ToGuid(system.SystemId));
+                new UserSystem(user.Id, system.SystemId);
         await unitOfWork.UsersRepository.CreateAsync(user);
         await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);
         await unitOfWork.UsersSystemsRepository.CreateManyAsync(usersSystems);
@@ -98,29 +94,30 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
+        await CheckConflicts(id, request.Name, request.Username, request.Email);
         await CheckExistence(
-            positionId: Parser.ToGuidOptional(request.PositionId),
-            roleId: Parser.ToGuidOptional(request.RoleId));
-        var user = await FindOneOrThrowAsync(id);
+            positionId: request.PositionId,
+            roleId: request.RoleId);
+        var user = await FindOneAsync(id);
         user.Update(
             username: request.Username,
             email: request.Email,
             name: request.Name,
             password: request.Password != null ? Crypt.HashPassword(request.Password) : null,
             enrollment: request.Enrollment,
-            positionId: Parser.ToGuidOptional(request.PositionId),
-            roleId: Parser.ToGuidOptional(request.RoleId),
+            positionId: request.PositionId,
+            roleId: request.RoleId,
             active: request.Active);
         var usersEquipments = from equipment in request.Equipments
             select
                 new UserEquipment(
                     user.Id, 
-                    Parser.ToGuid(equipment.EquipmentId), 
-                    Parser.ToDateOnly(equipment.StartedAt),
-                    Parser.ToDateOnlyOptional(equipment.EndedAt));
+                    equipment.EquipmentId, 
+                    equipment.StartedAt,
+                    equipment.EndedAt);
         var usersSystems = from system in request.Systems
             select
-                new UserSystem(user.Id, Parser.ToGuid(system.SystemId));
+                new UserSystem(user.Id, system.SystemId);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
@@ -132,12 +129,67 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     public async Task DeleteAsync(Guid id)
     {
-        var user = await FindOneOrThrowAsync(id);
+        var user = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         unitOfWork.UsersRepository.Delete(user);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckConflicts(
+        Guid? id = null, 
+        string? name = null, 
+        string? username = null, 
+        string? email = null)
+    {
+        var messages = new List<string>();
+        
+        if (name != null)
+            await CheckNameConflict(id, name, messages);
+        if (username != null)
+            await CheckUsernameConflict(id, username, messages);
+        if (email != null)
+            await CheckEmailConflict(id, email, messages);
+        
+        if (messages.Count > 0)
+            throw new ConflictException(string.Join(", ", messages));
+    }
+
+    private async Task CheckNameConflict(Guid? id, string name, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, name) 
+            : await unitOfWork.UsersRepository.ExistsAsync(name: name);
+
+        if (exists)
+        {
+            messages.Add("Page with this name already exists");
+        }
+    }
+
+    private async Task CheckUsernameConflict(Guid? id, string username, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, username) 
+            : await unitOfWork.UsersRepository.ExistsAsync(username: username);
+
+        if (exists)
+        {
+            messages.Add("Page with this username already exists");
+        }
+    }
+
+    private async Task CheckEmailConflict(Guid? id, string email, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, email) 
+            : await unitOfWork.UsersRepository.ExistsAsync(email: email);
+
+        if (exists)
+        {
+            messages.Add("Page with this email already exists");
+        }
     }
 
     private async Task CheckExistence(Guid? positionId, Guid? roleId)

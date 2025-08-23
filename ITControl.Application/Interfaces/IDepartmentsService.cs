@@ -6,7 +6,7 @@ namespace ITControl.Application.Interfaces;
 
 public interface IDepartmentsService
 {
-    Task<Department?> FindOneAsync(Guid id);
+    Task<Department> FindOneAsync(Guid id);
     Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request);
     Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRequest request);
     Task<Department?> CreateAsync(CreateDepartmentsRequest request);

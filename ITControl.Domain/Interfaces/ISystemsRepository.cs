@@ -1,11 +1,9 @@
-using System.Linq.Expressions;
-
 namespace ITControl.Domain.Interfaces;
 
 public interface ISystemsRepository
 {
     Task<Entities.System?> FindOneAsync(
-        Expression<Func<Domain.Entities.System?, bool>> predicate, bool? includeContract = null);
+        Guid id, bool? includeContract = null);
     Task<IEnumerable<Entities.System>> FindManyAsync(
         string? name = null,
         string? version = null,

@@ -12,7 +12,7 @@ public class ContractsView : IContractsView
 
         return new CreateContractsResponse()
         {
-            Id = contract.Id.ToString(),
+            Id = contract.Id,
         };
     }
 
@@ -22,15 +22,15 @@ public class ContractsView : IContractsView
 
         return new FindOneContractsResponse()
         {
-            Id = contract.Id.ToString(),
+            Id = contract.Id,
             ObjectName = contract.ObjectName,
-            StartedAt = contract.StartedAt.ToString(),
-            EndedAt = contract.EndedAt.ToString(),
+            StartedAt = contract.StartedAt,
+            EndedAt = contract.EndedAt,
             ContractsContacts = contract.ContractContacts != null ? 
                 from contact in contract.ContractContacts select 
                 new FindOneContractsContactsResponse()
                 {
-                    Id = contact.Id.ToString(),
+                    Id = contact.Id,
                     Name = contact.Name,
                     Phone = contact.Phone,
                     Email = contact.Email,
@@ -45,10 +45,10 @@ public class ContractsView : IContractsView
 
         return from contract in contracts select new FindManyContractsResponse()
         {
-            Id = contract.Id.ToString(),
+            Id = contract.Id,
             ObjectName = contract.ObjectName,
-            StartedAt = contract.StartedAt.ToString(),
-            EndedAt = contract.EndedAt.ToString(),
+            StartedAt = contract.StartedAt,
+            EndedAt = contract.EndedAt,
         };
     }
 }

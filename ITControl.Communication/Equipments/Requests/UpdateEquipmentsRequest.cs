@@ -9,5 +9,5 @@ public class UpdateEquipmentsRequest
     public string? Tag { get; set; }
     public int? Type { get; set; }
     public bool? Rented { get; set; }
-    public string? ContractId { get; set; }
+    public Guid? ContractId { get; set; }
 }

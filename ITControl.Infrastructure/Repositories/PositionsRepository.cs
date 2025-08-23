@@ -8,10 +8,9 @@ namespace ITControl.Infrastructure.Repositories;
 
 public class PositionsRepository(ApplicationDbContext context) : IPositionsRepository
 {
-    public async Task<Position?> FindOneAsync(Expression<Func<Position?, bool>> predicate)
+    public async Task<Position?> FindOneAsync(Guid id)
     {
-        var position = await context.Positions.SingleOrDefaultAsync(predicate);
-        return position;
+        return await context.Positions.FindAsync(id);
     }
 
     public async Task<IEnumerable<Position>> FindManyAsync(string? description = null, string? orderByDecription = null, int? page = null, int? size = null)

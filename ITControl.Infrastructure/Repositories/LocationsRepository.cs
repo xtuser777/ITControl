@@ -9,7 +9,7 @@ namespace ITControl.Infrastructure.Repositories;
 public class LocationsRepository(ApplicationDbContext context) : ILocationsRepository
 {
     public async Task<Location?> FindOneAsync(
-        Expression<Func<Location?, bool>> predicate,
+        Guid id,
         bool? includeUnit = null,
         bool? includeUser = null,
         bool? includeDepartment = null,
@@ -21,7 +21,7 @@ public class LocationsRepository(ApplicationDbContext context) : ILocationsRepos
         if (includeDepartment != null) query = query.Include(x => x.Department);
         if (includeDivision != null) query = query.Include(x => x.Division);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Location>> FindManyAsync(

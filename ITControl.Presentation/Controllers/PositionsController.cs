@@ -14,18 +14,21 @@ namespace ITControl.Presentation.Controllers;
 [ApiController]
 [PermissionsFilter]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-public class PositionsController(IPositionsService positionsService, IPositionsView positionsView) : ControllerBase
+public class PositionsController(
+    IPositionsService positionsService, 
+    IPositionsView positionsView) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(FindManyResponse<FindManyPositionsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyPositionsResponse>> Index([FromQuery] FindManyPositionsRequest request)
+    public async Task<FindManyResponse<FindManyPositionsResponse>> IndexAsync(
+        [FromQuery] FindManyPositionsRequest request)
     {
-        var positions = await positionsService.FindMany(request);
+        var positions = await positionsService.FindManyAsync(request);
         var data = positionsView.FindMany(positions);
-        var pagination = await positionsService.FindManyPagination(request);
+        var pagination = await positionsService.FindManyPaginationAsync(request);
 
         return new FindManyResponse<FindManyPositionsResponse>()
         {
@@ -40,9 +43,9 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOnePositionsResponse?>> Show(Guid id)
+    public async Task<FindOneResponse<FindOnePositionsResponse?>> ShowAsync(Guid id)
     {
-        var position = await positionsService.FindOne(id);
+        var position = await positionsService.FindOneAsync(id);
         var data = positionsView.FindOne(position);
 
         return new FindOneResponse<FindOnePositionsResponse?>()
@@ -56,9 +59,10 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreatePositionsResponse?>> Create([FromBody] CreatePositionsRequest request)
+    public async Task<FindOneResponse<CreatePositionsResponse?>> CreateAsync(
+        [FromBody] CreatePositionsRequest request)
     {
-        var position = await positionsService.Create(request);
+        var position = await positionsService.CreateAsync(request);
         var data = positionsView.Create(position);
         Response.StatusCode = 201;
         return new FindOneResponse<CreatePositionsResponse?>()
@@ -73,9 +77,11 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> Update(Guid id, [FromBody] UpdatePositionsRequest request)
+    public async Task<ActionResult> UpdateAsync(
+        Guid id, 
+        [FromBody] UpdatePositionsRequest request)
     {
-        await positionsService.Update(id, request);
+        await positionsService.UpdateAsync(id, request);
         
         return NoContent();
     }
@@ -86,9 +92,9 @@ public class PositionsController(IPositionsService positionsService, IPositionsV
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult> DeleteAsync(Guid id)
     {
-        await positionsService.Delete(id);
+        await positionsService.DeleteAsync(id);
         
         return NoContent();
     }

@@ -10,12 +10,12 @@ namespace ITControl.Infrastructure.Repositories;
 public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRepository
 {
     public async Task<Equipment?> FindOneAsync(
-        Expression<Func<Equipment?, bool>> predicate, bool? includeContract)
+        Guid id, bool? includeContract)
     {
         var query = context.Equipments.AsQueryable();
         if (includeContract.HasValue) query = query.Include(x => x.Contract);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(

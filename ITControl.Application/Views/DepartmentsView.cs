@@ -12,7 +12,7 @@ public class DepartmentsView : IDepartmentsView
 
         return new CreateDepartmentsResponse()
         {
-            Id = department.Id.ToString(),
+            Id = department.Id,
         };
     }
 
@@ -22,13 +22,13 @@ public class DepartmentsView : IDepartmentsView
 
         return new FindOneDepartmentsResponse()
         {
-            Id = department.Id.ToString(),
+            Id = department.Id,
             Alias = department.Alias,
             Name = department.Name,
-            UserId = department.UserId.ToString(),
+            UserId = department.UserId,
             User = department.User != null ? new FindOneDepartmentsUserResponse()
             {
-                Id = department.User.Id.ToString(),
+                Id = department.User.Id,
                 Name = department.User.Name,
             } : null
         };
@@ -40,10 +40,10 @@ public class DepartmentsView : IDepartmentsView
 
         return from department in departments select new FindManyDepartmentsResponse()
         {
-            Id = department.Id.ToString(),
+            Id = department.Id,
             Alias = department.Alias,
             Name = department.Name,
-            UserId = department.UserId.ToString(),
+            UserId = department.UserId,
         };
     }
 }

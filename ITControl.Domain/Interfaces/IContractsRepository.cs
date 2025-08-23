@@ -1,12 +1,11 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IContractsRepository
 {
     Task<Contract?> FindOneAsync(
-        Expression<Func<Contract?, bool>> predicate, 
+        Guid id, 
         bool? includeContractsContacts = null);
     Task<IEnumerable<Contract>> FindManyAsync(
         string? objectName = null,

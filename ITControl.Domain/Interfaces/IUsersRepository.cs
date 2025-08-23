@@ -1,16 +1,16 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IUsersRepository
 {
     Task<User?> FindOneAsync(
-        Expression<Func<User?, bool>> predicate, 
+        Guid id, 
         bool? includePosition, 
         bool? includeRole,
         bool? includeUsersEquipments,
         bool? includeUsersSystems);
+    Task<User?> FindOneByUsernameAsync(string username);
     Task<IEnumerable<User>> FindManyAsync(
         string? username = null, 
         string? name = null, 
@@ -39,7 +39,7 @@ public interface IUsersRepository
         Guid? positionId = null, 
         Guid? roleId = null);
     Task<bool> ExistsAsync(
-        Guid? id, 
+        Guid? id = null, 
         string? username = null, 
         string? name = null, 
         string? email = null, 
@@ -50,5 +50,6 @@ public interface IUsersRepository
     Task<bool> ExclusiveAsync(
         Guid id, 
         string? username = null, 
+        string? name = null, 
         string? email = null);
 }

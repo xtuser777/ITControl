@@ -9,13 +9,13 @@ namespace ITControl.Infrastructure.Repositories;
 public class ContractsRepository(ApplicationDbContext context) : IContractsRepository
 {
     public async Task<Contract?> FindOneAsync(
-        Expression<Func<Contract?, bool>> predicate, bool? includeContractsContacts = null)
+        Guid id, bool? includeContractsContacts = null)
     {
         var query = context.Contracts.AsQueryable();
         if (includeContractsContacts != null) 
             query = query.Include(x => x.ContractContacts);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(

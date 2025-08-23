@@ -13,7 +13,7 @@ public class PositionsView : IPositionsView
 
         var response = new FindOnePositionsResponse()
         {
-            Id = position.Id.ToString(),
+            Id = position.Id,
             Description = position.Description
         };
         
@@ -27,7 +27,7 @@ public class PositionsView : IPositionsView
         return from position in positions
             select new FindManyPositionsResponse()
             {
-                Id = position.Id.ToString(),
+                Id = position.Id,
                 Description = position.Description,
             }; 
     }
@@ -38,7 +38,7 @@ public class PositionsView : IPositionsView
 
         var response = new CreatePositionsResponse()
         {
-            Id = position.Id.ToString(),
+            Id = position.Id,
         };
         
         return response;

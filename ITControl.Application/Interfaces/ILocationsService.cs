@@ -6,7 +6,7 @@ namespace ITControl.Application.Interfaces;
 
 public interface ILocationsService
 {
-    Task<Location?> FindOneAsync(
+    Task<Location> FindOneAsync(
         Guid id,
         bool? includeUnit = null,
         bool? includeUser = null,

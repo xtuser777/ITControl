@@ -15,7 +15,7 @@ public class UsersView : IUsersView
 
         return new CreateUsersResponse()
         {
-            Id = user.Id.ToString()
+            Id = user.Id
         };
     }
 
@@ -28,25 +28,25 @@ public class UsersView : IUsersView
 
         return new FindOneUsersResponse()
         {
-            Id = user.Id.ToString(),
+            Id = user.Id,
             Name = user.Name,
             Email = user.Email,
             Username = user.Username,
             Enrollment = user.Enrollment,
             Active = user.Active,
-            PositionId = user.PositionId.ToString(),
-            RoleId = user.RoleId.ToString(),
+            PositionId = user.PositionId,
+            RoleId = user.RoleId,
             Position = user.Position != null
                 ? new FindOneUsersPositionResponse()
                 {
-                    Id = user.PositionId.ToString(),
+                    Id = user.PositionId,
                     Description = user.Position.Description,
                 }
                 : null,
             Role = user.Role != null
                 ? new FindOneUsersRoleResponse()
                 {
-                    Id = user.RoleId.ToString(),
+                    Id = user.RoleId,
                     Name = user.Role.Name,
                 } 
                 : null,
@@ -54,18 +54,18 @@ public class UsersView : IUsersView
                 ? from equipment in user.UsersEquipments select 
                     new FindOneUsersEquipmentsResponse()
                     {
-                        Id = equipment.Id.ToString(),
-                        EquipmentId = equipment.EquipmentId.ToString(),
-                        StartedAt = equipment.StartedAt.ToString(),
-                        EndedAt = equipment.EndedAt.ToString(),
+                        Id = equipment.Id,
+                        EquipmentId = equipment.EquipmentId,
+                        StartedAt = equipment.StartedAt,
+                        EndedAt = equipment.EndedAt,
                     }
                     : null,
             UsersSystems = user.UsersSystems != null
                 ? from system in user.UsersSystems select
                     new FindOneUsersSystemsResponse()
                     {
-                        Id = system.Id.ToString(),
-                        SystemId = system.SystemId.ToString(),
+                        Id = system.Id,
+                        SystemId = system.SystemId,
                     }
                 : null,
         };
@@ -77,14 +77,14 @@ public class UsersView : IUsersView
 
         return from user in users select new FindManyUsersResponse()
         {
-            Id = user.Id.ToString(),
+            Id = user.Id,
             Name = user.Name,
             Email = user.Email,
             Username = user.Username,
             Enrollment = user.Enrollment,
             Active = user.Active,
-            PositionId = user.PositionId.ToString(),
-            RoleId = user.RoleId.ToString(),
+            PositionId = user.PositionId,
+            RoleId = user.RoleId,
         };
     }
 }

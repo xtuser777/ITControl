@@ -9,7 +9,7 @@ namespace ITControl.Infrastructure.Repositories;
 public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepository
 {
     public async Task<Division?> FindOneAsync(
-        Expression<Func<Division?, bool>> predicate, 
+        Guid id, 
         bool? includeDepartment = null, 
         bool? includeUser = null)
     {
@@ -19,7 +19,7 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         if (includeUser is not null) 
             query = query.Include(x => x.User);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Division>> FindManyAsync(
@@ -78,7 +78,7 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         return count > 0;
     }
 
-    public async Task<bool> Exclusive(Guid id, string? name = null)
+    public async Task<bool> ExclusiveAsync(Guid id, string? name = null)
     {
         var query = context.Divisions.AsNoTracking();
         query = query.Where(x => x.Id != id);

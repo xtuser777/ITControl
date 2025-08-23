@@ -9,12 +9,12 @@ namespace ITControl.Infrastructure.Repositories;
 public class SystemsRepository(ApplicationDbContext context) : ISystemsRepository
 {
     public async Task<Domain.Entities.System?> FindOneAsync(
-        Expression<Func<Domain.Entities.System?, bool>> predicate, bool? includeContract = null)
+        Guid id, bool? includeContract = null)
     {
         var query = context.Systems.AsQueryable();
         if (includeContract != null) query = query.Include(x => x.Contract);
         
-        return await query.FirstOrDefaultAsync(predicate);
+        return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Domain.Entities.System>> FindManyAsync(

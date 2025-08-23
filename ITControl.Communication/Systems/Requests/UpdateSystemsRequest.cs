@@ -4,8 +4,8 @@ public class UpdateSystemsRequest
 {
     public string? Name { get; set; }
     public string? Version { get; set; }
-    public string? ImplementedAt { get; set; }
-    public string? EndedAt { get; set; }
+    public DateOnly? ImplementedAt { get; set; }
+    public DateOnly? EndedAt { get; set; }
     public bool? Own { get; set; }
-    public string? ContractId { get; set; }
+    public Guid? ContractId { get; set; }
 }

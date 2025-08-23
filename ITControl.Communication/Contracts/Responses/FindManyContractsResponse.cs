@@ -2,8 +2,8 @@ namespace ITControl.Communication.Contracts.Responses;
 
 public class FindManyContractsResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string ObjectName { get; set; } = string.Empty;
-    public string StartedAt { get; set; } = string.Empty;
-    public string? EndedAt { get; set; }
+    public DateOnly StartedAt { get; set; }
+    public DateOnly? EndedAt { get; set; }
 }

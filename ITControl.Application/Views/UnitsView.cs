@@ -12,7 +12,7 @@ public class UnitsView : IUnitsView
 
         return new CreateUnitsResponse()
         {
-            Id = unit.Id.ToString(),
+            Id = unit.Id,
         };
     }
 
@@ -22,7 +22,7 @@ public class UnitsView : IUnitsView
 
         return new FindOneUnitsResponse()
         {
-            Id = unit.Id.ToString(),
+            Id = unit.Id,
             Name = unit.Name,
             Phone = unit.Phone,
             PostalCode = unit.PostalCode,
@@ -38,7 +38,7 @@ public class UnitsView : IUnitsView
 
         return from unit in units select new FindManyUnitsResponse()
         {
-            Id = unit.Id.ToString(),
+            Id = unit.Id,
             Name = unit.Name,
             Phone = unit.Phone,
             PostalCode = unit.PostalCode,

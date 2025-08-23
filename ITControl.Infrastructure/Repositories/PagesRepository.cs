@@ -8,13 +8,15 @@ namespace ITControl.Infrastructure.Repositories;
 
 public class PagesRepository(ApplicationDbContext context): IPagesRepository
 {
-    public async Task<Page?> FindOneAsync(Expression<Func<Page?, bool>> predicate)
+    public async Task<Page?> FindOneAsync(Guid id)
     {
-        var page = await context.Pages.SingleOrDefaultAsync(predicate);
-        return page;
+        return await context.Pages.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Page>> FindManyAsync(string? name = null, string? orderByName = null, int? page = null, int? size = null)
+    public async Task<IEnumerable<Page>> FindManyAsync(
+        string? name = null, 
+        string? orderByName = null, 
+        int? page = null, int? size = null)
     {
         var query = context.Pages.AsNoTracking();
         if (name != null) query = query.Where(p => p.Name.Contains(name));
@@ -55,7 +57,7 @@ public class PagesRepository(ApplicationDbContext context): IPagesRepository
         return count;
     }
 
-    public async Task<bool> ExistAsync(Guid? id = null, string? name = null)
+    public async Task<bool> ExistsAsync(Guid? id = null, string? name = null)
     {
         var count = await CountAsync(id, name);
         

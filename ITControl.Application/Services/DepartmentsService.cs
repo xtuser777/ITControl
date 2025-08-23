@@ -1,6 +1,5 @@
 using ITControl.Application.Interfaces;
 using ITControl.Application.Tools;
-using ITControl.Application.Utils;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
@@ -10,17 +9,12 @@ namespace ITControl.Application.Services;
 
 public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 {
-    public async Task<Department?> FindOneAsync(Guid id)
+    public async Task<Department> FindOneAsync(Guid id)
     {
         return await unitOfWork
             .DepartmentsRepository
-            .FindOneAsync(x => x.Id == id, true);
-    }
-
-    public async Task<Department> FindOneOrThrowAsync(Guid id)
-    {
-        return await FindOneAsync(id) 
-            ?? throw new NotFoundException("department not found");
+            .FindOneAsync(id, true)
+               ?? throw new NotFoundException("department not found");
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request)
@@ -30,7 +24,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         return await unitOfWork.DepartmentsRepository.FindManyAsync(
             alias: request.Alias,
             name: request.Name,
-            userId: Parser.ToGuidOptional(request.UserId),
+            userId: request.UserId,
             orderByAlias: request.OrderByAlias,
             orderByName: request.OrderByName,
             orderByUser: request.OrderByUser,
@@ -45,7 +39,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         var count = await unitOfWork.DepartmentsRepository.CountAsync(
             alias: request.Alias,
             name: request.Name,
-            userId: Parser.ToGuidOptional(request.UserId));
+            userId: request.UserId);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -54,11 +48,12 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task<Department?> CreateAsync(CreateDepartmentsRequest request)
     {
-        await CheckExistence(Parser.ToGuid(request.UserId));
+        await CheckConflicts(name: request.Name, alias: request.Alias);
+        await CheckExistence(request.UserId);
         var department = new Department(
             alias: request.Alias,
             name: request.Name,
-            userId: Parser.ToGuid(request.UserId));
+            userId: request.UserId);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.DepartmentsRepository.CreateAsync(department);
         await unitOfWork.Commit(transaction);
@@ -68,12 +63,13 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task UpdateAsync(Guid id, UpdateDepartmentsRequest request)
     {
-        await CheckExistence(Parser.ToGuidOptional(request.UserId));
-        var department = await FindOneOrThrowAsync(id);
+        await CheckConflicts(id, request.Name, request.Alias);
+        await CheckExistence(request.UserId);
+        var department = await FindOneAsync(id);
         department.Update(
             alias: request.Alias,
             name: request.Name,
-            userId: Parser.ToGuidOptional(request.UserId));
+            userId: request.UserId);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Update(department);
         await unitOfWork.Commit(transaction);
@@ -81,10 +77,47 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var department = await FindOneOrThrowAsync(id);
+        var department = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Delete(department);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckConflicts(Guid? id = null, string? name = null, string? alias = null)
+    {
+        var messages = new List<string>();
+        
+        if (name != null)
+            await CheckNameConflict(id, name, messages);
+        if (alias != null)
+            await CheckAliasConflict(id, alias, messages);
+        
+        if (messages.Count > 0)
+            throw new ConflictException(string.Join(", ", messages));
+    }
+
+    private async Task CheckNameConflict(Guid? id, string name, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.DepartmentsRepository.ExclusiveAsync((Guid)id, name) 
+            : await unitOfWork.DepartmentsRepository.ExistsAsync(name: name);
+
+        if (exists)
+        {
+            messages.Add("Page with this name already exists");
+        }
+    }
+
+    private async Task CheckAliasConflict(Guid? id, string alias, List<string> messages)
+    {
+        var exists = id != null 
+            ? await unitOfWork.DepartmentsRepository.ExclusiveAsync((Guid)id, alias) 
+            : await unitOfWork.DepartmentsRepository.ExistsAsync(alias: alias);
+
+        if (exists)
+        {
+            messages.Add("Page with this alias already exists");
+        }
     }
 
     private async Task CheckExistence(Guid? userId)

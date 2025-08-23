@@ -14,7 +14,7 @@ public class EquipmentsView : IEquipmentsView
 
         return new CreateEquipmentsResponse()
         {
-            Id = equipment.Id.ToString(),
+            Id = equipment.Id,
         };
     }
 
@@ -24,7 +24,7 @@ public class EquipmentsView : IEquipmentsView
 
         return new FindOneEquipmentsResponse()
         {
-            Id = equipment.Id.ToString(),
+            Id = equipment.Id,
             Name = equipment.Name,
             Description = equipment.Description,
             Ip = equipment.Ip,
@@ -36,10 +36,10 @@ public class EquipmentsView : IEquipmentsView
                 DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
             },
             Rented = equipment.Rented,
-            ContractId = equipment.ContractId.ToString(),
+            ContractId = equipment.ContractId,
             Contract = equipment.Contract != null ? new FindOneEquipmentsContractResponse()
             {
-                Id = equipment.Contract.Id.ToString(),
+                Id = equipment.Contract.Id,
                 ObjectName = equipment.Contract.ObjectName
             } : null,
         };
@@ -51,7 +51,7 @@ public class EquipmentsView : IEquipmentsView
 
         return from equipment in equipments select new FindManyEquipmentsResponse()
         {
-            Id = equipment.Id.ToString(),
+            Id = equipment.Id,
             Name = equipment.Name,
             Description = equipment.Description,
             Ip = equipment.Ip,
@@ -63,7 +63,7 @@ public class EquipmentsView : IEquipmentsView
                 DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
             },
             Rented = equipment.Rented,
-            ContractId = equipment.ContractId.ToString(),
+            ContractId = equipment.ContractId,
         };
     }
 }

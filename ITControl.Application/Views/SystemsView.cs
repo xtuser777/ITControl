@@ -11,7 +11,7 @@ public class SystemsView : ISystemsView
 
         return new CreateSystemsResponse()
         {
-            Id = system.Id.ToString(),
+            Id = system.Id,
         };
     }
 
@@ -21,16 +21,16 @@ public class SystemsView : ISystemsView
 
         return new FindOneSystemsResponse()
         {
-            Id = system.Id.ToString(),
+            Id = system.Id,
             Name = system.Name,
             Version = system.Version,
-            ImplementedAt = system.ImplementedAt.ToString(),
-            EndedAt = system.EndedAt.ToString(),
+            ImplementedAt = system.ImplementedAt,
+            EndedAt = system.EndedAt,
             Own = system.Own,
-            ContractId = system.ContractId != null ? system.ContractId.ToString() : null,
+            ContractId = system.ContractId != null ? system.ContractId : null,
             Contract = system.Contract != null ? new FindOneSystemsContractResponse()
             {
-                Id = system.Contract.Id.ToString(),
+                Id = system.Contract.Id,
                 ObjectName = system.Contract.ObjectName,
             } : null,
         };
@@ -42,13 +42,13 @@ public class SystemsView : ISystemsView
 
         return from system in systems select new FindManySystemsResponse()
         {
-            Id = system.Id.ToString(),
+            Id = system.Id,
             Name = system.Name,
             Version = system.Version,
-            ImplementedAt = system.ImplementedAt.ToString(),
-            EndedAt = system.EndedAt.ToString(),
+            ImplementedAt = system.ImplementedAt,
+            EndedAt = system.EndedAt,
             Own = system.Own,
-            ContractId = system.ContractId?.ToString(),
+            ContractId = system.ContractId,
         };
     }
 }

@@ -5,7 +5,9 @@ namespace ITControl.Application.Interfaces;
 
 public interface ISystemsService
 {
-    Task<Domain.Entities.System?> FindOneAsync(Guid id, bool? includeContractsContacts = null);
+    Task<Domain.Entities.System> FindOneAsync(
+        Guid id, 
+        bool? includeContractsContacts = null);
     Task<IEnumerable<Domain.Entities.System>> FindManyAsync(FindManySystemsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManySystemsRequest request);
     Task<Domain.Entities.System?> CreateAsync(CreateSystemsRequest request);

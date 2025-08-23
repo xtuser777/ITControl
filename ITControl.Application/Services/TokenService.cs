@@ -1,10 +1,10 @@
-﻿using ITControl.Application.Interfaces;
-using ITControl.Communication.Auth.Responses;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
+using ITControl.Application.Interfaces;
+using ITControl.Communication.Auth.Responses;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ITControl.Application.Services;
 

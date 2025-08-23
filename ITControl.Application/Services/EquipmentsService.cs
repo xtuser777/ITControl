@@ -11,17 +11,12 @@ namespace ITControl.Application.Services;
 
 public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 {
-    public async Task<Equipment?> FindOneAsync(Guid id, bool? includeContract = null)
+    public async Task<Equipment> FindOneAsync(Guid id, bool? includeContract = null)
     {
         return await unitOfWork
             .EquipmentsRepository
-            .FindOneAsync(x => x.Id == id, includeContract);
-    }
-
-    private async Task<Equipment> FindOneOrThrowAsync(Guid id, bool? includeContract = null)
-    {
-        return await FindOneAsync(id, includeContract) 
-            ?? throw new NotFoundException("Equipamento não encontrado");
+            .FindOneAsync(id, includeContract) 
+               ?? throw new NotFoundException("Equipamento não encontrado");
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(FindManyEquipmentsRequest request)
@@ -68,7 +63,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task<Equipment?> CreateAsync(CreateEquipmentsRequest request)
     {
-        await CheckExistence(Parser.ToGuidOptional(request.ContractId));
+        await CheckExistence(request.ContractId);
         var equipment = new Equipment(
             request.Name, 
             request.Description,
@@ -77,7 +72,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
             request.Mac, 
             request.Tag, 
             request.Rented, 
-            Parser.ToGuidOptional(request.ContractId));
+            request.ContractId);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.EquipmentsRepository.CreateAsync(equipment);
         await unitOfWork.Commit(transaction);
@@ -87,8 +82,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task UpdateAsync(Guid id, UpdateEquipmentsRequest request)
     {
-        await CheckExistence(Parser.ToGuidOptional(request.ContractId));
-        var equipment = await FindOneOrThrowAsync(id);
+        await CheckExistence(request.ContractId);
+        var equipment = await FindOneAsync(id);
         equipment.Update(
             request.Name, 
             request.Description,
@@ -97,7 +92,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
             request.Mac, 
             request.Tag, 
             request.Rented, 
-            Parser.ToGuidOptional(request.ContractId));
+            request.ContractId);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Update(equipment);
         await unitOfWork.Commit(transaction);
@@ -105,7 +100,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var equipment = await FindOneOrThrowAsync(id);
+        var equipment = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);

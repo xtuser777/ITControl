@@ -12,7 +12,7 @@ public class RolesView : IRolesView
 
         return new CreateRolesResponse()
         {
-            Id = role.Id.ToString(),
+            Id = role.Id,
         };
     }
 
@@ -22,7 +22,7 @@ public class RolesView : IRolesView
 
         return new FindOneRolesResponse()
         {
-            Id = role.Id.ToString(),
+            Id = role.Id,
             Name = role.Name,
             Active = role.Active,
             RolesPages = role.RolesPages != null 
@@ -30,7 +30,7 @@ public class RolesView : IRolesView
                     select new FindOneRolesPagesResponse()
                     {
                         Id = rolePage.Id,
-                        PageId = rolePage.PageId.ToString(),
+                        PageId = rolePage.PageId,
                     }
                     : null,
             Pages = role.RolesPages != null 
@@ -51,7 +51,7 @@ public class RolesView : IRolesView
         return from role in roles
             select new FindManyRolesResponse()
             {
-                Id = role.Id.ToString(),
+                Id = role.Id,
                 Name = role.Name,
                 Active = role.Active,
             };

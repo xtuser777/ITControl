@@ -1,12 +1,11 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface ILocationsRepository
 {
     Task<Location?> FindOneAsync(
-        Expression<Func<Location?, bool>> predicate,
+        Guid id,
         bool? includeUnit = null,
         bool? includeUser = null,
         bool? includeDepartment = null,

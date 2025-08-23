@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Departments.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -23,7 +22,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyDepartmentsResponse>> Index([FromQuery] FindManyDepartmentsRequest request)
+        public async Task<FindManyResponse<FindManyDepartmentsResponse>> IndexAsync(
+            [FromQuery] FindManyDepartmentsRequest request)
         {
             var departments = await departmentsService.FindManyAsync(request);
             var pagination = await departmentsService.FindManyPagination(request);
@@ -42,7 +42,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneDepartmentsResponse?>> Show(Guid id)
+        public async Task<FindOneResponse<FindOneDepartmentsResponse?>> ShowAsync(Guid id)
         {
             var department = await departmentsService.FindOneAsync(id);
             var data = departmentsView.FindOne(department);
@@ -58,7 +58,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateDepartmentsResponse?>> Create(CreateDepartmentsRequest request)
+        public async Task<FindOneResponse<CreateDepartmentsResponse?>> CreateAsync(
+            [FromBody] CreateDepartmentsRequest request)
         {
             var department = await departmentsService.CreateAsync(request);
             var data = departmentsView.Create(department);
@@ -75,7 +76,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, UpdateDepartmentsRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdateDepartmentsRequest request)
         {
             await departmentsService.UpdateAsync(id, request);
             Response.StatusCode = 204;

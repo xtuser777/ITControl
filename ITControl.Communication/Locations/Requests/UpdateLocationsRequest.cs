@@ -3,8 +3,8 @@ namespace ITControl.Communication.Locations.Requests;
 public class UpdateLocationsRequest
 {
     public string? Description { get; set; }
-    public string? UnitId { get; set; }
-    public string? UserId { get; set; }
-    public string? DepartmentId { get; set; }
-    public string? DivisionId { get; set; }
+    public Guid? UnitId { get; set; }
+    public Guid? UserId { get; set; }
+    public Guid? DepartmentId { get; set; }
+    public Guid? DivisionId { get; set; }
 }

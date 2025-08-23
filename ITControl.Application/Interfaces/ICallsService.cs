@@ -5,14 +5,14 @@ using ITControl.Domain.Entities;
 namespace ITControl.Application.Interfaces;
 public interface ICallsService
 {
-    Task<Call> FindOne(
+    Task<Call> FindOneAsync(
         Guid id,
         bool? includeUser = null,
         bool? includeLocation = null,
         bool? includeEquipment = null,
         bool? includeSystem = null);
-    Task<IEnumerable<Call>> FindMany(FindManyCallsRequest request);
-    Task<PaginationResponse?> FindManyPagination(FindManyCallsRequest request);
-    Task<Call?> Create(CreateCallsRequest request);
-    Task Delete(Guid id);
+    Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request);
+    Task<PaginationResponse?> FindManyPaginationAsync(FindManyCallsRequest request);
+    Task<Call?> CreateAsync(CreateCallsRequest request);
+    Task DeleteAsync(Guid id);
 }

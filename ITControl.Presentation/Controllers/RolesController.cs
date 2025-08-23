@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Roles.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -14,14 +13,17 @@ namespace ITControl.Presentation.Controllers
     [ApiController]
     [PermissionsFilter]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class RolesController(IRolesService rolesService, IRolesView rolesView) : ControllerBase
+    public class RolesController(
+        IRolesService rolesService, 
+        IRolesView rolesView) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(typeof(FindManyResponse<FindManyRolesResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyRolesResponse>> Index([FromQuery] FindManyRolesRequest request)
+        public async Task<FindManyResponse<FindManyRolesResponse>> IndexAsync(
+            [FromQuery] FindManyRolesRequest request)
         {
             var roles = await rolesService.FindManyAsync(request);
             var data = rolesView.FindMany(roles);
@@ -40,7 +42,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneRolesResponse?>> Show(Guid id)
+        public async Task<FindOneResponse<FindOneRolesResponse?>> ShowAsync(Guid id)
         {
             var role = await rolesService.FindOneAsync(id, true);
             var data = rolesView.FindOne(role);
@@ -56,7 +58,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateRolesResponse?>> Create(
+        public async Task<FindOneResponse<CreateRolesResponse?>> CreateAsync(
             [FromBody] CreateRolesRequest request)
         {
             var role = await rolesService.CreateAsync(request);
@@ -74,7 +76,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, [FromBody] UpdateRolesRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdateRolesRequest request)
         {
             await rolesService.UpdateAsync(id, request);
             Response.StatusCode = 204;
@@ -86,7 +90,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await rolesService.DeleteAsync(id);
             Response.StatusCode = 204;

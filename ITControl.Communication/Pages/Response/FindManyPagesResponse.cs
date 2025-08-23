@@ -2,6 +2,6 @@ namespace ITControl.Communication.Pages.Response;
 
 public class FindManyPagesResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
 }

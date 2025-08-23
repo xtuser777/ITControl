@@ -1,11 +1,10 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IPositionsRepository
 {
-    Task<Position?> FindOneAsync(Expression<Func<Position?, bool>> predicate);
+    Task<Position?> FindOneAsync(Guid id);
     Task<IEnumerable<Position>> FindManyAsync(string? description = null, string? orderByDescription = null, int? page = null, int? size = null);
     Task CreateAsync(Position position);
     void Update(Position position);

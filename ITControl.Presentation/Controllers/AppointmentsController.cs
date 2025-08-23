@@ -22,7 +22,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyAppointmentsResponse>> Index(
+        public async Task<FindManyResponse<FindManyAppointmentsResponse>> IndexAsync(
             [FromQuery] FindManyAppointmentsRequest request)
         {
             var appointments = await appointmentsService.FindManyAsync(request);
@@ -42,7 +42,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneAppointmentsResponse?>> FindOne(Guid id)
+        public async Task<FindOneResponse<FindOneAppointmentsResponse?>> FindOneAsync(Guid id)
         {
             var appointment = await appointmentsService.FindOneAsync(id, true, true, true);
             var data = appointmentsView.FindOne(appointment);
@@ -58,7 +58,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateAppointmentsResponse?>> Create(
+        public async Task<FindOneResponse<CreateAppointmentsResponse?>> CreateAsync(
             [FromBody] CreateAppointmentsRequest request)
         {
             var appointment = await appointmentsService.CreateAsync(request);
@@ -76,7 +76,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, [FromBody] UpdateAppointmentsRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdateAppointmentsRequest request)
         {
             await appointmentsService.UpdateAsync(id, request);
             Response.StatusCode = StatusCodes.Status204NoContent;
@@ -88,7 +90,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await appointmentsService.DeleteAsync(id);
             Response.StatusCode = StatusCodes.Status204NoContent;

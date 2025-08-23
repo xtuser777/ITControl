@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Pages.Response;
 using ITControl.Communication.Shared.Responses;
@@ -23,10 +22,11 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyPagesResponse>> Index([FromQuery] FindManyPagesRequest request)
+        public async Task<FindManyResponse<FindManyPagesResponse>> IndexAsync(
+            [FromQuery] FindManyPagesRequest request)
         {
-            var pages = await pagesService.FindMany(request);
-            var pagination = await pagesService.FindManyPagination(request);
+            var pages = await pagesService.FindManyAsync(request);
+            var pagination = await pagesService.FindManyPaginationAsync(request);
             var data = pagesView.FindMany(pages);
 
             return new FindManyResponse<FindManyPagesResponse>()
@@ -42,9 +42,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOnePagesResponse?>> Show(Guid id)
+        public async Task<FindOneResponse<FindOnePagesResponse?>> ShowAsync(Guid id)
         {
-            var page = await pagesService.FindOne(id);
+            var page = await pagesService.FindOneAsync(id);
             var data = pagesView.FindOne(page);
             
             return new FindOneResponse<FindOnePagesResponse?>()
@@ -58,9 +58,10 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreatePagesResponse?>> Create([FromBody] CreatePagesRequest request)
+        public async Task<FindOneResponse<CreatePagesResponse?>> CreateAsync(
+            [FromBody] CreatePagesRequest request)
         {
-            var page = await pagesService.Create(request);
+            var page = await pagesService.CreateAsync(request);
             var data = pagesView.Create(page);
             this.Response.StatusCode = 201;
             return new FindOneResponse<CreatePagesResponse?>()
@@ -75,9 +76,11 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, [FromBody] UpdatePagesRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdatePagesRequest request)
         {
-            await pagesService.Update(id, request);
+            await pagesService.UpdateAsync(id, request);
             this.Response.StatusCode = 204;
         }
 
@@ -87,9 +90,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
-            await pagesService.Delete(id);
+            await pagesService.DeleteAsync(id);
             this.Response.StatusCode = 204;
         }
     }

@@ -6,7 +6,7 @@ namespace ITControl.Application.Interfaces;
 
 public interface IRolesService
 {
-    Task<Role?> FindOneAsync(Guid id, bool? includeRolesPages = null);
+    Task<Role> FindOneAsync(Guid id, bool? includeRolesPages = null);
     Task<IEnumerable<Role>> FindManyAsync(FindManyRolesRequest request);
     Task<PaginationResponse?> FindManyPaginatedAsync(FindManyRolesRequest request);
     Task<Role?> CreateAsync(CreateRolesRequest request);

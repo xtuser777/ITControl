@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
 using ITControl.Communication.Users.Responses;
@@ -8,89 +7,92 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ITControl.Presentation.Controllers
+namespace ITControl.Presentation.Controllers;
+
+[Route("users")]
+[ApiController]
+[PermissionsFilter]
+[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+public class UsersController(
+    IUsersService usersService,
+    IUsersView usersView) : ControllerBase
 {
-    [Route("users")]
-    [ApiController]
-    [PermissionsFilter]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class UsersController(
-        IUsersService usersService, 
-        IUsersView usersView) : ControllerBase
+    [HttpGet]
+    [ProducesResponseType(typeof(FindManyResponse<FindManyUsersResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<FindManyResponse<FindManyUsersResponse>> IndexAsync(
+        [FromQuery] FindManyUsersRequest request)
     {
-        [HttpGet]
-        [ProducesResponseType(typeof(FindManyResponse<FindManyUsersResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyUsersResponse>> Index([FromQuery] FindManyUsersRequest request)
-        {
-            var users = await usersService.FindManyAsync(request);
-            var data = usersView.FindMany(users);
-            var pagination = await usersService.FindManyPaginationAsync(request);
+        var users = await usersService.FindManyAsync(request);
+        var data = usersView.FindMany(users);
+        var pagination = await usersService.FindManyPaginationAsync(request);
 
-            return new FindManyResponse<FindManyUsersResponse>()
-            {
-                Data = data,
-                Pagination = pagination
-            };
-        }
-
-        [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(FindOneResponse<FindOneUsersResponse?>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneUsersResponse?>> Show(Guid id)
+        return new FindManyResponse<FindManyUsersResponse>()
         {
-            var user = await usersService.FindOneAsync(id, true, true, true, true);
-            var data = usersView.FindOne(user);
-            
-            return new FindOneResponse<FindOneUsersResponse?>()
-            {
-                Data = data,
-            };
-        }
+            Data = data,
+            Pagination = pagination
+        };
+    }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(FindOneResponse<CreateUsersResponse?>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateUsersResponse?>> Create([FromBody] CreateUsersRequest request)
-        {
-            var user = await usersService.CreateAsync(request);
-            var data = usersView.Create(user);
-            this.Response.StatusCode = 201;
-            return new FindOneResponse<CreateUsersResponse?>()
-            {
-                Data = data,
-            };
-        }
+    [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(FindOneResponse<FindOneUsersResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync(Guid id)
+    {
+        var user = await usersService.FindOneAsync(id, true, true, true, true);
+        var data = usersView.FindOne(user);
 
-        [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, [FromBody] UpdateUsersRequest request)
+        return new FindOneResponse<FindOneUsersResponse?>()
         {
-            await usersService.UpdateAsync(id, request);
-            this.Response.StatusCode = 204;
-        }
+            Data = data,
+        };
+    }
 
-        [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+    [HttpPost]
+    [ProducesResponseType(typeof(FindOneResponse<CreateUsersResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<FindOneResponse<CreateUsersResponse?>> CreateAsync(
+        [FromBody] CreateUsersRequest request)
+    {
+        var user = await usersService.CreateAsync(request);
+        var data = usersView.Create(user);
+        this.Response.StatusCode = 201;
+        return new FindOneResponse<CreateUsersResponse?>()
         {
-            await usersService.DeleteAsync(id); 
-            this.Response.StatusCode = 204;
-        }
+            Data = data,
+        };
+    }
+
+    [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task UpdateAsync(
+        Guid id,
+        [FromBody] UpdateUsersRequest request)
+    {
+        await usersService.UpdateAsync(id, request);
+        this.Response.StatusCode = 204;
+    }
+
+    [HttpDelete("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task DeleteAsync(Guid id)
+    {
+        await usersService.DeleteAsync(id);
+        this.Response.StatusCode = 204;
     }
 }

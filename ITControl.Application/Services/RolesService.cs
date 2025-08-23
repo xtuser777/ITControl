@@ -10,16 +10,11 @@ namespace ITControl.Application.Services;
 
 public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 {
-    public async Task<Role?> FindOneAsync(Guid id, bool? includeRolesPages = null)
+    public async Task<Role> FindOneAsync(Guid id, bool? includeRolesPages = null)
     {
         return await unitOfWork
-            .RolesRepository.FindOneAsync(x => x.Id == id, includeRolesPages);
-    }
-    
-    private async Task<Role> FindOneOrThrowAsync(Guid id, bool? includeRolesPages = null)
-    {
-        return await FindOneAsync(id, includeRolesPages) 
-            ?? throw new NotFoundException("Role not found");
+            .RolesRepository.FindOneAsync(id, includeRolesPages) 
+               ?? throw new NotFoundException("Role not found");
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(FindManyRolesRequest request)
@@ -56,10 +51,10 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         var rolesPages = from page in request.RolesPages
             select new RolePage(
                 roleId: role.Id,
-                pageId: Parser.ToGuid(page.PageId));
+                pageId: page.PageId);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.RolesRepository.CreateAsync(role);
-        await unitOfWork.RolesPagesRepository.CreateMany(rolesPages);
+        await unitOfWork.RolesPagesRepository.CreateManyAsync(rolesPages);
         await unitOfWork.Commit(transaction);
         
         return role;
@@ -69,22 +64,22 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         await CheckConflicts(id, name: request.Name);
         await CheckConnections((List<CreateRolesPagesRequest>?)request.RolesPages);
-        var role = await FindOneOrThrowAsync(id);
+        var role = await FindOneAsync(id);
         role.Update(name: request.Name, active: request.Active);
         var rolesPages = from page in request.RolesPages
             select new RolePage(
                 roleId: role.Id,
-                pageId: Parser.ToGuid(page.PageId));
+                pageId: page.PageId);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.RolesPagesRepository.DeleteMany(role);
-        await unitOfWork.RolesPagesRepository.CreateMany(rolesPages);
+        await unitOfWork.RolesPagesRepository.DeleteManyByRoleAsync(role);
+        await unitOfWork.RolesPagesRepository.CreateManyAsync(rolesPages);
         unitOfWork.RolesRepository.Update(role);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var role = await FindOneOrThrowAsync(id);
+        var role = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.RolesRepository.Delete(role);
         await unitOfWork.Commit(transaction);
@@ -122,7 +117,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         {
             foreach (var page in rolesPages)
             {
-                await CheckPageExistence(Guid.Parse((ReadOnlySpan<char>)page.PageId), messages);
+                await CheckPageExistence(page.PageId, messages);
             }
         }
 
@@ -132,7 +127,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 
     private async Task CheckPageExistence(Guid pageId, List<string> messages)
     {
-        var exists = await unitOfWork.PagesRepository.ExistAsync(id: pageId);
+        var exists = await unitOfWork.PagesRepository.ExistsAsync(id: pageId);
         if (exists == false)
             messages.Add("Page not exists");
     }

@@ -23,7 +23,8 @@ public class DivisionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyDivisionsResponse>> Index([FromQuery] FindManyDivisionsRequest request)
+    public async Task<FindManyResponse<FindManyDivisionsResponse>> IndexAsync(
+        [FromQuery] FindManyDivisionsRequest request)
     {
         var divisions = await divisionsService.FindManyAsync(request);
         var pagination = await divisionsService.FindManyPaginatedAsync(request);
@@ -42,7 +43,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneDivisionsResponse?>> Show([FromRoute] Guid id)
+    public async Task<FindOneResponse<FindOneDivisionsResponse?>> ShowAsync([FromRoute] Guid id)
     {
         var division = await divisionsService.FindOneAsync(id); 
         var data = divisionsView.FindOne(division);
@@ -58,7 +59,8 @@ public class DivisionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreateDivisionsResponse?>> Create([FromBody] CreateDivisionsRequest request)
+    public async Task<FindOneResponse<CreateDivisionsResponse?>> CreateAsync(
+        [FromBody] CreateDivisionsRequest request)
     {
         var division = await divisionsService.CreateAsync(request);
         var data = divisionsView.Create(division);
@@ -75,7 +77,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task Update([FromRoute] Guid id, [FromBody] UpdateDivisionsRequest request)
+    public async Task UpdateAsync(
+        [FromRoute] Guid id, 
+        [FromBody] UpdateDivisionsRequest request)
     {
         await divisionsService.UpdateAsync(id, request);
         Response.StatusCode = 204;
@@ -87,7 +91,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task Delete([FromRoute] Guid id)
+    public async Task DeleteAsync([FromRoute] Guid id)
     {
         await divisionsService.DeleteAsync(id);
         Response.StatusCode = 204;

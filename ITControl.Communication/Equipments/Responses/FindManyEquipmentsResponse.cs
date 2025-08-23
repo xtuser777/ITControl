@@ -4,7 +4,7 @@ namespace ITControl.Communication.Equipments.Responses;
 
 public class FindManyEquipmentsResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string Ip { get; set; } = string.Empty;
@@ -12,5 +12,5 @@ public class FindManyEquipmentsResponse
     public string Tag { get; set; } = string.Empty;
     public TranslatableField Type { get; set; } = null!;
     public bool Rented { get; set; }
-    public string? ContractId { get; set; }
+    public Guid? ContractId { get; set; }
 }

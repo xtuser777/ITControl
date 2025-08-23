@@ -2,6 +2,6 @@ namespace ITControl.Communication.Users.Responses;
 
 public class FindOneUsersRoleResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
 }

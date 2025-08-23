@@ -6,7 +6,7 @@ namespace ITControl.Application.Interfaces;
 
 public interface IUsersService
 {
-    Task<User?> FindOneAsync(
+    Task<User> FindOneAsync(
         Guid id, 
         bool? includePosition, 
         bool? includeRole, 

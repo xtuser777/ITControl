@@ -23,7 +23,7 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyTreatmentsResponse>> Index(
+    public async Task<FindManyResponse<FindManyTreatmentsResponse>> IndexAsync(
         [FromQuery] FindManyTreatmentsRequest request)
     {
         var treatments = await treatmentsService.FindManyAsync(request);
@@ -42,7 +42,7 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneTreatmentsResponse?>> Show(Guid id)
+    public async Task<FindOneResponse<FindOneTreatmentsResponse?>> ShowAsync(Guid id)
     {
         var treatment = await treatmentsService.FindOneAsync(id, true, true);
         var data = treatmentsView.FindOne(treatment);
@@ -57,7 +57,8 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreateTreatmentsResponse?>> Create(CreateTreatmentsRequest request)
+    public async Task<FindOneResponse<CreateTreatmentsResponse?>> CreateAsync(
+        [FromBody] CreateTreatmentsRequest request)
     {
         var treatment = await treatmentsService.CreateAsync(request);
         var data = treatmentsView.Create(treatment);
@@ -74,7 +75,9 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task Update(Guid id, UpdateTreatmentsRequest request)
+    public async Task UpdateAsync(
+        Guid id, 
+        [FromBody] UpdateTreatmentsRequest request)
     {
         await treatmentsService.UpdateAsync(id, request);
         Response.StatusCode = StatusCodes.Status204NoContent;
@@ -86,7 +89,7 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         await treatmentsService.DeleteAsync(id);
         Response.StatusCode = StatusCodes.Status204NoContent;

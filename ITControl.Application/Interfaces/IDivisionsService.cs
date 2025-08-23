@@ -6,7 +6,10 @@ namespace ITControl.Application.Interfaces;
 
 public interface IDivisionsService
 {
-    Task<Division?> FindOneAsync(Guid id, bool? includeDepartment = null, bool? includeUser = null);
+    Task<Division> FindOneAsync(
+        Guid id, 
+        bool? includeDepartment = null, 
+        bool? includeUser = null);
     Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRequest request);
     Task<PaginationResponse?> FindManyPaginatedAsync(FindManyDivisionsRequest request);
     Task<Division?> CreateAsync(CreateDivisionsRequest request);

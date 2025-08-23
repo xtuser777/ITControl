@@ -10,17 +10,14 @@ namespace ITControl.Application.Services;
 
 public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 {
-    public async Task<Contract?> FindOneAsync(Guid id, bool? includeContractsContacts = null)
+    public async Task<Contract> FindOneAsync(
+        Guid id, 
+        bool? includeContractsContacts = null)
     {
         return await unitOfWork
             .ContractsRepository
-            .FindOneAsync(x => x.Id == id, includeContractsContacts);
-    }
-
-    public async Task<Contract> FindOneOrThrowAsync(Guid id, bool? includeContractsContacts = null)
-    {
-        return await FindOneAsync(id, includeContractsContacts) 
-            ?? throw new NotFoundException("Contract not found");
+            .FindOneAsync(id, includeContractsContacts) 
+               ?? throw new NotFoundException("Contract not found");
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(FindManyContractsRequest request)
@@ -29,8 +26,8 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
         int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.ContractsRepository.FindManyAsync(
             objectName: request.ObjectName,
-            startedAt: Parser.ToDateOnlyOptional(request.StartedAt),
-            endedAt: Parser.ToDateOnlyOptional(request.EndedAt),
+            startedAt: request.StartedAt,
+            endedAt: request.EndedAt,
             orderByObjectName: request.OrderByObjectName,
             orderByStartedAt: request.OrderByStartedAt,
             orderByEndedAt: request.OrderByEndedAt,
@@ -44,8 +41,8 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
         
         var count = await unitOfWork.ContractsRepository.CountAsync(
             objectName: request.ObjectName,
-            startedAt: Parser.ToDateOnlyOptional(request.StartedAt),
-            endedAt: Parser.ToDateOnlyOptional(request.EndedAt));
+            startedAt: request.StartedAt,
+            endedAt: request.EndedAt);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -56,9 +53,11 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
     {
         var contract = new Contract(
             request.ObjectName,
-            Parser.ToDateOnly(request.StartedAt),
-            Parser.ToDateOnlyOptional(request.EndedAt));
-        var contractsContacts = request.Contacts.Select(x => new ContractContact(
+            request.StartedAt,
+            request.EndedAt);
+        var contractsContacts = request
+            .Contacts
+            .Select(x => new ContractContact(
             x.Name,
             x.Email,
             x.Phone,
@@ -74,11 +73,11 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 
     public async Task UpdateAsync(Guid id, UpdateContractsRequest request)
     {
-        var contract = await FindOneOrThrowAsync(id);
+        var contract = await FindOneAsync(id);
         contract.Update(
             request.ObjectName,
-            Parser.ToDateOnlyOptional(request.StartedAt),
-            Parser.ToDateOnlyOptional(request.EndedAt));
+            request.StartedAt,
+            request.EndedAt);
         var contractsContacts = request.Contacts.Select(x => new ContractContact(
             x.Name,
             x.Email,
@@ -94,7 +93,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var contract = await FindOneOrThrowAsync(id);
+        var contract = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsContactsRepository.DeleteManyByContractAsync(contract);
         unitOfWork.ContractsRepository.Delete(contract);

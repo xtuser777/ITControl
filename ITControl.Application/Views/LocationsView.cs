@@ -12,7 +12,7 @@ public class LocationsView : ILocationsView
 
         return new CreateLocationsResponse()
         {
-            Id = location.Id.ToString(),
+            Id = location.Id,
         };
     }
 
@@ -22,16 +22,16 @@ public class LocationsView : ILocationsView
 
         return new FindOneLocationsResponse()
         {
-            Id = location.Id.ToString(),
+            Id = location.Id,
             Description = location.Description,
-            UnitId = location.UnitId.ToString(),
-            UserId = location.UserId.ToString(),
-            DepartmentId = location.DepartmentId.ToString(),
-            DivisionId = location.DivisionId.ToString(),
+            UnitId = location.UnitId,
+            UserId = location.UserId,
+            DepartmentId = location.DepartmentId,
+            DivisionId = location.DivisionId,
             Department = location.Department != null
                 ? new FindOneLocationsDepartmentResponse()
                 {
-                    Id = location.DepartmentId.ToString(),
+                    Id = location.DepartmentId,
                     Alias = location.Department.Alias,
                     Name = location.Department.Name,
                 }
@@ -39,7 +39,7 @@ public class LocationsView : ILocationsView
             Division = location.Division != null
                 ? new FindOneLocationsDivisionResponse()
                 {
-                    Id = location.Division.Id.ToString(),
+                    Id = location.Division.Id,
                     Name = location.Division.Name,
                 }
                 : null,
@@ -53,12 +53,12 @@ public class LocationsView : ILocationsView
         return from location in locations
             select new FindManyLocationsResponse()
             {
-                Id = location.Id.ToString(),
+                Id = location.Id,
                 Description = location.Description,
-                UnitId = location.UnitId.ToString(),
-                UserId = location.UserId.ToString(),
-                DepartmentId = location.DepartmentId.ToString(),
-                DivisionId = location.DivisionId.ToString(),
+                UnitId = location.UnitId,
+                UserId = location.UserId,
+                DepartmentId = location.DepartmentId,
+                DivisionId = location.DivisionId,
             };
     }
 }

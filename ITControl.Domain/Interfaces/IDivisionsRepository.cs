@@ -1,12 +1,11 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IDivisionsRepository
 {
     Task<Division?> FindOneAsync(
-        Expression<Func<Division?, bool>> predicate, 
+        Guid id, 
         bool? includeDepartment = null, 
         bool? includeUser = null);
     Task<IEnumerable<Division>> FindManyAsync(
@@ -31,5 +30,5 @@ public interface IDivisionsRepository
         string? name = null,
         Guid? departmentId = null,
         Guid? userId = null);
-    Task<bool> Exclusive(Guid id, string? name = null);
+    Task<bool> ExclusiveAsync(Guid id, string? name = null);
 }

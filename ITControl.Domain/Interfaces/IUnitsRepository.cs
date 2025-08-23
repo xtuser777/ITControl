@@ -1,11 +1,10 @@
 using ITControl.Domain.Entities;
-using System.Linq.Expressions;
 
 namespace ITControl.Domain.Interfaces;
 
 public interface IUnitsRepository
 {
-    Task<Unit?> FindOneAsync(Expression<Func<Unit?, bool>> predicate);
+    Task<Unit?> FindOneAsync(Guid id);
     Task<IEnumerable<Unit>> FindManyAsync(
         string? name = null,
         string? phone = null,

@@ -2,8 +2,8 @@ namespace ITControl.Communication.Divisions.Responses;
 
 public class FindManyDivisionsResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public string DepartmentId { get; set; } = string.Empty;
-    public string UserId { get; set; } = string.Empty;
+    public Guid DepartmentId { get; set; }
+    public Guid UserId { get; set; }
 }

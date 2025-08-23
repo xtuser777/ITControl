@@ -22,11 +22,11 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyCallsResponse>> Index(
+    public async Task<FindManyResponse<FindManyCallsResponse>> IndexAsync(
         [FromQuery] FindManyCallsRequest request)
     {
-        var calls = await callsService.FindMany(request);
-        var pagination = await callsService.FindManyPagination(request);
+        var calls = await callsService.FindManyAsync(request);
+        var pagination = await callsService.FindManyPaginationAsync(request);
         var data = callsView.FindMany(calls);
         return new FindManyResponse<FindManyCallsResponse>()
         {
@@ -41,9 +41,9 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneCallsResponse?>> Show(Guid id)
+    public async Task<FindOneResponse<FindOneCallsResponse?>> ShowAsync(Guid id)
     {
-        var call = await callsService.FindOne(id, true, true, true, true);
+        var call = await callsService.FindOneAsync(id, true, true, true, true);
         var data = callsView.FindOne(call);
         return new FindOneResponse<FindOneCallsResponse?>()
         {
@@ -56,9 +56,10 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreateCallsResponse?>> Create(CreateCallsRequest request)
+    public async Task<FindOneResponse<CreateCallsResponse?>> CreateAsync(
+        [FromBody] CreateCallsRequest request)
     {
-        var call = await callsService.Create(request);
+        var call = await callsService.CreateAsync(request);
         var data = callsView.Create(call);
         Response.StatusCode = StatusCodes.Status201Created;
         return new FindOneResponse<CreateCallsResponse?>()
@@ -73,9 +74,9 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        await callsService.Delete(id);
+        await callsService.DeleteAsync(id);
         Response.StatusCode = StatusCodes.Status204NoContent;
     }
 }

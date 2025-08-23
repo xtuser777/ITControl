@@ -2,12 +2,12 @@ namespace ITControl.Communication.Systems.Responses;
 
 public class FindOneSystemsResponse
 {
-    public string Id { get; set; } = string.Empty;
+    public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Version { get; set; } = string.Empty;
-    public string ImplementedAt { get; set; } = string.Empty;
-    public string? EndedAt { get; set; }
+    public DateOnly ImplementedAt { get; set; } 
+    public DateOnly? EndedAt { get; set; }
     public bool Own { get; set; }
-    public string? ContractId { get; set; } = string.Empty;
+    public Guid? ContractId { get; set; }
     public FindOneSystemsContractResponse? Contract { get; set; }
 }

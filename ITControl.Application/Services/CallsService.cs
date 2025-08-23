@@ -11,7 +11,7 @@ namespace ITControl.Application.Services;
 public class CallsService(
     IUnitOfWork unitOfWork) : ICallsService
 {
-    public async Task<Call> FindOne(
+    public async Task<Call> FindOneAsync(
         Guid id, 
         bool? includeUser = null, 
         bool? includeLocation = null, 
@@ -24,7 +24,7 @@ public class CallsService(
             ?? throw new NotFoundException("Chamado não encontrado");
     }
 
-    public async Task<IEnumerable<Call>> FindMany(FindManyCallsRequest request)
+    public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request)
     {
         int? page = request.Page != null ? int.Parse(request.Page) : null;
         int? size = request.Size != null ? int.Parse(request.Size) : null;
@@ -45,7 +45,7 @@ public class CallsService(
             size);
     }
 
-    public async Task<PaginationResponse?> FindManyPagination(FindManyCallsRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyCallsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
 
@@ -63,7 +63,7 @@ public class CallsService(
         return pagination;
     }
 
-    public async Task<Call?> Create(CreateCallsRequest request)
+    public async Task<Call?> CreateAsync(CreateCallsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistence(
@@ -90,10 +90,10 @@ public class CallsService(
         return call;
     }
 
-    public async Task Delete(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var call = await FindOne(id);
+        var call = await FindOneAsync(id);
         unitOfWork.CallsStatusesRepository.Delete(call.CallStatus!);
         unitOfWork.CallsRepository.Delete(call);
         await unitOfWork.Commit(transaction);

@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -23,7 +22,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyEquipmentsResponse>> Index(
+        public async Task<FindManyResponse<FindManyEquipmentsResponse>> IndexAsync(
             [FromQuery] FindManyEquipmentsRequest request)
         {
             var equipments = await equipmentsService.FindManyAsync(request);
@@ -43,7 +42,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> Show(Guid id)
+        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> ShowAsync(Guid id)
         {
             var equipment = await equipmentsService.FindOneAsync(id, true);
             var data = equipmentsView.FindOne(equipment);
@@ -59,7 +58,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateEquipmentsResponse?>> Create(CreateEquipmentsRequest request)
+        public async Task<FindOneResponse<CreateEquipmentsResponse?>> CreateAsync(
+            [FromBody] CreateEquipmentsRequest request)
         {
             var equipment = await equipmentsService.CreateAsync(request);
             var data = equipmentsView.Create(equipment);
@@ -76,7 +76,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, UpdateEquipmentsRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdateEquipmentsRequest request)
         {
             await equipmentsService.UpdateAsync(id, request);
             Response.StatusCode = 204;
@@ -88,7 +90,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await equipmentsService.DeleteAsync(id);
             Response.StatusCode = 204;

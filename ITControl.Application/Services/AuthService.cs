@@ -14,7 +14,7 @@ public class AuthService(
 {
     public async Task<LoginResponse> Login(LoginRequest request)
     {
-        User user = await Validate(request.Username, request.Password);
+        var user = await Validate(request.Username, request.Password);
 
         var payload = new LoginPayload()
         {
@@ -39,7 +39,7 @@ public class AuthService(
     {
         Guid roleId = Parser.ToGuidOptional(request.RoleId) 
             ?? throw new UnauthorizedAccessException("Perfil inválido.");
-        var role = await unitOfWork.RolesRepository.FindOneAsync(x => x.Id == roleId, true) 
+        var role = await unitOfWork.RolesRepository.FindOneAsync(roleId, true) 
             ?? throw new UnauthorizedAccessException("Perfil não encontrado.");
         if (!role.Active)
         {
@@ -51,7 +51,7 @@ public class AuthService(
         List<Page?> pages = [];
         foreach (var pageId in pagesIds)
         {
-            var page = await unitOfWork.PagesRepository.FindOneAsync(x => x.Id == pageId);
+            var page = await unitOfWork.PagesRepository.FindOneAsync(pageId);
             pages.Add(page);
         }
 
@@ -82,12 +82,7 @@ public class AuthService(
 
     private async Task<User> Validate(string username, string password)
     {
-        var user = await unitOfWork.UsersRepository.FindOneAsync(
-                       x => x.Username == username, 
-                       null, 
-                       true, 
-                       null, 
-                       null) 
+        var user = await unitOfWork.UsersRepository.FindOneByUsernameAsync(username) 
             ?? throw new UnauthorizedAccessException("Usuário inválido.");
         if (!user.Active)
         {

@@ -2,14 +2,13 @@ using ITControl.Domain.Entities;
 using ITControl.Domain.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Repositories;
 
 public class RolesRepository(ApplicationDbContext context): IRolesRepository
 {
     public async Task<Role?> FindOneAsync(
-        Expression<Func<Role?, bool>> predicate, bool? includeRolesPages = null)
+        Guid id, bool? includeRolesPages = null)
     {
         var query = context.Roles.AsQueryable();
         if (includeRolesPages != null)
@@ -17,7 +16,7 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
             query = query.Include(x => x.RolesPages!).ThenInclude(rp => rp.Page);
         }
 
-        return await query.Where(predicate).FirstOrDefaultAsync();
+        return await query.Where(x => x.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(

@@ -6,7 +6,9 @@ namespace ITControl.Application.Interfaces;
 
 public interface IContractsService
 {
-    Task<Contract?> FindOneAsync(Guid id, bool? includeContractsContacts = null);
+    Task<Contract> FindOneAsync(
+        Guid id, 
+        bool? includeContractsContacts = null);
     Task<IEnumerable<Contract>> FindManyAsync(FindManyContractsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyContractsRequest request);
     Task<Contract?> CreateAsync(CreateContractsRequest request);

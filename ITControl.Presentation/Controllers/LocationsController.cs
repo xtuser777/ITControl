@@ -1,5 +1,4 @@
 using ITControl.Application.Interfaces;
-using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Locations.Requests;
 using ITControl.Communication.Locations.Responses;
 using ITControl.Communication.Shared.Responses;
@@ -23,7 +22,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyLocationsResponse>> Index(
+        public async Task<FindManyResponse<FindManyLocationsResponse>> IndexAsync(
            [FromQuery] FindManyLocationsRequest request)
         {
             var locations = await locationsService.FindManyAsync(request);
@@ -43,7 +42,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneLocationsResponse?>> Show(Guid id)
+        public async Task<FindOneResponse<FindOneLocationsResponse?>> ShowAsync(Guid id)
         {
             var location = await locationsService.FindOneAsync(id);
             var data = locationsView.FindOne(location);
@@ -59,7 +58,8 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateLocationsResponse?>> Create(CreateLocationsRequest request)
+        public async Task<FindOneResponse<CreateLocationsResponse?>> CreateAsync(
+            [FromBody]CreateLocationsRequest request)
         {
             var location = await locationsService.CreateAsync(request);
             var data = locationsView.Create(location);
@@ -76,7 +76,9 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Update(Guid id, UpdateLocationsRequest request)
+        public async Task UpdateAsync(
+            Guid id, 
+            [FromBody] UpdateLocationsRequest request)
         {
             await locationsService.UpdateAsync(id, request);
             Response.StatusCode = 204;
@@ -88,7 +90,7 @@ namespace ITControl.Presentation.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task DeleteAsync(Guid id)
         {
             await locationsService.DeleteAsync(id);
             Response.StatusCode = 204;

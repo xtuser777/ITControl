@@ -12,7 +12,7 @@ public class DivisionsView : IDivisionsView
 
         return new CreateDivisionsResponse()
         {
-            Id = division.Id.ToString(),
+            Id = division.Id,
         };
     }
 
@@ -22,18 +22,18 @@ public class DivisionsView : IDivisionsView
 
         return new FindOneDivisionsResponse()
         {
-            Id = division.Id.ToString(),
+            Id = division.Id,
             Name = division.Name,
-            DepartmentId = division.DepartmentId.ToString(),
-            UserId = division.UserId.ToString(),
+            DepartmentId = division.DepartmentId,
+            UserId = division.UserId,
             Department = division.Department != null ? new FindOneDivisionsDepartmentResponse()
             {
-                Id = division.Department.Id.ToString(),
+                Id = division.Department.Id,
                 Name = division.Department.Name,
             } : null,
             User = division.User != null ? new FindOneDivisionsUserResponse()
             {
-                Id = division.User.Id.ToString(),
+                Id = division.User.Id,
                 Name = division.User.Name,
             } : null
         };
@@ -46,10 +46,10 @@ public class DivisionsView : IDivisionsView
         return from division in divisions
             select new FindManyDivisionsResponse()
             {
-                Id = division.Id.ToString(),
+                Id = division.Id,
                 Name = division.Name,
-                DepartmentId = division.DepartmentId.ToString(),
-                UserId = division.UserId.ToString(),
+                DepartmentId = division.DepartmentId,
+                UserId = division.UserId,
             };
     }
 }

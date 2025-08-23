@@ -9,7 +9,7 @@ namespace ITControl.Infrastructure.Repositories;
 public class UsersRepository(ApplicationDbContext context) : IUsersRepository
 {
     public async Task<User?> FindOneAsync(
-        Expression<Func<User?, bool>> predicate, 
+        Guid id, 
         bool? includePosition, 
         bool? includeRole,
         bool? includeUsersEquipments,
@@ -32,9 +32,17 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
         {
             query = query.Include(x => x.UsersSystems);
         }
-        var user = await query.SingleOrDefaultAsync(predicate);
+        var user = await query.SingleOrDefaultAsync(x => x.Id == id);
         
         return user;
+    }
+
+    public async Task<User?> FindOneByUsernameAsync(string username)
+    {
+        return await context
+            .Users
+            .Include(x => x.Role)
+            .SingleOrDefaultAsync(x => x.Username == username);
     }
 
     public async Task<IEnumerable<User>> FindManyAsync(
@@ -146,11 +154,12 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
     public async Task<bool> ExclusiveAsync(
         Guid id, 
         string? username = null, 
+        string? name = null, 
         string? email = null)
     {
         var query = context.Users.AsNoTracking();
         query = query.Where(x => x.Id != id);
-        query = BuildQuery(query, username: username, email: email);
+        query = BuildQuery(query, username: username, name: name, email: email);
         var count = await query.CountAsync();
         
         return count > 0;

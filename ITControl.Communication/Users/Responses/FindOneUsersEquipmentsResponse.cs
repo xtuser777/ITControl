@@ -2,8 +2,8 @@ namespace ITControl.Communication.Users.Responses;
 
 public class FindOneUsersEquipmentsResponse
 {
-    public string Id { get; set; } = string.Empty;
-    public string EquipmentId { get; set; } = string.Empty;
-    public string StartedAt { get; set; } = string.Empty;
-    public string? EndedAt { get; set; }
+    public Guid Id { get; set; }
+    public Guid EquipmentId { get; set; }
+    public DateOnly StartedAt { get; set; }
+    public DateOnly? EndedAt { get; set; }
 }

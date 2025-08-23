@@ -9,14 +9,10 @@ namespace ITControl.Application.Services;
 
 public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 {
-    public async Task<Unit?> FindOneAsync(Guid id)
+    public async Task<Unit> FindOneAsync(Guid id)
     {
-        return await unitOfWork.UnitsRepository.FindOneAsync( x => x.Id == id);
-    }
-    
-    public async Task<Unit> FindOneOrThrowAsync(Guid id)
-    {
-        return await FindOneAsync(id) ?? throw new NotFoundException("Unit not found");
+        return await unitOfWork.UnitsRepository.FindOneAsync(id) 
+               ?? throw new NotFoundException("Unit not found");
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(FindManyUnitsRequest request)
@@ -60,7 +56,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 
     public async Task UpdateAsync(Guid id, UpdateUnitsRequest request)
     {
-        var unit = await FindOneOrThrowAsync(id);
+        var unit = await FindOneAsync(id);
         unit.Update(
             name: request.Name,
             addressNumber: request.AddressNumber,
@@ -75,7 +71,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var unit = await FindOneOrThrowAsync(id);
+        var unit = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.UnitsRepository.Delete(unit);
         await unitOfWork.Commit(transaction);
