@@ -36,12 +36,12 @@ public class TreatmentsView : ITreatmentsView
                    EndedIn = treatment.EndedIn,
                    Status = new TranslatableField()
                    {
-                       Value = (int)treatment.Status,
+                       Value = treatment.Status.ToString(),
                        DisplayValue = TreatmentStatusTranslator.ToDisplayName(treatment.Status)
                    },
                    Type = new TranslatableField()
                    {
-                       Value = (int)treatment.Type,
+                       Value = treatment.Type.ToString(),
                        DisplayValue = TreatmentTypeTranslator.ToDisplayName(treatment.Type)
                    },
                    Observation = treatment.Observation,
@@ -66,12 +66,12 @@ public class TreatmentsView : ITreatmentsView
             EndedIn = treatment.EndedIn,
             Status = new TranslatableField()
             {
-                Value = (int)treatment.Status,
+                Value = treatment.Status.ToString(),
                 DisplayValue = TreatmentStatusTranslator.ToDisplayName(treatment.Status)
             },
             Type = new TranslatableField()
             {
-                Value = (int)treatment.Type,
+                Value = treatment.Type.ToString(),
                 DisplayValue = TreatmentTypeTranslator.ToDisplayName(treatment.Type)
             },
             Observation = treatment.Observation,

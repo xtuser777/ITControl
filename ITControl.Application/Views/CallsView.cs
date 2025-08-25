@@ -28,7 +28,7 @@ public class CallsView : ICallsView
             Description = call.Description,
             Reason = new TranslatableField()
             {
-                Value = (int)call.Reason,
+                Value = call.Reason.ToString(),
                 DisplayValue = CallReasonTranslator.ToDisplayValue(call.Reason)
             },
             CallStatusId = call.CallStatusId,
@@ -42,7 +42,7 @@ public class CallsView : ICallsView
                     Id = call.CallStatusId,
                     Status = new TranslatableField()
                     {
-                        Value = (int)call.CallStatus!.Status,
+                        Value = call.CallStatus!.Status.ToString(),
                         DisplayValue = CallStatusTranslator.ToDisplayValue(call.CallStatus.Status)
                     },
                     Description = call.CallStatus.Description,
@@ -100,12 +100,12 @@ public class CallsView : ICallsView
                    Description = call.Description,
                    Reason = new TranslatableField()
                    {
-                       Value = (int)call.Reason,
+                       Value = call.Reason.ToString(),
                        DisplayValue = CallReasonTranslator.ToDisplayValue(call.Reason)
                    },
                    Status = new TranslatableField()
                    {
-                       Value = (int)call.CallStatus!.Status,
+                       Value = call.CallStatus!.Status.ToString(),
                        DisplayValue = CallStatusTranslator.ToDisplayValue(call.CallStatus.Status)
                    },
                    UserId = call.UserId,

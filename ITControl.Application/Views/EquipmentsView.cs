@@ -32,7 +32,7 @@ public class EquipmentsView : IEquipmentsView
             Tag = equipment.Tag,
             Type = new TranslatableField()
             {
-                Value = (int)equipment.Type,
+                Value = equipment.Type.ToString(),
                 DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
             },
             Rented = equipment.Rented,
@@ -59,7 +59,7 @@ public class EquipmentsView : IEquipmentsView
             Tag = equipment.Tag,
             Type = new TranslatableField()
             {
-                Value = (int)equipment.Type,
+                Value = equipment.Type.ToString(),
                 DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
             },
             Rented = equipment.Rented,

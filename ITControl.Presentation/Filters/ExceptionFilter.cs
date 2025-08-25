@@ -21,7 +21,6 @@ public class ExceptionFilter : IExceptionFilter
             {
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 context.Result = new UnauthorizedObjectResult(new ErrorJsonResponse(context.Exception.Message));
-                return;
             }
             else
                 ThrowUnknowError(context);

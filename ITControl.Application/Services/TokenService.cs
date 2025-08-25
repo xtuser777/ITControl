@@ -16,7 +16,9 @@ public class TokenService : ITokenService
         var claims = new[]
         {
             new Claim("sub", payload.Sub),
+            new Claim("user", payload.User),
             new Claim("role", payload.Role),
+            new Claim("permissions", JsonSerializer.Serialize(payload.Permissions)),
         };
 
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

@@ -15,11 +15,14 @@ public class AuthService(
     public async Task<LoginResponse> Login(LoginRequest request)
     {
         var user = await Validate(request.Username, request.Password);
+        var permissions = await Permissions(user.RoleId);
 
         var payload = new LoginPayload()
         {
             Sub = user.Id.ToString(),
-            Role = user.Role?.Name ?? "",
+            User = user.Name,
+            Role = user.Role?.Id.ToString() ?? "",
+            Permissions = permissions
         };
 
         var key = configuration["Jwt:Key"] ?? "";
@@ -35,10 +38,8 @@ public class AuthService(
         return new LoginResponse() { AccessToken = token, ExpiresIn = 60 * 24 * 7 };
     }
 
-    public async Task<PermissionsResponse> Permissions(Guid userId, PermissionsRequest request)
+    private async Task<List<string>> Permissions(Guid roleId)
     {
-        Guid roleId = Parser.ToGuidOptional(request.RoleId) 
-            ?? throw new UnauthorizedAccessException("Perfil inválido.");
         var role = await unitOfWork.RolesRepository.FindOneAsync(roleId, true) 
             ?? throw new UnauthorizedAccessException("Perfil não encontrado.");
         if (!role.Active)
@@ -57,27 +58,29 @@ public class AuthService(
 
         List<string> permissions = [.. pages.Where(x => x != null).Select(x => x!.Name)];
 
-        PermissionsPayload payload = new PermissionsPayload()
-        {
-            Sub = userId.ToString(),
-            Permissions = permissions
-        };
+        //PermissionsPayload payload = new PermissionsPayload()
+        //{
+        //    Sub = userId.ToString(),
+        //    Permissions = permissions
+        //};
 
-        var key = configuration["Jwt:Key"] ?? "";
-        var issuer = configuration["Jwt:Issuer"] ?? "";
-        var audience = configuration["Jwt:Audience"] ?? "";
-        var token = tokenService.GenerateToken(
-            key,
-            issuer,
-            audience,
-            payload
-        );
+        //var key = configuration["Jwt:Key"] ?? "";
+        //var issuer = configuration["Jwt:Issuer"] ?? "";
+        //var audience = configuration["Jwt:Audience"] ?? "";
+        //var token = tokenService.GenerateToken(
+        //    key,
+        //    issuer,
+        //    audience,
+        //    payload
+        //);
 
-        return new PermissionsResponse()
-        {
-            AccessToken = token,
-            ExpiresIn = 60 * 24 * 7,
-        };
+        //return new PermissionsResponse()
+        //{
+        //    AccessToken = token,
+        //    ExpiresIn = 60 * 24 * 7,
+        //};
+
+        return permissions;
     }
 
     private async Task<User> Validate(string username, string password)
