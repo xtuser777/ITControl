@@ -67,6 +67,7 @@ public class AppointmentsService(
     public async Task<Appointment?> CreateAsync(CreateAppointmentsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
+        await CheckExistenceAsync(request.CallId, request.UserId, request.LocationId);  
         var appointment = new Appointment(
             request.Description,
             request.ScheduledAt,
@@ -84,6 +85,7 @@ public class AppointmentsService(
     public async Task UpdateAsync(Guid id, UpdateAppointmentsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
+        await CheckExistenceAsync(request.CallId, request.UserId, request.LocationId); 
         var appointment = await FindOneAsync(id);
         appointment.Update(
             request.Description,
@@ -103,5 +105,60 @@ public class AppointmentsService(
         var appointment = await FindOneAsync(id);
         unitOfWork.AppointmentsRepository.Delete(appointment);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckExistenceAsync(Guid? callId = null, Guid? userId = null, Guid? locationId = null)
+    {
+        var messages = new List<string>();
+        if (callId != null)
+        {
+            await CheckCallExistenceAsync(callId.Value, messages);
+        }
+
+        if (userId != null)
+        {
+            await CheckUserExistenceAsync(userId.Value, messages);
+        }
+
+        if (locationId != null)
+        {
+            await CheckLocationExistenceAsync(locationId.Value, messages);  
+        }
+
+        if (messages.Count > 0)
+        {
+            throw new NotFoundException(string.Join(Environment.NewLine, messages.ToArray()));
+        }
+    }
+
+    private async Task CheckCallExistenceAsync(
+        Guid callId,
+        List<string> messages)
+    {
+        var exists = await unitOfWork.CallsRepository.ExistsAsync(id: callId);
+        if (exists == false)
+        {
+            messages.Add("Chamado não encontrado");
+        }
+    }
+
+    private async Task CheckUserExistenceAsync(Guid userId, List<string> messages)
+    {
+        var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
+        if (user == false)
+        {
+            messages.Add("Usuário não encontrado");
+        }
+    }
+
+    private async Task CheckLocationExistenceAsync(
+        Guid locationId,
+        List<string> messages)
+    {
+        var exists = await unitOfWork.LocationsRepository.ExistsAsync(id: locationId);
+        if (exists == false)
+        {
+            messages.Add("Local não encontrado");
+        }
     }
 }
