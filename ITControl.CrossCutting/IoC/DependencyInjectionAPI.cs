@@ -58,13 +58,18 @@ public static class DependencyInjectionApi
         services.AddScoped<IEquipmentsRepository, EquipmentsRepository>();
         services.AddScoped<IEquipmentsService, EquipmentsService>();
         services.AddScoped<IEquipmentsView, EquipmentsView>();
+        services.AddScoped<IEquipmentsTypesView, EquipmentsTypesView>();
         services.AddScoped<ICallsRepository, CallsRepository>();
         services.AddScoped<ICallsStatusesRepository, CallsStatusesRepository>();
         services.AddScoped<ICallsService, CallsService>();
         services.AddScoped<ICallsView, CallsView>();
+        services.AddScoped<ICallsStatusesView, CallsStatusesView>();
+        services.AddScoped<ICallsReasonsView, CallsReasonsView>();
         services.AddScoped<ITreatmentsRepository, TreatmentsRepository>();
         services.AddScoped<ITreatmentsService, TreatmentsService>();
         services.AddScoped<ITreatmentsView, TreatmentsView>();
+        services.AddScoped<ITreatmentsStatusesView, TreatmentsStatusesView>();
+        services.AddScoped<ITreatmentsTypesView, TreatmentsTypesView>();
         services.AddScoped<IAppointmentsRepository, AppointmentsRepository>();
         services.AddScoped<IAppointmentsService, AppointmentsService>();
         services.AddScoped<IAppointmentsView, AppointmentsView>();
