@@ -65,7 +65,9 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistence(
             positionId: request.PositionId,
-            roleId: request.RoleId);
+            roleId: request.RoleId,
+            equipments: request.Equipments,
+            systems: request.Systems);
         var user = new User(
             username: request.Username,
             email: request.Email,
@@ -97,7 +99,9 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         await CheckConflicts(id, request.Name, request.Username, request.Email);
         await CheckExistence(
             positionId: request.PositionId,
-            roleId: request.RoleId);
+            roleId: request.RoleId,
+            equipments: request.Equipments,
+            systems: request.Systems);
         var user = await FindOneAsync(id);
         user.Update(
             username: request.Username,
@@ -192,12 +196,30 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         }
     }
 
-    private async Task CheckExistence(Guid? positionId, Guid? roleId)
+    private async Task CheckExistence(
+        Guid? positionId, 
+        Guid? roleId, 
+        IEnumerable<CreateUsersEquipmentsRequest>? equipments,
+        IEnumerable<CreateUsersSystemsRequest>? systems)
     {
         var messages = new List<string>();
 
         if (positionId != null) await CheckPositionExistence((Guid)positionId, messages);
         if (roleId != null) await CheckRoleExistence((Guid)roleId, messages);
+        if (equipments != null)
+        {
+            foreach (var equipment in equipments)
+            {
+                await CheckEquipmentExistence(equipment.EquipmentId, messages);
+            }
+        }
+        if (systems != null)
+        {
+            foreach (var system in systems)
+            {
+                await CheckSystemExistence(system.SystemId, messages);
+            }
+        }
 
         if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
     }
@@ -214,5 +236,19 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         var exists = await unitOfWork.RolesRepository.ExistsAsync(id: roleId);
         if (!exists)
             messages.Add("Role not found");
+    }
+
+    private async Task CheckEquipmentExistence(Guid equipmentId, List<string> messages)
+    {
+        var exists = await unitOfWork.EquipmentsRepository.ExistsAsync(id: equipmentId);
+        if (!exists)
+            messages.Add("Equipment not found");
+    }
+
+    private async Task CheckSystemExistence(Guid systemId, List<string> messages)
+    {
+        var exists = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
+        if (!exists)
+            messages.Add("System not found");
     }
 }

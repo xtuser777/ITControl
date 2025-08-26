@@ -34,9 +34,9 @@ public sealed class Appointment : Entity
         set
         {
             DomainExceptionValidation
-                .When(value > DateOnly.FromDateTime(DateTime.Now))
+                .When(CreatedAt == DateTime.Now && value < DateOnly.FromDateTime(DateTime.Now))
                 .Property("ScheduledAt")
-                .DateMustNotBeGreaterThanCurrent();
+                .DateMustNotBeLessThan(DateOnly.FromDateTime(DateTime.Now));
             _scheduledAt = value;
         }
     }
@@ -46,9 +46,9 @@ public sealed class Appointment : Entity
         set
         {
             DomainExceptionValidation
-                .When(value > TimeOnly.FromDateTime(DateTime.Now))
+                .When(CreatedAt == DateTime.Now && value < TimeOnly.FromDateTime(DateTime.Now))
                 .Property("ScheduledIn")
-                .TimeMustNotBeGreaterThanCurrent();
+                .TimeMustNotBeLessThan(TimeOnly.FromDateTime(DateTime.Now));
             _scheduledIn = value;
         }
     }

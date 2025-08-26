@@ -39,13 +39,15 @@ public class CallsView : ICallsView
             CallStatus = call.CallStatus != null 
                 ? new FindOneCallsStatusResponse() 
                 {
-                    Id = call.CallStatusId,
+                    Id = call.CallStatus.Id,
                     Status = new TranslatableField()
                     {
                         Value = call.CallStatus!.Status.ToString(),
                         DisplayValue = CallStatusTranslator.ToDisplayValue(call.CallStatus.Status)
                     },
                     Description = call.CallStatus.Description,
+                    CreatedAt = call.CallStatus.CreatedAt,
+                    UpdatedAt = call.CallStatus.UpdatedAt,
                 } 
                 : null,
             User = call.User != null 
