@@ -9,12 +9,29 @@ namespace ITControl.Infrastructure.Repositories;
 public class NotificationsRepository(
     ApplicationDbContext context) : INotificationsRepository
 {
-    public async Task<Notification?> FindOneAsync(Guid id, bool? includeUser = null)
+    public async Task<Notification?> FindOneAsync(
+        Guid id,
+        bool? includeUser = null,
+        bool? includeCall = null,
+        bool? includeAppointment = null,
+        bool? includeTreatment = null)
     {
         var query = context.Notifications.AsQueryable();
         if (includeUser == true)
         {
             query = query.Include(n => n.User);
+        }
+        if (includeCall == true) 
+        {
+            query = query.Include(n => n.Call);
+        }
+        if (includeAppointment == true) 
+        {
+            query = query.Include(n => n.Appointment);
+        }
+        if (includeTreatment == true) 
+        {
+            query = query.Include(n => n.Treatment);
         }
 
         return await query.FirstOrDefaultAsync(n => n.Id == id);

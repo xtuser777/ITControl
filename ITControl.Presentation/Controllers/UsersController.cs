@@ -42,7 +42,7 @@ public class UsersController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync(Guid id)
+    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync([FromRoute] Guid id)
     {
         var user = await usersService.FindOneAsync(id, true, true, true, true);
         var data = usersView.FindOne(user);
@@ -77,7 +77,7 @@ public class UsersController(
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task UpdateAsync(
-        Guid id,
+        [FromRoute] Guid id,
         [FromBody] UpdateUsersRequest request)
     {
         await usersService.UpdateAsync(id, request);
@@ -90,9 +90,11 @@ public class UsersController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(
+        [FromRoute] Guid id, 
+        [FromBody] DeleteUsersRequest request)
     {
-        await usersService.DeleteAsync(id);
+        await usersService.DeleteAsync(id, request);
         this.Response.StatusCode = 204;
     }
 }

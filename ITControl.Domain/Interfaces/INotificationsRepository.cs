@@ -5,7 +5,12 @@ namespace ITControl.Domain.Interfaces;
 
 public interface INotificationsRepository
 {
-    Task<Notification?> FindOneAsync(Guid id, bool? includeUser = null);
+    Task<Notification?> FindOneAsync(
+        Guid id, 
+        bool? includeUser = null,
+        bool? includeCall = null,
+        bool? includeAppointment = null,
+        bool? includeTreatment = null);
     Task<IEnumerable<Notification>> FindManyAsync(
         string? title = null,
         string? message = null,

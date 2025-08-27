@@ -96,6 +96,13 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
         context.Users.Update(user);
     }
 
+    public void SoftDelete(User user)
+    {
+        user.Active = false;
+        user.UpdatedAt = DateTime.Now;
+        context.Users.Update(user);
+    }
+
     public void Delete(User user)
     {
         context.Users.Remove(user);

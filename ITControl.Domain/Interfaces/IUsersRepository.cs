@@ -29,6 +29,7 @@ public interface IUsersRepository
         int? size = null);
     Task CreateAsync(User user);
     void Update(User user);
+    void SoftDelete(User user);
     void Delete(User user);
     Task<int> CountAsync(
         string? username = null, 

@@ -3,6 +3,7 @@ using ITControl.Application.Tools;
 using ITControl.Communication.Appointments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Entities;
+using ITControl.Domain.Enums;
 using ITControl.Domain.Exceptions;
 
 namespace ITControl.Application.Services;
@@ -77,6 +78,17 @@ public class AppointmentsService(
             request.CallId,
             request.LocationId);
         await unitOfWork.AppointmentsRepository.CreateAsync(appointment);
+        var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
+            ?? throw new NotFoundException("chamado não encontrado");
+        var user = await unitOfWork.UsersRepository.FindOneAsync(request.UserId, null, null, null, null) 
+            ?? throw new NotFoundException("Usuário não encontrado");
+        var message = $"O agendamento foi criado para o chamado {call.Title} por {user.Name} para {request.ScheduledAt} às {request.ScheduledIn}.";
+        await CreateNotification(
+            appointment.Id,
+            request.UserId,
+            "Novo agendamento criado",
+            message,
+            NotificationType.Info);
         await unitOfWork.Commit(transaction);
         
         return appointment;
@@ -86,7 +98,7 @@ public class AppointmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistenceAsync(request.CallId, request.UserId, request.LocationId); 
-        var appointment = await FindOneAsync(id);
+        var appointment = await FindOneAsync(id, true, true);
         appointment.Update(
             request.Description,
             request.ScheduledAt,
@@ -96,6 +108,17 @@ public class AppointmentsService(
             request.CallId,
             request.LocationId);
         unitOfWork.AppointmentsRepository.Update(appointment);
+        var call = appointment.Call
+            ?? throw new NotFoundException("Chamado não encontrado");
+        var user = appointment.User
+            ?? throw new NotFoundException("Usuário não encontrado");
+        var message = $"O agendamento foi atualizado para o chamado {call.Title} por {user.Name} para {request.ScheduledAt} às {request.ScheduledIn}.";
+        await CreateNotification(
+            appointment.Id,
+            user.Id,
+            "Agendamento atualizado",
+            message,
+            NotificationType.Info);
         await unitOfWork.Commit(transaction);
     }
 
@@ -160,5 +183,24 @@ public class AppointmentsService(
         {
             messages.Add("Local não encontrado");
         }
+    }
+
+    private async Task CreateNotification(
+        Guid referenceId,
+        Guid userId,
+        string title,
+        string message,
+        NotificationType type)
+    {
+        var notification = new Notification(
+            title,
+            message,
+            type,
+            NotificationReference.Appointment,
+            userId,
+            null,
+            null,
+            referenceId);
+        await unitOfWork.NotificationsRepository.CreateAsync(notification);
     }
 }

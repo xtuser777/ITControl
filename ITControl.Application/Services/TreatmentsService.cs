@@ -101,11 +101,16 @@ public class TreatmentsService(
         var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
                    ?? throw new NotFoundException("Chamado não encontrado");
         var callStatus = call.CallStatus!;
+        var user = await unitOfWork.UsersRepository.FindOneAsync(
+            request.UserId, null, null, null, null) 
+                   ?? throw new NotFoundException("Usuário não encontrado");
+        var message = $"O atendimento com o protocolo {treatment.Protocol} foi iniciado para o chamado {call.Title} por {user.Name}.";
         callStatus.Update(
             status: CallStatus.InProgress,
-            description: $"Atendimento iniciado com o protocolo {treatment.Protocol}");
+            description: message);
         await unitOfWork.TreatmentsRepository.CreateAsync(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
+        await CreateNotification(treatment.Id, request.UserId, "Atendimento Iniciado", message, NotificationType.Info);
         await unitOfWork.Commit(transaction);
 
         return treatment;
@@ -115,29 +120,37 @@ public class TreatmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistenceAsync(request.CallId, request.UserId);
-        var treatment = await FindOneAsync(id);
-        var call = await unitOfWork.CallsRepository.FindOneAsync(treatment.CallId) 
+        var treatment = await FindOneAsync(id, true, true);
+        var call = treatment.Call
                    ?? throw new NotFoundException("Chamado não encontrado");
         var callStatus = call.CallStatus!;
+        var user = treatment.User
+                   ?? throw new NotFoundException("Usuário não encontrado");
+        var message = "";
+        var type = NotificationType.Info;
         if (treatment.Status == TreatmentStatus.Started)
         {
+            message = $"O atendimento com o protocolo {treatment.Protocol} foi iniciado para o chamado {call.Title} por {user.Name}.";
             callStatus.Update(
                 status: CallStatus.InProgress,
-                description: $"Atendimento iniciado com o protocolo {treatment.Protocol}");
+                description: message);
         }
 
         if (treatment.Status == TreatmentStatus.PartialFinished)
         {
+            message = $"O atendimento com o protocolo {treatment.Protocol} foi finalizado parcialmente para o chamado {call.Title} por {user.Name}.";
             callStatus.Update(
                 status: CallStatus.InProgress,
-                description: $"Atentimento colocado em espera em {treatment.StartedAt} às {treatment.StartedIn}. Verifique as observações do atendimento");
+                description: message);
         }
 
         if (treatment.Status == TreatmentStatus.Finished)
         {
+            message = $"O atendimento com o protocolo {treatment.Protocol} foi finalizado para o chamado {call.Title} por {user.Name}.";
+            type = NotificationType.Success;
             callStatus.Update(
                 status: CallStatus.Closed,
-                description: $"Atentimento finalizado em {treatment.StartedAt} às {treatment.StartedIn}. Verifique as observações do atendimento");
+                description: message);
         }
         treatment.Update(
             request.Description,
@@ -154,6 +167,7 @@ public class TreatmentsService(
             request.UserId);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
+        await CreateNotification(treatment.Id, call.UserId, "Atendimento Atualizado", message, type);
         await unitOfWork.Commit(transaction);
     }
 
@@ -202,5 +216,24 @@ public class TreatmentsService(
         {
             messages.Add("Usuário não encontrado");
         }
+    }
+
+    private async Task CreateNotification(
+        Guid referenceId, 
+        Guid userId, 
+        string title, 
+        string message,
+        NotificationType type)
+    {
+        var notification = new Notification(
+            title,
+            message,
+            type,
+            NotificationReference.Treatment,
+            userId,
+            null,
+            null,
+            referenceId);
+        await unitOfWork.NotificationsRepository.CreateAsync(notification);
     }
 }

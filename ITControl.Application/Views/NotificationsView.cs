@@ -11,7 +11,7 @@ public class NotificationsView : INotificationsView
     {
         if (notifications is null || !notifications.Any())
         {
-            return Enumerable.Empty<FindManyNotificationsResponse>();
+            return [];
         }
 
         return notifications.Select(n => new FindManyNotificationsResponse
@@ -30,6 +30,10 @@ public class NotificationsView : INotificationsView
                 DisplayValue = NotificationReferenceTranslator.ToDisplayValue(n.Reference)
             },
             IsRead = n.IsRead,
+            UserId = n.UserId,
+            CallId = n.CallId,
+            AppointmentId = n.AppointmentId,
+            TreatmentId = n.TreatmentId,
             CreatedAt = n.CreatedAt,
             ReadAt = n.UpdatedAt
         });

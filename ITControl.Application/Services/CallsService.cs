@@ -79,12 +79,17 @@ public class CallsService(
             request.LocationId,
             request.SystemId,
             request.EquipmentId);
+        var user = await unitOfWork.UsersRepository.FindOneAsync(
+            call.UserId, false, false, false, false) 
+            ?? throw new NotFoundException("user not found");
+        var message = $"Novo chamado aberto por {user.Name} em {DateTime.Now}.";
         var callStatus = new Domain.Entities.CallStatus(
             Domain.Enums.CallStatus.Open,
-            $"Abertura do chamado em {DateTime.Now}",
+            message,
             call.Id);
         await unitOfWork.CallsRepository.CreateAsync(call);
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
+        await CreateNotification(call.Id, "Novo Chamado", message);
         await unitOfWork.Commit(transaction);
 
         return call;
@@ -161,6 +166,27 @@ public class CallsService(
         if (system == false)
         {
             messages.Add("the system does not exist");
+        }
+    }
+
+    private async Task CreateNotification(Guid referenceId, string title, string message)
+    {
+        var rolesMaster = await unitOfWork.RolesRepository.FindManyAsync(name: "MASTER");
+        if (!rolesMaster.Any())
+            throw new NotFoundException("Role Master not found");
+        var users = await unitOfWork.UsersRepository.FindManyAsync(roleId: rolesMaster.ToList()[0].Id);
+        foreach (var user in users)
+        {
+            var notification = new Notification(
+                title: title,
+                message: message,
+                type: NotificationType.Info,
+                reference: NotificationReference.Call,
+                userId: user.Id,
+                callId: referenceId,
+                appointmentId: null,
+                treatmentId: null);
+            await unitOfWork.NotificationsRepository.CreateAsync(notification);
         }
     }
 }

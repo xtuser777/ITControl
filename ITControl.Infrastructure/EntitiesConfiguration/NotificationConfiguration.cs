@@ -16,7 +16,13 @@ public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
         builder.Property(n => n.Reference).IsRequired();
         builder.Property(n => n.IsRead).IsRequired().HasDefaultValue(false);
         builder.Property(n => n.UserId).IsRequired();
+        builder.Property(n => n.CallId).IsRequired(false);
+        builder.Property(n => n.AppointmentId).IsRequired(false);
+        builder.Property(n => n.TreatmentId).IsRequired(false);
         builder.HasOne(n => n.User).WithMany().HasForeignKey(n => n.UserId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(n => n.Call).WithMany().HasForeignKey(n => n.CallId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(n => n.Appointment).WithMany().HasForeignKey(n => n.AppointmentId).OnDelete(DeleteBehavior.NoAction);
+        builder.HasOne(n => n.Treatment).WithMany().HasForeignKey(n => n.TreatmentId).OnDelete(DeleteBehavior.NoAction);
         builder.Property(n => n.CreatedAt).IsRequired();
         builder.Property(n => n.UpdatedAt).IsRequired();
     }

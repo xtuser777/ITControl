@@ -131,13 +131,14 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id, DeleteUsersRequest request)
     {
         var user = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
+        CheckUserLogged(user.Id, request.LoggedUserId);
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
-        unitOfWork.UsersRepository.Delete(user);
+        unitOfWork.UsersRepository.SoftDelete(user);
         await unitOfWork.Commit(transaction);
     }
 
@@ -250,5 +251,11 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         var exists = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
         if (!exists)
             messages.Add("System not found");
+    }
+
+    private void CheckUserLogged(Guid userId, Guid loggedUserId)
+    {
+        if (userId == loggedUserId)
+            throw new BadRequestException("You are not authorized to perform this action");
     }
 }
