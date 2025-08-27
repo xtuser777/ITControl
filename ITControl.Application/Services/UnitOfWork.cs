@@ -28,7 +28,8 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     private ICallsStatusesRepository? _callsStatusesRepository;
     private ITreatmentsRepository? _treatmentsRepository;
     private IAppointmentsRepository? _appointmentsRepository;
-    
+    private INotificationsRepository? _notificationsRepository;
+
     public ApplicationDbContext Context => context;
     public IDbContextTransaction BeginTransaction => context.Database.BeginTransaction();
     public IPositionsRepository PositionsRepository => _positionsRepository ?? new PositionsRepository(context);
@@ -50,7 +51,8 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     public ICallsStatusesRepository CallsStatusesRepository => _callsStatusesRepository ?? new CallsStatusesRepository(context);
     public ITreatmentsRepository TreatmentsRepository => _treatmentsRepository ?? new TreatmentsRepository(context);
     public IAppointmentsRepository AppointmentsRepository => _appointmentsRepository ?? new AppointmentsRepository(context);
-    
+    public INotificationsRepository NotificationsRepository => _notificationsRepository ?? new NotificationsRepository(context);
+
     public async Task Commit(IDbContextTransaction transaction)
     {
         await context.SaveChangesAsync();
