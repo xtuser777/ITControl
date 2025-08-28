@@ -12,13 +12,19 @@ namespace ITControl.Application.Services;
 public class NotificationsService(
     IUnitOfWork unitOfWork) : INotificationsService
 {
-    private async Task<Notification> FindOneInternalAsync(Guid id, bool? includeUser = null)
+    public async Task<Notification> FindOneAsync(
+        Guid id,
+        bool? includeUser = null,
+        bool? includeCall = null,
+        bool? includeAppointment = null,
+        bool? includeTreatment = null)
     {
-        return await unitOfWork.NotificationsRepository.FindOneAsync(id, includeUser) 
+        return await unitOfWork.NotificationsRepository.FindOneAsync(
+            id, includeUser, includeCall, includeAppointment, includeTreatment) 
             ?? throw new NotFoundException("Notification not found");
     }
 
-    public async Task<IEnumerable<Notification>> FindMany(FindManyNotificationsRequest request)
+    public async Task<IEnumerable<Notification>> FindManyAsync(FindManyNotificationsRequest request)
     {
         int? page = request.Page != null ? int.Parse(request.Page) : null;
         int? size = request.Size != null ? int.Parse(request.Size) : null;
@@ -34,15 +40,15 @@ public class NotificationsService(
             request.OrderByType,
             request.OrderByReference,
             request.OrderByIsRead,
-            request.OrderByUserId,
+            request.OrderByUser,
             page,
             size);
     }
 
-    public async Task Update(Guid id, UpdateNotificationsRequest request)
+    public async Task UpdateAsync(Guid id, UpdateNotificationsRequest request)
     {
         using var transaction = unitOfWork.BeginTransaction;
-        var notification = await FindOneInternalAsync(id);
+        var notification = await FindOneAsync(id);
         if (request.IsRead != null && request.IsRead == true)
         {
             notification.MarkAsRead();
@@ -51,7 +57,7 @@ public class NotificationsService(
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task<PaginationResponse?> FindManyPagination(FindManyNotificationsRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyNotificationsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
 

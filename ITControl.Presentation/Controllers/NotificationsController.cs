@@ -25,16 +25,28 @@ public class NotificationsController(
     public async Task<FindManyResponse<FindManyNotificationsResponse>> IndexAsync(
         [FromQuery] FindManyNotificationsRequest request)
     {
-        var notifications = await notificationsService.FindMany(request);
+        var notifications = await notificationsService.FindManyAsync(request);
         var response = new FindManyResponse<FindManyNotificationsResponse>
         {
             Data = notificationsView.FindMany(notifications)
         };
-        var pagination = await notificationsService.FindManyPagination(request);
+        var pagination = await notificationsService.FindManyPaginationAsync(request);
         if (pagination != null)
         {
             response.Pagination = pagination;
         }
+        return response;
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<FindOneResponse<FindOneNotificationsResponse?>> ShowAsync([FromRoute] Guid id)
+    {
+        var notification = await notificationsService.FindOneAsync(
+            id, true, true, true, true);
+        var response = new FindOneResponse<FindOneNotificationsResponse?>
+        {
+            Data = notificationsView.FindOne(notification)
+        };
         return response;
     }
 
@@ -48,7 +60,7 @@ public class NotificationsController(
         [FromRoute] Guid id, 
         [FromBody] UpdateNotificationsRequest request)
     {
-        await notificationsService.Update(id, request);
+        await notificationsService.UpdateAsync(id, request);
         return NoContent();
     }
 }

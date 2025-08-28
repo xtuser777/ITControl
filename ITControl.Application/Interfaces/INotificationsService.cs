@@ -6,7 +6,13 @@ namespace ITControl.Application.Interfaces;
 
 public interface INotificationsService
 {
-    Task<IEnumerable<Notification>> FindMany(FindManyNotificationsRequest request);
-    Task<PaginationResponse?> FindManyPagination(FindManyNotificationsRequest request);
-    Task Update(Guid id, UpdateNotificationsRequest request);
+    Task<Notification> FindOneAsync(
+        Guid id,
+        bool? includeUser = null,
+        bool? includeCall = null,
+        bool? includeAppointment = null,
+        bool? includeTreatment = null);
+    Task<IEnumerable<Notification>> FindManyAsync(FindManyNotificationsRequest request);
+    Task<PaginationResponse?> FindManyPaginationAsync(FindManyNotificationsRequest request);
+    Task UpdateAsync(Guid id, UpdateNotificationsRequest request);
 }

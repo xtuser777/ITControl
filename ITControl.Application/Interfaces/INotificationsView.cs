@@ -5,5 +5,6 @@ namespace ITControl.Application.Interfaces;
 
 public interface INotificationsView
 {
+    FindOneNotificationsResponse? FindOne(Notification? notification);
     IEnumerable<FindManyNotificationsResponse> FindMany(IEnumerable<Notification>? notifications);
 }

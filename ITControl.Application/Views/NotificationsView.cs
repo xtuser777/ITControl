@@ -38,4 +38,36 @@ public class NotificationsView : INotificationsView
             ReadAt = n.UpdatedAt
         });
     }
+
+    public FindOneNotificationsResponse? FindOne(Notification? notification)
+    {
+        if (notification is null)
+        {
+            return null;
+        }
+
+        return new FindOneNotificationsResponse
+        {
+            Id = notification.Id,
+            Title = notification.Title,
+            Message = notification.Message,
+            Type = new()
+            {
+                Value = notification.Type.ToString(),
+                DisplayValue = NotificationTypeTranslator.ToDisplayValue(notification.Type)
+            },
+            Reference = new()
+            {
+                Value = notification.Reference.ToString(),
+                DisplayValue = NotificationReferenceTranslator.ToDisplayValue(notification.Reference)
+            },
+            IsRead = notification.IsRead,
+            UserId = notification.UserId,
+            CallId = notification.CallId,
+            AppointmentId = notification.AppointmentId,
+            TreatmentId = notification.TreatmentId,
+            CreatedAt = notification.CreatedAt,
+            ReadAt = notification.UpdatedAt
+        };
+    }
 }

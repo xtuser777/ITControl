@@ -255,6 +255,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
     private void CheckUserLogged(Guid userId, Guid loggedUserId)
     {
+        if (loggedUserId == Guid.Empty)
+            throw new BadRequestException("Logged user ID is required");
         if (userId == loggedUserId)
             throw new BadRequestException("You are not authorized to perform this action");
     }

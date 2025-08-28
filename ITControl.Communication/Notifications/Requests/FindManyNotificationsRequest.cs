@@ -15,5 +15,5 @@ public class FindManyNotificationsRequest : PageableRequest
     public string? OrderByType { get; set; }
     public string? OrderByReference { get; set; }
     public string? OrderByIsRead { get; set; }
-    public string? OrderByUserId { get; set; }
+    public string? OrderByUser { get; set; }
 }
