@@ -46,4 +46,27 @@ public sealed class Notification : Entity
         IsRead = true;
         UpdatedAt = DateTime.Now;
     }
+
+    public void Update(
+        string? title = null,
+        string? message = null,
+        NotificationType? type = null,
+        NotificationReference? reference = null,
+        bool? isRead = null,
+        Guid? userId = null,
+        Guid? callId = null,
+        Guid? appointmentId = null,
+        Guid? treatmentId = null)
+    {
+        Title = title ?? Title;
+        Message = message ?? Message;
+        Type = type ?? Type;
+        Reference = reference ?? Reference;
+        IsRead = isRead ?? IsRead;
+        UserId = userId ?? UserId;
+        CallId = callId ?? CallId;
+        AppointmentId = appointmentId ?? AppointmentId;
+        TreatmentId = treatmentId ?? TreatmentId;
+        UpdatedAt = DateTime.Now;
+    }
 }

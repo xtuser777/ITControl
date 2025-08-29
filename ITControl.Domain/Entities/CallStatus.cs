@@ -6,7 +6,6 @@ public sealed class CallStatus : Entity
 {
     private Enums.CallStatus _status;
     private string _description = string.Empty;
-    private Guid _callId;
 
     public Enums.CallStatus Status 
     { 
@@ -36,41 +35,24 @@ public sealed class CallStatus : Entity
             _description = value;
         }
     }
-    public Guid CallId
-    {
-        get => _callId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("CallId")
-                .MustNotBeEmpty();
-            _callId = value;
-        }
-    }
-    public Call? Call { get; set; }
 
     public CallStatus(
         Enums.CallStatus status, 
-        string description, 
-        Guid callId)
+        string description)
     {
         Id = Guid.NewGuid();
         Status = status;
         Description = description;
-        CallId = callId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
     public void Update(
         Enums.CallStatus? status = null, 
-        string? description = null, 
-        Guid? callId = null)
+        string? description = null)
     {
         Status = status ?? Status;
         Description = description ?? Description;
-        CallId = callId ?? CallId;
         UpdatedAt = DateTime.Now;
     }
 }

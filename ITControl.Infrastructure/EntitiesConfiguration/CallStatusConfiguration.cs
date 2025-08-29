@@ -22,10 +22,5 @@ public class CallStatusConfiguration : IEntityTypeConfiguration<CallStatus>
         builder
             .Property(x => x.UpdatedAt)
             .IsRequired();
-
-        builder.HasOne(x => x.Call).WithOne("CallStatus")
-            .HasForeignKey<CallStatus>(x => x.CallId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
     }
 }

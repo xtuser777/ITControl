@@ -117,6 +117,7 @@ public sealed class Call : Entity
         string title, 
         string description, 
         CallReason reason,
+        Guid callStatusId,
         Guid userId, 
         Guid locationId, 
         Guid? systemId, 
@@ -127,6 +128,7 @@ public sealed class Call : Entity
         Title = title;
         Description = description;
         Reason = reason;
+        CallStatusId = callStatusId;
         UserId = userId;
         LocationId = locationId;
         SystemId = systemId;

@@ -31,16 +31,18 @@ public class NotificationsService(
         return await unitOfWork.NotificationsRepository.FindManyAsync(
             request.Title,
             request.Message,
-            null,
-            null,
+            Parser.ToEnumOptional<NotificationType>(request.Type),
+            Parser.ToEnumOptional<NotificationReference>(request.Reference),
             request.IsRead,
             request.UserId,
+            request.CreatedAt,
             request.OrderByTitle,
             request.OrderByMessage,
             request.OrderByType,
             request.OrderByReference,
             request.OrderByIsRead,
             request.OrderByUser,
+            request.OrderByCreatedAt,
             page,
             size);
     }
@@ -49,10 +51,7 @@ public class NotificationsService(
     {
         using var transaction = unitOfWork.BeginTransaction;
         var notification = await FindOneAsync(id);
-        if (request.IsRead != null && request.IsRead == true)
-        {
-            notification.MarkAsRead();
-        }
+        notification.Update(isRead: request.IsRead);
         unitOfWork.NotificationsRepository.Update(notification);
         await unitOfWork.Commit(transaction);
     }
@@ -67,10 +66,18 @@ public class NotificationsService(
             Parser.ToEnumOptional<NotificationType>(request.Type),
             Parser.ToEnumOptional<NotificationReference>(request.Reference),
             request.IsRead,
-            request.UserId);
+            request.UserId,
+            request.CreatedAt);
 
         var pagination = Pagination.Build(request.Page, request.Size, count);
 
         return pagination;
+    }
+
+    public async Task<int> CountUnreadAsync(Guid userId)
+    {
+        return await unitOfWork.NotificationsRepository.CountAsync(
+            isRead: false,
+            userId: userId);
     }
 }

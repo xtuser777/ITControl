@@ -39,6 +39,11 @@ public class NotificationsController(
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(FindOneResponse<FindOneNotificationsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<FindOneNotificationsResponse?>> ShowAsync([FromRoute] Guid id)
     {
         var notification = await notificationsService.FindOneAsync(
@@ -46,6 +51,21 @@ public class NotificationsController(
         var response = new FindOneResponse<FindOneNotificationsResponse?>
         {
             Data = notificationsView.FindOne(notification)
+        };
+        return response;
+    }
+
+    [HttpGet("count-unread/{userId:guid}")]
+    [ProducesResponseType(typeof(FindOneResponse<CountUnreadNotificationsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<FindOneResponse<CountUnreadNotificationsResponse>> CountUnreadAsync([FromRoute] Guid userId)
+    {
+        var count = await notificationsService.CountUnreadAsync(userId);
+        var response = new FindOneResponse<CountUnreadNotificationsResponse>
+        {
+            Data = notificationsView.CountUnread(count)
         };
         return response;
     }

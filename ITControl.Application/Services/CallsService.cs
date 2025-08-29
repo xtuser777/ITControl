@@ -68,27 +68,28 @@ public class CallsService(
         await using var transaction = unitOfWork.BeginTransaction;
         await CheckExistence(
             userId: request.UserId,
-            locationId: request.LocationId,
             equipmentId: request.EquipmentId,
             systemId: request.SystemId);
-        var call = new Call(
-            request.Title,
-            request.Description,
-            Parser.ToEnum<CallReason>(request.Reason),
-            request.UserId,
-            request.LocationId,
-            request.SystemId,
-            request.EquipmentId);
         var user = await unitOfWork.UsersRepository.FindOneAsync(
-            call.UserId, false, false, false, false) 
+            request.UserId, false, false, false, false)
             ?? throw new NotFoundException("user not found");
         var message = $"Novo chamado aberto por {user.Name} em {DateTime.Now}.";
         var callStatus = new Domain.Entities.CallStatus(
             Domain.Enums.CallStatus.Open,
-            message,
-            call.Id);
-        await unitOfWork.CallsRepository.CreateAsync(call);
+            message);
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
+        var locations = await unitOfWork.LocationsRepository.FindManyAsync(userId: request.UserId);
+        var location = locations.SingleOrDefault() ?? throw new NotFoundException("location not found");
+        var call = new Call(
+            request.Title,
+            request.Description,
+            Parser.ToEnum<CallReason>(request.Reason),
+            callStatus.Id,
+            request.UserId,
+            location.Id,
+            request.SystemId,
+            request.EquipmentId);
+        await unitOfWork.CallsRepository.CreateAsync(call);
         await CreateNotification(call.Id, "Novo Chamado", message);
         await unitOfWork.Commit(transaction);
 
@@ -106,7 +107,6 @@ public class CallsService(
 
     private async Task CheckExistence(
         Guid? userId = null,
-        Guid? locationId = null,
         Guid? equipmentId = null,
         Guid? systemId = null)
     {
@@ -114,10 +114,6 @@ public class CallsService(
         if (userId.HasValue)
         {
             await CheckUserExistence(userId.Value, messages);
-        }
-        if (locationId.HasValue)
-        {
-            await CheckLocationExistence(locationId.Value, messages);
         }
         if (equipmentId.HasValue)
         {
@@ -139,15 +135,6 @@ public class CallsService(
         if (user == false)
         {
             messages.Add("the user does not exist");
-        }
-    }
-
-    private async Task CheckLocationExistence(Guid locationId, List<string> messages)
-    {
-        var location = await unitOfWork.LocationsRepository.ExistsAsync(id: locationId);
-        if (location == false)
-        {
-            messages.Add("the location does not exist");
         }
     }
 

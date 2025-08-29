@@ -14,5 +14,6 @@ public interface INotificationsService
         bool? includeTreatment = null);
     Task<IEnumerable<Notification>> FindManyAsync(FindManyNotificationsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyNotificationsRequest request);
+    Task<int> CountUnreadAsync(Guid userId);
     Task UpdateAsync(Guid id, UpdateNotificationsRequest request);
 }

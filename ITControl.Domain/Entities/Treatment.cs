@@ -56,7 +56,7 @@ public sealed class Treatment : Entity
         set
         {
             DomainExceptionValidation
-                .When(value > DateOnly.FromDateTime(DateTime.Now))
+                .When(CreatedAt == DateTime.Now && value > DateOnly.FromDateTime(DateTime.Now))
                 .Property("StartedAt")
                 .DateMustNotBeGreaterThanCurrent();
             _startedAt = value; 
@@ -80,7 +80,7 @@ public sealed class Treatment : Entity
         set
         {
             DomainExceptionValidation
-                .When(value > TimeOnly.FromDateTime(DateTime.Now))
+                .When(CreatedAt == DateTime.Now && value > TimeOnly.FromDateTime(DateTime.Now))
                 .Property("StartedIn")
                 .TimeMustNotBeGreaterThanCurrent();
             _startedIn = value;

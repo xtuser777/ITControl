@@ -43,19 +43,24 @@ public class NotificationsRepository(
         NotificationType? type = null, 
         NotificationReference? reference = null, 
         bool? isRead = null, 
-        Guid? userId = null, 
+        Guid? userId = null,
+        DateTime? createdAt = null,
         string? orderByTitle = null, 
         string? orderByMessage = null, 
         string? orderByType = null, 
         string? orderByReference = null, 
         string? orderByIsRead = null, 
         string? orderByUser = null, 
+        string? orderByCreatedAt = null,
         int? page = null, 
         int? size = null)
     {
         var query = context.Notifications.AsNoTracking();
-        query = BuildQuery(query, title, message, type, reference, isRead, userId);
-        query = ApplySorting(query, orderByTitle, orderByMessage, orderByType, orderByReference, orderByIsRead, orderByUser);
+        query = BuildQuery(
+            query, title, message, type, reference, isRead, userId, createdAt);
+        query = ApplySorting(
+            query, orderByTitle, orderByMessage, orderByType, 
+            orderByReference, orderByIsRead, orderByUser, orderByCreatedAt);
         if (page.HasValue && size.HasValue)
         {
             var skip = (page.Value - 1) * size.Value;
@@ -81,10 +86,11 @@ public class NotificationsRepository(
         NotificationType? type = null, 
         NotificationReference? reference = null, 
         bool? isRead = null, 
-        Guid? userId = null)
+        Guid? userId = null,
+        DateTime? createdAt = null)
     {
         var query = context.Notifications.AsNoTracking();
-        query = BuildQuery(query, title, message, type, reference, isRead, userId);
+        query = BuildQuery(query, title, message, type, reference, isRead, userId, createdAt);
 
         return query.CountAsync();
     }
@@ -96,7 +102,8 @@ public class NotificationsRepository(
         NotificationType? type = null, 
         NotificationReference? reference = null, 
         bool? isRead = null, 
-        Guid? userId = null)
+        Guid? userId = null,
+        DateTime? createdAt = null)
     {
         if (!string.IsNullOrWhiteSpace(title))
         {
@@ -122,6 +129,10 @@ public class NotificationsRepository(
         {
             query = query.Where(n => n.UserId == userId.Value);
         }
+        if (createdAt.HasValue)
+        {
+            query = query.Where(n => n.CreatedAt.Date == createdAt.Value.Date);
+        }
         return query;
     }
 
@@ -132,7 +143,8 @@ public class NotificationsRepository(
         string? orderByType = null, 
         string? orderByReference = null, 
         string? orderByIsRead = null, 
-        string? orderByUser = null)
+        string? orderByUser = null,
+        string? orderByCreatedAt = null)
     {
         if (!string.IsNullOrWhiteSpace(orderByTitle))
         {
@@ -169,6 +181,12 @@ public class NotificationsRepository(
             query = orderByUser.ToLower() == "d" 
                 ? query.OrderByDescending(n => n.UserId) 
                 : query.OrderBy(n => n.UserId);
+        }
+        if (!string.IsNullOrWhiteSpace(orderByCreatedAt))
+        {
+            query = orderByCreatedAt.ToLower() == "d" 
+                ? query.OrderByDescending(n => n.CreatedAt) 
+                : query.OrderBy(n => n.CreatedAt);
         }
         return query;
     }

@@ -70,4 +70,12 @@ public class NotificationsView : INotificationsView
             ReadAt = notification.UpdatedAt
         };
     }
+
+    public CountUnreadNotificationsResponse CountUnread(int count)
+    {
+        return new CountUnreadNotificationsResponse
+        {
+            Count = count
+        };
+    }
 }

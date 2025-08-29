@@ -57,7 +57,7 @@ public class CallsRepository(
             .Include(c => c.CallStatus)
             .Include(c => c.User)
             .Include(c => c.Location)
-            .AsQueryable();
+            .AsNoTracking();
         query = BuildQuery(
             query, null, title, description, reason, status, userId, locationId);
         query = ApplySorting(

@@ -18,12 +18,14 @@ public interface INotificationsRepository
         NotificationReference? reference = null,
         bool? isRead = null,
         Guid? userId = null,
+        DateTime? createdAt = null,
         string? orderByTitle = null,
         string? orderByMessage = null,
         string? orderByType = null,
         string? orderByReference = null,
         string? orderByIsRead = null,
         string? orderByUser = null,
+        string? orderByCreatedAt = null,
         int? page = null,
         int? size = null);
     Task CreateAsync(Notification notification);
@@ -34,5 +36,6 @@ public interface INotificationsRepository
         NotificationType? type = null,
         NotificationReference? reference = null,
         bool? isRead = null,
-        Guid? userId = null);
+        Guid? userId = null,
+        DateTime? createdAt = null);
 }
