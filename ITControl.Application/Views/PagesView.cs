@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Application.Translators;
 using ITControl.Communication.Pages.Response;
 using ITControl.Domain.Entities;
 
@@ -24,6 +25,7 @@ public class PagesView : IPagesView
         {
             Id = page.Id,
             Name = page.Name,
+            DisplayName = PagesTranslator.ToDisplayValue(page.Name),
         };
     }
 
@@ -36,6 +38,7 @@ public class PagesView : IPagesView
             {
                 Id = page.Id,
                 Name = page.Name,
+                DisplayName = PagesTranslator.ToDisplayValue(page.Name),
             }; 
     }
 }

@@ -21,6 +21,8 @@ public static class DependencyInjectionApi
             options => options.UseSqlServer(connectionString)
         );
 
+        services.AddSingleton<IWebSocketService, WebSocketService>();
+
         services.AddScoped<IPositionsRepository, PositionsRepository>();
         services.AddScoped<IPositionsService, PositionsService>();
         services.AddScoped<IPositionsView, PositionsView>();

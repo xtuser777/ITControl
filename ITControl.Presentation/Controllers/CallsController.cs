@@ -15,7 +15,9 @@ namespace ITControl.Presentation.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class CallsController(
     ICallsService callsService,
-    ICallsView callsView) : ControllerBase
+    ICallsView callsView,
+    IWebSocketService webSocketService,
+    INotificationsService notificationsService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(typeof(FindManyResponse<FindManyCallsResponse>), StatusCodes.Status200OK)]
@@ -61,6 +63,11 @@ public class CallsController(
     {
         var call = await callsService.CreateAsync(request);
         var data = callsView.Create(call);
+        if (call != null)
+        {
+            var count = await notificationsService.CountUnreadAsync(call.UserId);
+            await webSocketService.EchoAsync(call.UserId.ToString(), count.ToString());
+        }
         Response.StatusCode = StatusCodes.Status201Created;
         return new FindOneResponse<CreateCallsResponse?>()
         {

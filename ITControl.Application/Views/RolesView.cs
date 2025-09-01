@@ -40,7 +40,7 @@ public class RolesView : IRolesView
                     {
                         Id = rolePage.Page?.Id ?? Guid.Empty,
                         Name = rolePage.Page?.Name ?? string.Empty,
-                        DisplayValue = PagesTranslator.ToDisplayValue(rolePage.Page?.Name)
+                        DisplayValue = PagesTranslator.ToDisplayValue(rolePage.Page?.Name ?? "")
                     }
                     : null,
         };
