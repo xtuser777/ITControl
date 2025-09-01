@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Application.Translators;
 using ITControl.Communication.Roles.Responses;
 using ITControl.Domain.Entities;
 
@@ -39,6 +40,7 @@ public class RolesView : IRolesView
                     {
                         Id = rolePage.Page?.Id ?? Guid.Empty,
                         Name = rolePage.Page?.Name ?? string.Empty,
+                        DisplayValue = PagesTranslator.ToDisplayValue(rolePage.Page?.Name)
                     }
                     : null,
         };
