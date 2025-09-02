@@ -4,7 +4,6 @@ namespace ITControl.Domain.Entities;
 
 public sealed class Appointment : Entity
 {
-    private string _description = string.Empty;
     private DateOnly _scheduledAt;
     private TimeOnly _scheduledIn;
     private string _observation = string.Empty;
@@ -12,22 +11,7 @@ public sealed class Appointment : Entity
     private Guid _callId;
     private Guid _locationId;
 
-    public string Description
-    {
-        get => _description;
-        set
-        {
-            DomainExceptionValidation
-                .When(string.IsNullOrEmpty(value))
-                .Property("Description")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value.Length > 100)
-                .Property("Description")
-                .LengthMustBeLessThanOrEqualTo(100);
-            _description = value;
-        }
-    }
+    public string Description { get; set; } = string.Empty;
     public DateOnly ScheduledAt
     {
         get => _scheduledAt;

@@ -9,8 +9,16 @@ public class EquipmentTypeTranslator
         return equipmentType switch
         {
             EquipmentType.Desktop => "Computador de mesa",
-            EquipmentType.Notebook => "Notebook",
+            EquipmentType.Laptop => "Notebook",
             EquipmentType.Server => "Servidor",
+            EquipmentType.Printer => "Impressora",
+            EquipmentType.Router => "Roteador",
+            EquipmentType.Switch => "Switch",
+            EquipmentType.Firewall => "Firewall",
+            EquipmentType.Cftv => "CFTV",
+            EquipmentType.Pabx => "PABX",
+            EquipmentType.TimeClock => "Relógio de ponto",
+            EquipmentType.Other => "Outro",
             _ => equipmentType.ToString()
         };
     }

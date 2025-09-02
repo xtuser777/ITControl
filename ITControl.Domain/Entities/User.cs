@@ -20,11 +20,11 @@ public sealed class User : Entity
         {
             DomainExceptionValidation
                 .When(string.IsNullOrEmpty(value))
-                .Property("Name")
+                .Property("Username")
                 .MustNotBeEmpty();
             DomainExceptionValidation
                 .When(value.Length > 100)
-                .Property("Name")
+                .Property("Username")
                 .LengthMustBeLessThanOrEqualTo(100);
             _username = value;
         }

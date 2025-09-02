@@ -1,27 +1,8 @@
-using ITControl.Domain.Validation;
-
 namespace ITControl.Domain.Entities;
 
 public class Page : Entity
 {
-    private string _name = string.Empty;
-
-    public string Name 
-    { 
-        get => _name; 
-        set
-        {
-            DomainExceptionValidation
-                .When(string.IsNullOrEmpty(value))
-                .Property("Name")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value.Length > 100)
-                .Property("Name")
-                .LengthMustBeLessThanOrEqualTo(100);
-            _name = value;
-        } 
-    }
+    public string Name { get; set; } = string.Empty;
 
     public Page(string name)
     {
