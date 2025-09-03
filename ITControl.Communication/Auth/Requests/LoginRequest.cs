@@ -16,6 +16,11 @@ public class LoginRequest
         50, 
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "MAX_LENGTH")]
+    [RegularExpression(
+        "^[a-zA-Z0-9_.-]*$", 
+        ErrorMessageResourceType = typeof(Errors), 
+        ErrorMessageResourceName = "INVALID_FORMAT")]
+    [Display(Name = "usuário")]
     public string Username { get; set; } = string.Empty;
 
     [Required(
@@ -29,5 +34,6 @@ public class LoginRequest
         12, 
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "MAX_LENGTH")]
+    [Display(Name = "senha")]
     public string Password { get; set; } = string.Empty;
 }

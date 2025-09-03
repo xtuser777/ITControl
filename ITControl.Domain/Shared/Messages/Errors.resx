@@ -144,9 +144,21 @@
     <value>O campo {0} deve ser um horário válido</value>
   </data>
   <data name="DATE_GREATER_THAN_CURRENT" xml:space="preserve">
+    <value>O campo {0} deve ser uma data maior que {1}</value>
+  </data>
+  <data name="DATE_GREATER_THAN" xml:space="preserve">
     <value>O campo {0} deve ser maior que a data atual</value>
   </data>
   <data name="TIME_GREATER_THAN_CURRENT" xml:space="preserve">
     <value>O campo {0} deve ser maior que o horário atual</value>
+  </data>
+  <data name="INVALID_GUID" xml:space="preserve">
+    <value>O campo {0} deve ser um valor UUID válido</value>
+  </data>
+  <data name="INVALID_BOOLEAN" xml:space="preserve">
+    <value>O campo {0} deve ser um valor booleano válido</value>
+  </data>
+  <data name="DATE_PRESENT_PAST" xml:space="preserve">
+    <value>O campo {0} deve ser uma data menor ou igual a atual</value>
   </data>
 </root>

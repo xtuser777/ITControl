@@ -1,4 +1,5 @@
-﻿using ITControl.Domain.Shared.Messages;
+﻿using ITControl.Communication.Shared.Attributes;
+using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Calls.Requests;
@@ -34,8 +35,15 @@ public class CreateCallsRequest
     [Required(
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "REQUIRED")]
+    [GuidValue]
     [Display(Name = "usuário")]
     public Guid UserId { get; set; }
+
+    [GuidValue]
+    [Display(Name = "equipamento")]
     public Guid? EquipmentId { get; set; }
+
+    [GuidValue]
+    [Display(Name = "sistema")]
     public Guid? SystemId { get; set; }
 }

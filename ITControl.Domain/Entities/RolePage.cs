@@ -4,33 +4,8 @@ namespace ITControl.Domain.Entities;
 
 public sealed class RolePage : Entity
 {
-    private Guid _roleId;
-    private Guid _pageId;
-
-    public Guid RoleId 
-    { 
-        get => _roleId; 
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("RoleId")
-                .MustNotBeEmpty();
-            _roleId = value;
-        } 
-    }
-    public Guid PageId 
-    { 
-        get => _pageId; 
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("PageId")
-                .MustNotBeEmpty();
-            _pageId = value;
-        } 
-    }
+    public Guid RoleId { get; set; }
+    public Guid PageId { get; set; }
     public Role? Role { get; set; }
     public Page? Page { get; set; }
 

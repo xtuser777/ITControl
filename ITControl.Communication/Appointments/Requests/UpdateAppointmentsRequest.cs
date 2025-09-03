@@ -39,7 +39,16 @@ public class UpdateAppointmentsRequest
         ErrorMessageResourceName = "MAX_LENGTH")]
     [Display(Name = "observação")]
     public string? Observation { get; set; }
+
+    [GuidValue]
+    [Display(Name = "usuário")]
     public Guid? UserId { get; set; }
+
+    [GuidValue]
+    [Display(Name = "chamado")]
     public Guid? CallId { get; set; }
+
+    [GuidValue]
+    [Display(Name = "local")]
     public Guid? LocationId { get; set; }
 }

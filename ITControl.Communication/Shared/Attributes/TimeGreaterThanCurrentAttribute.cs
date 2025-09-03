@@ -1,18 +1,22 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
 
 namespace ITControl.Communication.Shared.Attributes;
 
-public class TimeGreaterThanCurrentAttribute(string scheduledAt) : ValidationAttribute
+public class TimeGreaterThanCurrentAttribute : ValidationAttribute
 {
-    protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
-    {
-        var property = validationContext.ObjectType.GetProperty(scheduledAt);
-        if (property == null)
-        {
-            throw new ArgumentException("Comparison property not found.");
-        }
+    private readonly string date;
 
+    public TimeGreaterThanCurrentAttribute(string date)
+    {
+        this.date = date;
+        ErrorMessageResourceType = typeof(Domain.Shared.Messages.Errors);
+        ErrorMessageResourceName = "TIME_GREATER_THAN_CURRENT";
+    }
+
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        var property = validationContext.ObjectType.GetProperty(date) 
+            ?? throw new ArgumentException("Comparison property not found.");
         var comparisonValue = (DateOnly?)property.GetValue(validationContext.ObjectInstance);
         
         var currentValue = (TimeOnly)(value ?? throw new ArgumentNullException(nameof(value)));
@@ -21,11 +25,9 @@ public class TimeGreaterThanCurrentAttribute(string scheduledAt) : ValidationAtt
             currentValue < TimeOnly.FromDateTime(DateTime.Now) 
             && comparisonValue == DateOnly.FromDateTime(DateTime.Now))
         {
-            return new ValidationResult(
-                ErrorMessage = ErrorMessage 
-                ?? $"{validationContext.DisplayName} must be greater than current.");
+            return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
         }
 
-        return ValidationResult.Success ?? throw new NullReferenceException();
+        return ValidationResult.Success;
     }
 }

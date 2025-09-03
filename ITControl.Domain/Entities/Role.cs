@@ -1,40 +1,9 @@
-using ITControl.Domain.Validation;
-
 namespace ITControl.Domain.Entities;
 
 public sealed class Role : Entity
 {
-    private string _name = string.Empty;
-    private bool _active;
-
-    public string Name 
-    { 
-        get => _name; 
-        set
-        {
-            DomainExceptionValidation
-                .When(string.IsNullOrEmpty(value))
-                .Property("Name")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value.Length > 64)
-                .Property("Name")
-                .LengthMustBeLessThanOrEqualTo(64);
-            _name = value;
-        } 
-    }
-    public bool Active 
-    { 
-        get => _active; 
-        set
-        {
-            DomainExceptionValidation
-                .When(CreatedAt == UpdatedAt && value == false)
-                .Property("Active")
-                .MustBeTrue();
-            _active = value;
-        } 
-    }
+    public string Name { get; set; } = string.Empty;
+    public bool Active { get; set; }
 
     public ICollection<RolePage>? RolesPages { get; set; }
 

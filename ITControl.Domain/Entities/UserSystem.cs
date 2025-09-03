@@ -1,12 +1,7 @@
-using ITControl.Domain.Validation;
-
 namespace ITControl.Domain.Entities;
 
 public sealed class UserSystem : Entity
 {
-    private Guid _userId;
-    private Guid _systemId;
-
     public UserSystem(Guid userId, Guid systemId)
     {
         Id = Guid.NewGuid();
@@ -16,30 +11,8 @@ public sealed class UserSystem : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public Guid UserId
-    {
-        get => _userId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("UserId")
-                .MustNotBeEmpty();
-            _userId = value;
-        }
-    }
-    public Guid SystemId
-    {
-        get => _systemId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("SystemId")
-                .MustNotBeEmpty();
-            _systemId = value;
-        }
-    }
+    public Guid UserId { get; set; }
+    public Guid SystemId { get; set; }
     public User? User { get; set; }
     public System? System { get; set; }
 

@@ -1,3 +1,4 @@
+using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
@@ -16,6 +17,7 @@ public class UpdateContractsRequest
         DataType.Date, 
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "INVALID_DATE")]
+    [DatePresentPast]
     [Display(Name = "início")]
     public DateOnly? StartedAt { get; set; }
     
@@ -23,6 +25,7 @@ public class UpdateContractsRequest
         DataType.Date, 
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "INVALID_DATE")]
+    [DateGreatherThan("StartedAt")]
     [Display(Name = "fim")]
     public DateOnly? EndedAt { get; set; }
 

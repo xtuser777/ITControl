@@ -1,3 +1,4 @@
+using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
@@ -28,6 +29,7 @@ public class CreateDepartmentsRequest
     [Required(
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = "REQUIRED")]
+    [GuidValue]
     [Display(Name = "user")]
     public Guid UserId { get; set; }
 }
