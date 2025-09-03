@@ -1,114 +1,14 @@
-using ITControl.Domain.Validation;
-
 namespace ITControl.Domain.Entities;
 
 public sealed class Appointment : Entity
 {
-    private DateOnly _scheduledAt;
-    private TimeOnly _scheduledIn;
-    private string _observation = string.Empty;
-    private Guid _userId;
-    private Guid _callId;
-    private Guid _locationId;
-
-    public string Description { get; set; } = string.Empty;
-    public DateOnly ScheduledAt
-    {
-        get => _scheduledAt;
-        set
-        {
-            DomainExceptionValidation
-                .When(CreatedAt == DateTime.Now && value < DateOnly.FromDateTime(DateTime.Now))
-                .Property("ScheduledAt")
-                .DateMustNotBeLessThan(DateOnly.FromDateTime(DateTime.Now));
-            _scheduledAt = value;
-        }
-    }
-    public TimeOnly ScheduledIn
-    {
-        get => _scheduledIn;
-        set
-        {
-            DomainExceptionValidation
-                .When(CreatedAt == DateTime.Now && value < TimeOnly.FromDateTime(DateTime.Now))
-                .Property("ScheduledIn")
-                .TimeMustNotBeLessThan(TimeOnly.FromDateTime(DateTime.Now));
-            _scheduledIn = value;
-        }
-    }
-    public string Observation
-    {
-        get => _observation;
-        set
-        {
-            DomainExceptionValidation
-                .When(value.Length > 255)
-                .Property("Observation")
-                .LengthMustBeLessThanOrEqualTo(255);
-            _observation = value;
-        }
-    }
-    public Guid UserId
-    {
-        get => _userId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("UserId")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value == default)
-                .Property("UserId")
-                .MustNotBeNull();
-            DomainExceptionValidation
-                .When(!Guid.TryParse(value.ToString(), out _))
-                .Property("UserId")
-                .MustBeAUuid();
-            _userId = value;
-        }
-    }
-    public Guid CallId
-    {
-        get => _callId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("CallId")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value == default)
-                .Property("CallId")
-                .MustNotBeNull();
-            DomainExceptionValidation
-                .When(!Guid.TryParse(value.ToString(), out _))
-                .Property("CallId")
-                .MustBeAUuid();
-            _callId = value;
-        }
-    }
-    public Guid LocationId
-    {
-        get => _locationId;
-        set
-        {
-            DomainExceptionValidation
-                .When(value == Guid.Empty)
-                .Property("LocationId")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value == default)
-                .Property("LocationId")
-                .MustNotBeNull();
-            DomainExceptionValidation
-                .When(!Guid.TryParse(value.ToString(), out _))
-                .Property("LocationId")
-                .MustBeAUuid();
-            _locationId = value;
-        }
-    }
-
+    public string Description { get; set; } 
+    public DateOnly ScheduledAt { get; set; }
+    public TimeOnly ScheduledIn { get; set; }
+    public string Observation { get; set; }
+    public Guid UserId { get; set; }
+    public Guid CallId { get; set; }
+    public Guid LocationId { get; set; }
     public User? User { get; set; }
     public Call? Call { get; set; }
     public Location? Location { get; set; }

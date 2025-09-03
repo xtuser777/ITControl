@@ -3,13 +3,11 @@ using System.Reflection;
 
 namespace ITControl.Communication.Shared.Attributes;
 
-public class DateGreaterThanCurrentAttribute(string comparisonProperty) : ValidationAttribute
+public class DateGreaterThanCurrentAttribute() : ValidationAttribute
 {
-    private readonly string _comparisonProperty = comparisonProperty;
-
-    protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+    protected override ValidationResult IsValid(object? value, ValidationContext validationContext)
     {
-        var currentValue = (DateOnly)value;
+        var currentValue = (DateOnly)(value ?? throw new ArgumentNullException(nameof(value)));
 
         if (currentValue < DateOnly.FromDateTime(DateTime.Now))
         {

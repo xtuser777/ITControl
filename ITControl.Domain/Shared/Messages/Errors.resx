@@ -137,4 +137,16 @@
     <value>O campo {0} deve ser um e-mail válido</value>
     <comment>Verifica se o campo especificado é um e-mail válido</comment>
   </data>
+  <data name="INVALID_DATE" xml:space="preserve">
+    <value>O campo {0} deve ser uma data válida</value>
+  </data>
+  <data name="INVALID_TIME" xml:space="preserve">
+    <value>O campo {0} deve ser um horário válido</value>
+  </data>
+  <data name="DATE_GREATER_THAN_CURRENT" xml:space="preserve">
+    <value>O campo {0} deve ser maior que a data atual</value>
+  </data>
+  <data name="TIME_GREATER_THAN_CURRENT" xml:space="preserve">
+    <value>O campo {0} deve ser maior que o horário atual</value>
+  </data>
 </root>

@@ -5,11 +5,30 @@ namespace ITControl.Communication.Contracts.Requests;
 
 public class UpdateContractsRequest
 {
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [MaxLength(
+        100, 
+        ErrorMessageResourceType = typeof(Errors), 
+        ErrorMessageResourceName = "MAX_LENGTH")]
+    [Display(Name = "objeto")]
     public string? ObjectName { get; set; }
+    
+    [DataType(
+        DataType.Date, 
+        ErrorMessageResourceType = typeof(Errors), 
+        ErrorMessageResourceName = "INVALID_DATE")]
+    [Display(Name = "início")]
     public DateOnly? StartedAt { get; set; }
+    
+    [DataType(
+        DataType.Date, 
+        ErrorMessageResourceType = typeof(Errors), 
+        ErrorMessageResourceName = "INVALID_DATE")]
+    [Display(Name = "fim")]
     public DateOnly? EndedAt { get; set; }
 
-    [Required(ErrorMessage = "O campo 'contatos' é obrigatório")]
+    [Required(
+        ErrorMessageResourceType = typeof(Errors), 
+        ErrorMessageResourceName = "REQUIRED")]
+    [Display(Name = "contatos")]
     public IEnumerable<CreateContractsContactsRequest> Contacts { get; set; } = [];
 }
