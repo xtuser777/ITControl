@@ -1,11 +1,11 @@
-using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Pages.Requests;
 
 public class UpdatePagesRequest
 {
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]
     public string? Name { get; set; }
 }

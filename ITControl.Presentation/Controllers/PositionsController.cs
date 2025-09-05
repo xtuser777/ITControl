@@ -1,4 +1,4 @@
-using ITControl.Application.Interfaces;
+using ITControl.Application.Positions.Interfaces;
 using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Positions.Requests;
 using ITControl.Communication.Positions.Responses;

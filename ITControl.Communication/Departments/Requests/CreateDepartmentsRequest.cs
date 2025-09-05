@@ -1,34 +1,23 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Converters;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Departments.Requests;
 
 public class CreateDepartmentsRequest
 {
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        10, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(10)]
     [Display(Name = "sigla")]
     public string Alias { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        100, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]
     public string Name { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
+    [GuidConverter]
     [GuidValue]
     [Display(Name = "user")]
     public Guid UserId { get; set; }

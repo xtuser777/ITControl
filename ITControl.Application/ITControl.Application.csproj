@@ -12,4 +12,8 @@
       <ProjectReference Include="..\ITControl.Infrastructure\ITControl.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Views\" />
+    </ItemGroup>
+
 </Project>

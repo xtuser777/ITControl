@@ -1,63 +1,68 @@
 ﻿using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Treatments.Requests;
 
 public class CreateTreatmentsRequest
 {
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(100)]
     [Display(Name = "descrição")]
     public string Description { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [DataType(DataType.Date, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_DATE")]
+    [RequiredField]
+    [DateOnlyConverter]
+    [DateValue]
     [DatePresentPast]
     [Display(Name = "data de início")]
     public DateOnly StartedAt { get; set; }
 
-    [DataType(DataType.Date, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_DATE")]
+    [DateOnlyNullableConverter]
+    [DateValue]
     [DateGreatherThan("StartedAt")]
     [Display(Name = "data de término")]
     public DateOnly? EndedAt { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [DataType(DataType.Time, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_TIME")]
+    [RequiredField]
+    [TimeOnlyConverter]
+    [TimeValue]
     [TimePresentPast]
     [Display(Name = "hora de início")]
     public TimeOnly StartedIn { get; set; }
 
-    [DataType(DataType.Time, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_TIME")]
+    [TimeOnlyNullableConverter]
+    [TimeValue]
     [Display(Name = "hora de término")]
     public TimeOnly? EndedIn { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateStatus))]
     [Display(Name = "status")]
     public string Status { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateType))]
     [Display(Name = "tipo")]
     public string Type { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(255, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(255)]
     [Display(Name = "observação")]
     public string Observation { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(50, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(50)]
     [Display(Name = "protocolo externo")]
     public string ExternalProtocol { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
+    [GuidConverter]
     [GuidValue]
     [Display(Name = "chamado")]
     public Guid CallId { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
+    [GuidConverter]
     [GuidValue]
     [Display(Name = "usuário")]
     public Guid UserId { get; set; }

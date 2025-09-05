@@ -1,4 +1,5 @@
 using ITControl.Application.Interfaces;
+using ITControl.Application.Notifications.Interfaces;
 using ITControl.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;

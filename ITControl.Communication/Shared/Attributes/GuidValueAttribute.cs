@@ -16,9 +16,9 @@ public class GuidValueAttribute : ValidationAttribute
         {
             return ValidationResult.Success;
         }
-        if (value is Guid guidValue)
+        if (value is Guid valueGuid)
         {
-            if (guidValue == Guid.Empty)
+            if (valueGuid == Guid.Empty)
             {
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }

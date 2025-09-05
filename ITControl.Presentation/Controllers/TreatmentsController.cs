@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Interfaces;
+﻿using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Requests;

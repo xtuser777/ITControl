@@ -1,4 +1,17 @@
-using ITControl.Domain.Entities;
+using ITControl.Domain.Appointments.Entities;
+using ITControl.Domain.Calls.Entities;
+using ITControl.Domain.Contracts.Entities;
+using ITControl.Domain.Departments.Entities;
+using ITControl.Domain.Divisions.Entities;
+using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Locations.Entities;
+using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Positions.Entities;
+using ITControl.Domain.Roles.Entities;
+using ITControl.Domain.Treatments.Entities;
+using ITControl.Domain.Units.Entities;
+using ITControl.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Contexts;
@@ -16,7 +29,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Location> Locations { get; set; }
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<ContractContact> ContractContacts { get; set; }
-    public DbSet<Domain.Entities.System> Systems { get; set; }
+    public DbSet<Domain.Systems.Entities.System> Systems { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<UserEquipment> UsersEquipments { get; set; }
     public DbSet<UserSystem> UsersSystems { get; set; }

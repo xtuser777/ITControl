@@ -1,13 +1,12 @@
-using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Positions.Requests;
 
 public class CreatePositionsRequest
 {
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(100)]
     [DisplayName("descrição")]
     public string Description { get; set; } = string.Empty;
 }

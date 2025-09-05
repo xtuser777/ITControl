@@ -6,26 +6,30 @@ namespace ITControl.Communication.Treatments.Requests;
 
 public class UpdateTreatmentsRequest
 {
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "descrição")]
     public string? Description { get; set; }
 
-    [DataType(DataType.Date, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_DATE")]
+    [DateOnlyNullableConverter]
+    [DateValue]
     [DatePresentPast]
     [Display(Name = "data de início")]
     public DateOnly? StartedAt { get; set; }
 
-    [DataType(DataType.Date, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_DATE")]
+    [DateOnlyNullableConverter]
+    [DateValue]
     [DateGreatherThan("StartedAt")]
     [Display(Name = "data de término")]
     public DateOnly? EndedAt { get; set; }
 
-    [DataType(DataType.Time, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_TIME")]
+    [TimeOnlyNullableConverter]
+    [TimeValue]
     [TimePresentPast]
     [Display(Name = "hora de início")]
     public TimeOnly? StartedIn { get; set; }
 
-    [DataType(DataType.Time, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "INVALID_TIME")]
+    [TimeOnlyNullableConverter]
+    [TimeValue]
     [Display(Name = "hora de término")]
     public TimeOnly? EndedIn { get; set; }
 
@@ -37,18 +41,20 @@ public class UpdateTreatmentsRequest
     [Display(Name = "tipo")]
     public string? Type { get; set; }
     
-    [MaxLength(255, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(255)]
     [Display(Name = "observação")]
     public string? Observation { get; set; }
     
-    [MaxLength(50, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(50)]
     [Display(Name = "protocolo externo")]
     public string? ExternalProtocol { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [Display(Name = "chamado")]
     public Guid? CallId { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [Display(Name = "usuário")]
     public Guid? UserId { get; set; }

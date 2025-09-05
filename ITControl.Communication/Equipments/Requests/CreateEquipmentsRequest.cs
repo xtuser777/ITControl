@@ -1,78 +1,50 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Equipments.Requests;
 
 public class CreateEquipmentsRequest
 {
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        100, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]    
     public string Name { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        255,
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(255)]
     [Display(Name = "descrição")]
     public string Description { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        15, 
-        ErrorMessageResourceType = typeof(Errors),
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(15)]
     [Display(Name = "endereço IP")]
     public string Ip { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        17, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(17)]
     [Display(Name = "endereço MAC")]
     public string Mac { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
-    [MaxLength(
-        50, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMaxLength(50)]
     [Display(Name = "etiqueta")]
     public string Tag { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [CustomValidation(typeof(CreateEquipmentsRequest), nameof(ValidateType))]
     [Display(Name = "tipo")]
     public string Type { get; set; } = string.Empty;
 
-    [Required(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [BoolValue]
     [CustomValidation(typeof(CreateEquipmentsRequest), nameof(ValidateRented))]
     [Display(Name = "alugado")]
     public bool Rented { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [CustomValidation(typeof(CreateEquipmentsRequest), nameof(ValidateContractId))]
+    [Display(Name = "contrato")]
     public Guid? ContractId { get; set; }
 
     public static ValidationResult? ValidateRented(bool x, ValidationContext context)

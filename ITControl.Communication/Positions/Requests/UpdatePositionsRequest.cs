@@ -1,11 +1,11 @@
-using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Positions.Requests;
 
 public class UpdatePositionsRequest
 {
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "descrição")]
     public string? Description { get; set; }
 }

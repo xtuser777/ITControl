@@ -1,4 +1,4 @@
-using ITControl.Application.Interfaces;
+using ITControl.Application.Equipments.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 

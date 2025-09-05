@@ -1,4 +1,3 @@
-using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 
@@ -6,48 +5,36 @@ namespace ITControl.Communication.Appointments.Requests;
 
 public class UpdateAppointmentsRequest
 {
-    [MaxLength(
-        100, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "descrição")]
     public string? Description { get; set; }
     
-    [DataType(
-        DataType.Date, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "INVALID_DATE")]
-    [DateGreaterThanCurrent(
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "DATE_GREATER_THAN_CURRENT")]
+    [DateOnlyNullableConverter]
+    [DateValue]
+    [DateGreaterThanCurrent]
     [Display(Name = "data de agendameto")]
     public DateOnly? ScheduledAt { get; set; }
-    
-    [DataType(
-        DataType.Time, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "INVALID_TIME")]
-    [TimeGreaterThanCurrent(
-        "ScheduledAt",
-        ErrorMessageResourceType = typeof(Errors),
-        ErrorMessageResourceName = "TIME_GREATER_THAN_CURRENT")]
+
+    [TimeOnlyNullableConverter]
+    [TimeValue]
+    [TimeGreaterThanCurrent("ScheduledAt")]
     public TimeOnly? ScheduledIn { get; set; }
     
-    [MaxLength(
-        255, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(255)]
     [Display(Name = "observação")]
     public string? Observation { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [Display(Name = "usuário")]
     public Guid? UserId { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [Display(Name = "chamado")]
     public Guid? CallId { get; set; }
 
+    [GuidNullableConverter]
     [GuidValue]
     [Display(Name = "local")]
     public Guid? LocationId { get; set; }

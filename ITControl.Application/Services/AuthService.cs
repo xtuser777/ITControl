@@ -2,7 +2,8 @@
 using ITControl.Application.Utils;
 using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
-using ITControl.Domain.Entities;
+using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Users.Entities;
 using Microsoft.Extensions.Configuration;
 
 namespace ITControl.Application.Services;

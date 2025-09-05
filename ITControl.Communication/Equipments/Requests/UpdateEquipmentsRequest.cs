@@ -1,54 +1,43 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Equipments.Requests;
 
 public class UpdateEquipmentsRequest
 {
-    [MaxLength(
-        100, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]
     public string? Name { get; set; }
     
-    [MaxLength(
-        255, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(255)]
     [Display(Name = "descrição")]
     public string? Description { get; set; }
 
-    [MaxLength(
-        15, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(15)]
     [Display(Name = "endereço IP")]
     public string? Ip { get; set; }
 
-    [MaxLength(
-        17, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(17)]
     [Display(Name = "endereço MAC")]
     public string? Mac { get; set; }
 
-    [MaxLength(
-        50, 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(50)]
     [Display(Name = "etiqueta")]
     public string? Tag { get; set; }
 
     [CustomValidation(typeof(UpdateEquipmentsRequest), nameof(ValidateType))]
+    [Display(Name = "tipo")]
     public string? Type { get; set; }
 
     [BoolValue]
     [CustomValidation(typeof(UpdateEquipmentsRequest), nameof(ValidateRented))]
+    [Display(Name = "alugado")]
     public bool? Rented { get; set; }
 
     [CustomValidation(typeof(UpdateEquipmentsRequest), nameof(ValidateContractId))]
+    [GuidNullableConverter]
+    [GuidValue]
+    [Display(Name = "contrato")]
     public Guid? ContractId { get; set; }
 
     public static ValidationResult? ValidateRented(bool? x, ValidationContext context)

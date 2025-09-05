@@ -1,12 +1,11 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Roles.Requests;
 
 public class UpdateRolesRequest
 {
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]
     public string? Name { get; set; }
 
@@ -14,7 +13,7 @@ public class UpdateRolesRequest
     [Display(Name = "ativo")]
     public bool? Active { get; set; }
     
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
     [Display(Name = "páginas")]
     public IEnumerable<CreateRolesPagesRequest>? RolesPages { get; set; }
 }

@@ -6,50 +6,52 @@ namespace ITControl.Communication.Users.Requests;
 
 public class CreateUsersRequest
 {
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MinLength(3, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MIN_LENGTH")]
-    [MaxLength(20, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMinLength(3)]
+    [StringMaxLength(20)]
     [Display(Name = "usuário")]
     public string Username { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MinLength(6, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MIN_LENGTH")]
-    [MaxLength(12, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMinLength(6)]
+    [StringMaxLength(12)]
     [Display(Name = "senha")]
     public string Password { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
-    [MinLength(3, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MIN_LENGTH")]
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [RequiredField]
+    [StringMinLength(3)]
+    [StringMaxLength(100)]
     [Display(Name = "nome")]
     public string Name { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [EmailAddress(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "VALID_EMAIL")]
-    [MaxLength(100, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "MAX_LENGTH")]
+    [StringMaxLength(100)]
     [Display(Name = "e-mail")]
     public string Email { get; set; } = string.Empty;
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [Range(1, int.MaxValue, ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "POSITIVE_VALUE")]
     [Display(Name = "matrícula")]
     public int Enrollment { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
+    [GuidConverter]
     [GuidValue]
     [Display(Name = "cargo")]
     public Guid PositionId { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
+    [GuidConverter]
     [GuidValue]
     [Display(Name = "perfil")]
     public Guid RoleId { get; set; }
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [Display(Name = "equipamentos")]
     public IEnumerable<CreateUsersEquipmentsRequest> Equipments { get; set; } = [];
 
-    [Required(ErrorMessageResourceType = typeof(Errors), ErrorMessageResourceName = "REQUIRED")]
+    [RequiredField]
     [Display(Name = "sistemas")]
     public IEnumerable<CreateUsersSystemsRequest> Systems { get; set; } = [];
 }
