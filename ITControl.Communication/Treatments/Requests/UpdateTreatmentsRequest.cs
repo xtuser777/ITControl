@@ -1,6 +1,7 @@
 ﻿using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Treatments.Enums;
 
 namespace ITControl.Communication.Treatments.Requests;
 
@@ -62,7 +63,7 @@ public class UpdateTreatmentsRequest
     public static ValidationResult? ValidateStatus(string? status, ValidationContext context)
     {
         if (status == null) return ValidationResult.Success;
-        var allowedStatuses = Enum.GetNames(typeof(Domain.Enums.TreatmentStatus));
+        var allowedStatuses = Enum.GetNames(typeof(TreatmentStatus));
         if (!allowedStatuses.Contains(status))
         {
             var statuses = string.Join(", ", allowedStatuses);
@@ -75,7 +76,7 @@ public class UpdateTreatmentsRequest
     public static ValidationResult? ValidateType(string? type, ValidationContext context)
     {
         if (type == null) return ValidationResult.Success;
-        var allowedTypes = Enum.GetNames(typeof(Domain.Enums.TreatmentType));
+        var allowedTypes = Enum.GetNames(typeof(TreatmentType));
         if (!allowedTypes.Contains(type))
         {
             var types = string.Join(", ", allowedTypes);

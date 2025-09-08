@@ -1,7 +1,8 @@
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Application.Users.Interfaces;
-using ITControl.Application.Utils;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
 using ITControl.Domain.Exceptions;
@@ -25,7 +26,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
                 true, 
                 true, 
                 true) 
-               ?? throw new NotFoundException("Usuário não encontrado");
+               ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
     }
 
     public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
@@ -60,6 +61,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         return pagination;
     }
 
+    [Obsolete("Obsolete")]
     public async Task<User?> CreateAsync(CreateUsersRequest request)
     {
         await CheckConflicts(null, request.Name, request.Username, request.Email);
@@ -95,6 +97,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         return user;
     }
 
+    [Obsolete("Obsolete")]
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
         await CheckConflicts(id, request.Name, request.Username, request.Email);
@@ -170,7 +173,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
         if (exists)
         {
-            messages.Add("Page with this name already exists");
+            messages.Add(Errors.USER_NAME_EXISTS);
         }
     }
 
@@ -182,7 +185,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
         if (exists)
         {
-            messages.Add("Page with this username already exists");
+            messages.Add(Errors.USER_USERNAME_EXISTS);
         }
     }
 
@@ -194,7 +197,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 
         if (exists)
         {
-            messages.Add("Page with this email already exists");
+            messages.Add(Errors.USER_EMAIL_EXISTS);
         }
     }
 
@@ -230,35 +233,35 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     {
         var exists = await unitOfWork.PositionsRepository.ExistsAsync(id: positionId);
         if (!exists)
-            messages.Add("Position not found");
+            messages.Add(Errors.POSITION_NOT_FOUND);
     }
 
     private async Task CheckRoleExistence(Guid roleId, List<string> messages)
     {
         var exists = await unitOfWork.RolesRepository.ExistsAsync(id: roleId);
         if (!exists)
-            messages.Add("Role not found");
+            messages.Add(Errors.ROLE_NOT_FOUND);
     }
 
     private async Task CheckEquipmentExistence(Guid equipmentId, List<string> messages)
     {
         var exists = await unitOfWork.EquipmentsRepository.ExistsAsync(id: equipmentId);
         if (!exists)
-            messages.Add("Equipment not found");
+            messages.Add(Errors.EQUIPMENT_NOT_FOUND);
     }
 
     private async Task CheckSystemExistence(Guid systemId, List<string> messages)
     {
         var exists = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
         if (!exists)
-            messages.Add("System not found");
+            messages.Add(Errors.SYSTEM_NOT_FOUND);
     }
 
-    private void CheckUserLogged(Guid userId, Guid loggedUserId)
+    private static void CheckUserLogged(Guid userId, Guid loggedUserId)
     {
         if (loggedUserId == Guid.Empty)
-            throw new BadRequestException("Logged user ID is required");
+            throw new BadRequestException(Errors.USER_LOGGED_ID_REQUIRED);
         if (userId == loggedUserId)
-            throw new BadRequestException("You are not authorized to perform this action");
+            throw new BadRequestException(Errors.USER_LOGGED_ID_EQUALS);
     }
 }

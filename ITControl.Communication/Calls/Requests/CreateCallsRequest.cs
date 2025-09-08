@@ -1,5 +1,6 @@
 ﻿using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Calls.Enums;
 
 namespace ITControl.Communication.Calls.Requests;
 
@@ -38,7 +39,7 @@ public class CreateCallsRequest
 
     public static ValidationResult? ValidateReason(string reason, ValidationContext context)
     {
-        var validReasons = Enum.GetNames(typeof(Domain.Enums.CallReason));
+        var validReasons = Enum.GetNames(typeof(CallReason));
         if (!validReasons.Contains(reason))
         {
             var reasons = string.Join(", ", validReasons);

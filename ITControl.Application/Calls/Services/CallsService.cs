@@ -1,13 +1,17 @@
 ﻿using ITControl.Application.Calls.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
-using ITControl.Application.Utils;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Messages.Notifications;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Calls.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Exceptions;
+using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Notifications.Enums;
+using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Application.Calls.Services;
 public class CallsService(
@@ -23,7 +27,7 @@ public class CallsService(
         return await unitOfWork
             .CallsRepository
             .FindOneAsync(id, includeUser, includeLocation, includeEquipment, includeSystem)
-            ?? throw new NotFoundException("Chamado não encontrado");
+            ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request)
@@ -34,7 +38,7 @@ public class CallsService(
             request.Title,
             request.Description,
             Parser.ToEnumOptional<CallReason>(request.Reason),
-            Parser.ToEnumOptional<Domain.Enums.CallStatus>(request.Status),
+            Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
             request.UserId,
             request.LocationId,
             request.OrderByTitle,
@@ -56,7 +60,7 @@ public class CallsService(
             request.Title,
             request.Description,
             Parser.ToEnumOptional<CallReason>(request.Reason),
-            Parser.ToEnumOptional<Domain.Enums.CallStatus>(request.Status),
+            Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
             request.UserId,
             request.LocationId);
 
@@ -74,14 +78,14 @@ public class CallsService(
             systemId: request.SystemId);
         var user = await unitOfWork.UsersRepository.FindOneAsync(
             request.UserId, false, false, false, false)
-            ?? throw new NotFoundException("user not found");
-        var message = $"Novo chamado aberto por {user.Name} em {DateTime.Now}.";
-        var callStatus = new Domain.Entities.CallStatus(
-            Domain.Enums.CallStatus.Open,
+            ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
+        var message = string.Format(Messages.CALLS_OPENED, user.Name, DateTime.Now);
+        var callStatus = new CallStatus(
+            Domain.Calls.Enums.CallStatus.Open,
             message);
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
         var locations = await unitOfWork.LocationsRepository.FindManyAsync(userId: request.UserId);
-        var location = locations.SingleOrDefault() ?? throw new NotFoundException("location not found");
+        var location = locations.SingleOrDefault() ?? throw new NotFoundException(Errors.LOCATION_NOT_FOUND);
         var call = new Call(
             request.Title,
             request.Description,
@@ -92,7 +96,7 @@ public class CallsService(
             request.SystemId,
             request.EquipmentId);
         await unitOfWork.CallsRepository.CreateAsync(call);
-        await CreateNotification(call.Id, "Novo Chamado", message);
+        await CreateNotification(call.Id, Titles.CALLS_NEW, message);
         await unitOfWork.Commit(transaction);
 
         return call;
@@ -136,7 +140,7 @@ public class CallsService(
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("the user does not exist");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 
@@ -145,7 +149,7 @@ public class CallsService(
         var equipment = await unitOfWork.EquipmentsRepository.ExistsAsync(id: equipmentId);
         if (equipment == false)
         {
-            messages.Add("the equipment does not exist");
+            messages.Add(Errors.EQUIPMENT_NOT_FOUND);
         }
     }
 
@@ -154,16 +158,17 @@ public class CallsService(
         var system = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
         if (system == false)
         {
-            messages.Add("the system does not exist");
+            messages.Add(Errors.SYSTEM_NOT_FOUND);
         }
     }
 
     private async Task CreateNotification(Guid referenceId, string title, string message)
     {
         var rolesMaster = await unitOfWork.RolesRepository.FindManyAsync(name: "MASTER");
-        if (!rolesMaster.Any())
-            throw new NotFoundException("Role Master not found");
-        var users = await unitOfWork.UsersRepository.FindManyAsync(roleId: rolesMaster.ToList()[0].Id);
+        var roles = rolesMaster.ToList();
+        if (roles.Count == 0)
+            throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);
+        var users = await unitOfWork.UsersRepository.FindManyAsync(roleId: roles.ToList()[0].Id);
         foreach (var user in users)
         {
             var notification = new Notification(

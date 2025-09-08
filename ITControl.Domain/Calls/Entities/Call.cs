@@ -1,7 +1,7 @@
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Locations.Entities;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Domain.Calls.Entities;
@@ -20,7 +20,7 @@ public sealed class Call : Entity
     public CallStatus? CallStatus { get; set; }
     public User? User { get; set; }
     public Location? Location { get; set; }
-    public System? System { get; set; }
+    public Systems.Entities.System? System { get; set; }
     public Equipment? Equipment { get; set; }
 
     public Call(

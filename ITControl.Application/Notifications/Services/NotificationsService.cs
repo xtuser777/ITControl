@@ -1,12 +1,13 @@
-﻿using ITControl.Application.Interfaces;
-using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Tools;
-using ITControl.Application.Utils;
+﻿using ITControl.Application.Notifications.Interfaces;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Notifications.Requests;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Enums;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Notifications.Enums;
 
 namespace ITControl.Application.Notifications.Services;
 
@@ -22,7 +23,7 @@ public class NotificationsService(
     {
         return await unitOfWork.NotificationsRepository.FindOneAsync(
             id, includeUser, includeCall, includeAppointment, includeTreatment) 
-            ?? throw new NotFoundException("Notification not found");
+            ?? throw new NotFoundException(Errors.NOTIFICATION_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Notification>> FindManyAsync(FindManyNotificationsRequest request)

@@ -1,6 +1,6 @@
 using ITControl.Domain.Contracts.Entities;
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Equipments.Entities;
 

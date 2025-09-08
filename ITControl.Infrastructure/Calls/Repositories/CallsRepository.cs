@@ -1,8 +1,9 @@
 ﻿using ITControl.Domain.Calls.Entities;
+using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Calls.Interfaces;
-using ITControl.Domain.Enums;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
+using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
 namespace ITControl.Infrastructure.Calls.Repositories;
 
@@ -42,7 +43,7 @@ public class CallsRepository(
         string? title = null, 
         string? description = null,
         CallReason? reason = null,
-        Domain.Enums.CallStatus? status = null,
+        CallStatus? status = null,
         Guid? userId = null, 
         Guid? locationId = null, 
         string? orderByTitle = null, 
@@ -91,7 +92,7 @@ public class CallsRepository(
         string? title = null, 
         string? description = null,
         CallReason? reason = null,
-        Domain.Enums.CallStatus? status = null,
+        CallStatus? status = null,
         Guid? userId = null, 
         Guid? locationId = null)
     {
@@ -106,7 +107,7 @@ public class CallsRepository(
         string? title = null, 
         string? description = null,
         CallReason? reason = null,
-        Domain.Enums.CallStatus? status = null,
+        CallStatus? status = null,
         Guid? userId = null, 
         Guid? locationId = null)
     {
@@ -121,7 +122,7 @@ public class CallsRepository(
         string? title = null,
         string? description = null,
         CallReason? reason = null,
-        Domain.Enums.CallStatus? status = null,
+        CallStatus? status = null,
         Guid? userId = null,
         Guid? locationId = null)
     {

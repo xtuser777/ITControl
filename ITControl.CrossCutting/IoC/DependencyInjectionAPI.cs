@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Services;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Domain.Pages.Interfaces;
 using ITControl.Infrastructure.Pages.Repositories;
@@ -74,11 +72,15 @@ using ITControl.Infrastructure.Appointments.Repositories;
 using ITControl.Application.Appointments.Interfaces;
 using ITControl.Application.Appointments.Services;
 using ITControl.Application.Appointments.Views;
+using ITControl.Application.Auth.Interfaces;
+using ITControl.Application.Auth.Services;
 using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Infrastructure.Notifications.Repositories;
 using ITControl.Application.Notifications.Interfaces;
 using ITControl.Application.Notifications.Services;
 using ITControl.Application.Notifications.Views;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Services;
 
 namespace ITControl.CrossCutting.IoC;
 

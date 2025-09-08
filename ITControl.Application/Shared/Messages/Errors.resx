@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="APPOINTMENT_NOT_FOUND" xml:space="preserve">
+        <value>Agendamento não encontrado</value>
+    </data>
+    <data name="AUTH_ROLE_INACTIVE" xml:space="preserve">
+        <value>Perfil inativo</value>
+    </data>
+    <data name="AUTH_INVALID_USER" xml:space="preserve">
+        <value>Usuário inválido</value>
+    </data>
+    <data name="AUTH_INACTIVE_USER" xml:space="preserve">
+        <value>Usuário inativo</value>
+    </data>
+    <data name="AUTH_INVALID_PASSWORD" xml:space="preserve">
+        <value>Senha inválida</value>
+    </data>
+    <data name="CALL_NOT_FOUND" xml:space="preserve">
+        <value>Chamado não encontrado</value>
+    </data>
+    <data name="CALL_ROLE_MASTER_NOT_FOUND" xml:space="preserve">
+        <value>Perfil master não encontrado</value>
+    </data>
+    <data name="CONTRACT_NOT_FOUND" xml:space="preserve">
+        <value>Contrato não encontrado</value>
+    </data>
+    <data name="DEPARTMENT_NOT_FOUND" xml:space="preserve">
+        <value>Departamento não encontrado</value>
+    </data>
+    <data name="DIVISION_NOT_FOUND" xml:space="preserve">
+        <value>Divisão não encontrado</value>
+    </data>
+    <data name="EQUIPMENT_NOT_FOUND" xml:space="preserve">
+        <value>Equipamento não encontrado</value>
+    </data>
+    <data name="LOCATION_NOT_FOUND" xml:space="preserve">
+        <value>Localização não encontrado</value>
+    </data>
+    <data name="NOTIFICATION_NOT_FOUND" xml:space="preserve">
+        <value>Notificação não encontrada</value>
+    </data>
+    <data name="PAGE_NOT_FOUND" xml:space="preserve">
+        <value>Página não encontrada</value>
+    </data>
+    <data name="PAGE_NAME_EXISTS" xml:space="preserve">
+        <value>Já existe uma página com este nome</value>
+    </data>
+    <data name="DIVISION_NAME_EXISTS" xml:space="preserve">
+        <value>Já existe uma divisão com este nome</value>
+    </data>
+    <data name="DEPARTMENT_ALIAS_EXISTS" xml:space="preserve">
+        <value>Já existe uma secretaria com esta sigla</value>
+    </data>
+    <data name="DEPARTMENT_NAME_EXISTS" xml:space="preserve">
+        <value>Já existe uma secretaria com este nome</value>
+    </data>
+    <data name="POSITION_NOT_FOUND" xml:space="preserve">
+        <value>Cargo não encontrado</value>
+    </data>
+    <data name="POSITION_DESCRIPTION_EXISTS" xml:space="preserve">
+        <value>Já existe um cargo com esta descrição</value>
+    </data>
+    <data name="ROLE_NOT_FOUND" xml:space="preserve">
+        <value>Perfil não encontrado</value>
+    </data>
+    <data name="ROLE_NAME_EXISTS" xml:space="preserve">
+        <value>Já existe um perfil com este nome</value>
+    </data>
+    <data name="ROLE_PAGES_NOT_FOUND" xml:space="preserve">
+        <value>Páginas do perfil são obrigatórias</value>
+    </data>
+    <data name="SYSTEM_NOT_FOUND" xml:space="preserve">
+        <value>Sistema não encontrado</value>
+    </data>
+    <data name="TREATMENT_NOT_FOUND" xml:space="preserve">
+        <value>Atendimento não emcontrado</value>
+    </data>
+    <data name="UNIT_NOT_FOUND" xml:space="preserve">
+        <value>Unidade não encontrada</value>
+    </data>
+    <data name="USER_NOT_FOUND" xml:space="preserve">
+        <value>Usuário não encontrado</value>
+    </data>
+    <data name="USER_USERNAME_EXISTS" xml:space="preserve">
+        <value>Já existe um usuário com este nome de usuário</value>
+    </data>
+    <data name="USER_NAME_EXISTS" xml:space="preserve">
+        <value>Já existe um usuário com este nome</value>
+    </data>
+    <data name="USER_EMAIL_EXISTS" xml:space="preserve">
+        <value>Já existe um usuário em este e-mail</value>
+    </data>
+    <data name="USER_LOGGED_ID_REQUIRED" xml:space="preserve">
+        <value>O id do usuário logado é obrigatório</value>
+    </data>
+    <data name="USER_LOGGED_ID_EQUALS" xml:space="preserve">
+        <value>Não é permitido remover a si mesmo</value>
+    </data>
+</root>

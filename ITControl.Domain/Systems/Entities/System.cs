@@ -1,5 +1,5 @@
 using ITControl.Domain.Contracts.Entities;
-using ITControl.Domain.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Systems.Entities;
 
@@ -24,8 +24,8 @@ public class System : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public string Name { get; set; } = string.Empty;
-    public string Version { get; set; } = string.Empty;
+    public string Name { get; set; }
+    public string Version { get; set; }
     public DateOnly ImplementedAt { get; set; }
     public DateOnly? EndedAt { get; set; }
     public bool Own { get; set; }

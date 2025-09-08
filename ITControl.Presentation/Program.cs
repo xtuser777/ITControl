@@ -1,10 +1,10 @@
-using ITControl.Application.Interfaces;
-using ITControl.Application.Services;
 using ITControl.CrossCutting.IoC;
 using ITControl.Presentation.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ITControl.Application.Auth.Interfaces;
+using ITControl.Application.Auth.Services;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);

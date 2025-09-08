@@ -1,11 +1,12 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
-using ITControl.Application.Utils;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Enums;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Exceptions;
 
 namespace ITControl.Application.Equipments.Services;
@@ -17,7 +18,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         return await unitOfWork
             .EquipmentsRepository
             .FindOneAsync(id, includeContract) 
-               ?? throw new NotFoundException("Equipamento não encontrado");
+               ?? throw new NotFoundException(Errors.EQUIPMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(FindManyEquipmentsRequest request)
@@ -68,7 +69,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         var equipment = new Equipment(
             request.Name, 
             request.Description,
-            Parser.ToEnum<EquipmentType>(request.Type.ToString()), 
+            Parser.ToEnum<EquipmentType>(request.Type), 
             request.Ip, 
             request.Mac, 
             request.Tag, 
@@ -88,7 +89,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         equipment.Update(
             request.Name, 
             request.Description,
-            Parser.ToEnumOptional<EquipmentType>(request.Type?.ToString()), 
+            Parser.ToEnumOptional<EquipmentType>(request.Type), 
             request.Ip, 
             request.Mac, 
             request.Tag, 
@@ -120,6 +121,6 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
     {
         var exists = await unitOfWork.ContractsRepository.ExistsAsync(contractId);
         if (!exists)
-            messages.Add("Contract not found");
+            messages.Add(Errors.CONTRACT_NOT_FOUND);
     }
 }

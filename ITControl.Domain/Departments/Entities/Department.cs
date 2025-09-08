@@ -1,4 +1,4 @@
-using ITControl.Domain.Entities;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Domain.Departments.Entities;

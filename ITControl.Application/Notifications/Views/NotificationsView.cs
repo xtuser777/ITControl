@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Translators;
+using ITControl.Application.Notifications.Translators;
 using ITControl.Communication.Notifications.Responses;
 using ITControl.Domain.Notifications.Entities;
 

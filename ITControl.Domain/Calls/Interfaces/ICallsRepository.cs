@@ -1,5 +1,5 @@
 ﻿using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Calls.Enums;
 
 namespace ITControl.Domain.Calls.Interfaces;
 

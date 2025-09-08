@@ -1,6 +1,7 @@
 using ITControl.Application.Departments.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Departments.Entities;
@@ -15,7 +16,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         return await unitOfWork
             .DepartmentsRepository
             .FindOneAsync(id, true)
-               ?? throw new NotFoundException("department not found");
+               ?? throw new NotFoundException(Errors.DEPARTMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request)
@@ -105,7 +106,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
         if (exists)
         {
-            messages.Add("Page with this name already exists");
+            messages.Add(Errors.DEPARTMENT_NAME_EXISTS);
         }
     }
 
@@ -117,7 +118,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
         if (exists)
         {
-            messages.Add("Page with this alias already exists");
+            messages.Add(Errors.DEPARTMENT_ALIAS_EXISTS);
         }
     }
 
@@ -139,7 +140,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("the user does not exist");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 }

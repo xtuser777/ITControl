@@ -1,12 +1,14 @@
 using ITControl.Application.Appointments.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Messages.Notifications;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Appointments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Appointments.Entities;
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
 using ITControl.Domain.Exceptions;
+using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Notifications.Enums;
 
 namespace ITControl.Application.Appointments.Services;
 
@@ -22,7 +24,7 @@ public class AppointmentsService(
         return await unitOfWork
             .AppointmentsRepository
             .FindOneAsync(id, includeUser, includeCall, includeLocation)
-            ?? throw new NotFoundException("Agendamento não encontrado");
+            ?? throw new NotFoundException(Errors.APPOINTMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Appointment>> FindManyAsync(FindManyAppointmentsRequest request)
@@ -81,14 +83,14 @@ public class AppointmentsService(
             request.LocationId);
         await unitOfWork.AppointmentsRepository.CreateAsync(appointment);
         var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
-            ?? throw new NotFoundException("chamado não encontrado");
+            ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var user = await unitOfWork.UsersRepository.FindOneAsync(request.UserId, null, null, null, null) 
-            ?? throw new NotFoundException("Usuário não encontrado");
-        var message = $"O agendamento foi criado para o chamado {call.Title} por {user.Name} para {request.ScheduledAt} às {request.ScheduledIn}.";
+            ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
+        var message = string.Format(Messages.APPOINTMENTS_CREATED, call.Title, user.Name, request.ScheduledAt, request.ScheduledIn);
         await CreateNotification(
             appointment.Id,
             request.UserId,
-            "Novo agendamento criado",
+            Titles.APPOINTMENTS_STARTED,
             message,
             NotificationType.Info);
         await unitOfWork.Commit(transaction);
@@ -111,14 +113,14 @@ public class AppointmentsService(
             request.LocationId);
         unitOfWork.AppointmentsRepository.Update(appointment);
         var call = appointment.Call
-            ?? throw new NotFoundException("Chamado não encontrado");
+            ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var user = appointment.User
-            ?? throw new NotFoundException("Usuário não encontrado");
-        var message = $"O agendamento foi atualizado para o chamado {call.Title} por {user.Name} para {request.ScheduledAt} às {request.ScheduledIn}.";
+            ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
+        var message = string.Format(Messages.APPOINTMENTS_UPDATED, call.Title, user.Name, request.ScheduledAt, request.ScheduledIn);
         await CreateNotification(
             appointment.Id,
             user.Id,
-            "Agendamento atualizado",
+            Titles.APPOINTMENTS_UPDATED,
             message,
             NotificationType.Info);
         await unitOfWork.Commit(transaction);
@@ -163,7 +165,7 @@ public class AppointmentsService(
         var exists = await unitOfWork.CallsRepository.ExistsAsync(id: callId);
         if (exists == false)
         {
-            messages.Add("Chamado não encontrado");
+            messages.Add(Errors.CALL_NOT_FOUND);
         }
     }
 
@@ -172,7 +174,7 @@ public class AppointmentsService(
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("Usuário não encontrado");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 
@@ -183,7 +185,7 @@ public class AppointmentsService(
         var exists = await unitOfWork.LocationsRepository.ExistsAsync(id: locationId);
         if (exists == false)
         {
-            messages.Add("Local não encontrado");
+            messages.Add(Errors.LOCATION_NOT_FOUND);
         }
     }
 

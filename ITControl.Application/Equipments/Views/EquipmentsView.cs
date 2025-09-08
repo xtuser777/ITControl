@@ -1,5 +1,5 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Application.Translators;
+using ITControl.Application.Equipments.Translators;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Entities;

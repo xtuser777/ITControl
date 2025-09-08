@@ -1,5 +1,5 @@
-using ITControl.Domain.Enums;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;

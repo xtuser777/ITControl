@@ -1,7 +1,7 @@
 ﻿using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Users.Entities;
 

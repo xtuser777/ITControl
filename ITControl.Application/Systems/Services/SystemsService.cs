@@ -1,7 +1,8 @@
-using ITControl.Application.Interfaces;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Application.Systems.Interfaces;
-using ITControl.Application.Tools;
-using ITControl.Application.Utils;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Systems.Requests;
 using ITControl.Domain.Exceptions;
@@ -15,7 +16,7 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
     {
         return await unitOfWork.SystemsRepository
             .FindOneAsync(id, includeContractsContacts)
-               ?? throw new NotFoundException("System not found");
+               ?? throw new NotFoundException(Errors.SYSTEM_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(FindManySystemsRequest request)
@@ -56,7 +57,7 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
     public async Task<Domain.Systems.Entities.System?> CreateAsync(CreateSystemsRequest request)
     {
         await CheckExistence(request.ContractId);
-        var system = new Domain.Entities.System(
+        var system = new Domain.Systems.Entities.System(
             request.Name,
             request.Version,
             implementedAt: request.ImplementedAt,
@@ -107,6 +108,6 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
     {
         var exists = await unitOfWork.ContractsRepository.ExistsAsync(contractId);
         if (!exists)
-            messages.Add("Contract not found");
+            messages.Add(Errors.CONTRACT_NOT_FOUND);
     }
 }

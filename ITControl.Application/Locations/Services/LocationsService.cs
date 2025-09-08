@@ -1,6 +1,7 @@
-using ITControl.Application.Interfaces;
 using ITControl.Application.Locations.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Locations.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
@@ -23,7 +24,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
             includeUser, 
             includeDepartment, 
             includeDivision) 
-               ?? throw new NotFoundException("Location not found");
+               ?? throw new NotFoundException(Errors.LOCATION_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Location>> FindManyAsync(FindManyLocationsRequest request)
@@ -139,7 +140,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         var unit = await unitOfWork.UnitsRepository.ExistsAsync(id: unitId);
         if (unit == false)
         {
-            messages.Add("the unit does not exist");
+            messages.Add(Errors.UNIT_NOT_FOUND);
         }
     }
 
@@ -148,7 +149,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("the user does not exist");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 
@@ -157,7 +158,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         var department = await unitOfWork.DepartmentsRepository.ExistsAsync(id: departmentId);
         if (department == false)
         {
-            messages.Add("the department does not exist");
+            messages.Add(Errors.DEPARTMENT_NOT_FOUND);
         }
     }
 
@@ -166,7 +167,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         var division = await unitOfWork.DivisionsRepository.ExistsAsync(id: divisionId);
         if (division == false)
         {
-            messages.Add("the division does not exist");
+            messages.Add(Errors.DIVISION_NOT_FOUND);
         }
     }
 }

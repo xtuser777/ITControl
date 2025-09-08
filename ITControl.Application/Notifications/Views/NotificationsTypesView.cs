@@ -1,7 +1,7 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Translators;
+using ITControl.Application.Notifications.Translators;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Enums;
+using ITControl.Domain.Notifications.Enums;
 
 namespace ITControl.Application.Notifications.Views;
 

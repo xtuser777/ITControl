@@ -1,5 +1,5 @@
-﻿using ITControl.Domain.Enums;
-using ITControl.Domain.Notifications.Entities;
+﻿using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Notifications.Enums;
 
 namespace ITControl.Domain.Notifications.Interfaces;
 

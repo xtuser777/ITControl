@@ -1,5 +1,6 @@
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Equipments.Enums;
 
 namespace ITControl.Communication.Equipments.Requests;
 
@@ -12,17 +13,17 @@ public class CreateEquipmentsRequest
 
     [RequiredField]
     [StringMaxLength(255)]
-    [Display(Name = "descrição")]
+    [Display(Name = "descriï¿½ï¿½o")]
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(15)]
-    [Display(Name = "endereço IP")]
+    [Display(Name = "endereï¿½o IP")]
     public string Ip { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(17)]
-    [Display(Name = "endereço MAC")]
+    [Display(Name = "endereï¿½o MAC")]
     public string Mac { get; set; } = string.Empty;
 
     [RequiredField]
@@ -65,15 +66,15 @@ public class CreateEquipmentsRequest
             return new ValidationResult("Rented property not found.");
         var rentedValue = (bool)(rentedProperty.GetValue(context.ObjectInstance) ?? throw new NullReferenceException());
         if (rentedValue && x == null)
-            return new ValidationResult($"O campo {context.DisplayName} é obrigatório quando o equipamento for alugado.");
+            return new ValidationResult($"O campo {context.DisplayName} ï¿½ obrigatï¿½rio quando o equipamento for alugado.");
         return ValidationResult.Success;
     }
 
     public static ValidationResult? ValidateType(string x, ValidationContext context)
     {
-        if (!Enum.TryParse(typeof(Domain.Enums.EquipmentType), x, out var _))
+        if (!Enum.TryParse(typeof(EquipmentType), x, out var _))
         {
-            var types = string.Join(", ", Enum.GetNames(typeof(Domain.Enums.EquipmentType)));
+            var types = string.Join(", ", Enum.GetNames(typeof(EquipmentType)));
             return new ValidationResult($"O campo {context.DisplayName} deve possuir um des sequintes valores: {types}.");
         }
         return ValidationResult.Success;

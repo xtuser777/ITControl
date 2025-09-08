@@ -1,7 +1,8 @@
-using ITControl.Application.Interfaces;
 using ITControl.Application.Roles.Interfaces;
-using ITControl.Application.Tools;
-using ITControl.Application.Utils;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
@@ -15,7 +16,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         return await unitOfWork
             .RolesRepository.FindOneAsync(id, includeRolesPages) 
-               ?? throw new NotFoundException("Role not found");
+               ?? throw new NotFoundException(Errors.ROLE_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(FindManyRolesRequest request)
@@ -105,7 +106,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 
         if (exists)
         {
-            messages.Add("Role with this name already exists");
+            messages.Add(Errors.ROLE_NAME_EXISTS);
         }
     }
 
@@ -113,7 +114,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         var messages = new List<string>();
 
-        if (rolesPages == null || rolesPages.Count == 0) messages.Add("No roles pages found");
+        if (rolesPages == null || rolesPages.Count == 0) messages.Add(Errors.ROLE_PAGES_NOT_FOUND);
         else
         {
             foreach (var page in rolesPages)
@@ -130,6 +131,6 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         var exists = await unitOfWork.PagesRepository.ExistsAsync(id: pageId);
         if (exists == false)
-            messages.Add("Page not exists");
+            messages.Add(Errors.PAGE_NOT_FOUND);
     }
 }

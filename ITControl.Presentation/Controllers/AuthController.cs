@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Interfaces;
+﻿using ITControl.Application.Auth.Interfaces;
 using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Communication.Shared.Responses;

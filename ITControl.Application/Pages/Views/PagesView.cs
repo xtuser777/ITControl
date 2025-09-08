@@ -1,5 +1,5 @@
 using ITControl.Application.Pages.Interfaces;
-using ITControl.Application.Translators;
+using ITControl.Application.Pages.Translators;
 using ITControl.Communication.Pages.Response;
 using ITControl.Domain.Pages.Entities;
 

@@ -1,5 +1,6 @@
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Application.Units.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Units.Requests;
@@ -13,7 +14,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
     public async Task<Unit> FindOneAsync(Guid id)
     {
         return await unitOfWork.UnitsRepository.FindOneAsync(id) 
-               ?? throw new NotFoundException("Unit not found");
+               ?? throw new NotFoundException(Errors.UNIT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(FindManyUnitsRequest request)

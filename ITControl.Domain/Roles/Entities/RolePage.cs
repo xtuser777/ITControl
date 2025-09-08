@@ -1,5 +1,5 @@
-using ITControl.Domain.Entities;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Validation;
 
 namespace ITControl.Domain.Roles.Entities;

@@ -1,6 +1,6 @@
-using ITControl.Domain.Entities;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Roles.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Users.Entities;
 

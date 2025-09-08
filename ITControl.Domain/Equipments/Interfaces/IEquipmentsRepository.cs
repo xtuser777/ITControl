@@ -1,5 +1,5 @@
-using ITControl.Domain.Enums;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Equipments.Enums;
 
 namespace ITControl.Domain.Equipments.Interfaces;
 

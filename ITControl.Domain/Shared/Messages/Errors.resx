@@ -161,4 +161,19 @@
   <data name="DATE_PRESENT_PAST" xml:space="preserve">
     <value>O campo {0} deve ser uma data menor ou igual a atual</value>
   </data>
+  <data name="Parser_ToGuid_Invalid_GUID_format___0_" xml:space="preserve">
+    <value>Invalid GUID format: {0}</value>
+  </data>
+  <data name="Parser_ToEnum_Invalid_ENUM_value___0_" xml:space="preserve">
+    <value>Invalid ENUM value: {0}</value>
+  </data>
+  <data name="Parser_ToDateOnly_Invalid_DateOnly_format___0_" xml:space="preserve">
+    <value>Invalid DateOnly format: {0}</value>
+  </data>
+  <data name="Parser_ToTimeOnly_Invalid_TimeOnly_format___0_" xml:space="preserve">
+    <value>Invalid TimeOnly format: {0}</value>
+  </data>
+  <data name="Parser_ToBool_Invalid_boolean_format___0_" xml:space="preserve">
+    <value>Invalid boolean format: {0}</value>
+  </data>
 </root>

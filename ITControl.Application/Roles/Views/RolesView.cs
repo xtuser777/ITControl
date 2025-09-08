@@ -1,5 +1,5 @@
+using ITControl.Application.Pages.Translators;
 using ITControl.Application.Roles.Interfaces;
-using ITControl.Application.Translators;
 using ITControl.Communication.Roles.Responses;
 using ITControl.Domain.Roles.Entities;
 

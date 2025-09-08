@@ -9,11 +9,7 @@ public class LoginRequest
     [RequiredField]
     [StringMinLength(3)]
     [StringMaxLength(50)]
-    [RegularExpression(
-        "^[a-zA-Z0-9_.-]*$", 
-        ErrorMessageResourceType = typeof(Errors), 
-        ErrorMessageResourceName = "INVALID_FORMAT")]
-    [Display(Name = "usuário")]
+    [Display(Name = "usuï¿½rio")]
     public string Username { get; set; } = string.Empty;
 
     [RequiredField]

@@ -1,6 +1,7 @@
 using ITControl.Application.Divisions.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Divisions.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Divisions.Entities;
@@ -16,7 +17,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         return await unitOfWork
             .DivisionsRepository
             .FindOneAsync(id, includeDepartment, includeUser)
-               ?? throw new NotFoundException("divisão não encontrada");
+               ?? throw new NotFoundException(Errors.DIVISION_NOT_FOUND);
     }
     
     public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRequest request)
@@ -108,7 +109,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 
         if (exists)
         {
-            messages.Add("Page with this name already exists");
+            messages.Add(Errors.DIVISION_NAME_EXISTS);
         }
     }
 
@@ -134,7 +135,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("the user does not exist");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 
@@ -143,7 +144,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         var department = await unitOfWork.DepartmentsRepository.ExistsAsync(id: departmentId);
         if (department == false)
         {
-            messages.Add("the department does not exist");
+            messages.Add(Errors.DEPARTMENT_NOT_FOUND);
         }
     }
 }

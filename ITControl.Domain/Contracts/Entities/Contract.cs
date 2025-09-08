@@ -1,4 +1,4 @@
-using ITControl.Domain.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Contracts.Entities;
 

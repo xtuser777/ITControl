@@ -1,6 +1,7 @@
-using ITControl.Application.Interfaces;
 using ITControl.Application.Positions.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Positions.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
@@ -38,7 +39,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     public async Task<Position> FindOneAsync(Guid id)
     {
         return await unitOfWork.PositionsRepository.FindOneAsync(id) 
-               ?? throw new NotFoundException("Position not found");
+               ?? throw new NotFoundException(Errors.POSITION_NOT_FOUND);
     }
 
     public async Task<Position?> CreateAsync(CreatePositionsRequest request)
@@ -89,7 +90,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
 
         if (exists)
         {
-            messages.Add("Position with this description already exists");
+            messages.Add(Errors.POSITION_DESCRIPTION_EXISTS);
         }
     }
 }

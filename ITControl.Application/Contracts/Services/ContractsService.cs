@@ -1,6 +1,7 @@
 using ITControl.Application.Contracts.Interfaces;
-using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Contracts.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Contracts.Entities;
@@ -17,7 +18,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
         return await unitOfWork
             .ContractsRepository
             .FindOneAsync(id, includeContractsContacts) 
-               ?? throw new NotFoundException("Contract not found");
+               ?? throw new NotFoundException(Errors.CONTRACT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(FindManyContractsRequest request)

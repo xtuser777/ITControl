@@ -1,6 +1,7 @@
-using ITControl.Application.Interfaces;
 using ITControl.Application.Pages.Interfaces;
-using ITControl.Application.Tools;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
@@ -40,7 +41,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         return await unitOfWork
             .PagesRepository
             .FindOneAsync(id) 
-               ?? throw new NotFoundException("Page not found");
+               ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
     public async Task<Page?> CreateAsync(CreatePagesRequest request)
@@ -91,7 +92,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 
         if (exists)
         {
-            messages.Add("Page with this name already exists");
+            messages.Add(Errors.PAGE_NAME_EXISTS);
         }
     }
 }

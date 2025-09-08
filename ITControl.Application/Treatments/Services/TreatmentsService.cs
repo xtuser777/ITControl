@@ -1,14 +1,17 @@
-﻿using ITControl.Application.Interfaces;
-using ITControl.Application.Tools;
+﻿using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Messages.Notifications;
+using ITControl.Application.Shared.Tools;
+using ITControl.Application.Shared.Utils;
 using ITControl.Application.Treatments.Interfaces;
-using ITControl.Application.Utils;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Requests;
-using ITControl.Domain.Entities;
-using ITControl.Domain.Enums;
 using ITControl.Domain.Exceptions;
+using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Treatments.Entities;
-using CallStatus = ITControl.Domain.Enums.CallStatus;
+using ITControl.Domain.Treatments.Enums;
+using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
 namespace ITControl.Application.Treatments.Services;
 
@@ -23,7 +26,7 @@ public class TreatmentsService(
         return await unitOfWork
             .TreatmentsRepository
             .FindOneAsync(id, includeCall, includeUser) 
-            ?? throw new NotFoundException("Atendimento não encontrado");
+            ?? throw new NotFoundException(Errors.TREATMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Treatment>> FindManyAsync(FindManyTreatmentsRequest request)
@@ -101,18 +104,18 @@ public class TreatmentsService(
             request.CallId,
             request.UserId);
         var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
-                   ?? throw new NotFoundException("Chamado não encontrado");
+                   ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
         var user = await unitOfWork.UsersRepository.FindOneAsync(
             request.UserId, null, null, null, null) 
-                   ?? throw new NotFoundException("Usuário não encontrado");
-        var message = $"O atendimento com o protocolo {treatment.Protocol} foi iniciado para o chamado {call.Title} por {user.Name}.";
+                   ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
+        var message = string.Format(Messages.TREATMENTS_STARTED, treatment.Protocol, call.Title, user.Name);
         callStatus.Update(
             status: CallStatus.InProgress,
             description: message);
         await unitOfWork.TreatmentsRepository.CreateAsync(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
-        await CreateNotification(treatment.Id, request.UserId, "Atendimento Iniciado", message, NotificationType.Info);
+        await CreateNotification(treatment.Id, request.UserId, Titles.TREATMENTS_STARTED, message, NotificationType.Info);
         await unitOfWork.Commit(transaction);
 
         return treatment;
@@ -124,15 +127,15 @@ public class TreatmentsService(
         await CheckExistenceAsync(request.CallId, request.UserId);
         var treatment = await FindOneAsync(id, true, true);
         var call = treatment.Call
-                   ?? throw new NotFoundException("Chamado não encontrado");
+                   ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
         var user = treatment.User
-                   ?? throw new NotFoundException("Usuário não encontrado");
+                   ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = "";
         var type = NotificationType.Info;
         if (treatment.Status == TreatmentStatus.Started)
         {
-            message = $"O atendimento com o protocolo {treatment.Protocol} foi iniciado para o chamado {call.Title} por {user.Name}.";
+            message = string.Format(Messages.TREATMENTS_STARTED, treatment.Protocol, call.Title, user.Name);
             callStatus.Update(
                 status: CallStatus.InProgress,
                 description: message);
@@ -140,7 +143,7 @@ public class TreatmentsService(
 
         if (treatment.Status == TreatmentStatus.PartialFinished)
         {
-            message = $"O atendimento com o protocolo {treatment.Protocol} foi finalizado parcialmente para o chamado {call.Title} por {user.Name}.";
+            message = string.Format(Messages.TREATMENTS_PARTIAL_FINISHED, treatment.Protocol, call.Title, user.Name);
             callStatus.Update(
                 status: CallStatus.InProgress,
                 description: message);
@@ -148,7 +151,7 @@ public class TreatmentsService(
 
         if (treatment.Status == TreatmentStatus.Finished)
         {
-            message = $"O atendimento com o protocolo {treatment.Protocol} foi finalizado para o chamado {call.Title} por {user.Name}.";
+            message = string.Format(Messages.TREATMENTS_FINISHED, call.Title, user.Name);
             type = NotificationType.Success;
             callStatus.Update(
                 status: CallStatus.Closed,
@@ -169,7 +172,7 @@ public class TreatmentsService(
             request.UserId);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
-        await CreateNotification(treatment.Id, call.UserId, "Atendimento Atualizado", message, type);
+        await CreateNotification(treatment.Id, call.UserId, Titles.TREATMENTS_UPDATED, message, type);
         await unitOfWork.Commit(transaction);
     }
 
@@ -207,7 +210,7 @@ public class TreatmentsService(
         var exists = await unitOfWork.CallsRepository.ExistsAsync(id: callId);
         if (exists == false)
         {
-            messages.Add("Chamado não encontrado");
+            messages.Add(Errors.CALL_NOT_FOUND);
         }
     }
 
@@ -216,7 +219,7 @@ public class TreatmentsService(
         var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
         if (user == false)
         {
-            messages.Add("Usuário não encontrado");
+            messages.Add(Errors.USER_NOT_FOUND);
         }
     }
 

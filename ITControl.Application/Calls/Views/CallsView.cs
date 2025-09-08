@@ -1,5 +1,6 @@
 ﻿using ITControl.Application.Calls.Interfaces;
-using ITControl.Application.Translators;
+using ITControl.Application.Calls.Translators;
+using ITControl.Application.Equipments.Translators;
 using ITControl.Communication.Calls.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;

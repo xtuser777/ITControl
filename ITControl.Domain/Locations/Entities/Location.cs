@@ -1,6 +1,6 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Divisions.Entities;
-using ITControl.Domain.Entities;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Users.Entities;
 
