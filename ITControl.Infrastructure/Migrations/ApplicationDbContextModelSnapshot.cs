@@ -22,7 +22,7 @@ namespace ITControl.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Appointment", b =>
+            modelBuilder.Entity("ITControl.Domain.Appointments.Entities.Appointment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Call", b =>
+            modelBuilder.Entity("ITControl.Domain.Calls.Entities.Call", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -125,7 +125,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Calls");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.CallStatus", b =>
+            modelBuilder.Entity("ITControl.Domain.Calls.Entities.CallStatus", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -150,7 +150,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("CallsStatuses");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Contract", b =>
+            modelBuilder.Entity("ITControl.Domain.Contracts.Entities.Contract", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +178,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Contracts");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.ContractContact", b =>
+            modelBuilder.Entity("ITControl.Domain.Contracts.Entities.ContractContact", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -220,7 +220,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("ContractContacts");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Department", b =>
+            modelBuilder.Entity("ITControl.Domain.Departments.Entities.Department", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,7 +258,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Departments");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Division", b =>
+            modelBuilder.Entity("ITControl.Domain.Divisions.Entities.Division", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -293,7 +293,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Divisions");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Equipment", b =>
+            modelBuilder.Entity("ITControl.Domain.Equipments.Entities.Equipment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -355,7 +355,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Equipments");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Location", b =>
+            modelBuilder.Entity("ITControl.Domain.Locations.Entities.Location", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -397,7 +397,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Notification", b =>
+            modelBuilder.Entity("ITControl.Domain.Notifications.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -455,7 +455,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Notifications", (string)null);
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Page", b =>
+            modelBuilder.Entity("ITControl.Domain.Pages.Entities.Page", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -480,7 +480,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Pages");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Position", b =>
+            modelBuilder.Entity("ITControl.Domain.Positions.Entities.Position", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -505,7 +505,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Positions");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Role", b =>
+            modelBuilder.Entity("ITControl.Domain.Roles.Entities.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -533,7 +533,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.RolePage", b =>
+            modelBuilder.Entity("ITControl.Domain.Roles.Entities.RolePage", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -560,7 +560,93 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("RolesPages");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.System", b =>
+            modelBuilder.Entity("ITControl.Domain.Supplements.Entities.Supplement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("QuantityInStock")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Supplements", (string)null);
+                });
+
+            modelBuilder.Entity("ITControl.Domain.SupplementsMovements.Entities.SupplementMovement", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("DepartmentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DivisionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("MovementDate")
+                        .HasColumnType("date");
+
+                    b.Property<string>("Observation")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("SupplementId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UnitId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("DivisionId");
+
+                    b.HasIndex("SupplementId");
+
+                    b.HasIndex("UnitId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("SupplementsMovements", (string)null);
+                });
+
+            modelBuilder.Entity("ITControl.Domain.Systems.Entities.System", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -601,7 +687,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Systems");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Treatment", b =>
+            modelBuilder.Entity("ITControl.Domain.Treatments.Entities.Treatment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -669,7 +755,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Treatments");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Unit", b =>
+            modelBuilder.Entity("ITControl.Domain.Units.Entities.Unit", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -719,7 +805,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Units");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.User", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -778,7 +864,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.UserEquipment", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.UserEquipment", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -811,7 +897,7 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("UsersEquipments");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.UserSystem", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.UserSystem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -838,21 +924,21 @@ namespace ITControl.Infrastructure.Migrations
                     b.ToTable("UsersSystems");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Appointment", b =>
+            modelBuilder.Entity("ITControl.Domain.Appointments.Entities.Appointment", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Call", "Call")
+                    b.HasOne("ITControl.Domain.Calls.Entities.Call", "Call")
                         .WithMany()
                         .HasForeignKey("CallId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.Location", "Location")
+                    b.HasOne("ITControl.Domain.Locations.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -865,31 +951,31 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Call", b =>
+            modelBuilder.Entity("ITControl.Domain.Calls.Entities.Call", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.CallStatus", "CallStatus")
+                    b.HasOne("ITControl.Domain.Calls.Entities.CallStatus", "CallStatus")
                         .WithMany()
                         .HasForeignKey("CallStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.Equipment", "Equipment")
+                    b.HasOne("ITControl.Domain.Equipments.Entities.Equipment", "Equipment")
                         .WithMany()
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ITControl.Domain.Entities.Location", "Location")
+                    b.HasOne("ITControl.Domain.Locations.Entities.Location", "Location")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.System", "System")
+                    b.HasOne("ITControl.Domain.Systems.Entities.System", "System")
                         .WithMany()
                         .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -906,9 +992,9 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.ContractContact", b =>
+            modelBuilder.Entity("ITControl.Domain.Contracts.Entities.ContractContact", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Contract", "Contract")
+                    b.HasOne("ITControl.Domain.Contracts.Entities.Contract", "Contract")
                         .WithMany("ContractContacts")
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -917,9 +1003,9 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Department", b =>
+            modelBuilder.Entity("ITControl.Domain.Departments.Entities.Department", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -928,15 +1014,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Division", b =>
+            modelBuilder.Entity("ITControl.Domain.Divisions.Entities.Division", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Department", "Department")
+                    b.HasOne("ITControl.Domain.Departments.Entities.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -947,9 +1033,9 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Equipment", b =>
+            modelBuilder.Entity("ITControl.Domain.Equipments.Entities.Equipment", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Contract", "Contract")
+                    b.HasOne("ITControl.Domain.Contracts.Entities.Contract", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -957,26 +1043,26 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Location", b =>
+            modelBuilder.Entity("ITControl.Domain.Locations.Entities.Location", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Department", "Department")
+                    b.HasOne("ITControl.Domain.Departments.Entities.Department", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.Division", "Division")
+                    b.HasOne("ITControl.Domain.Divisions.Entities.Division", "Division")
                         .WithMany()
                         .HasForeignKey("DivisionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ITControl.Domain.Entities.Unit", "Unit")
+                    b.HasOne("ITControl.Domain.Units.Entities.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -991,24 +1077,24 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Notification", b =>
+            modelBuilder.Entity("ITControl.Domain.Notifications.Entities.Notification", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Appointment", "Appointment")
+                    b.HasOne("ITControl.Domain.Appointments.Entities.Appointment", "Appointment")
                         .WithMany()
                         .HasForeignKey("AppointmentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ITControl.Domain.Entities.Call", "Call")
+                    b.HasOne("ITControl.Domain.Calls.Entities.Call", "Call")
                         .WithMany()
                         .HasForeignKey("CallId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ITControl.Domain.Entities.Treatment", "Treatment")
+                    b.HasOne("ITControl.Domain.Treatments.Entities.Treatment", "Treatment")
                         .WithMany()
                         .HasForeignKey("TreatmentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -1023,15 +1109,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.RolePage", b =>
+            modelBuilder.Entity("ITControl.Domain.Roles.Entities.RolePage", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Page", "Page")
+                    b.HasOne("ITControl.Domain.Pages.Entities.Page", "Page")
                         .WithMany()
                         .HasForeignKey("PageId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.Role", "Role")
+                    b.HasOne("ITControl.Domain.Roles.Entities.Role", "Role")
                         .WithMany("RolesPages")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1042,9 +1128,51 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.System", b =>
+            modelBuilder.Entity("ITControl.Domain.SupplementsMovements.Entities.SupplementMovement", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Contract", "Contract")
+                    b.HasOne("ITControl.Domain.Departments.Entities.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ITControl.Domain.Divisions.Entities.Division", "Division")
+                        .WithMany()
+                        .HasForeignKey("DivisionId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ITControl.Domain.Supplements.Entities.Supplement", "Supplement")
+                        .WithMany()
+                        .HasForeignKey("SupplementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ITControl.Domain.Units.Entities.Unit", "Unit")
+                        .WithMany()
+                        .HasForeignKey("UnitId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+
+                    b.Navigation("Division");
+
+                    b.Navigation("Supplement");
+
+                    b.Navigation("Unit");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ITControl.Domain.Systems.Entities.System", b =>
+                {
+                    b.HasOne("ITControl.Domain.Contracts.Entities.Contract", "Contract")
                         .WithMany()
                         .HasForeignKey("ContractId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -1052,15 +1180,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("Contract");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Treatment", b =>
+            modelBuilder.Entity("ITControl.Domain.Treatments.Entities.Treatment", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Call", "Call")
+                    b.HasOne("ITControl.Domain.Calls.Entities.Call", "Call")
                         .WithMany()
                         .HasForeignKey("CallId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1071,15 +1199,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.User", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.User", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Position", "Position")
+                    b.HasOne("ITControl.Domain.Positions.Entities.Position", "Position")
                         .WithMany()
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.Role", "Role")
+                    b.HasOne("ITControl.Domain.Roles.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1090,15 +1218,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.UserEquipment", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.UserEquipment", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.Equipment", "Equipment")
+                    b.HasOne("ITControl.Domain.Equipments.Entities.Equipment", "Equipment")
                         .WithMany()
                         .HasForeignKey("EquipmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany("UsersEquipments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1109,15 +1237,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.UserSystem", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.UserSystem", b =>
                 {
-                    b.HasOne("ITControl.Domain.Entities.System", "System")
+                    b.HasOne("ITControl.Domain.Systems.Entities.System", "System")
                         .WithMany()
                         .HasForeignKey("SystemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ITControl.Domain.Entities.User", "User")
+                    b.HasOne("ITControl.Domain.Users.Entities.User", "User")
                         .WithMany("UsersSystems")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1128,17 +1256,17 @@ namespace ITControl.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Contract", b =>
+            modelBuilder.Entity("ITControl.Domain.Contracts.Entities.Contract", b =>
                 {
                     b.Navigation("ContractContacts");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.Role", b =>
+            modelBuilder.Entity("ITControl.Domain.Roles.Entities.Role", b =>
                 {
                     b.Navigation("RolesPages");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Entities.User", b =>
+            modelBuilder.Entity("ITControl.Domain.Users.Entities.User", b =>
                 {
                     b.Navigation("UsersEquipments");
 

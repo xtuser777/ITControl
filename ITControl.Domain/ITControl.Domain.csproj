@@ -7,6 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Update="Shared\DisplayValues\SupplementsTypes.Designer.cs">
+        <DependentUpon>SupplementsTypes.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
       <Compile Update="Shared\Messages\Errors.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
@@ -15,6 +20,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <EmbeddedResource Update="Shared\DisplayValues\SupplementsTypes.resx">
+        <LastGenOutput>SupplementsTypes.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
       <EmbeddedResource Update="Shared\Messages\Errors.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>Errors.Designer.cs</LastGenOutput>

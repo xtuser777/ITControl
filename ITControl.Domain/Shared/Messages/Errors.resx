@@ -176,4 +176,7 @@
   <data name="Parser_ToBool_Invalid_boolean_format___0_" xml:space="preserve">
     <value>Invalid boolean format: {0}</value>
   </data>
+  <data name="ConnectionNotFound" xml:space="preserve">
+    <value>O campo {0} com o id '{1}' não foi encontrado.</value>
+  </data>
 </root>

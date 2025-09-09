@@ -10,6 +10,8 @@ using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Domain.Pages.Interfaces;
 using ITControl.Domain.Positions.Interfaces;
 using ITControl.Domain.Roles.Interfaces;
+using ITControl.Domain.Supplements.Interfaces;
+using ITControl.Domain.SupplementsMovements.Interfaces;
 using ITControl.Domain.Systems.Interfaces;
 using ITControl.Domain.Treatments.Interfaces;
 using ITControl.Domain.Units.Interfaces;
@@ -26,6 +28,8 @@ using ITControl.Infrastructure.Notifications.Repositories;
 using ITControl.Infrastructure.Pages.Repositories;
 using ITControl.Infrastructure.Positions.Repositories;
 using ITControl.Infrastructure.Roles.Repositories;
+using ITControl.Infrastructure.Supplements.Repositories;
+using ITControl.Infrastructure.SupplementsMovements.Repositories;
 using ITControl.Infrastructure.Systems.Repositories;
 using ITControl.Infrastructure.Treatments.Repositories;
 using ITControl.Infrastructure.Units.Repositories;
@@ -58,6 +62,8 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     private ITreatmentsRepository? _treatmentsRepository;
     private IAppointmentsRepository? _appointmentsRepository;
     private INotificationsRepository? _notificationsRepository;
+    private ISupplementsRepository? _supplementsRepository;
+    private ISupplementsMovementsRepository? _supplementsMovementsRepository;
 
     public ApplicationDbContext Context => context;
     public IDbContextTransaction BeginTransaction => context.Database.BeginTransaction();
@@ -81,12 +87,13 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     public ITreatmentsRepository TreatmentsRepository => _treatmentsRepository ?? new TreatmentsRepository(context);
     public IAppointmentsRepository AppointmentsRepository => _appointmentsRepository ?? new AppointmentsRepository(context);
     public INotificationsRepository NotificationsRepository => _notificationsRepository ?? new NotificationsRepository(context);
+    public ISupplementsRepository SupplementsRepository => _supplementsRepository ?? new SupplementsRepository(context);
+    public ISupplementsMovementsRepository SupplementsMovementsRepository => _supplementsMovementsRepository ?? new SupplementsMovementsRepository(context);
 
     public async Task Commit(IDbContextTransaction transaction)
     {
         await context.SaveChangesAsync();
         await transaction.CommitAsync();
-
     }
 
     public void Dispose()

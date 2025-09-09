@@ -81,6 +81,16 @@ using ITControl.Application.Notifications.Services;
 using ITControl.Application.Notifications.Views;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Services;
+using ITControl.Application.Supplements.Views;
+using ITControl.Application.Supplements.Interfaces;
+using ITControl.Domain.Supplements.Interfaces;
+using ITControl.Infrastructure.Supplements.Repositories;
+using ITControl.Application.Supplements.Services;
+using ITControl.Domain.SupplementsMovements.Interfaces;
+using ITControl.Infrastructure.SupplementsMovements.Repositories;
+using ITControl.Application.SupplementsMovements.Interfaces;
+using ITControl.Application.SupplementsMovements.Services;
+using ITControl.Application.SupplementsMovements.Views;
 
 namespace ITControl.CrossCutting.IoC;
 
@@ -154,6 +164,13 @@ public static class DependencyInjectionApi
         services.AddScoped<INotificationsView, NotificationsView>();
         services.AddScoped<INotificationsTypesView, NotificationsTypesView>();
         services.AddScoped<INotificationsReferencesView, NotificationsReferencesView>();
+        services.AddScoped<ISupplementsRepository, SupplementsRepository>();
+        services.AddScoped<ISupplementsService, SupplementsService>();
+        services.AddScoped<ISupplementsView, SupplementsView>();
+        services.AddScoped<ISupplementsTypesView, SupplementsTypesView>();
+        services.AddScoped<ISupplementsMovementsRepository, SupplementsMovementsRepository>();
+        services.AddScoped<ISupplementsMovementsService, SupplementsMovementsService>();
+        services.AddScoped<ISupplementsMovementsView, SupplementsMovementsView>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
