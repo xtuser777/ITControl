@@ -25,37 +25,9 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Messages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\CallsReasons.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>CallsReasons.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\CallsStatuses.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>CallsStatuses.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\EquipmentsTypes.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>EquipmentsTypes.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\NotificationsReferences.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>NotificationsReferences.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\NotificationsTypes.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>NotificationsTypes.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
       <EmbeddedResource Update="Shared\Messages\Translate\Pages.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Pages.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\TreatmentsTypes.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>TreatmentsTypes.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Shared\Messages\Translate\TreatmentsStatuses.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>TreatmentsStatuses.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
@@ -75,45 +47,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>Messages.resx</DependentUpon>
       </Compile>
-      <Compile Update="Shared\Messages\Translate\CallsReasons.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>CallsReasons.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\CallsStatuses.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>CallsStatuses.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\EquipmentsTypes.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>EquipmentsTypes.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\NotificationsReferences.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>NotificationsReferences.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\NotificationsTypes.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>NotificationsTypes.resx</DependentUpon>
-      </Compile>
       <Compile Update="Shared\Messages\Translate\Pages.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Pages.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\TreatmentsTypes.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>TreatmentsTypes.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Shared\Messages\Translate\TreatmentsStatuses.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>TreatmentsStatuses.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

@@ -1,7 +1,7 @@
 using ITControl.Application.Calls.Interfaces;
-using ITControl.Application.Calls.Translators;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Calls.Views;
 
@@ -13,7 +13,7 @@ public class CallsReasonsView : ICallsReasonsView
         return callsReasons.Select(cr => new TranslatableField()
         {
             Value = cr.ToString(),
-            DisplayValue = CallReasonTranslator.ToDisplayValue(cr),
+            DisplayValue = cr.GetDisplayValue(),
         });
     }
 }

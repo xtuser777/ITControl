@@ -1,5 +1,5 @@
 using ITControl.CrossCutting.IoC;
-using ITControl.Presentation.Filters;
+using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;

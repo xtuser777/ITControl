@@ -1,7 +1,7 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Notifications.Translators;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Notifications.Views;
 
@@ -13,7 +13,7 @@ public class NotificationsTypesView : INotificationsTypesView
         return types.Select(t => new TranslatableField
         {
             Value = t.ToString(),
-            DisplayValue = NotificationTypeTranslator.ToDisplayValue(t)
+            DisplayValue = t.GetDisplayValue()
         });
     }
 }

@@ -1,7 +1,7 @@
 ﻿using ITControl.Application.Equipments.Interfaces;
-using ITControl.Application.Equipments.Translators;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Equipments.Views;
 
@@ -13,7 +13,7 @@ public class EquipmentsTypesView : IEquipmentsTypesView
         return equipmentTypes.Select(et => new TranslatableField
         {
             Value = et.ToString(),
-            DisplayValue = EquipmentTypeTranslator.ToDisplayValue(et)
+            DisplayValue = et.GetDisplayValue()
         });
     }
 }

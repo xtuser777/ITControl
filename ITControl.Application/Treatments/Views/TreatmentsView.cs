@@ -1,10 +1,8 @@
-﻿using ITControl.Application.Calls.Translators;
-using ITControl.Application.Treatments.Interfaces;
-using ITControl.Application.Treatments.Translators;
+﻿using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Responses;
+using ITControl.Domain.Shared.Extensions;
 using ITControl.Domain.Treatments.Entities;
-using ITControl.Infrastructure.Migrations;
 
 namespace ITControl.Application.Treatments.Views;
 
@@ -38,12 +36,12 @@ public class TreatmentsView : ITreatmentsView
                    Status = new TranslatableField()
                    {
                        Value = treatment.Status.ToString(),
-                       DisplayValue = TreatmentStatusTranslator.ToDisplayName(treatment.Status)
+                       DisplayValue = treatment.Status.GetDisplayValue()
                    },
                    Type = new TranslatableField()
                    {
                        Value = treatment.Type.ToString(),
-                       DisplayValue = TreatmentTypeTranslator.ToDisplayName(treatment.Type)
+                       DisplayValue = treatment.Type.GetDisplayValue()
                    },
                    Observation = treatment.Observation,
                    ExternalProtocol = treatment.ExternalProtocol,
@@ -68,24 +66,24 @@ public class TreatmentsView : ITreatmentsView
             Status = new TranslatableField()
             {
                 Value = treatment.Status.ToString(),
-                DisplayValue = TreatmentStatusTranslator.ToDisplayName(treatment.Status)
+                DisplayValue = treatment.Status.GetDisplayValue()
             },
             Type = new TranslatableField()
             {
                 Value = treatment.Type.ToString(),
-                DisplayValue = TreatmentTypeTranslator.ToDisplayName(treatment.Type)
+                DisplayValue = treatment.Type.GetDisplayValue()
             },
             Observation = treatment.Observation,
             ExternalProtocol = treatment.ExternalProtocol,
             CallId = treatment.CallId,
             UserId = treatment.UserId,
-            Call = treatment.Call != null && treatment.Call.Location != null
+            Call = treatment.Call?.Location != null
                 ? new FindOneTreatmentsCallResponse()
                 {
                     Id = treatment.Call.Id,
                     Title = treatment.Call.Title,
                     Description = treatment.Call.Description,
-                    Reason = CallReasonTranslator.ToDisplayValue(treatment.Call.Reason),
+                    Reason = treatment.Call.Reason.GetDisplayValue(),
                     Location = new FindOneTreatmentsCallLocationResponse()
                     {
                         Id = treatment.Call.Location.Id,

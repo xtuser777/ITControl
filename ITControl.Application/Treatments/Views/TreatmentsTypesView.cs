@@ -1,6 +1,6 @@
 using ITControl.Application.Treatments.Interfaces;
-using ITControl.Application.Treatments.Translators;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Extensions;
 using ITControl.Domain.Treatments.Enums;
 
 namespace ITControl.Application.Treatments.Views;
@@ -13,7 +13,7 @@ public class TreatmentsTypesView : ITreatmentsTypesView
         return treatmentsTypes.Select(tt => new TranslatableField()
         {
             Value = tt.ToString(),
-            DisplayValue = TreatmentTypeTranslator.ToDisplayName(tt),
+            DisplayValue = tt.GetDisplayValue(),
         });
     }
 }

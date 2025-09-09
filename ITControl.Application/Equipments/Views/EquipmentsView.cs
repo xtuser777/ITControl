@@ -1,8 +1,8 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Application.Equipments.Translators;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Equipments.Views;
 
@@ -33,7 +33,7 @@ public class EquipmentsView : IEquipmentsView
             Type = new TranslatableField()
             {
                 Value = equipment.Type.ToString(),
-                DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
+                DisplayValue = equipment.Type.GetDisplayValue(),
             },
             Rented = equipment.Rented,
             ContractId = equipment.ContractId,
@@ -60,7 +60,7 @@ public class EquipmentsView : IEquipmentsView
             Type = new TranslatableField()
             {
                 Value = equipment.Type.ToString(),
-                DisplayValue = EquipmentTypeTranslator.ToDisplayValue(equipment.Type),
+                DisplayValue = equipment.Type.GetDisplayValue(),
             },
             Rented = equipment.Rented,
             ContractId = equipment.ContractId,

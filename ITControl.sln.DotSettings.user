@@ -4,15 +4,28 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FNotifications_002FMessages/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FNotifications_002FTitles/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FCallsReasons/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FCallsReasons/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FCallsStatuses/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FCallsStatuses/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FEquipmentsTypes/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FNotificationsReferences/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FNotificationsReferences/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FNotificationsTypes/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FNotificationsTypes/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FPages/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FPages/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FPagesNames/@EntryIndexedValue">True</s:Boolean>
 	
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FTreatmentsStatuses/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FTreatmentsStatuses/@EntryIndexRemoved">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FTreatmentsTypes/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EApplication_002FShared_002FMessages_002FTranslate_002FTreatmentsTypes/@EntryIndexRemoved">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FCallsReasons/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FCallsStatuses/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FEquipmentsTypes/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FNotificationsReferences/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FNotificationsTypes/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FTreatmentsStatuses/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FTreatmentsTypes/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FMessages_002FErrors/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean></wpf:ResourceDictionary>
