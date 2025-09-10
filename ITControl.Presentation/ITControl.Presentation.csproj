@@ -26,8 +26,4 @@
       <Folder Include="Shared\" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="KnowledgeBases\" />
-    </ItemGroup>
-
 </Project>

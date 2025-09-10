@@ -26,10 +26,12 @@ public class KnowledgeBasesRepository(
         var query = context.KnowledgeBases
             .Include(kb => kb.User)
             .AsNoTracking();
-        var applyFiltersParams = (ApplyFiltersKnowledgeBasesRepositoryParams)@params;
+        var applyFiltersParams = (ApplyFiltersKnowledgeBasesRepositoryParams)
+            (@params as FindManyKnowledgeBasesRepositoryParams)!;
         applyFiltersParams.Query = query;
         query = ApplyFilters(applyFiltersParams);
-        var applySortingParams = (ApplySortingKnowledgeBasesRepositoryParams)@params;
+        var applySortingParams = (ApplySortingKnowledgeBasesRepositoryParams)
+            (@params as FindManyKnowledgeBasesRepositoryParams)!;
         applySortingParams.Query = query;
         query = ApplySorting(applySortingParams);
         if (@params.Page.HasValue && @params.Size.HasValue)
@@ -59,7 +61,8 @@ public class KnowledgeBasesRepository(
     public async Task<int> CountAsync(ICountKnowledgeBasesRepositoryParams @params)
     {
         var query = context.KnowledgeBases.AsNoTracking();
-        var applyFiltersParams = (ApplyFiltersKnowledgeBasesRepositoryParams)@params;
+        var applyFiltersParams = (ApplyFiltersKnowledgeBasesRepositoryParams)
+            (@params as CountKnowledgeBasesRepositoryParams)!;
         applyFiltersParams.Query = query;
         query = ApplyFilters(applyFiltersParams);
 
@@ -185,6 +188,17 @@ public class FindManyKnowledgeBasesRepositoryParams : IFindManyKnowledgeBasesRep
             OrderByEstimatedTime = @params.OrderByEstimatedTime,
             OrderByReason = @params.OrderByReason,
             OrderByUser = @params.OrderByUser
+        };
+
+    public static implicit operator CountKnowledgeBasesRepositoryParams(FindManyKnowledgeBasesRepositoryParams @params) =>
+        new()
+        {
+            Id = @params.Id,
+            Title = @params.Title,
+            Content = @params.Content,
+            EstimatedTime = @params.EstimatedTime,
+            Reason = @params.Reason,
+            UserId = @params.UserId
         };
 }
 

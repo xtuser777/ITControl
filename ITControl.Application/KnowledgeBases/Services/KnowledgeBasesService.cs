@@ -26,11 +26,9 @@ public class KnowledgeBasesService(
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(IFindManyKnowledgeBasesRepositoryParams @params)
     {
-        if (!@params.Page.HasValue || !@params.Size.HasValue)
-        {
-            return null;
-        }
-        var countParams = (ICountKnowledgeBasesRepositoryParams)@params;
+        if (!@params.Page.HasValue || !@params.Size.HasValue) return null;
+        var countParams = (CountKnowledgeBasesRepositoryParams)
+            (@params as FindManyKnowledgeBasesRepositoryParams)!;
         var count = await unitOfWork.KnowledgeBasesRepository.CountAsync(countParams);
         var pagination = Pagination.Build(@params.Page.Value.ToString(), @params.Size.Value.ToString(), count);
 
