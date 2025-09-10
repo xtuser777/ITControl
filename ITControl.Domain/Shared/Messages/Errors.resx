@@ -177,6 +177,15 @@
     <value>Invalid boolean format: {0}</value>
   </data>
   <data name="ConnectionNotFound" xml:space="preserve">
-    <value>O campo {0} com o id '{1}' não foi encontrado.</value>
+    <value>O {0} com o id '{1}' não foi encontrado.</value>
+  </data>
+  <data name="MustBeAOneOfTheseValues" xml:space="preserve">
+    <value>O campo {0} deve ser um dos seguintes valores: {1}.</value>
+  </data>
+  <data name="UserConnectionNotFound" xml:space="preserve">
+    <value>O usuário com o id {0} não foi encontrado.</value>
+  </data>
+  <data name="UsersRepositoryNotAvailable" xml:space="preserve">
+    <value>O repositório de usuários não está disponível.</value>
   </data>
 </root>

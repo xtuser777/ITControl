@@ -5,6 +5,7 @@ using ITControl.Domain.Contracts.Interfaces;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Equipments.Interfaces;
+using ITControl.Domain.KnowledgeBases.Interfaces;
 using ITControl.Domain.Locations.Interfaces;
 using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Domain.Pages.Interfaces;
@@ -23,6 +24,7 @@ using ITControl.Infrastructure.Contracts.Repositories;
 using ITControl.Infrastructure.Departments.Repositories;
 using ITControl.Infrastructure.Divisions.Repositories;
 using ITControl.Infrastructure.Equipments.Repositories;
+using ITControl.Infrastructure.KnowledgeBases.Repositories;
 using ITControl.Infrastructure.Locations.Repositories;
 using ITControl.Infrastructure.Notifications.Repositories;
 using ITControl.Infrastructure.Pages.Repositories;
@@ -64,6 +66,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     private INotificationsRepository? _notificationsRepository;
     private ISupplementsRepository? _supplementsRepository;
     private ISupplementsMovementsRepository? _supplementsMovementsRepository;
+    private IKnowledgeBasesRepository? _knowledgeBasesRepository;
 
     public ApplicationDbContext Context => context;
     public IDbContextTransaction BeginTransaction => context.Database.BeginTransaction();
@@ -89,6 +92,7 @@ public class UnitOfWork(ApplicationDbContext context) : IUnitOfWork
     public INotificationsRepository NotificationsRepository => _notificationsRepository ?? new NotificationsRepository(context);
     public ISupplementsRepository SupplementsRepository => _supplementsRepository ?? new SupplementsRepository(context);
     public ISupplementsMovementsRepository SupplementsMovementsRepository => _supplementsMovementsRepository ?? new SupplementsMovementsRepository(context);
+    public IKnowledgeBasesRepository KnowledgeBasesRepository => _knowledgeBasesRepository ?? new KnowledgeBasesRepository(context);
 
     public async Task Commit(IDbContextTransaction transaction)
     {

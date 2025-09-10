@@ -61,7 +61,7 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} com o id &apos;{1}&apos; não foi encontrado..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O {0} com o id &apos;{1}&apos; não foi encontrado..
         /// </summary>
         public static string ConnectionNotFound {
             get {
@@ -151,6 +151,15 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser um dos seguintes valores: {1}..
+        /// </summary>
+        public static string MustBeAOneOfTheseValues {
+            get {
+                return ResourceManager.GetString("MustBeAOneOfTheseValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Invalid boolean format: {0}.
         /// </summary>
         public static string Parser_ToBool_Invalid_boolean_format___0_ {
@@ -219,6 +228,24 @@ namespace ITControl.Domain.Shared.Messages {
         public static string TIME_GREATER_THAN_CURRENT {
             get {
                 return ResourceManager.GetString("TIME_GREATER_THAN_CURRENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O usuário com o id {0} não foi encontrado..
+        /// </summary>
+        public static string UserConnectionNotFound {
+            get {
+                return ResourceManager.GetString("UserConnectionNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O repositório de usuários não está disponível..
+        /// </summary>
+        public static string UsersRepositoryNotAvailable {
+            get {
+                return ResourceManager.GetString("UsersRepositoryNotAvailable", resourceCulture);
             }
         }
         

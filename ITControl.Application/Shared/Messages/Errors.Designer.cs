@@ -187,6 +187,15 @@ namespace ITControl.Application.Shared.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Base de conhecimento não encontrada..
+        /// </summary>
+        internal static string KnowledgeBaseNotFound {
+            get {
+                return ResourceManager.GetString("KnowledgeBaseNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Localização não encontrado.
         /// </summary>
         internal static string LOCATION_NOT_FOUND {

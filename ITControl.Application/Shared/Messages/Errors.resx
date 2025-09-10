@@ -219,4 +219,7 @@
   <data name="SupplementMovimentNotFound" xml:space="preserve">
     <value>Movimento de suprimento não encontrado.</value>
   </data>
+  <data name="KnowledgeBaseNotFound" xml:space="preserve">
+    <value>Base de conhecimento não encontrada.</value>
+  </data>
 </root>

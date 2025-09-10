@@ -4,6 +4,7 @@ using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.Locations.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Pages.Entities;
@@ -42,6 +43,7 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Supplement> Supplements { get; set; }
     public DbSet<SupplementMovement> SupplementsMovements { get; set; }
+    public DbSet<KnowledgeBase> KnowledgeBases { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

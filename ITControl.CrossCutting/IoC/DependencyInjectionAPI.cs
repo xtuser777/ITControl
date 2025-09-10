@@ -91,6 +91,11 @@ using ITControl.Infrastructure.SupplementsMovements.Repositories;
 using ITControl.Application.SupplementsMovements.Interfaces;
 using ITControl.Application.SupplementsMovements.Services;
 using ITControl.Application.SupplementsMovements.Views;
+using ITControl.Domain.KnowledgeBases.Interfaces;
+using ITControl.Infrastructure.KnowledgeBases.Repositories;
+using ITControl.Application.KnowledgeBases.Services;
+using ITControl.Application.KnowledgeBases.Interfaces;
+using ITControl.Application.KnowledgeBases.Views;
 
 namespace ITControl.CrossCutting.IoC;
 
@@ -171,6 +176,9 @@ public static class DependencyInjectionApi
         services.AddScoped<ISupplementsMovementsRepository, SupplementsMovementsRepository>();
         services.AddScoped<ISupplementsMovementsService, SupplementsMovementsService>();
         services.AddScoped<ISupplementsMovementsView, SupplementsMovementsView>();
+        services.AddScoped<IKnowledgeBasesRepository, KnowledgeBasesRepository>();
+        services.AddScoped<IKnowledgeBasesService, KnowledgeBasesService>();
+        services.AddScoped<IKnowledgeBasesView, KnowledgeBasesView>();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 

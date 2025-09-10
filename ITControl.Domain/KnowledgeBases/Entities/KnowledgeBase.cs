@@ -35,19 +35,38 @@ public sealed class KnowledgeBase : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(
-        string? title = null,
-        string? content = null,
-        TimeOnly? estimatedTime = null,
-        CallReason? reason = null,
-        Guid? userId = null
-    )
+    public void Update(UpdateKnowledgeBaseParams @params)
     {
+        var (title, content, estimatedTime, reason, userId) = @params;
         Title = title ?? Title;
         Content = content ?? Content;
         EstimatedTime = estimatedTime ?? EstimatedTime;
         Reason = reason ?? Reason;
         UserId = userId ?? UserId;
         UpdatedAt = DateTime.Now;
+    }
+}
+
+public class UpdateKnowledgeBaseParams
+{
+    public string? Title { get; set; }
+    public string? Content { get; set; }
+    public TimeOnly? EstimatedTime { get; set; }
+    public CallReason? Reason { get; set; }
+    public Guid? UserId { get; set; }
+
+    internal void Deconstruct(
+        out string? title,
+        out string? content,
+        out TimeOnly? estimatedTime,
+        out CallReason? reason,
+        out Guid? userId
+    )
+    {
+        title = Title;
+        content = Content;
+        estimatedTime = EstimatedTime;
+        reason = Reason;
+        userId = UserId;
     }
 }

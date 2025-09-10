@@ -22,4 +22,8 @@
       <ProjectReference Include="..\ITControl.CrossCutting\ITControl.CrossCutting.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="KnowledgeBases\" />
+    </ItemGroup>
+
 </Project>

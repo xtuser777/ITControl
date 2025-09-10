@@ -4,6 +4,7 @@ using ITControl.Domain.Contracts.Interfaces;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Equipments.Interfaces;
+using ITControl.Domain.KnowledgeBases.Interfaces;
 using ITControl.Domain.Locations.Interfaces;
 using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Domain.Pages.Interfaces;
@@ -46,6 +47,7 @@ public interface IUnitOfWork
     INotificationsRepository NotificationsRepository { get; }
     ISupplementsRepository SupplementsRepository { get; }
     ISupplementsMovementsRepository SupplementsMovementsRepository { get; }
+    IKnowledgeBasesRepository KnowledgeBasesRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();
 }
