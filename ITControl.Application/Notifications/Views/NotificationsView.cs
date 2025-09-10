@@ -1,7 +1,8 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Notifications.Translators;
 using ITControl.Communication.Notifications.Responses;
+using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Notifications.Views;
 
@@ -9,7 +10,7 @@ public class NotificationsView : INotificationsView
 {
     public IEnumerable<FindManyNotificationsResponse> FindMany(IEnumerable<Notification>? notifications)
     {
-        if (notifications is null || !notifications.Any())
+        if (notifications is null)
         {
             return [];
         }
@@ -19,15 +20,15 @@ public class NotificationsView : INotificationsView
             Id = n.Id,
             Title = n.Title,
             Message = n.Message,
-            Type = new()
+            Type = new TranslatableField
             {
                 Value = n.Type.ToString(),
-                DisplayValue = NotificationTypeTranslator.ToDisplayValue(n.Type)
+                DisplayValue = n.Type.GetDisplayValue()
             },
-            Reference = new()
+            Reference = new TranslatableField
             {
                 Value = n.Reference.ToString(),
-                DisplayValue = NotificationReferenceTranslator.ToDisplayValue(n.Reference)
+                DisplayValue = n.Reference.GetDisplayValue()
             },
             IsRead = n.IsRead,
             UserId = n.UserId,
@@ -51,15 +52,15 @@ public class NotificationsView : INotificationsView
             Id = notification.Id,
             Title = notification.Title,
             Message = notification.Message,
-            Type = new()
+            Type = new TranslatableField
             {
                 Value = notification.Type.ToString(),
-                DisplayValue = NotificationTypeTranslator.ToDisplayValue(notification.Type)
+                DisplayValue = notification.Type.GetDisplayValue()
             },
-            Reference = new()
+            Reference = new TranslatableField
             {
                 Value = notification.Reference.ToString(),
-                DisplayValue = NotificationReferenceTranslator.ToDisplayValue(notification.Reference)
+                DisplayValue = notification.Reference.GetDisplayValue()
             },
             IsRead = notification.IsRead,
             UserId = notification.UserId,

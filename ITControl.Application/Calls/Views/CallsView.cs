@@ -1,9 +1,8 @@
 ﻿using ITControl.Application.Calls.Interfaces;
-using ITControl.Application.Calls.Translators;
-using ITControl.Application.Equipments.Translators;
 using ITControl.Communication.Calls.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
+using ITControl.Domain.Shared.Extensions;
 
 namespace ITControl.Application.Calls.Views;
 public class CallsView : ICallsView
@@ -30,7 +29,7 @@ public class CallsView : ICallsView
             Reason = new TranslatableField()
             {
                 Value = call.Reason.ToString(),
-                DisplayValue = CallReasonTranslator.ToDisplayValue(call.Reason)
+                DisplayValue = call.Reason.GetDisplayValue()
             },
             CallStatusId = call.CallStatusId,
             UserId = call.UserId,
@@ -44,7 +43,7 @@ public class CallsView : ICallsView
                     Status = new TranslatableField()
                     {
                         Value = call.CallStatus!.Status.ToString(),
-                        DisplayValue = CallStatusTranslator.ToDisplayValue(call.CallStatus.Status)
+                        DisplayValue = call.CallStatus.Status.GetDisplayValue()
                     },
                     Description = call.CallStatus.Description,
                     CreatedAt = call.CallStatus.CreatedAt,
@@ -76,7 +75,7 @@ public class CallsView : ICallsView
                     Description = call.Equipment.Description,
                     Ip = call.Equipment.Ip,
                     Mac = call.Equipment.Mac,
-                    Type = EquipmentTypeTranslator.ToDisplayValue(call.Equipment.Type)
+                    Type = call.Equipment.Type.GetDisplayValue()
                 }
                 : null,
             System = call.System != null 
@@ -104,12 +103,12 @@ public class CallsView : ICallsView
                    Reason = new TranslatableField()
                    {
                        Value = call.Reason.ToString(),
-                       DisplayValue = CallReasonTranslator.ToDisplayValue(call.Reason)
+                       DisplayValue = call.Reason.GetDisplayValue()
                    },
                    Status = new TranslatableField()
                    {
                        Value = call.CallStatus!.Status.ToString(),
-                       DisplayValue = CallStatusTranslator.ToDisplayValue(call.CallStatus.Status)
+                       DisplayValue = call.CallStatus.Status.GetDisplayValue()
                    },
                    UserId = call.UserId,
                    LocationId = call.LocationId,
