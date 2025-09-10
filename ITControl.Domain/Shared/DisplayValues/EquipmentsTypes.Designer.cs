@@ -39,7 +39,7 @@ namespace ITControl.Domain.Shared.DisplayValues {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ITControl.Application.Shared.Messages.Translate.EquipmentsTypes", typeof(EquipmentsTypes).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ITControl.Domain.Shared.DisplayValues.EquipmentsTypes", typeof(EquipmentsTypes).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
