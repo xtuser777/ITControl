@@ -11,18 +11,18 @@ public class DateGreatherThanAttribute : ValidationAttribute
     {
         _dateGreatherThan = dateGreatherThan;
         ErrorMessageResourceType = typeof(Errors);
-        ErrorMessageResourceName = "DATE_GREATER_THAN";
+        ErrorMessageResourceName = nameof(Errors.DATE_GREATER_THAN);
     }
 
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
-        if (value is DateOnly dateValue)
+        if (value is DateOnly dateValue && dateValue != DateOnly.MinValue)
         {
             var comparisonProperty = validationContext.ObjectType.GetProperty(_dateGreatherThan);
             if (comparisonProperty != null) 
             {
                 var comparisonValue = comparisonProperty.GetValue(validationContext.ObjectInstance);
-                if (comparisonValue is DateOnly comparisonDateValue)
+                if (comparisonValue is DateOnly comparisonDateValue && comparisonDateValue != DateOnly.MinValue)
                 {
                     if (dateValue > comparisonDateValue)
                     {

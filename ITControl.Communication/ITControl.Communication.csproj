@@ -7,6 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\ITControl.Domain\ITControl.Domain.csproj" />
       <ProjectReference Include="..\ITControl.Infrastructure\ITControl.Infrastructure.csproj" />
     </ItemGroup>

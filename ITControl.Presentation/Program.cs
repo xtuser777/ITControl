@@ -1,17 +1,19 @@
+using ITControl.Application.Auth.Interfaces;
+using ITControl.Application.Auth.Services;
+using ITControl.Communication.Shared.Converters;
 using ITControl.CrossCutting.IoC;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using ITControl.Application.Auth.Interfaces;
-using ITControl.Application.Auth.Services;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new GuidConverter()));
 
 builder.Services.AddCors(options =>
 {
@@ -79,6 +81,27 @@ builder.Services.AddMvc(options =>
 {
     options.Filters.Add(typeof(ExceptionFilter));
     //options.Filters.Add(typeof(PermissionsFilter));
+});
+
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = actionContext =>
+    {
+        var errors = new List<string>();
+        actionContext.ModelState.Values.ToList().ForEach(v => v.Errors.ToList().ForEach(e => errors.Add(e.ErrorMessage)));
+
+        // Create a custom error response object
+        var customErrorResponse = new
+        {
+            StatusCode = 400,
+            Message = "Validation Failed",
+            Errors = errors
+        };
+
+        return new BadRequestObjectResult(customErrorResponse);
+    };
 });
 
 var app = builder.Build();

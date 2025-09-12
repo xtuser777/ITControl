@@ -27,7 +27,7 @@ public class ExceptionFilter : IExceptionFilter
         }
     }
 
-    private void HandleProjectException(ExceptionContext context)
+    private static void HandleProjectException(ExceptionContext context)
     {
         switch (context.Exception)
         {
@@ -48,10 +48,13 @@ public class ExceptionFilter : IExceptionFilter
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
                 context.Result = new NotFoundObjectResult(new ErrorJsonResponse(context.Exception.Message));
                 break;
+            case ConverterException:
+                context.ModelState.AddModelError((context.Exception as ConverterException)!.PropertyName, context.Exception.Message);
+                break;
         }
     }
 
-    private void ThrowUnknowError(ExceptionContext context)
+    private static void ThrowUnknowError(ExceptionContext context)
     {
         context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
         context.Result = new ObjectResult(new ErrorJsonResponse("Unknown Error"));

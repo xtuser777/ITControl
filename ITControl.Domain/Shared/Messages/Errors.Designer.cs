@@ -70,7 +70,7 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser maior que a data atual.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser uma data maior que {1}.
         /// </summary>
         public static string DATE_GREATER_THAN {
             get {
@@ -79,7 +79,7 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser uma data maior que {1}.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser maior que a data atual.
         /// </summary>
         public static string DATE_GREATER_THAN_CURRENT {
             get {
@@ -228,6 +228,15 @@ namespace ITControl.Domain.Shared.Messages {
         public static string TIME_GREATER_THAN_CURRENT {
             get {
                 return ResourceManager.GetString("TIME_GREATER_THAN_CURRENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser uma hora menor ou igual a atual.
+        /// </summary>
+        public static string TimePresentPast {
+            get {
+                return ResourceManager.GetString("TimePresentPast", resourceCulture);
             }
         }
         

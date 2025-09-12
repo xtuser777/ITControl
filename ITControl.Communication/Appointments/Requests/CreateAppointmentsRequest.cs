@@ -29,19 +29,16 @@ public class CreateAppointmentsRequest
     public string Observation { get; set; } = string.Empty;
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
     [Display(Name = "usuário")]
     public Guid UserId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
     [Display(Name = "chamado")]
     public Guid CallId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
     [Display(Name = "local")]
     public Guid LocationId { get; set; }

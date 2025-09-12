@@ -144,10 +144,10 @@
     <value>O campo {0} deve ser um horário válido</value>
   </data>
   <data name="DATE_GREATER_THAN_CURRENT" xml:space="preserve">
-    <value>O campo {0} deve ser uma data maior que {1}</value>
+    <value>O campo {0} deve ser maior que a data atual</value>
   </data>
   <data name="DATE_GREATER_THAN" xml:space="preserve">
-    <value>O campo {0} deve ser maior que a data atual</value>
+    <value>O campo {0} deve ser uma data maior que {1}</value>
   </data>
   <data name="TIME_GREATER_THAN_CURRENT" xml:space="preserve">
     <value>O campo {0} deve ser maior que o horário atual</value>
@@ -187,5 +187,8 @@
   </data>
   <data name="UsersRepositoryNotAvailable" xml:space="preserve">
     <value>O repositório de usuários não está disponível.</value>
+  </data>
+  <data name="TimePresentPast" xml:space="preserve">
+    <value>O campo {0} deve ser uma hora menor ou igual a atual</value>
   </data>
 </root>
