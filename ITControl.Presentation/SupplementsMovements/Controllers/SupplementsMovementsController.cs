@@ -5,6 +5,7 @@ using ITControl.Communication.SupplementsMovements.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.SupplementsMovements.Controllers;
+
 [Route("supplements-movements")]
 [ApiController]
 public class SupplementsMovementsController(

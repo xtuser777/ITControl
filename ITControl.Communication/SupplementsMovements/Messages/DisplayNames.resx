@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Quantity" xml:space="preserve">
+        <value>quantidade</value>
+    </data>
+    <data name="MovementDate" xml:space="preserve">
+        <value>data do movimento</value>
+    </data>
+    <data name="Observation" xml:space="preserve">
+        <value>observação</value>
+    </data>
+    <data name="SupplementId" xml:space="preserve">
+        <value>suplemento</value>
+    </data>
+    <data name="UserId" xml:space="preserve">
+        <value>usuário</value>
+    </data>
+    <data name="UnitId" xml:space="preserve">
+        <value>unidade</value>
+    </data>
+    <data name="DepartmentId" xml:space="preserve">
+        <value>secretaria</value>
+    </data>
+    <data name="DivisionId" xml:space="preserve">
+        <value>divisão</value>
+    </data>
+</root>

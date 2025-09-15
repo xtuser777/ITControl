@@ -28,7 +28,7 @@ namespace ITControl.Application.Shared.Messages.Translate {
         internal static System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.Equals(null, resourceMan)) {
-                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("ITControl.Application.Shared.Messages.Translate.Pages", typeof(PagesNames).Assembly);
+                    System.Resources.ResourceManager temp = new System.Resources.ResourceManager("ITControl.Application.Shared.Messages.Translate.PagesNames", typeof(PagesNames).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
