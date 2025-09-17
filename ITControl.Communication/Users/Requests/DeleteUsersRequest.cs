@@ -1,4 +1,5 @@
 using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Users.Requests;
@@ -6,8 +7,7 @@ namespace ITControl.Communication.Users.Requests;
 public class DeleteUsersRequest
 {
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "usuário logado")]
+    [Display(Name = nameof(LoggedUserId), ResourceType = typeof(DisplayNames))]
     public Guid LoggedUserId { get; set; }
 }

@@ -1,6 +1,5 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Communication.Shared.Converters;
-using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Systems.Requests;
@@ -9,34 +8,32 @@ public class CreateSystemsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = "nome")]
+    [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(50)]
-    [Display(Name = "versão")]
+    [Display(Name = nameof(Version), ResourceType = typeof(DisplayNames))]
     public string Version { get; set; } = string.Empty;
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
     [DateGreaterThanCurrent]
-    [Display(Name = "data de implementação")]
+    [Display(Name = nameof(ImplementedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly ImplementedAt { get; set; }
 
-    [DateOnlyNullableConverter]
     [DateValue]
-    [DateGreatherThan("ImplementedAt")]
-    [Display(Name = "data de desativação")]
+    [DateGreatherThan(nameof(ImplementedAt))]
+    [Display(Name = nameof(EndedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? EndedAt { get; set; }
 
     [RequiredField]
     [BoolValue]
-    [Display(Name = "próprio")]
+    [Display(Name = nameof(Own), ResourceType = typeof(DisplayNames))]
     public bool Own { get; set; }
 
-    [GuidNullableConverter]
     [GuidValue]
-    [Display(Name = "identificador do contrato")]
+    [ContractConnection]
+    [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
 }

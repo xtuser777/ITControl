@@ -1,4 +1,5 @@
 using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Users.Requests;
@@ -6,8 +7,8 @@ namespace ITControl.Communication.Users.Requests;
 public class CreateUsersSystemsRequest
 {
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "sistema")]
+    [SystemConnection]
+    [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid SystemId { get; set; }
 }

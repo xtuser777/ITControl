@@ -13,7 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.Converters.Add(new GuidConverter()));
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new GuidConverter());
+    options.JsonSerializerOptions.Converters.Add(new GuidNullableConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new DateOnlyNullableConverter());
+    options.JsonSerializerOptions.Converters.Add(new TimeOnlyConverter());
+    options.JsonSerializerOptions.Converters.Add(new TimeOnlyNullableConverter());
+});
 
 builder.Services.AddCors(options =>
 {

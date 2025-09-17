@@ -61,7 +61,7 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O {0} com o id &apos;{1}&apos; não foi encontrado..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O(A) {0} com o id &apos;{1}&apos; não foi encontrado..
         /// </summary>
         public static string ConnectionNotFound {
             get {

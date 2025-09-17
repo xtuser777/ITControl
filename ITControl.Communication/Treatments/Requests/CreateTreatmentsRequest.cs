@@ -1,6 +1,8 @@
 ﻿using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Treatments.Enums;
+using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Treatments.Requests;
 
@@ -8,64 +10,60 @@ public class CreateTreatmentsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = "descrição")]
+    [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
     [DatePresentPast]
-    [Display(Name = "data de início")]
+    [Display(Name = nameof(StartedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly StartedAt { get; set; }
 
-    [DateOnlyNullableConverter]
     [DateValue]
-    [DateGreatherThan("StartedAt")]
-    [Display(Name = "data de término")]
+    [DateGreatherThan(nameof(StartedAt))]
+    [Display(Name = nameof(EndedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? EndedAt { get; set; }
 
     [RequiredField]
-    [TimeOnlyConverter]
     [TimeValue]
     [TimePresentPast]
-    [Display(Name = "hora de início")]
+    [Display(Name = nameof(StartedIn), ResourceType = typeof(DisplayNames))]
     public TimeOnly StartedIn { get; set; }
 
-    [TimeOnlyNullableConverter]
     [TimeValue]
-    [Display(Name = "hora de término")]
+    [Display(Name = nameof(EndedIn), ResourceType = typeof(DisplayNames))]
     public TimeOnly? EndedIn { get; set; }
 
     [RequiredField]
     [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateStatus))]
-    [Display(Name = "status")]
+    [Display(Name = nameof(Status), ResourceType = typeof(DisplayNames))]
     public string Status { get; set; } = string.Empty;
 
     [RequiredField]
     [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateType))]
-    [Display(Name = "tipo")]
+    [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string Type { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(255)]
-    [Display(Name = "observação")]
+    [Display(Name = nameof(Observation), ResourceType = typeof(DisplayNames))]
     public string Observation { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(50)]
-    [Display(Name = "protocolo externo")]
+    [Display(Name = nameof(ExternalProtocol), ResourceType = typeof(DisplayNames))]
     public string ExternalProtocol { get; set; } = string.Empty;
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "chamado")]
+    [CallConnection]
+    [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
     public Guid CallId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
     public static ValidationResult? ValidateStatus(string status, ValidationContext context)
@@ -74,7 +72,7 @@ public class CreateTreatmentsRequest
         if (!allowedStatuses.Contains(status))
         { 
             var statuses = string.Join(", ", allowedStatuses);
-            var errorMessage = $"O campo {context.DisplayName} deve ser um dos seguintes valores: {statuses}.";
+            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, statuses);
             return new ValidationResult(errorMessage);
         }
         return ValidationResult.Success;
@@ -86,7 +84,7 @@ public class CreateTreatmentsRequest
         if (!allowedTypes.Contains(type))
         {
             var types = string.Join(", ", allowedTypes);
-            var errorMessage = $"O campo {context.DisplayName} deve ser um dos seguintes valores: {types}.";
+            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types);
             return new ValidationResult(errorMessage);
         }
         return ValidationResult.Success;

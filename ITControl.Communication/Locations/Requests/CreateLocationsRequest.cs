@@ -1,3 +1,4 @@
+using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,29 +8,29 @@ public class CreateLocationsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = "descrição")]
+    [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "unidade")]
+    [UnitConnection]
+    [Display(Name = nameof(UnitId), ResourceType = typeof(DisplayNames))]
     public Guid UnitId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "secretaria")]
+    [DepartmentConnection]
+    [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
     public Guid DepartmentId { get; set; }
 
-    [GuidNullableConverter]
     [GuidValue]
-    [Display(Name = "divisão")]
+    [DivisionConnection]
+    [Display(Name = nameof(DivisionId), ResourceType = typeof(DisplayNames))]
     public Guid? DivisionId { get; set; }
 }

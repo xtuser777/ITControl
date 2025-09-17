@@ -117,78 +117,184 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="MAX_LENGTH" xml:space="preserve">
-    <value>O campo {0} deve conter até {1} caracteres</value>
-    <comment>Verifica se o campo especificado tem a quantidade máxima de caracteres exigida</comment>
+  <data name="Active" xml:space="preserve">
+    <value>ativo</value>
   </data>
-  <data name="MIN_LENGTH" xml:space="preserve">
-    <value>O campo {0} deve conter no mínimo {1} caracteres</value>
-    <comment>Verifica se o campo especificado tem o mínimo de caracteres exigidos</comment>
+  <data name="AddressNumber" xml:space="preserve">
+    <value>número</value>
   </data>
-  <data name="POSITIVE_VALUE" xml:space="preserve">
-    <value>O campo {0} deve ser um número positivo</value>
-    <comment>Verifica se o campo especificado contém apenas números positivos a partir de 1</comment>
+  <data name="Alias" xml:space="preserve">
+    <value>sigla</value>
   </data>
-  <data name="REQUIRED" xml:space="preserve">
-    <value>O campo {0} é obrigatório</value>
-    <comment>Verifica se o campo específico é nulo ou vazio</comment>
+  <data name="Brand" xml:space="preserve">
+    <value>marca</value>
   </data>
-  <data name="VALID_EMAIL" xml:space="preserve">
-    <value>O campo {0} deve ser um e-mail válido</value>
-    <comment>Verifica se o campo especificado é um e-mail válido</comment>
+  <data name="CallId" xml:space="preserve">
+    <value>chamado</value>
   </data>
-  <data name="INVALID_DATE" xml:space="preserve">
-    <value>O campo {0} deve ser uma data válida</value>
+  <data name="Cellphone" xml:space="preserve">
+    <value>celular</value>
   </data>
-  <data name="INVALID_TIME" xml:space="preserve">
-    <value>O campo {0} deve ser um horário válido</value>
+  <data name="Contacts" xml:space="preserve">
+    <value>contatos</value>
   </data>
-  <data name="DATE_GREATER_THAN_CURRENT" xml:space="preserve">
-    <value>O campo {0} deve ser maior que a data atual</value>
+  <data name="Content" xml:space="preserve">
+    <value>conteúdo</value>
   </data>
-  <data name="DATE_GREATER_THAN" xml:space="preserve">
-    <value>O campo {0} deve ser uma data maior que {1}</value>
+  <data name="ContractId" xml:space="preserve">
+    <value>contrato</value>
   </data>
-  <data name="TIME_GREATER_THAN_CURRENT" xml:space="preserve">
-    <value>O campo {0} deve ser maior que o horário atual</value>
+  <data name="DepartmentId" xml:space="preserve">
+    <value>secretaria</value>
   </data>
-  <data name="INVALID_GUID" xml:space="preserve">
-    <value>O campo {0} deve ser um valor UUID válido</value>
+  <data name="Description" xml:space="preserve">
+    <value>descrição</value>
   </data>
-  <data name="INVALID_BOOLEAN" xml:space="preserve">
-    <value>O campo {0} deve ser um valor booleano válido</value>
+  <data name="DivisionId" xml:space="preserve">
+    <value>divisão</value>
   </data>
-  <data name="DATE_PRESENT_PAST" xml:space="preserve">
-    <value>O campo {0} deve ser uma data menor ou igual a atual</value>
+  <data name="Email" xml:space="preserve">
+    <value>e-mail</value>
   </data>
-  <data name="Parser_ToGuid_Invalid_GUID_format___0_" xml:space="preserve">
-    <value>Invalid GUID format: {0}</value>
+  <data name="EndedAt" xml:space="preserve">
+    <value>data de encerramento</value>
   </data>
-  <data name="Parser_ToEnum_Invalid_ENUM_value___0_" xml:space="preserve">
-    <value>Invalid ENUM value: {0}</value>
+  <data name="EndedIn" xml:space="preserve">
+    <value>hora de encerramento</value>
   </data>
-  <data name="Parser_ToDateOnly_Invalid_DateOnly_format___0_" xml:space="preserve">
-    <value>Invalid DateOnly format: {0}</value>
+  <data name="Enrollment" xml:space="preserve">
+    <value>matrícula</value>
   </data>
-  <data name="Parser_ToTimeOnly_Invalid_TimeOnly_format___0_" xml:space="preserve">
-    <value>Invalid TimeOnly format: {0}</value>
+  <data name="EquipmentId" xml:space="preserve">
+    <value>equipamento</value>
   </data>
-  <data name="Parser_ToBool_Invalid_boolean_format___0_" xml:space="preserve">
-    <value>Invalid boolean format: {0}</value>
+  <data name="Equipments" xml:space="preserve">
+    <value>equipamentos</value>
   </data>
-  <data name="ConnectionNotFound" xml:space="preserve">
-    <value>O(A) {0} com o id '{1}' não foi encontrado.</value>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>tempo estimado</value>
   </data>
-  <data name="MustBeAOneOfTheseValues" xml:space="preserve">
-    <value>O campo {0} deve ser um dos seguintes valores: {1}.</value>
+  <data name="ExternalProtocol" xml:space="preserve">
+    <value>protocolo externo</value>
   </data>
-  <data name="UserConnectionNotFound" xml:space="preserve">
-    <value>O usuário com o id {0} não foi encontrado.</value>
+  <data name="ImplementedAt" xml:space="preserve">
+    <value>data de implementação</value>
   </data>
-  <data name="UsersRepositoryNotAvailable" xml:space="preserve">
-    <value>O repositório de usuários não está disponível.</value>
+  <data name="Ip" xml:space="preserve">
+    <value>endereço IP</value>
   </data>
-  <data name="TimePresentPast" xml:space="preserve">
-    <value>O campo {0} deve ser uma hora menor ou igual a atual</value>
+  <data name="IsRead" xml:space="preserve">
+    <value>lida</value>
+  </data>
+  <data name="LocationId" xml:space="preserve">
+    <value>local</value>
+  </data>
+  <data name="LoggedUserId" xml:space="preserve">
+    <value>usuário logado</value>
+  </data>
+  <data name="Mac" xml:space="preserve">
+    <value>endereço MAC</value>
+  </data>
+  <data name="Model" xml:space="preserve">
+    <value>modelo</value>
+  </data>
+  <data name="MovementDate" xml:space="preserve">
+    <value>data do movimento</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>nome</value>
+  </data>
+  <data name="Neighborhood" xml:space="preserve">
+    <value>bairro</value>
+  </data>
+  <data name="ObjectName" xml:space="preserve">
+    <value>objeto</value>
+  </data>
+  <data name="Observation" xml:space="preserve">
+    <value>observação</value>
+  </data>
+  <data name="Own" xml:space="preserve">
+    <value>próprio</value>
+  </data>
+  <data name="PageId" xml:space="preserve">
+    <value>página</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>senha</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>telefone</value>
+  </data>
+  <data name="PositionId" xml:space="preserve">
+    <value>cargo</value>
+  </data>
+  <data name="PostalCode" xml:space="preserve">
+    <value>CEP</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>quantidade</value>
+  </data>
+  <data name="Reason" xml:space="preserve">
+    <value>motivo</value>
+  </data>
+  <data name="Rented" xml:space="preserve">
+    <value>alugado</value>
+  </data>
+  <data name="RoleId" xml:space="preserve">
+    <value>perfil</value>
+  </data>
+  <data name="RolesPages" xml:space="preserve">
+    <value>páginas</value>
+  </data>
+  <data name="ScheduledAt" xml:space="preserve">
+    <value>data agendada</value>
+  </data>
+  <data name="ScheduledIn" xml:space="preserve">
+    <value>hora agendada</value>
+  </data>
+  <data name="StartedAt" xml:space="preserve">
+    <value>data de início</value>
+  </data>
+  <data name="StartedIn" xml:space="preserve">
+    <value>hora de início</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>status</value>
+  </data>
+  <data name="Stock" xml:space="preserve">
+    <value>quantidade em estoque</value>
+  </data>
+  <data name="StreetName" xml:space="preserve">
+    <value>logradouro</value>
+  </data>
+  <data name="SupplementId" xml:space="preserve">
+    <value>suplemento</value>
+  </data>
+  <data name="SystemId" xml:space="preserve">
+    <value>sistema</value>
+  </data>
+  <data name="Systems" xml:space="preserve">
+    <value>sistemas</value>
+  </data>
+  <data name="Tag" xml:space="preserve">
+    <value>etiqueta</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>título</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>type</value>
+  </data>
+  <data name="UnitId" xml:space="preserve">
+    <value>unidade</value>
+  </data>
+  <data name="UserId" xml:space="preserve">
+    <value>usuário</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>nome de usuário</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>versão</value>
   </data>
 </root>

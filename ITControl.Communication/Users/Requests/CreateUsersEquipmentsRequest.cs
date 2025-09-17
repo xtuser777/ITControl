@@ -1,24 +1,23 @@
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Resources;
 
 namespace ITControl.Communication.Users.Requests;
 
 public class CreateUsersEquipmentsRequest
 {
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "equipamento")]
+    [EquipmentConnection]
+    [Display(Name = nameof(EquipmentId), ResourceType = typeof(DisplayNames))]
     public Guid EquipmentId { get; set; }
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
-    [Display(Name = "data de início")]
+    [Display(Name = nameof(StartedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly StartedAt { get; set; }
 
-    [DateOnlyNullableConverter]
     [DateValue]
-    [Display(Name = "data de término")]
+    [Display(Name = nameof(EndedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? EndedAt { get; set; }
 }

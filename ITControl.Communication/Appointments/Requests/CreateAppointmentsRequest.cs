@@ -1,3 +1,4 @@
+using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,39 +8,40 @@ public class CreateAppointmentsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = "descrição")]
+    [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
     [DateGreaterThanCurrent]
-    [Display(Name = "data agendada")]
+    [Display(Name = nameof(ScheduledAt), ResourceType = typeof(DisplayNames))]
     public DateOnly ScheduledAt { get; set; }
 
     [RequiredField]
-    [TimeOnlyConverter]
     [TimeValue]
-    [TimeGreaterThanCurrent("ScheduledAt")]
-    [Display(Name = "hora agendada")]
+    [TimeGreaterThanCurrent(nameof(ScheduledAt))]
+    [Display(Name = nameof(ScheduledIn), ResourceType = typeof(DisplayNames))]
     public TimeOnly ScheduledIn { get; set; }
 
     [StringMaxLength(255)]
-    [Display(Name = "observação")]
+    [Display(Name = nameof(Observation), ResourceType = typeof(DisplayNames))]
     public string Observation { get; set; } = string.Empty;
 
     [RequiredField]
     [GuidValue]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
     [RequiredField]
     [GuidValue]
-    [Display(Name = "chamado")]
+    [CallConnection]
+    [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
     public Guid CallId { get; set; }
 
     [RequiredField]
     [GuidValue]
-    [Display(Name = "local")]
+    [LocationConnection]
+    [Display(Name = nameof(LocationId), ResourceType = typeof(DisplayNames))]
     public Guid LocationId { get; set; }
 }

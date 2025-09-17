@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ITControl.Communication.SupplementsMovements.Messages {
+namespace ITControl.Communication.SupplementsMovements.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace ITControl.Communication.SupplementsMovements.Messages {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ITControl.Communication.SupplementsMovements.Messages.Errors", typeof(Errors).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ITControl.Communication.SupplementsMovements.Resources.Errors", typeof(Errors).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

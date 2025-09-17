@@ -1,10 +1,7 @@
 ﻿using ITControl.Communication.Shared.Attributes;
-using ITControl.Communication.SupplementsMovements.Messages;
-using ITControl.Domain.Departments.Interfaces;
-using ITControl.Domain.Divisions.Interfaces;
+using ITControl.Communication.Shared.Resources;
+using ITControl.Communication.SupplementsMovements.Resources;
 using ITControl.Domain.Supplements.Interfaces;
-using ITControl.Domain.Units.Interfaces;
-using ITControl.Domain.Users.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.SupplementsMovements.Requests;
@@ -13,53 +10,47 @@ public class CreateSupplementsMovementsRequest
 {
     [RequiredField]
     [IntegerPositiveValue]
-    [Display(Name = "quantidade")]
+    [Display(Name = nameof(Quantity), ResourceType = typeof(DisplayNames))]
     public int Quantity { get; set; }
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
     [DatePresentPast]
-    [Display(Name = "data do movimento")]
+    [Display(Name = nameof(MovementDate), ResourceType = typeof(DisplayNames))]
     public DateOnly MovementDate { get; set; }
 
     [StringMaxLength(255)]
-    [Display(Name = "observação")]
+    [Display(Name = nameof(Observation), ResourceType = typeof(DisplayNames))]
     public string Observation { get; set; } = string.Empty;
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [CustomValidation(typeof(CreateSupplementsMovementsRequest), nameof(ValidateSupplementId))]
-    [Display(Name = "suplemento")]
+    [SupplementConnection]
+    [Display(Name = nameof(SupplementId), ResourceType = typeof(DisplayNames))]
     public Guid SupplementId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [CustomValidation(typeof(CreateSupplementsMovementsRequest), nameof(ValidateUserId))]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [CustomValidation(typeof(CreateSupplementsMovementsRequest), nameof(ValidateUnitId))]
-    [Display(Name = "unidade")]
+    [UnitConnection]
+    [Display(Name = nameof(UnitId), ResourceType = typeof(DisplayNames))]
     public Guid UnitId { get; set; }
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [CustomValidation(typeof(CreateSupplementsMovementsRequest), nameof(ValidateDepartmentId))]
-    [Display(Name = "secretaria")]
+    [DepartmentConnection]
+    [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
     public Guid DepartmentId { get; set; }
 
     [RequiredField]
-    [GuidNullableConverter]
     [GuidValue]
-    [CustomValidation(typeof(CreateSupplementsMovementsRequest), nameof(ValidateDivisionId))]
-    [Display(Name = "divisão")]
+    [DivisionConnection]
+    [Display(Name = nameof(DivisionId), ResourceType = typeof(DisplayNames))]
     public Guid? DivisionId { get; set; }
 
     public static ValidationResult? ValidateQuantity(int quantity, ValidationContext context)
@@ -72,85 +63,5 @@ public class CreateSupplementsMovementsRequest
             return new ValidationResult(string.Format(Errors.QuantityOverStock, context.DisplayName, quantity, supplement.QuantityInStock));
         }
         return ValidationResult.Success;
-    }
-
-    public static ValidationResult? ValidateSupplementId(Guid supplementId, ValidationContext validationContext)
-    {
-        if (supplementId == Guid.Empty)
-            return ValidationResult.Success;
-        var supplementsRepository = (ISupplementsRepository)validationContext.GetService(typeof(ISupplementsRepository))!;
-        var exists = supplementsRepository.ExistsAsync(id: supplementId).Result;
-        if (!exists)
-        {
-            return new ValidationResult(string.Format(Errors.SupplementNotFound, supplementId));
-        }
-        else
-        {
-            return ValidationResult.Success;
-        }
-    }
-
-    public static ValidationResult? ValidateUserId(Guid userId, ValidationContext validationContext)
-    {
-        if (userId == Guid.Empty)
-            return ValidationResult.Success;
-        var usersRepository = (IUsersRepository)validationContext.GetService(typeof(IUsersRepository))!;
-        var exists = usersRepository.ExistsAsync(id: userId).Result;
-        if (!exists)
-        {
-            return new ValidationResult(string.Format(Errors.UserNotFound, userId));
-        }
-        else
-        {
-            return ValidationResult.Success;
-        }
-    }
-
-    public static ValidationResult? ValidateUnitId(Guid unitId, ValidationContext validationContext)
-    {
-        if (unitId == Guid.Empty)
-            return ValidationResult.Success;
-        var unitsRepository = (IUnitsRepository)validationContext.GetService(typeof(IUnitsRepository))!;
-        var exists = unitsRepository.ExistsAsync(id: unitId).Result;
-        if (!exists)
-        {
-            return new ValidationResult(string.Format(Errors.UnitNotFound, unitId));
-        }
-        else
-        {
-            return ValidationResult.Success;
-        }
-    }
-
-    public static ValidationResult? ValidateDepartmentId(Guid departmentId, ValidationContext validationContext)
-    {
-        if (departmentId == Guid.Empty)
-            return ValidationResult.Success;
-        var departmentsRepository = (IDepartmentsRepository)validationContext.GetService(typeof(IDepartmentsRepository))!;
-        var exists = departmentsRepository.ExistsAsync(id: departmentId).Result;
-        if (!exists)
-        {
-            return new ValidationResult(string.Format(Errors.DepartmentNotFound, departmentId));
-        }
-        else
-        {
-            return ValidationResult.Success;
-        }
-    }
-
-    public static ValidationResult? ValidateDivisionId(Guid? divisionId, ValidationContext validationContext)
-    {
-        if (!divisionId.HasValue) return ValidationResult.Success;
-        if (divisionId == Guid.Empty) return ValidationResult.Success;
-        var divisionsRepository = (IDivisionsRepository)validationContext.GetService(typeof(IDivisionsRepository))!;
-        var exists = divisionsRepository.ExistsAsync(id: divisionId.Value).Result;
-        if (!exists)
-        {
-            return new ValidationResult(string.Format(Errors.DivisionNotFound, divisionId));
-        }
-        else
-        {
-            return ValidationResult.Success;
-        }
     }
 }

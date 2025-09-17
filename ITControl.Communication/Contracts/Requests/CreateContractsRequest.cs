@@ -1,4 +1,5 @@
 using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Contracts.Requests;
@@ -7,23 +8,21 @@ public class CreateContractsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = "objeto")]
+    [Display(Name = nameof(ObjectName), ResourceType = typeof(DisplayNames))]
     public string ObjectName { get; set; } = string.Empty;
 
     [RequiredField]
-    [DateOnlyConverter]
     [DateValue]
     [DatePresentPast]
-    [Display(Name = "início")]
+    [Display(Name = nameof(StartedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly StartedAt { get; set; }
 
-    [DateOnlyNullableConverter]
     [DateValue]
-    [DateGreatherThan("StartedAt")]
-    [Display(Name = "fim")]
+    [DateGreatherThan(nameof(StartedAt))]
+    [Display(Name = nameof(EndedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? EndedAt { get; set; }
 
     [RequiredField]
-    [Display(Name = "contatos")]
+    [Display(Name = nameof(Contacts), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateContractsContactsRequest> Contacts { get; set; } = [];
 }

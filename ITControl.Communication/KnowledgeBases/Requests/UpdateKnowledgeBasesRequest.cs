@@ -1,9 +1,9 @@
-﻿using ITControl.Communication.Shared.Attributes;
+﻿using ITControl.Communication.Shared.Resources;
+using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Shared.Utils;
-using ITControl.Domain.Users.Interfaces;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.KnowledgeBases.Requests;
@@ -11,26 +11,25 @@ namespace ITControl.Communication.KnowledgeBases.Requests;
 public class UpdateKnowledgeBasesRequest
 {
     [StringMaxLength(100)]
-    [Display(Name = "título")]
+    [Display(Name = nameof(Title), ResourceType = typeof(DisplayNames))]
     public string? Title { get; set; } = string.Empty;
 
-    [Display(Name = "conteúdo")]
+    [StringMinLength(1)]
+    [Display(Name = nameof(Content), ResourceType = typeof(DisplayNames))]
     public string? Content { get; set; } = string.Empty;
 
-    [TimeOnlyConverter]
     [TimeValue]
-    [Display(Name = "tempo estimado")]
+    [Display(Name = nameof(EstimatedTime), ResourceType = typeof(DisplayNames))]
     public TimeOnly? EstimatedTime { get; set; }
 
     [StringMaxLength(50)]
     [CustomValidation(typeof(UpdateKnowledgeBasesRequest), nameof(ValidateReason))]
-    [Display(Name = "motivo")]
+    [Display(Name = nameof(Reason), ResourceType = typeof(DisplayNames))]
     public string? Reason { get; set; } = string.Empty;
 
-    [GuidConverter]
     [GuidValue]
-    [CustomValidation(typeof(UpdateKnowledgeBasesRequest), nameof(ValidateUserId))]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? UserId { get; set; }
 
     public static implicit operator UpdateKnowledgeBaseParams(UpdateKnowledgeBasesRequest request) =>
@@ -52,23 +51,5 @@ public class UpdateKnowledgeBasesRequest
         }
         var enumValues = string.Join(", ", Enum.GetNames(typeof(CallReason)));
         return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
-    }
-
-    public static ValidationResult? ValidateUserId(Guid? userId, ValidationContext context)
-    {
-        if (userId == null) return ValidationResult.Success;
-        if (userId == Guid.Empty)
-        {
-            return ValidationResult.Success;
-        }
-        var repository = (IUsersRepository?)context.GetService(typeof(IUsersRepository));
-        if (repository == null)
-        {
-            return new ValidationResult(Errors.UsersRepositoryNotAvailable);
-        }
-        var userExists = repository.ExistsAsync(id: userId, active: true).GetAwaiter().GetResult();
-        return userExists
-            ? ValidationResult.Success
-            : new ValidationResult(string.Format(Errors.UserConnectionNotFound, userId));
     }
 }

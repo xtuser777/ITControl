@@ -1,5 +1,3 @@
-using ITControl.Communication.Shared.Helpers;
-using ITControl.Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +12,6 @@ public class PermissionsFilter : Attribute, IResourceFilter
     {
         try
         {
-            ModelStateHelper.ModelState = context.ModelState;
             var controller = context.RouteData.Values["controller"]?.ToString() ?? "";
             context.HttpContext.Request.Headers.TryGetValue("Authorization", out var authorization);
             var tokenString = authorization.ToString().Split(' ')[1];

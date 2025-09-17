@@ -1,6 +1,8 @@
 ﻿using ITControl.Communication.Shared.Attributes;
-using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Shared.Messages;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Calls.Requests;
 
@@ -8,33 +10,33 @@ public class CreateCallsRequest
 {
     [RequiredField]
     [StringMaxLength(64)]
-    [Display(Name = "título")]
+    [Display(Name = nameof(Title), ResourceType = typeof(DisplayNames))]
     public string Title { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(255)]
-    [Display(Name = "descrição")]
+    [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
     [CustomValidation(typeof(CreateCallsRequest), nameof(ValidateReason))]
-    [Display(Name = "motivo")]
+    [Display(Name = nameof(Reason), ResourceType = typeof(DisplayNames))]
     public string Reason { get; set; } = string.Empty;
 
     [RequiredField]
-    [GuidConverter]
     [GuidValue]
-    [Display(Name = "usuário")]
+    [UserConnection]
+    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    [GuidNullableConverter]
     [GuidValue]
-    [Display(Name = "equipamento")]
+    [EquipmentConnection]
+    [Display(Name = nameof(EquipmentId), ResourceType = typeof(DisplayNames))]
     public Guid? EquipmentId { get; set; }
 
-    [GuidNullableConverter]
     [GuidValue]
-    [Display(Name = "sistema")]
+    [SystemConnection]
+    [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid? SystemId { get; set; }
 
     public static ValidationResult? ValidateReason(string reason, ValidationContext context)
@@ -43,7 +45,7 @@ public class CreateCallsRequest
         if (!validReasons.Contains(reason))
         {
             var reasons = string.Join(", ", validReasons);
-            return new ValidationResult($"O campo {context.DisplayName} deve ser um dos seguintes valores: {reasons}.");
+            return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, reasons));
         }
         return ValidationResult.Success;
     }
