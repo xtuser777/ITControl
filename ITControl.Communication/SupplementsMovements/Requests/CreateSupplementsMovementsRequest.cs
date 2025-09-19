@@ -57,7 +57,7 @@ public class CreateSupplementsMovementsRequest
     {
         var instance = (CreateSupplementsMovementsRequest)context.ObjectInstance;
         var supplementsRepository = (ISupplementsRepository)context.GetService(typeof(ISupplementsRepository))!;
-        var supplement = supplementsRepository.FindOneAsync(instance.SupplementId).Result;
+        var supplement = supplementsRepository.FindOneAsync(instance.SupplementId).GetAwaiter().GetResult();
         if (supplement != null && quantity > supplement.QuantityInStock)
         {
             return new ValidationResult(string.Format(Errors.QuantityOverStock, context.DisplayName, quantity, supplement.QuantityInStock));

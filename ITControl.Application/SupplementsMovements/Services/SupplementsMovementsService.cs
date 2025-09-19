@@ -78,6 +78,7 @@ public class SupplementsMovementsService(
             divisionId: request.DivisionId);
         using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SupplementsMovementsRepository.CreateAsync(supplementMovement);
+        await DecrementSupplementStock(request.SupplementId, request.Quantity);
         await unitOfWork.Commit(transaction);
 
         return supplementMovement;
@@ -87,7 +88,30 @@ public class SupplementsMovementsService(
     {
         var supplementMovement = await FindOneAsync(id);
         using var transaction = unitOfWork.BeginTransaction;
+        await AddSupplementStock(supplementMovement.SupplementId, supplementMovement.Quantity);
         unitOfWork.SupplementsMovementsRepository.Delete(supplementMovement);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task DecrementSupplementStock(Guid supplementId, int quantity)
+    {
+        var supplement = await unitOfWork.SupplementsRepository.FindOneAsync(supplementId);
+        if (supplement != null)
+        {
+            var newQuantity = supplement.QuantityInStock - quantity;
+            supplement.Update(quantityInStock: newQuantity);
+            unitOfWork.SupplementsRepository.Update(supplement);
+        }
+    }
+
+    private async Task AddSupplementStock(Guid supplementId, int quantity)
+    {
+        var supplement = await unitOfWork.SupplementsRepository.FindOneAsync(supplementId);
+        if (supplement != null)
+        {
+            var newQuantity = supplement.QuantityInStock + quantity;
+            supplement.Update(quantityInStock: newQuantity);
+            unitOfWork.SupplementsRepository.Update(supplement);
+        }
     }
 }
