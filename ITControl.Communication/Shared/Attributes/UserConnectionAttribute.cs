@@ -13,7 +13,7 @@ public class UserConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var usersRepository = (IUsersRepository)validationContext.GetService(typeof(IUsersRepository))!;
-        var exists = usersRepository.ExistsAsync(id: userId).Result;
+        var exists = usersRepository.ExistsAsync(id: userId).GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, userId));
 

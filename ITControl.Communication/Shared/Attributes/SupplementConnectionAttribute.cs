@@ -13,8 +13,8 @@ public class SupplementConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var supplementRepository = (ISupplementsRepository)validationContext.GetService(typeof(ISupplementsRepository))!;
-        var exists = supplementRepository.ExistsAsync(id: supplementId);
-        if (exists == null)
+        var exists = supplementRepository.ExistsAsync(id: supplementId).GetAwaiter().GetResult();
+        if (exists == false)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, supplementId));
         }

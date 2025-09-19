@@ -13,7 +13,7 @@ public class LocationConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var locationsRepository = (ILocationsRepository)validationContext.GetService(typeof(ILocationsRepository))!;
-        bool locationExists = locationsRepository.ExistsAsync(id: locationId).Result;
+        bool locationExists = locationsRepository.ExistsAsync(id: locationId).GetAwaiter().GetResult();
         if (!locationExists)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, locationId));

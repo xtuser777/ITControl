@@ -13,7 +13,7 @@ public class PageConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var pagesRepository = (IPagesRepository)validationContext.GetService(typeof(IPagesRepository))!;
-        bool pageExists = pagesRepository.ExistsAsync(id: pageId).Result;
+        bool pageExists = pagesRepository.ExistsAsync(id: pageId).GetAwaiter().GetResult();
         if (!pageExists)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, pageId));
