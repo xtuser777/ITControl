@@ -12,7 +12,8 @@ public class PermissionsFilter : Attribute, IResourceFilter
     {
         try
         {
-            var controller = context.RouteData.Values["controller"]?.ToString() ?? "";
+            var path = context.HttpContext.Request.Path.Value ?? throw new UnauthorizedAccessException();
+            var controller = path.Split('/')[1];
             context.HttpContext.Request.Headers.TryGetValue("Authorization", out var authorization);
             var tokenString = authorization.ToString().Split(' ')[1];
             var tokenHandler = new JwtSecurityTokenHandler();
