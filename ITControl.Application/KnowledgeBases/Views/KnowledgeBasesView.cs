@@ -27,7 +27,11 @@ public class KnowledgeBasesView : IKnowledgeBasesView
             Title = knowledgeBase.Title,
             Content = knowledgeBase.Content,
             EstimatedTime = knowledgeBase.EstimatedTime,
-            Reason = knowledgeBase.Reason.GetDisplayValue(),
+            Reason = new () 
+            { 
+                Value = knowledgeBase.Reason.ToString(), 
+                DisplayValue = knowledgeBase.Reason.GetDisplayValue() 
+            },
             UserId = knowledgeBase.UserId,
             User = knowledgeBase.User == null ? null : new FindOneKnowledgeBasesUserResponse
             {

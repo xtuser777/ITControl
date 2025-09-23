@@ -29,6 +29,10 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Pages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Update="Shared\Messages\Translate\PagesNames.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>PagesNames.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
     <ItemGroup>
@@ -51,6 +55,11 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>Pages.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Messages\Translate\PagesNames.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PagesNames.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 

@@ -1,4 +1,6 @@
-﻿namespace ITControl.Communication.KnowledgeBases.Responses;
+﻿using ITControl.Communication.Shared.Responses;
+
+namespace ITControl.Communication.KnowledgeBases.Responses;
 
 public class FindOneKnowledgeBasesResponse
 {
@@ -6,7 +8,7 @@ public class FindOneKnowledgeBasesResponse
     public string Title { get; set; } = string.Empty;
     public string Content { get; set; } = string.Empty;
     public TimeOnly EstimatedTime { get; set; }
-    public string Reason { get; set; } = string.Empty;
+    public TranslatableField Reason { get; set; } = null!;
     public Guid UserId { get; set; }
     public FindOneKnowledgeBasesUserResponse? User { get; set; }
 }

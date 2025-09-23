@@ -23,6 +23,10 @@ public abstract class PagesTranslator
             "appointments" => PagesNames.Appointments,
             "treatments" => PagesNames.Treatments,
             "notifications" => PagesNames.Notifications,
+            "profile" => PagesNames.Profile,
+            "supplements" => PagesNames.Supplements,
+            "supplements-movements" => PagesNames.SupplementsMovements,
+            "knowledge-bases" => PagesNames.KnowledgeBases,
             _ => value,
         };
     }
