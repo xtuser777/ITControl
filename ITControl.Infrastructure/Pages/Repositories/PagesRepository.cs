@@ -7,26 +7,23 @@ namespace ITControl.Infrastructure.Pages.Repositories;
 
 public class PagesRepository(ApplicationDbContext context): IPagesRepository
 {
-    public async Task<Page?> FindOneAsync(Guid id)
+    public async Task<Page?> FindOneAsync(IFindOnePagesRepositoryParams @params)
     {
-        return await context.Pages.FindAsync(id);
+        return await context.Pages.FindAsync(@params.Id);
     }
 
-    public async Task<IEnumerable<Page>> FindManyAsync(
-        string? name = null, 
-        string? orderByName = null, 
-        int? page = null, int? size = null)
+    public async Task<IEnumerable<Page>> FindManyAsync(IFindManyPagesRepositoryParams @params)
     {
         var query = context.Pages.AsNoTracking();
-        if (name != null) query = query.Where(p => p.Name.Contains(name));
-        query = orderByName switch
+        if (@params.Name != null) query = query.Where(p => p.Name.Contains(@params.Name));
+        query = @params.OrderByName switch
         {
             "a" => query.OrderBy(p => p.Name),
             "d" => query.OrderByDescending(p => p.Name),
             _ => query
         };
-        if (page != null && size != null) 
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        if (@params.Page != null && @params.Size != null) 
+            query = query.Skip((@params.Page.Value - 1) * @params.Size.Value).Take(@params.Size.Value);
         
         return await query.ToListAsync();
     }
@@ -46,31 +43,62 @@ public class PagesRepository(ApplicationDbContext context): IPagesRepository
         context.Pages.Remove(page);
     }
 
-    public async Task<int> CountAsync(Guid? id = null, string? name = null)
+    public async Task<int> CountAsync(ICountPagesRepositoryParams @params)
     {
         var query = context.Pages.AsNoTracking();
-        if (id != null) query = query.Where(p => p.Id == id);
-        if (name != null) query = query.Where(p => p.Name.Contains(name));
+        if (@params.Id != null) query = query.Where(p => p.Id == @params.Id);
+        if (@params.Name != null) query = query.Where(p => p.Name.Contains(@params.Name));
         var count = await query.CountAsync();
         
         return count;
     }
 
-    public async Task<bool> ExistsAsync(Guid? id = null, string? name = null)
+    public async Task<bool> ExistsAsync(IExistsPagesRepositoryParams @params)
     {
-        var count = await CountAsync(id, name);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(Guid id, string? name = null)
+    public async Task<bool> ExclusiveAsync(IExclusivePagesRepositoryParams @params)
     {
         var query = context.Pages
             .AsNoTracking()
-            .Where(p => p.Id != id);
-        if (name != null) query = query.Where(p => p.Name.Contains(name));
+            .Where(p => p.Id != @params.Id);
+        if (@params.Name != null) query = query.Where(p => p.Name.Contains(@params.Name));
         var count = await query.CountAsync();
         
         return count > 0;
     }
+}
+
+public class FindOnePagesRepositoryParams : IFindOnePagesRepositoryParams
+{
+    public Guid? Id { get; set; }
+}
+
+public class FindManyPagesRepositoryParams : IFindManyPagesRepositoryParams
+{
+    public string? Name { get; set; }
+    public string? OrderByName { get; set; }
+    public int? Page { get; set; }
+    public int? Size { get; set; }
+}
+
+public class CountPagesRepositoryParams : ICountPagesRepositoryParams
+{
+    public Guid? Id { get; set; }
+    public string? Name { get; set; }
+}
+
+public class ExistsPagesRepositoryParams : IExistsPagesRepositoryParams
+{
+    public Guid? Id { get; set; }
+    public string? Name { get; set; }
+}
+
+public class ExclusivePagesRepositoryParams : IExclusivePagesRepositoryParams
+{
+    public Guid Id { get; set; }
+    public string? Name { get; set; }
 }

@@ -14,9 +14,14 @@ public class Page : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(string? name = null)
+    public void Update(UpdatePageParams @params)
     {
-        Name = name ?? Name;
+        Name = @params.Name ?? Name;
         UpdatedAt = DateTime.Now;
     }
+}
+
+public class UpdatePageParams
+{
+    public string? Name { get; set; }
 }

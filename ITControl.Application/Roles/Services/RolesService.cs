@@ -7,6 +7,7 @@ using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Roles.Entities;
+using ITControl.Infrastructure.Pages.Repositories;
 
 namespace ITControl.Application.Roles.Services;
 
@@ -129,7 +130,8 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 
     private async Task CheckPageExistence(Guid pageId, List<string> messages)
     {
-        var exists = await unitOfWork.PagesRepository.ExistsAsync(id: pageId);
+        var exists = await unitOfWork.PagesRepository.ExistsAsync(
+            new ExistsPagesRepositoryParams() { Id = pageId });
         if (exists == false)
             messages.Add(Errors.PAGE_NOT_FOUND);
     }

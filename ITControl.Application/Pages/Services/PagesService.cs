@@ -6,6 +6,7 @@ using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Infrastructure.Pages.Repositories;
 
 namespace ITControl.Application.Pages.Services;
 
@@ -13,23 +14,14 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 {
     public async Task<IEnumerable<Page>> FindManyAsync(FindManyPagesRequest request)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        var pages = await unitOfWork.PagesRepository.FindManyAsync(
-            name: request.Name,
-            orderByName: request.OrderByName,
-            page,
-            size
-        );
-        
-        return pages;
+        return await unitOfWork.PagesRepository.FindManyAsync((FindManyPagesRepositoryParams)request);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyPagesRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.PagesRepository.CountAsync(name: request.Name);
+        var count = await unitOfWork.PagesRepository.CountAsync((CountPagesRepositoryParams)request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -40,14 +32,12 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
     {
         return await unitOfWork
             .PagesRepository
-            .FindOneAsync(id) 
+            .FindOneAsync(new FindOnePagesRepositoryParams() { Id = id }) 
                ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
-    public async Task<Page?> CreateAsync(CreatePagesRequest request)
+    public async Task<Page?> CreateAsync(Page page)
     {
-        await CheckConflicts(name: request.Name);
-        var page = new Page(name: request.Name);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
@@ -55,11 +45,10 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         return page;
     }
 
-    public async Task UpdateAsync(Guid id, UpdatePagesRequest request)
+    public async Task UpdateAsync(Guid id, UpdatePageParams @params)
     {
-        await CheckConflicts(id, request.Name);
         var page = await FindOneAsync(id);
-        page.Update(name: request.Name);
+        page.Update(@params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);
@@ -71,28 +60,5 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckConflicts(Guid? id = null, string? name = null)
-    {
-        var messages = new List<string>();
-        
-        if (name != null)
-            await CheckNameConflict(id, name, messages);
-        
-        if (messages.Count > 0)
-            throw new ConflictException(string.Join(", ", messages));
-    }
-
-    private async Task CheckNameConflict(Guid? id, string name, List<string> messages)
-    {
-        var exists = id != null 
-            ? await unitOfWork.PagesRepository.ExclusiveAsync((Guid)id, name) 
-            : await unitOfWork.PagesRepository.ExistsAsync(name: name);
-
-        if (exists)
-        {
-            messages.Add(Errors.PAGE_NAME_EXISTS);
-        }
     }
 }

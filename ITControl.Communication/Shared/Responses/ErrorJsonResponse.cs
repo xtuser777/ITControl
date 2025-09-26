@@ -1,6 +1,6 @@
 namespace ITControl.Communication.Shared.Responses;
 
-public class ErrorJsonResponse(string error)
+public class ErrorJsonResponse(string[] errors)
 {
-    public string Message { get; set; } = error;
+    public string[] Errors { get; set; } = errors;
 }
