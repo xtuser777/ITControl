@@ -11,7 +11,7 @@ public class DepartmentConnectionAttribute : ValidationAttribute
         if (value is not Guid departmentId || departmentId == Guid.Empty)
             return ValidationResult.Success;
         var departmentsRepository = (IDepartmentsRepository)validationContext.GetService(typeof(IDepartmentsRepository))!;
-        var exists = departmentsRepository.ExistsAsync(id: departmentId).GetAwaiter().GetResult();
+        var exists = departmentsRepository.ExistsAsync(new () { Id = departmentId }).GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, departmentId));
 

@@ -1,6 +1,7 @@
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Departments.Entities;
 
 namespace ITControl.Communication.Departments.Requests;
 
@@ -14,8 +15,12 @@ public class UpdateDepartmentsRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
 
-    [GuidValue]
-    [UserConnection]
-    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
-    public Guid? UserId { get; set; }
+    public static implicit operator UpdateDepartmentParams(UpdateDepartmentsRequest request)
+    {
+        return new UpdateDepartmentParams
+        {
+            Alias = request.Alias,
+            Name = request.Name
+        };
+    }
 }

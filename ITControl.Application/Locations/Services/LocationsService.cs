@@ -155,7 +155,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
 
     private async Task CheckDepartmentExistence(Guid departmentId, List<string> messages)
     {
-        var department = await unitOfWork.DepartmentsRepository.ExistsAsync(id: departmentId);
+        var department = await unitOfWork.DepartmentsRepository.ExistsAsync(new() { Id = departmentId });
         if (department == false)
         {
             messages.Add(Errors.DEPARTMENT_NOT_FOUND);

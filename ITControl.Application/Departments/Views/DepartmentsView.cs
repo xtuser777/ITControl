@@ -25,12 +25,6 @@ public class DepartmentsView : IDepartmentsView
             Id = department.Id,
             Alias = department.Alias,
             Name = department.Name,
-            UserId = department.UserId,
-            User = department.User != null ? new FindOneDepartmentsUserResponse()
-            {
-                Id = department.User.Id,
-                Name = department.User.Name,
-            } : null
         };
     }
 
@@ -43,7 +37,6 @@ public class DepartmentsView : IDepartmentsView
             Id = department.Id,
             Alias = department.Alias,
             Name = department.Name,
-            UserId = department.UserId,
         };
     }
 }

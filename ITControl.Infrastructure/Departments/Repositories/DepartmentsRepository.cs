@@ -1,5 +1,6 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
+using ITControl.Domain.Departments.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,36 +9,30 @@ namespace ITControl.Infrastructure.Departments.Repositories;
 public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsRepository
 {
     public async Task<Department?> FindOneAsync(
-        Guid id, bool? includeUser = null)
+        FindOneDepartmentsRepositoryParams @params)
     {
-        var query = context.Departments.AsQueryable();
-        if (includeUser != null) query = query.Include(x => x.User);
-        
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await context.Departments.FindAsync(@params.Id);
     }
 
     public async Task<IEnumerable<Department>> FindManyAsync(
-        string? alias = null, 
-        string? name = null, 
-        Guid? userId = null, 
-        string? orderByAlias = null,
-        string? orderByName = null,
-        string? orderByUser = null,
-        int? page = null, 
-        int? size = null)
+        FindManyDepartmentsRepositoryParams @params)
     {
         var query = context.Departments.AsNoTracking();
-        query = BuildQuery(
-            query: query,
-            alias: alias,
-            name: name,
-            userId: userId);
-        query = BuildOrderBy(
-            query: query,
-            orderByAlias: orderByAlias,
-            orderByName: orderByName,
-            orderByUser: orderByUser);
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        var (alias, name, orderByAlias, orderByName, page, size) = @params;
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Alias = alias,
+            Name = name
+        });
+        query = BuildOrderBy(new ()
+        {
+            Query = query,
+            OrderByAlias = orderByAlias,
+            OrderByName = orderByName
+        });
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -57,73 +52,63 @@ public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsR
         context.Departments.Remove(department);
     }
 
-    public async Task<int> CountAsync(
-        Guid? id = null, 
-        string? alias = null, 
-        string? name = null, 
-        Guid? userId = null)
+    public async Task<int> CountAsync(CountDepartmentsRepositoryParams @params)
     {
         var query = context.Departments.AsNoTracking();
-        query = BuildQuery(
-            query: query,
-            id: id,
-            alias: alias,
-            name: name,
-            userId: userId);
+        var (id, alias, name) = @params;
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Id = id,
+            Alias = alias,
+            Name = name,
+        });
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(
-        Guid? id = null, 
-        string? alias = null, 
-        string? name = null, 
-        Guid? userId = null)
+    public async Task<bool> ExistsAsync(ExistsDepartmentsRepositoryParams @params)
     {
-        var count = await CountAsync(id, alias, name, userId);
+        var (id, alias, name) = @params;
+        var count = await CountAsync(new ()
+        {
+            Id = id,
+            Alias = alias,
+            Name = name,
+        });
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(
-        Guid id, 
-        string? alias = null, 
-        string? name = null, 
-        Guid? userId = null)
+    public async Task<bool> ExclusiveAsync(ExclusiveDepartmentsRepositoryParams @params)
     {
         var query = context.Departments.AsNoTracking();
+        var (id, alias, name) = @params;
         query = query.Where(x => x.Id != id);
-        query = BuildQuery(
-            query: query,
-            alias: alias,
-            name: name,
-            userId: userId);
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Alias = alias,
+            Name = name,
+        });
         var count = await query.CountAsync();
         
         return count > 0;
     }
 
-    private IQueryable<Department> BuildQuery(
-        IQueryable<Department> query, 
-        Guid? id = null, 
-        string? alias = null, 
-        string? name = null, 
-        Guid? userId = null)
+    private static IQueryable<Department> BuildQuery(BuildQueryParams @params)
     {
+        var (query, id, alias, name) = @params;
         if (id is not null) query = query.Where(x => x.Id == id);
         if (alias is not null) query = query.Where(x => x.Alias.Contains(alias));
         if (name is not null) query = query.Where(x => x.Name.Contains(name));
-        if (userId is not null) query = query.Where(x => x.UserId == userId);
         
         return query;
     }
 
-    private IQueryable<Department> BuildOrderBy(
-        IQueryable<Department> query,
-        string? orderByAlias = null,
-        string? orderByName = null,
-        string? orderByUser = null)
+    private static IQueryable<Department> BuildOrderBy(BuildOrderByParams @params)
     {
+        var (query, orderByAlias, orderByName) = @params;
         query = orderByAlias switch
         {
             "a" => query.OrderBy(p => p.Alias),
@@ -136,13 +121,37 @@ public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsR
             "d" => query.OrderByDescending(p => p.Name),
             _ => query
         };
-        query = orderByUser switch
-        {
-            "a" => query.Include(x => x.User).OrderBy(p => p.User!.Name),
-            "d" => query.Include(x => x.User).OrderByDescending(p => p.User!.Name),
-            _ => query
-        };
         
         return query;
+    }
+}
+
+class BuildQueryParams
+{
+    public IQueryable<Department> Query { get; set; } = null!;
+    public Guid? Id { get; set; }
+    public string? Alias { get; set; }
+    public string? Name { get; set; }
+
+    internal void Deconstruct(out IQueryable<Department> query, out Guid? id, out string? alias, out string? name)
+    {
+        query = Query;
+        id = Id;
+        alias = Alias;
+        name = Name;
+    }
+}
+
+class BuildOrderByParams
+{
+    public IQueryable<Department> Query { get; set; } = null!;
+    public string? OrderByAlias { get; set; }
+    public string? OrderByName { get; set; }
+
+    internal void Deconstruct(out IQueryable<Department> query, out string? orderByAlias, out string? orderByName)
+    {
+        query = Query;
+        orderByAlias = OrderByAlias;
+        orderByName = OrderByName;
     }
 }

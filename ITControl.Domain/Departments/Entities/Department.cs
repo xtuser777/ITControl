@@ -1,5 +1,4 @@
 using ITControl.Domain.Shared.Entities;
-using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Domain.Departments.Entities;
 
@@ -7,24 +6,26 @@ public class Department : Entity
 {
     public string Alias { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-    public Guid UserId { get; set; }
-    public User? User { get; set; }
 
-    public Department(string alias, string name, Guid userId)
+    public Department(string alias, string name)
     {
         Id = Guid.NewGuid();
         Alias = alias;
         Name = name;
-        UserId = userId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(string? alias = null, string? name = null, Guid? userId = null)
+    public void Update(UpdateDepartmentParams @params)
     {
-        Alias = alias ?? Alias;
-        Name = name ?? Name;
-        UserId = userId ?? UserId;
+        Alias = @params.Alias ?? Alias;
+        Name = @params.Name ?? Name;
         UpdatedAt = DateTime.Now;
     }
+}
+
+public class UpdateDepartmentParams
+{
+    public string? Alias { get; set; }
+    public string? Name { get; set; }
 }

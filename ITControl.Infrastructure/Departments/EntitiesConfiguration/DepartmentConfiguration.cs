@@ -8,14 +8,12 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
 {
     public void Configure(EntityTypeBuilder<Department> builder)
     {
-        builder.HasKey(t => t.Id);
-        builder.Property(p => p.Alias).HasMaxLength(10).IsRequired();
-        builder.Property(p => p.Name).HasMaxLength(100).IsRequired();
-        builder.Property(x => x.CreatedAt).IsRequired();
-        builder.Property(x => x.UpdatedAt).IsRequired();
-        builder.HasIndex(p => p.Alias).IsUnique();
-        builder.HasIndex(p => p.Name).IsUnique();
-        
-        builder.HasOne(x=> x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasKey(d => d.Id);
+        builder.Property(d => d.Alias).HasMaxLength(10).IsRequired();
+        builder.Property(d => d.Name).HasMaxLength(100).IsRequired();
+        builder.Property(d => d.CreatedAt).IsRequired();
+        builder.Property(d => d.UpdatedAt).IsRequired();
+        builder.HasIndex(d => d.Alias).IsUnique();
+        builder.HasIndex(d => d.Name).IsUnique();
     }
 }

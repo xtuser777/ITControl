@@ -1,6 +1,7 @@
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Departments.Entities;
 
 namespace ITControl.Communication.Departments.Requests;
 
@@ -16,9 +17,8 @@ public class CreateDepartmentsRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 
-    [RequiredField]
-    [GuidValue]
-    [UserConnection]
-    [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
-    public Guid UserId { get; set; }
+    public static implicit operator Department(CreateDepartmentsRequest request)
+    {
+        return new Department(request.Alias, request.Name);
+    }
 }
