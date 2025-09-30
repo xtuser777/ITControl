@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Notifications.Controllers;
 
-[Route("notifications")]
+[Route("[controller]")]
 [ApiController]
 [PermissionsFilter]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

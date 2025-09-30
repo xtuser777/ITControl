@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Positions.Controllers;
 
-[Route("positions")]
+[Route("[controller]")]
 [ApiController]
 [PermissionsFilter]
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

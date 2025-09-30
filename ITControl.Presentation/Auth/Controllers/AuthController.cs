@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Auth.Controllers
 {
-    [Route("auth")]
+    [Route("[controller]")]
     [ApiController]
     public class AuthController(IAuthService authService) : ControllerBase
     {

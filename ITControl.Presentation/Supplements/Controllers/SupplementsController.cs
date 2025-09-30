@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Supplements.Controllers;
 
-[Route("supplements")]
+[Route("[controller]")]
 [ApiController]
 [Produces("application/json")]
 [PermissionsFilter]
