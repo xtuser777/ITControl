@@ -241,6 +241,15 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Já existe um registro com este(a) {0}..
+        /// </summary>
+        public static string UniqueField {
+            get {
+                return ResourceManager.GetString("UniqueField", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O usuário com o id {0} não foi encontrado..
         /// </summary>
         public static string UserConnectionNotFound {

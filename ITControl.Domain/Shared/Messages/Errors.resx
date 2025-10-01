@@ -191,4 +191,7 @@
   <data name="TimePresentPast" xml:space="preserve">
     <value>O campo {0} deve ser uma hora menor ou igual a atual</value>
   </data>
+  <data name="UniqueField" xml:space="preserve">
+    <value>Já existe um registro com este(a) {0}.</value>
+  </data>
 </root>

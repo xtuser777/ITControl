@@ -15,6 +15,5 @@ public class DivisionConfiguration : IEntityTypeConfiguration<Division>
         builder.HasIndex(x => x.Name).IsUnique();
 
         builder.HasOne(x => x.Department).WithMany().HasForeignKey(x => x.DepartmentId).OnDelete(DeleteBehavior.Restrict);
-        builder.HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Restrict);
     }
 }

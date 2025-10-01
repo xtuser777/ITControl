@@ -25,17 +25,12 @@ public class DivisionsView : IDivisionsView
             Id = division.Id,
             Name = division.Name,
             DepartmentId = division.DepartmentId,
-            UserId = division.UserId,
             Department = division.Department != null ? new FindOneDivisionsDepartmentResponse()
             {
                 Id = division.Department.Id,
+                Alias = division.Department.Alias,
                 Name = division.Department.Name,
             } : null,
-            User = division.User != null ? new FindOneDivisionsUserResponse()
-            {
-                Id = division.User.Id,
-                Name = division.User.Name,
-            } : null
         };
     }
 
@@ -49,7 +44,6 @@ public class DivisionsView : IDivisionsView
                 Id = division.Id,
                 Name = division.Name,
                 DepartmentId = division.DepartmentId,
-                UserId = division.UserId,
             };
     }
 }

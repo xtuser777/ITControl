@@ -125,10 +125,6 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         {
             await CheckDepartmentExistence(departmentId.Value, messages);
         }
-        if (divisionId.HasValue)
-        {
-            await CheckDivisionExistence(divisionId.Value, messages);
-        }
         if (messages.Count > 0)
         {
             throw new NotFoundException(string.Join(", ", messages));
@@ -159,15 +155,6 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
         if (department == false)
         {
             messages.Add(Errors.DEPARTMENT_NOT_FOUND);
-        }
-    }
-
-    private async Task CheckDivisionExistence(Guid divisionId, List<string> messages)
-    {
-        var division = await unitOfWork.DivisionsRepository.ExistsAsync(id: divisionId);
-        if (division == false)
-        {
-            messages.Add(Errors.DIVISION_NOT_FOUND);
         }
     }
 }

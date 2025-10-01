@@ -44,7 +44,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<FindOneDivisionsResponse?>> ShowAsync([FromRoute] Guid id)
     {
-        var division = await divisionsService.FindOneAsync(id); 
+        var division = await divisionsService.FindOneAsync(
+            new () { Id = id, IncludeDepartment = true }
+        ); 
         var data = divisionsView.FindOne(division);
         
         return new FindOneResponse<FindOneDivisionsResponse?>()
