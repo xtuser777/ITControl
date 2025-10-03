@@ -106,8 +106,17 @@ public class TreatmentsService(
         var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
-        var user = await unitOfWork.UsersRepository.FindOneAsync(
-            request.UserId, null, null, null, null) 
+        var user = await unitOfWork.UsersRepository.FindOneAsync(new()
+        {
+            Id = request.UserId,
+            IncludeDepartment = false,
+            IncludeUsersEquipments = false,
+            IncludePosition = false,
+            IncludeDivision = false,
+            IncludeRole = false,
+            IncludeUnit = false,
+            IncludeUsersSystems = false
+        }) 
                    ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.TREATMENTS_STARTED, treatment.Protocol, call.Title, user.Name);
         callStatus.Update(
@@ -216,7 +225,7 @@ public class TreatmentsService(
 
     private async Task CheckUserExistenceAsync(Guid userId, List<string> messages)
     {
-        var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
+        var user = await unitOfWork.UsersRepository.ExistsAsync(new() { Id = userId });
         if (user == false)
         {
             messages.Add(Errors.USER_NOT_FOUND);

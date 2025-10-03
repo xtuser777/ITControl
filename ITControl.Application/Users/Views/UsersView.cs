@@ -32,10 +32,14 @@ public class UsersView : IUsersView
             Name = user.Name,
             Email = user.Email,
             Username = user.Username,
+            Document = user.Document,
             Enrollment = user.Enrollment,
             Active = user.Active,
             PositionId = user.PositionId,
             RoleId = user.RoleId,
+            UnitId = user.UnitId,
+            DepartmentId = user.DepartmentId,
+            DivisionId = user.DivisionId,
             Position = user.Position != null
                 ? new FindOneUsersPositionResponse()
                 {
@@ -49,6 +53,31 @@ public class UsersView : IUsersView
                     Id = user.RoleId,
                     Name = user.Role.Name,
                 } 
+                : null,
+            Unit = user.Unit is not null
+                ? new FindOneUsersUnitResponse()
+                {
+                    Id = user.UnitId,
+                    Name = user.Unit.Name,
+                    Address = $"{user.Unit.StreetName}, {user.Unit.AddressNumber}, {user.Unit.Neighborhood}",
+                    Phone = user.Unit.Phone,
+                    Email = ""
+                }
+                : null,
+            Department = user.Department is not null
+                ? new FindOneUsersDepartmentResponse()
+                {
+                    Id = user.DepartmentId,
+                    Name = user.Department.Name,
+                    Alias = user.Department.Alias,
+                }
+                : null,
+            Division = user.Division is not null
+                ? new FindOneUsersDivisionResponse()
+                {
+                    Id = user.Division.Id,
+                    Name = user.Division.Name,
+                }
                 : null,
             UsersEquipments = user.UsersEquipments != null 
                 ? from equipment in user.UsersEquipments select 
@@ -81,10 +110,14 @@ public class UsersView : IUsersView
             Name = user.Name,
             Email = user.Email,
             Username = user.Username,
+            Document = user.Document,
             Enrollment = user.Enrollment,
             Active = user.Active,
             PositionId = user.PositionId,
             RoleId = user.RoleId,
+            UnitId = user.UnitId,
+            DepartmentId = user.DepartmentId,
+            DivisionId = user.DivisionId,
         };
     }
 }

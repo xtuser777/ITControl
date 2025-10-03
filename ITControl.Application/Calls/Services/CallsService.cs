@@ -11,6 +11,7 @@ using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Roles.Entities;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Application.Calls.Services;
@@ -76,8 +77,17 @@ public class CallsService(
             userId: request.UserId,
             equipmentId: request.EquipmentId,
             systemId: request.SystemId);
-        var user = await unitOfWork.UsersRepository.FindOneAsync(
-            request.UserId, false, false, false, false)
+        var user = await unitOfWork.UsersRepository.FindOneAsync(new()
+        {
+            Id = request.UserId,
+            IncludeDepartment = false,
+            IncludeUsersEquipments = false,
+            IncludePosition = false,
+            IncludeDivision = false,
+            IncludeRole = false,
+            IncludeUnit = false,
+            IncludeUsersSystems = false
+        })
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.CALLS_OPENED, user.Name, DateTime.Now);
         var callStatus = new CallStatus(
@@ -137,7 +147,7 @@ public class CallsService(
 
     private async Task CheckUserExistence(Guid userId, List<string> messages)
     {
-        var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
+        var user = await unitOfWork.UsersRepository.ExistsAsync(new() { Id = userId });
         if (user == false)
         {
             messages.Add(Errors.USER_NOT_FOUND);
@@ -168,7 +178,7 @@ public class CallsService(
         var roles = rolesMaster.ToList();
         if (roles.Count == 0)
             throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);
-        var users = await unitOfWork.UsersRepository.FindManyAsync(roleId: roles.ToList()[0].Id);
+        var users = await unitOfWork.UsersRepository.FindManyAsync(new () { RoleId = roles.ToList()[0].Id });
         foreach (var user in users)
         {
             var notification = new Notification(

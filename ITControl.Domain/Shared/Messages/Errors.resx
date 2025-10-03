@@ -194,4 +194,10 @@
   <data name="UniqueField" xml:space="preserve">
     <value>Já existe um registro com este(a) {0}.</value>
   </data>
+  <data name="InvalidDocument" xml:space="preserve">
+    <value>O campo {0} precisa ser um CPF válido.</value>
+  </data>
+  <data name="DontRemoveYourself" xml:space="preserve">
+    <value>Não é permitido o usuário remover a si próprio.</value>
+  </data>
 </root>

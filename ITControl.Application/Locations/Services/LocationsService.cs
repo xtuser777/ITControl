@@ -142,7 +142,7 @@ public class LocationsService(IUnitOfWork unitOfWork) : ILocationsService
 
     private async Task CheckUserExistence(Guid userId, List<string> messages)
     {
-        var user = await unitOfWork.UsersRepository.ExistsAsync(id: userId);
+        var user = await unitOfWork.UsersRepository.ExistsAsync(new() { Id = userId });
         if (user == false)
         {
             messages.Add(Errors.USER_NOT_FOUND);

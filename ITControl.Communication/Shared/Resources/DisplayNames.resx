@@ -153,6 +153,9 @@
   <data name="DivisionId" xml:space="preserve">
     <value>divisão</value>
   </data>
+  <data name="Document" xml:space="preserve">
+    <value>documento (CPF)</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>e-mail</value>
   </data>

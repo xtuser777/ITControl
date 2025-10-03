@@ -1,62 +1,35 @@
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
-using ITControl.Application.Shared.Utils;
 using ITControl.Application.Users.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Users.Entities;
+using ITControl.Domain.Users.Params;
 
 namespace ITControl.Application.Users.Services;
 
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
-    public async Task<User> FindOneAsync(
-        Guid id, 
-        bool? includePosition = null, 
-        bool? includeRole = null,
-        bool? includeUsersEquipments = null,
-        bool? includeUsersSystems = null)
+    public async Task<User> FindOneAsync(FindOneUsersRepositoryParams @params)
     {
-        return await unitOfWork.UsersRepository
-            .FindOneAsync(
-                id, 
-                true, 
-                true, 
-                true, 
-                true) 
+        return await unitOfWork.UsersRepository.FindOneAsync(@params) 
                ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
+    public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRepositoryParams @params)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        return await unitOfWork.UsersRepository.FindManyAsync(
-            username: request.Username,
-            email: request.Email,
-            name: request.Name,
-            active: Parser.ToBoolOptional(request.Active),
-            orderByUsername: request.OrderByUsername,
-            orderByName: request.OrderByName,
-            orderByEmail: request.OrderByEmail,
-            orderByActive: request.OrderByActive,
-            page: page,
-            size: size);
+        return await unitOfWork.UsersRepository.FindManyAsync(@params);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyUsersRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyUsersRepositoryParams @params)
     {
-        if (request.Page == null || request.Size == null) return null;
+        if (@params.Page == null || @params.Size == null) return null;
         
-        var count = await unitOfWork.UsersRepository.CountAsync(
-            username: request.Username,
-            email: request.Email,
-            name: request.Name,
-            active: Parser.ToBoolOptional(request.Active));
+        var count = await unitOfWork.UsersRepository.CountAsync(@params);
         
-        var pagination = Pagination.Build(request.Page, request.Size, count);
+        var pagination = Pagination.Build(@params.Page, @params.Size, count);
         
         return pagination;
     }
@@ -64,21 +37,8 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     [Obsolete("Obsolete")]
     public async Task<User?> CreateAsync(CreateUsersRequest request)
     {
-        await CheckConflicts(null, request.Name, request.Username, request.Email);
         await using var transaction = unitOfWork.BeginTransaction;
-        await CheckExistence(
-            positionId: request.PositionId,
-            roleId: request.RoleId,
-            equipments: request.Equipments,
-            systems: request.Systems);
-        var user = new User(
-            username: request.Username,
-            email: request.Email,
-            name: request.Name,
-            password: Crypt.HashPassword(request.Password),
-            enrollment: request.Enrollment,
-            positionId: request.PositionId,
-            roleId: request.RoleId);
+        var user = new User(request);
         var usersEquipments = from equipment in request.Equipments
             select
                 new UserEquipment(
@@ -100,22 +60,10 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     [Obsolete("Obsolete")]
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
-        await CheckConflicts(id, request.Name, request.Username, request.Email);
-        await CheckExistence(
-            positionId: request.PositionId,
-            roleId: request.RoleId,
-            equipments: request.Equipments,
-            systems: request.Systems);
-        var user = await FindOneAsync(id);
-        user.Update(
-            username: request.Username,
-            email: request.Email,
-            name: request.Name,
-            password: request.Password != null ? Crypt.HashPassword(request.Password) : null,
-            enrollment: request.Enrollment,
-            positionId: request.PositionId,
-            roleId: request.RoleId,
-            active: request.Active);
+        
+        await using var transaction = unitOfWork.BeginTransaction;
+        var user = await FindOneAsync(new () { Id = id });
+        user.Update(request);
         var usersEquipments = from equipment in request.Equipments
             select
                 new UserEquipment(
@@ -126,7 +74,6 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         var usersSystems = from system in request.Systems
             select
                 new UserSystem(user.Id, system.SystemId);
-        await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);
@@ -135,133 +82,13 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(Guid id, DeleteUsersRequest request)
+    public async Task DeleteAsync(Guid id)
     {
-        var user = await FindOneAsync(id);
         await using var transaction = unitOfWork.BeginTransaction;
-        CheckUserLogged(user.Id, request.LoggedUserId);
+        var user = await FindOneAsync(new() { Id = id });
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         unitOfWork.UsersRepository.SoftDelete(user);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckConflicts(
-        Guid? id = null, 
-        string? name = null, 
-        string? username = null, 
-        string? email = null)
-    {
-        var messages = new List<string>();
-        
-        if (name != null)
-            await CheckNameConflict(id, name, messages);
-        if (username != null)
-            await CheckUsernameConflict(id, username, messages);
-        if (email != null)
-            await CheckEmailConflict(id, email, messages);
-        
-        if (messages.Count > 0)
-            throw new ConflictException(string.Join(", ", messages));
-    }
-
-    private async Task CheckNameConflict(Guid? id, string name, List<string> messages)
-    {
-        var exists = id != null 
-            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, name) 
-            : await unitOfWork.UsersRepository.ExistsAsync(name: name);
-
-        if (exists)
-        {
-            messages.Add(Errors.USER_NAME_EXISTS);
-        }
-    }
-
-    private async Task CheckUsernameConflict(Guid? id, string username, List<string> messages)
-    {
-        var exists = id != null 
-            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, username) 
-            : await unitOfWork.UsersRepository.ExistsAsync(username: username);
-
-        if (exists)
-        {
-            messages.Add(Errors.USER_USERNAME_EXISTS);
-        }
-    }
-
-    private async Task CheckEmailConflict(Guid? id, string email, List<string> messages)
-    {
-        var exists = id != null 
-            ? await unitOfWork.UsersRepository.ExclusiveAsync((Guid)id, email) 
-            : await unitOfWork.UsersRepository.ExistsAsync(email: email);
-
-        if (exists)
-        {
-            messages.Add(Errors.USER_EMAIL_EXISTS);
-        }
-    }
-
-    private async Task CheckExistence(
-        Guid? positionId, 
-        Guid? roleId, 
-        IEnumerable<CreateUsersEquipmentsRequest>? equipments,
-        IEnumerable<CreateUsersSystemsRequest>? systems)
-    {
-        var messages = new List<string>();
-
-        if (positionId != null) await CheckPositionExistence((Guid)positionId, messages);
-        if (roleId != null) await CheckRoleExistence((Guid)roleId, messages);
-        if (equipments != null)
-        {
-            foreach (var equipment in equipments)
-            {
-                await CheckEquipmentExistence(equipment.EquipmentId, messages);
-            }
-        }
-        if (systems != null)
-        {
-            foreach (var system in systems)
-            {
-                await CheckSystemExistence(system.SystemId, messages);
-            }
-        }
-
-        if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
-    }
-
-    private async Task CheckPositionExistence(Guid positionId, List<string> messages)
-    {
-        var exists = await unitOfWork.PositionsRepository.ExistsAsync(id: positionId);
-        if (!exists)
-            messages.Add(Errors.POSITION_NOT_FOUND);
-    }
-
-    private async Task CheckRoleExistence(Guid roleId, List<string> messages)
-    {
-        var exists = await unitOfWork.RolesRepository.ExistsAsync(id: roleId);
-        if (!exists)
-            messages.Add(Errors.ROLE_NOT_FOUND);
-    }
-
-    private async Task CheckEquipmentExistence(Guid equipmentId, List<string> messages)
-    {
-        var exists = await unitOfWork.EquipmentsRepository.ExistsAsync(id: equipmentId);
-        if (!exists)
-            messages.Add(Errors.EQUIPMENT_NOT_FOUND);
-    }
-
-    private async Task CheckSystemExistence(Guid systemId, List<string> messages)
-    {
-        var exists = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
-        if (!exists)
-            messages.Add(Errors.SYSTEM_NOT_FOUND);
-    }
-
-    private static void CheckUserLogged(Guid userId, Guid loggedUserId)
-    {
-        if (loggedUserId == Guid.Empty)
-            throw new BadRequestException(Errors.USER_LOGGED_ID_REQUIRED);
-        if (userId == loggedUserId)
-            throw new BadRequestException(Errors.USER_LOGGED_ID_EQUALS);
     }
 }

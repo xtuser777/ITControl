@@ -25,9 +25,17 @@ public class UsersController(
     public async Task<FindManyResponse<FindManyUsersResponse>> IndexAsync(
         [FromQuery] FindManyUsersRequest request)
     {
+        var pagination = await usersService.FindManyPaginationAsync(request);
+        if (pagination is null)
+        {
+            return new FindManyResponse<FindManyUsersResponse>()
+            {
+                Data = [],
+                Pagination = pagination
+            };
+        }
         var users = await usersService.FindManyAsync(request);
         var data = usersView.FindMany(users);
-        var pagination = await usersService.FindManyPaginationAsync(request);
 
         return new FindManyResponse<FindManyUsersResponse>()
         {
@@ -36,15 +44,15 @@ public class UsersController(
         };
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(FindOneResponse<FindOneUsersResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync([FromRoute] Guid id)
+    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync([FromRoute] FindOneUsersRequest request)
     {
-        var user = await usersService.FindOneAsync(id, true, true, true, true);
+        var user = await usersService.FindOneAsync(request);
         var data = usersView.FindOne(user);
 
         return new FindOneResponse<FindOneUsersResponse?>()
@@ -94,7 +102,7 @@ public class UsersController(
         [FromRoute] Guid id, 
         [FromBody] DeleteUsersRequest request)
     {
-        await usersService.DeleteAsync(id, request);
+        await usersService.DeleteAsync(id);
         this.Response.StatusCode = 204;
     }
 }

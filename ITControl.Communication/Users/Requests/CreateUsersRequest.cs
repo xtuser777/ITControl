@@ -2,6 +2,9 @@ using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Users.Entities;
+using ITControl.Domain.Users.Interfaces;
+using ITControl.Domain.Users.Params;
 
 namespace ITControl.Communication.Users.Requests;
 
@@ -10,6 +13,7 @@ public class CreateUsersRequest
     [RequiredField]
     [StringMinLength(3)]
     [StringMaxLength(20)]
+    [CustomValidation(typeof(CreateUsersRequest), nameof(ValidateUsername))]
     [Display(Name = nameof(Username), ResourceType = typeof(DisplayNames))]
     public string Username { get; set; } = string.Empty;
 
@@ -30,8 +34,16 @@ public class CreateUsersRequest
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = nameof(Errors.VALID_EMAIL))]
     [StringMaxLength(100)]
+    [CustomValidation(typeof(CreateUsersRequest), nameof(ValidateEmail))]
     [Display(Name = nameof(Email), ResourceType = typeof(DisplayNames))]
     public string Email { get; set; } = string.Empty;
+
+    [RequiredField]
+    [StringLength(11)]
+    [DocumentValue]
+    [CustomValidation(typeof(CreateUsersRequest), nameof(ValidateDocument))]
+    [Display(Name = nameof(Document), ResourceType = typeof(DisplayNames))]
+    public string Document { get; set; } = string.Empty;
 
     [RequiredField]
     [IntegerPositiveValue]
@@ -51,10 +63,91 @@ public class CreateUsersRequest
     public Guid RoleId { get; set; }
 
     [RequiredField]
+    [GuidValue]
+    [UnitConnection]
+    [Display(Name = nameof(UnitId), ResourceType = typeof(DisplayNames))]
+    public Guid UnitId { get; set; }
+
+    [RequiredField]
+    [GuidValue]
+    [DepartmentConnection]
+    [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
+    public Guid DepartmentId { get; set; }
+
+    [GuidValue]
+    [DivisionConnection]
+    [Display(Name = nameof(DivisionId), ResourceType = typeof(DisplayNames))]
+    public Guid? DivisionId { get; set; }
+
+    [RequiredField]
     [Display(Name = nameof(Equipments), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateUsersEquipmentsRequest> Equipments { get; set; } = [];
 
     [RequiredField]
     [Display(Name = nameof(Systems), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateUsersSystemsRequest> Systems { get; set; } = [];
+
+    public static implicit operator UserParams(CreateUsersRequest request) =>
+        new ()
+        {
+            Username = request.Username,
+            Password = request.Password,
+            Name = request.Name,
+            Email = request.Email,
+            Document = request.Document,
+            Enrollment = request.Enrollment,
+            PositionId = request.PositionId,
+            RoleId = request.RoleId,
+            UnitId = request.UnitId,
+            DepartmentId = request.DepartmentId,
+            DivisionId = request.DivisionId,
+        };
+
+    public static ValidationResult? ValidateUsername(string username, ValidationContext context)
+    {
+        if (string.IsNullOrEmpty(username)) 
+            return ValidationResult.Success;
+        var usersRepository = context
+            .GetService(typeof(IUsersRepository)) as IUsersRepository
+            ?? throw new NullReferenceException();
+        var exists = usersRepository
+            .ExistsAsync(new () { Username = username })
+            .GetAwaiter().GetResult();
+        if (!exists) 
+            return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
+
+        return ValidationResult.Success;
+    }
+
+    public static ValidationResult? ValidateEmail(string email, ValidationContext context)
+    {
+        if (string.IsNullOrEmpty(email))
+            return ValidationResult.Success;
+        var usersRepository = context
+            .GetService(typeof(IUsersRepository)) as IUsersRepository
+            ?? throw new NullReferenceException();
+        var exists = usersRepository
+            .ExistsAsync(new() { Email = email })
+            .GetAwaiter().GetResult();
+        if (!exists)
+            return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
+
+        return ValidationResult.Success;
+    }
+
+    public static ValidationResult? ValidateDocument(string document, ValidationContext context)
+    {
+        if (string.IsNullOrEmpty(document))
+            return ValidationResult.Success;
+        var usersRepository = context
+            .GetService(typeof(IUsersRepository)) as IUsersRepository
+            ?? throw new NullReferenceException();
+        var exists = usersRepository
+            .ExistsAsync(new() { Document = document })
+            .GetAwaiter().GetResult();
+        if (!exists)
+            return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
+
+        return ValidationResult.Success;
+    }
 }

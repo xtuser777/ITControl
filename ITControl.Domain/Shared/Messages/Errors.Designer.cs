@@ -97,6 +97,15 @@ namespace ITControl.Domain.Shared.Messages {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Não é permitido o usuário remover a si próprio..
+        /// </summary>
+        public static string DontRemoveYourself {
+            get {
+                return ResourceManager.GetString("DontRemoveYourself", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} deve ser um valor booleano válido.
         /// </summary>
         public static string INVALID_BOOLEAN {
@@ -129,6 +138,15 @@ namespace ITControl.Domain.Shared.Messages {
         public static string INVALID_TIME {
             get {
                 return ResourceManager.GetString("INVALID_TIME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O campo {0} precisa ser um CPF válido..
+        /// </summary>
+        public static string InvalidDocument {
+            get {
+                return ResourceManager.GetString("InvalidDocument", resourceCulture);
             }
         }
         
