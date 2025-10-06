@@ -16,14 +16,14 @@ namespace ITControl.Infrastructure.Migrations
                 table: "Users",
                 type: "uniqueidentifier",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: new Guid("797C1710-2C59-45E6-968D-857F9CF6AE01"));
 
             migrationBuilder.AddColumn<Guid>(
                 name: "DivisionId",
                 table: "Users",
                 type: "uniqueidentifier",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: new Guid("3044A11B-A1C0-44B7-8B2B-98DC46405901"));
 
             migrationBuilder.AddColumn<string>(
                 name: "Document",
@@ -38,7 +38,7 @@ namespace ITControl.Infrastructure.Migrations
                 table: "Users",
                 type: "uniqueidentifier",
                 nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+                defaultValue: new Guid("3A8CB58A-A82B-4413-A312-7DEC05C6B1E8"));
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_DepartmentId",
