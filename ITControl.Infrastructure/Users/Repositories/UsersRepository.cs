@@ -19,6 +19,18 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
         {
             query = query.Include(x => x.Role);
         }
+        if (@params.IncludeUnit is true)
+        {
+            query = query.Include(x => x.Unit);
+        }
+        if (@params.IncludeDepartment is true)
+        {
+            query = query.Include(x => x.Department);
+        }
+        if (@params.IncludeDivision is true)
+        {
+            query = query.Include(x => x.Division);
+        }
         if (@params.IncludeUsersEquipments is true)
         {
             query = query.Include(x => x.UsersEquipments);

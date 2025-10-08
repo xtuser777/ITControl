@@ -1,6 +1,7 @@
 ﻿using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ITControl.Communication.Shared.Attributes;
 
@@ -34,26 +35,26 @@ public class DocumentValueAttribute : ValidationAttribute
         string documentWithoutDigits1 = document[..^2];
         var total1 = 0;
         var mul1 = 2;
-        foreach (var digit in documentWithoutDigits1.Split())
+        for (var i = 0; i < documentWithoutDigits1.Length; i++)
         {
-            var digitInt = Convert.ToInt32(digit);
+            var digitInt = Convert.ToInt32(documentWithoutDigits1[i].ToString());
             total1 += digitInt * mul1++;
         }
         var rest1 = total1 % 11;
         var digit1 = rest1 < 2 ? 0 : 11 - rest1;
-        if (Convert.ToInt32(document[9]) != digit1)
+        if (Convert.ToInt32(document[9].ToString()) != digit1)
             return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
         string documentWithoutDigits2 = documentWithoutDigits1 + digit1;
         var total2 = 0;
         var mul2 = 2;
-        foreach (var digit in documentWithoutDigits2.Split())
+        for (var i = 0; i < documentWithoutDigits2.Length; i++)
         {
-            var digitInt = Convert.ToInt32(digit);
+            var digitInt = Convert.ToInt32(documentWithoutDigits2[i].ToString());
             total2 += digitInt * mul2++;
         }
         var rest2 = total2 % 11;
         var digit2 = rest2 < 2 ? 0 : 11 - rest2;
-        if (Convert.ToInt32(document[10]) != digit2)
+        if (Convert.ToInt32(document[10].ToString()) != digit2)
             return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
 
         return ValidationResult.Success;
