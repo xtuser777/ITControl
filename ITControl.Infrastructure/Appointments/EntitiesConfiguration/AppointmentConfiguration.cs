@@ -40,10 +40,5 @@ public class AppointmentConfiguration : IEntityTypeConfiguration<Appointment>
             .WithMany()
             .HasForeignKey(a => a.CallId)
             .IsRequired();
-        builder
-            .HasOne(a => a.Location)
-            .WithMany()
-            .HasForeignKey(a => a.LocationId)
-            .IsRequired();
     }
 }

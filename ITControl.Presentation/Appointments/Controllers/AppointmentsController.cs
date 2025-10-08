@@ -42,9 +42,12 @@ namespace ITControl.Presentation.Appointments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneAppointmentsResponse?>> FindOneAsync(Guid id)
+        public async Task<FindOneResponse<FindOneAppointmentsResponse?>> FindOneAsync(
+            [FromRoute] Guid id,
+            [FromQuery] FindOneAppointmentsRequest request)
         {
-            var appointment = await appointmentsService.FindOneAsync(id, true, true, true);
+            request.Id = id;
+            var appointment = await appointmentsService.FindOneAsync(request);
             var data = appointmentsView.FindOne(appointment);
 
             return new FindOneResponse<FindOneAppointmentsResponse?>()

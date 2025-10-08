@@ -1,5 +1,6 @@
 using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Appointments.Interfaces;
+using ITControl.Domain.Appointments.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,79 +9,42 @@ namespace ITControl.Infrastructure.Appointments.Repositories;
 public class AppointmentsRepository(
     ApplicationDbContext context) : IAppointmentsRepository
 {
-    public async Task<Appointment?> FindOneAsync(
-        Guid id, 
-        bool? includeUser = null, 
-        bool? includeCall = null, 
-        bool? includeLocation = null)
+    public async Task<Appointment?> FindOneAsync(FindOneAppointmentsRepositoryParams @params)
     {
         var query = context.Appointments.AsQueryable();
-        if (includeUser != null)
+        if (@params.IncludeUser != null)
         {
             query = query.Include(x => x.User);
         }
-
-        if (includeCall != null)
-        {
-            query = query.Include(x => x.Call!).ThenInclude(c => c.User);
-        }
-
-        if (includeLocation != null)
+        if (@params.IncludeCall != null)
         {
             query = query
-                .Include(x => x.Location!)
-                .ThenInclude(l => l.Unit)
-                .Include(a => a.Location!)
-                .ThenInclude(l => l.Department)
-                .Include(a => a.Location!)
-                .ThenInclude(l => l.Division);
+                .Include(x => x.Call!).ThenInclude(c => c.User!).ThenInclude(u => u.Unit)
+                .Include(x => x.Call!).ThenInclude(c => c.User!).ThenInclude(u => u.Department)
+                .Include(x => x.Call!).ThenInclude(c => c.User!).ThenInclude(u => u.Division);
         }
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(x => x.Id == @params.Id);
     }
 
-    public async Task<IEnumerable<Appointment>> FindManyAsync(
-        string? description = null, 
-        DateOnly? scheduledAt = null, 
-        TimeOnly? scheduledIn = null,
-        string? observation = null, 
-        Guid? userId = null, 
-        Guid? callId = null, 
-        Guid? locationId = null,
-        string? orderByDescription = null, 
-        string? orderByScheduledAt = null, 
-        string? orderByScheduledIn = null,
-        string? orderByObservation = null, 
-        string? orderByUser = null, 
-        string? orderByCall = null,
-        string? orderByLocation = null, 
-        int? page = null, int? size = null)
+    public async Task<IEnumerable<Appointment>> FindManyAsync(FindManyAppointmentsRepositoryParams @params)
     {
+        var (page, size) = @params;
         var query = context
             .Appointments
             .Include(x => x.User)
             .Include(x => x.Call)
-            .Include(x => x.Location)
             .AsNoTracking();
-        query = BuildQuery(
-            query, 
-            null, 
-            description, 
-            scheduledAt, 
-            scheduledIn, 
-            observation, 
-            userId, 
-            callId, 
-            locationId);
-        query = BuildOrderBy(
-            query, 
-            orderByDescription, 
-            orderByScheduledAt, 
-            orderByScheduledIn, 
-            orderByObservation,
-            orderByUser, 
-            orderByCall, 
-            orderByLocation);
+        query = BuildQuery(new()
+        {
+            Query = query,
+            Params = @params
+        });
+        query = BuildOrderBy(new()
+        {
+            Query = query,
+            Params = @params
+        });
         if (page.HasValue && size.HasValue)
         {
             var skip = (page.Value - 1) * size.Value;
@@ -105,151 +69,97 @@ public class AppointmentsRepository(
         context.Appointments.Remove(appointment);
     }
 
-    public async Task<int> CountAsync(
-        Guid? id = null, 
-        string? description = null, 
-        DateOnly? scheduledAt = null, 
-        TimeOnly? scheduledIn = null,
-        string? observation = null, 
-        Guid? userId = null, 
-        Guid? callId = null, 
-        Guid? locationId = null)
+    public async Task<int> CountAsync(CountAppointmentsRepositoryParams @params)
     {
         var query = context.Appointments.AsNoTracking();
-        query = BuildQuery(
-            query, 
-            null, 
-            description, 
-            scheduledAt, 
-            scheduledIn, 
-            observation, 
-            userId, 
-            callId, 
-            locationId);
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Params = @params
+        });
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(
-        Guid? id = null, 
-        string? description = null, 
-        DateOnly? scheduledAt = null, 
-        TimeOnly? scheduledIn = null,
-        string? observation = null, 
-        Guid? userId = null, 
-        Guid? callId = null, 
-        Guid? locationId = null)
+    public async Task<bool> ExistsAsync(ExistsAppointmentsRepositoryParams @params)
     {
-        var count = await CountAsync(
-            id, 
-            description, 
-            scheduledAt, 
-            scheduledIn, 
-            observation, 
-            userId, 
-            callId,
-            locationId);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    private IQueryable<Appointment> BuildQuery(
-        IQueryable<Appointment> query,
-        Guid? id = null, 
-        string? description = null, 
-        DateOnly? scheduledAt = null, 
-        TimeOnly? scheduledIn = null,
-        string? observation = null, 
-        Guid? userId = null, 
-        Guid? callId = null, 
-        Guid? locationId = null)
+    private static IQueryable<Appointment> BuildQuery(BuildQueryAppointmentsRepositoryParams @queryParams)
     {
-        if (id != null)
+        var (query, @params) = @queryParams;
+        if (@params.Id != null)
         {
-            query = query.Where(x => x.Id == id);
+            query = query.Where(x => x.Id == @params.Id);
         }
-        if (description != null)
+        if (@params.Description != null)
         {
-            query = query.Where(x => x.Description.Contains(description));
+            query = query.Where(x => x.Description.Contains(@params.Description));
         }
-        if (scheduledAt != null)
+        if (@params.ScheduledAt  != null)
         {
-            query = query.Where(x => x.ScheduledAt == scheduledAt);
+            query = query.Where(x => x.ScheduledAt == @params.ScheduledAt );
         }
-        if (scheduledIn != null)
+        if (@params.ScheduledIn  != null)
         {
-            query = query.Where(x => x.ScheduledIn == scheduledIn);
+            query = query.Where(x => x.ScheduledIn == @params.ScheduledIn );
         }
-        if (observation != null)
+        if (@params.Observation != null)
         {
-            query = query.Where(x => x.Observation.Contains(observation));
+            query = query.Where(x => x.Observation.Contains(@params.Observation));
         }
-        if (userId != null)
+        if (@params.UserId  != null)
         {
-            query = query.Where(x => x.UserId == userId);
+            query = query.Where(x => x.UserId == @params.UserId );
         }
-        if (callId != null)
+        if (@params.CallId  != null)
         {
-            query = query.Where(x => x.CallId == callId);
-        }
-        if (locationId != null)
-        {
-            query = query.Where(x => x.LocationId == locationId);
+            query = query.Where(x => x.CallId == @params.CallId );
         }
         
         return query;
     }
 
-    private IQueryable<Appointment> BuildOrderBy(
-        IQueryable<Appointment> query,
-        string? orderByDescription = null, 
-        string? orderByScheduledAt = null, 
-        string? orderByScheduledIn = null,
-        string? orderByObservation = null, 
-        string? orderByUser = null, 
-        string? orderByCall = null,
-        string? orderByLocation = null)
+    private static IQueryable<Appointment> BuildOrderBy(BuildOrderByAppointmentsRepositoryParams @orderByParams)
     {
-        query = orderByDescription switch
+        var (query, @params) = @orderByParams;
+        query = @params.OrderByDescription switch
         {
             "a" => query.OrderBy(x => x.Description),
             "d" => query.OrderByDescending(x => x.Description),
             _ => query
         };
-        query = orderByScheduledAt switch
+        query = @params.OrderByScheduledAt switch
         {
             "a" => query.OrderBy(x => x.ScheduledAt),
             "d" => query.OrderByDescending(x => x.ScheduledAt),
             _ => query
         };
-        query = orderByScheduledIn switch
+        query = @params.OrderByScheduledIn switch
         {
             "a" => query.OrderBy(x => x.ScheduledIn),
             "d" => query.OrderByDescending(x => x.ScheduledIn),
             _ => query
         };
-        query = orderByObservation switch
+        query = @params.OrderByObservation switch
         {
             "a" => query.OrderBy(x => x.Observation),
             "d" => query.OrderByDescending(x => x.Observation),
             _ => query
         };
-        query = orderByUser switch
+        query = @params.OrderByUser switch
         {
             "a" => query.OrderBy(x => x.User!.Name),
             "d" => query.OrderByDescending(x => x.User!.Name),
             _ => query
         };
-        query = orderByCall switch
+        query = @params.OrderByCall switch
         {
             "a" => query.OrderBy(x => x.Call!.Title),
             "d" => query.OrderByDescending(x => x.Call!.Title),
-            _ => query
-        };
-        query = orderByLocation switch
-        {
-            "a" => query.OrderBy(x => x.Location!.Description),
-            "d" => query.OrderByDescending(x => x.Location!.Description),
             _ => query
         };
         

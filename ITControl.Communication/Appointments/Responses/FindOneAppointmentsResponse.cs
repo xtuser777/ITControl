@@ -12,5 +12,4 @@ public class FindOneAppointmentsResponse
     public Guid LocationId { get; set; }
     public FindOneAppointmentsUserResponse? User { get; set; }
     public FindOneAppointmentsCallResponse? Call { get; set; }
-    public FindOneAppointmentsLocationResponse? Location { get; set; }
 }

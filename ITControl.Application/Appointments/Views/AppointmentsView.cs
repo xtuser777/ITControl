@@ -29,7 +29,6 @@ public class AppointmentsView : IAppointmentsView
             Observation = appointment.Observation,
             UserId = appointment.UserId,
             CallId = appointment.CallId,
-            LocationId = appointment.LocationId,
             User = appointment.User != null
                 ? new FindOneAppointmentsUserResponse()
                 {
@@ -43,19 +42,16 @@ public class AppointmentsView : IAppointmentsView
                     Id = appointment.Call.Id,
                     Title = appointment.Call.Title,
                     Description = appointment.Call.Description,
-                    User = appointment.Call.User?.Name ?? ""
-                }
-                : null,
-            Location = appointment.Location != null
-                ? new FindOneAppointmentsLocationResponse()
-                {
-                    Id = appointment.Location.Id,
-                    Description = appointment.Location.Description,
-                    Unit = appointment.Location.Unit?.Name ?? "",
-                    Address = $"{appointment.Location.Unit?.StreetName}, {appointment.Location.Unit?.AddressNumber}, {appointment.Location.Unit?.Neighborhood}",
-                    Phone = appointment.Location.Unit?.Phone ?? "",
-                    Department = appointment.Location.Department?.Name ?? "",
-                    Division = appointment.Location.Division?.Name ?? "",
+                    User = new FindOneAppointmentsCallUserResponse()
+                    {
+                        Id = appointment.User!.Id,
+                        Name = appointment.User.Name,
+                        Unit = appointment.User.Unit?.Name ?? "",
+                        Address = $"{appointment.User.Unit?.StreetName}, {appointment.User.Unit?.AddressNumber}, {appointment.User.Unit?.Neighborhood}",
+                        Phone = appointment.User.Unit?.Phone ?? "",
+                        Department = appointment.User.Department?.Name ?? "",
+                        Division = appointment.User.Division?.Name ?? "",
+                    }
                 }
                 : null,
         };
@@ -75,7 +71,6 @@ public class AppointmentsView : IAppointmentsView
                 Observation = appointment.Observation,
                 UserId = appointment.UserId,
                 CallId = appointment.CallId,
-                LocationId = appointment.LocationId,
             };
     }
 }

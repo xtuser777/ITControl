@@ -1,50 +1,15 @@
 using ITControl.Domain.Appointments.Entities;
+using ITControl.Domain.Appointments.Params;
 
 namespace ITControl.Domain.Appointments.Interfaces;
 
 public interface IAppointmentsRepository
 {
-    Task<Appointment?> FindOneAsync(
-        Guid id,
-        bool? includeUser = null,
-        bool? includeCall = null,
-        bool? includeLocation = null);
-    Task<IEnumerable<Appointment>> FindManyAsync(
-        string? description = null,
-        DateOnly? scheduledAt = null,
-        TimeOnly? scheduledIn = null,
-        string? observation = null,
-        Guid? userId = null,
-        Guid? callId = null,
-        Guid? locationId = null,
-        string? orderByDescription = null,
-        string? orderByStartedAt = null,
-        string? orderByStartedIn = null,
-        string? orderByObservation = null,
-        string? orderByUser = null,
-        string? orderByCall = null,
-        string? orderByLocation = null,
-        int? page = null,
-        int? size = null);
+    Task<Appointment?> FindOneAsync(FindOneAppointmentsRepositoryParams @params);
+    Task<IEnumerable<Appointment>> FindManyAsync(FindManyAppointmentsRepositoryParams @params);
     Task CreateAsync(Appointment appointment);
     void Update(Appointment appointment);
     void Delete(Appointment appointment);
-    Task<int> CountAsync(
-        Guid? id = null,
-        string? description = null,
-        DateOnly? scheduledAt = null,
-        TimeOnly? scheduledIn = null,
-        string? observation = null,
-        Guid? userId = null,
-        Guid? callId = null,
-        Guid? locationId = null);
-    Task<bool> ExistsAsync(
-        Guid? id = null,
-        string? description = null,
-        DateOnly? scheduledAt = null,
-        TimeOnly? scheduledIn = null,
-        string? observation = null,
-        Guid? userId = null,
-        Guid? callId = null,
-        Guid? locationId = null);
+    Task<int> CountAsync(CountAppointmentsRepositoryParams @params);
+    Task<bool> ExistsAsync(ExistsAppointmentsRepositoryParams @params);
 }

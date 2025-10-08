@@ -1,9 +1,9 @@
 namespace ITControl.Communication.Appointments.Responses;
 
-public class FindOneAppointmentsLocationResponse
+public class FindOneAppointmentsCallUserResponse
 {
     public Guid Id { get; set; }
-    public string Description { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
     public string Unit { get; set; } = string.Empty;
     public string Address { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;

@@ -6,11 +6,7 @@ namespace ITControl.Application.Appointments.Interfaces;
 
 public interface IAppointmentsService
 {
-    Task<Appointment> FindOneAsync(
-        Guid id,
-        bool? includeUser = null,
-        bool? includeCall = null,
-        bool? includeLocation = null);
+    Task<Appointment> FindOneAsync(FindOneAppointmentsRequest request);
     Task<IEnumerable<Appointment>> FindManyAsync(FindManyAppointmentsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyAppointmentsRequest request);
     Task<Appointment?> CreateAsync(CreateAppointmentsRequest request);

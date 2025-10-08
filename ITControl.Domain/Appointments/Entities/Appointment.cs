@@ -1,5 +1,5 @@
+using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Locations.Entities;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
 
@@ -13,48 +13,30 @@ public sealed class Appointment : Entity
     public string Observation { get; set; }
     public Guid UserId { get; set; }
     public Guid CallId { get; set; }
-    public Guid LocationId { get; set; }
     public User? User { get; set; }
     public Call? Call { get; set; }
-    public Location? Location { get; set; }
 
-    public Appointment(
-        string description,
-        DateOnly scheduledAt,
-        TimeOnly scheduledIn,
-        string observation,
-        Guid userId,
-        Guid callId,
-        Guid locationId)
+    public Appointment(AppointmentsParams @params)
     {
         Id = Guid.NewGuid();
-        Description = description;
-        ScheduledAt = scheduledAt;
-        ScheduledIn = scheduledIn;
-        Observation = observation;
-        UserId = userId;
-        CallId = callId;
-        LocationId = locationId;
+        Description = @params.Description;
+        ScheduledAt = @params.ScheduledAt;
+        ScheduledIn = @params.ScheduledIn;
+        Observation = @params.Observation;
+        UserId = @params.UserId;
+        CallId = @params.CallId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(
-        string? description = null,
-        DateOnly? scheduledAt = null,
-        TimeOnly? scheduledIn = null,
-        string? observation = null,
-        Guid? userId = null,
-        Guid? callId = null,
-        Guid? locationId = null)
+    public void Update(UpdateAppointmentParams @params)
     {
-        Description = description ?? Description;
-        ScheduledAt = scheduledAt ?? ScheduledAt;
-        ScheduledIn = scheduledIn ?? ScheduledIn;
-        Observation = observation ?? Observation;
-        UserId = userId ?? UserId;
-        CallId = callId ?? CallId;
-        LocationId = locationId ?? LocationId;
+        Description = @params.Description ?? Description;
+        ScheduledAt = @params.ScheduledAt ?? ScheduledAt;
+        ScheduledIn = @params.ScheduledIn ?? ScheduledIn;
+        Observation = @params.Observation ?? Observation;
+        UserId = @params.UserId ?? UserId;
+        CallId = @params.CallId ?? CallId;
         UpdatedAt = DateTime.Now;
     }
 }

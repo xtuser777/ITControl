@@ -9,5 +9,4 @@ public class FindManyAppointmentsResponse
     public string Observation { get; set; } = string.Empty;
     public Guid UserId { get; set; }
     public Guid CallId { get; set; }
-    public Guid LocationId { get; set; }
 }

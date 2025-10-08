@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
+using ITControl.Domain.Appointments.Params;
 
 namespace ITControl.Communication.Appointments.Requests;
 
@@ -34,8 +35,14 @@ public class UpdateAppointmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? CallId { get; set; }
 
-    [GuidValue]
-    [LocationConnection]
-    [Display(Name = nameof(LocationId), ResourceType = typeof(DisplayNames))]
-    public Guid? LocationId { get; set; }
+    public static implicit operator UpdateAppointmentParams(UpdateAppointmentsRequest request) =>
+        new()
+        {
+            Description = request.Description,
+            ScheduledAt = request.ScheduledAt,
+            ScheduledIn = request.ScheduledIn,
+            Observation = request.Observation,
+            UserId = request.UserId,
+            CallId = request.CallId
+        };
 }
