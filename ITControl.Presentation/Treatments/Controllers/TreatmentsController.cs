@@ -41,9 +41,11 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneTreatmentsResponse?>> ShowAsync(Guid id)
+    public async Task<FindOneResponse<FindOneTreatmentsResponse?>> ShowAsync(
+        [FromRoute] Guid id, [FromQuery] FindOneTreatmentsRequest request)
     {
-        var treatment = await treatmentsService.FindOneAsync(id, true, true);
+        request.Id = id;
+        var treatment = await treatmentsService.FindOneAsync(request);
         var data = treatmentsView.FindOne(treatment);
         return new FindOneResponse<FindOneTreatmentsResponse?>()
         {

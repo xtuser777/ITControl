@@ -1,6 +1,7 @@
 using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Treatments.Enums;
+using ITControl.Domain.Treatments.Params;
 using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Domain.Treatments.Entities;
@@ -23,60 +24,41 @@ public sealed class Treatment : Entity
     public Call? Call { get; set; }
     public User? User { get; set; }
 
-    public Treatment(
-        string description,
-        string protocol,
-        DateOnly startedAt, 
-        DateOnly? endedAt, 
-        TimeOnly startedIn, 
-        TimeOnly? endedIn, 
-        TreatmentStatus status,
-        TreatmentType type,
-        string observation,
-        string externalProtocol,
-        Guid callId, 
-        Guid userId)
+    public Treatment() { }
+
+    public Treatment(TreatmentParams @params)
     {
-        Description = description;
-        Protocol = protocol;
-        StartedAt = startedAt;
-        EndedAt = endedAt;
-        StartedIn = startedIn;
-        EndedIn = endedIn;
-        Status = status;
-        Type = type;
-        Observation = observation;
-        ExternalProtocol = externalProtocol;
-        CallId = callId;
-        UserId = userId;
+        Id = Guid.NewGuid();
+        Description = @params.Description;
+        Protocol = @params.Protocol;
+        StartedAt = @params.StartedAt;
+        EndedAt = @params.EndedAt;
+        StartedIn = @params.StartedIn;
+        EndedIn = @params.EndedIn;
+        Status = @params.Status;
+        Type = @params.Type;
+        Observation = @params.Observation;
+        ExternalProtocol = @params.ExternalProtocol;
+        CallId = @params.CallId;
+        UserId = @params.UserId;
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
     }
 
-    public void Update(
-        string? description = null,
-        string? protocol = null,
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null, 
-        TimeOnly? startedIn = null, 
-        TimeOnly? endedIn = null, 
-        TreatmentStatus? status = null,
-        TreatmentType? type = null,
-        string? observation = null,
-        string? externalProtocol = null,
-        Guid? callId = null, 
-        Guid? userId = null)
+    public void Update(UpdateTreatmentParams @params)
     {
-        Description = description ?? Description;
-        Protocol = protocol ?? Protocol;
-        StartedAt = startedAt ?? StartedAt;
-        EndedAt = endedAt ?? EndedAt;
-        StartedIn = startedIn ?? StartedIn;
-        EndedIn = endedIn ?? EndedIn;
-        Status = status ?? Status;
-        Type = type ?? Type;
-        Observation = observation ?? Observation;
-        ExternalProtocol = externalProtocol ?? ExternalProtocol;
-        CallId = callId ?? CallId;
-        UserId = userId ?? UserId;
+        Description = @params.Description ?? Description;
+        Protocol = @params.Protocol ?? Protocol;
+        StartedAt = @params.StartedAt ?? StartedAt;
+        EndedAt = @params.EndedAt ?? EndedAt;
+        StartedIn = @params.StartedIn ?? StartedIn;
+        EndedIn = @params.EndedIn ?? EndedIn;
+        Status = @params.Status ?? Status;
+        Type = @params.Type ?? Type;
+        Observation = @params.Observation ?? Observation;
+        ExternalProtocol = @params.ExternalProtocol ?? ExternalProtocol;
+        CallId = @params.CallId ?? CallId;
+        UserId = @params.UserId ?? UserId;
         UpdatedAt = DateTime.Now;
     }
 }

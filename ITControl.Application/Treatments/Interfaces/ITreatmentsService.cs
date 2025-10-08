@@ -6,10 +6,7 @@ namespace ITControl.Application.Treatments.Interfaces;
 
 public interface ITreatmentsService
 {
-    Task<Treatment> FindOneAsync(
-        Guid id,
-        bool? includeCall = null,
-        bool? includeUser = null);
+    Task<Treatment> FindOneAsync(FindOneTreatmentsRequest request);
     Task<IEnumerable<Treatment>> FindManyAsync(
         FindManyTreatmentsRequest request);
     Task<PaginationResponse?> FindManyPaginationAsync(

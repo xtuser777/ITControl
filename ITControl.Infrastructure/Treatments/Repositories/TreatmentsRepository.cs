@@ -1,6 +1,6 @@
 ﻿using ITControl.Domain.Treatments.Entities;
-using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Interfaces;
+using ITControl.Domain.Treatments.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,95 +9,49 @@ namespace ITControl.Infrastructure.Treatments.Repositories;
 public class TreatmentsRepository(
     ApplicationDbContext context) : ITreatmentsRepository
 {
-    public async Task<Treatment?> FindOneAsync(
-        Guid id, 
-        bool? includeCall = null, 
-        bool? includeUser = null)
+    public async Task<Treatment?> FindOneAsync(FindOneTreatmentsRepositoryParams @params)
     {
         var query = context.Treatments.AsQueryable();
-        if (includeCall == true)
+        if (@params.IncludeCall == true)
         {
             query = query
                 .Include(t => t.Call)
-                .ThenInclude(x => x!.Location)
+                .ThenInclude(x => x!.User)
                 .ThenInclude(x => x!.Unit)
                 .Include(x => x.Call)
-                .ThenInclude(x => x!.Location)
+                .ThenInclude(x => x!.User)
                 .ThenInclude(x => x!.Department)
                 .Include(x => x.Call)
-                .ThenInclude(x => x!.Location)
+                .ThenInclude(x => x!.User)
                 .ThenInclude(x => x!.Division);
         }
-        if (includeUser == true)
+        if (@params.IncludeUser == true)
         {
             query = query.Include(t => t.User);
         }
 
         return await query
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstOrDefaultAsync(t => t.Id == @params.Id);
     }
 
-    public async Task<IEnumerable<Treatment>> FindManyAsync(
-        string? description = null, 
-        string? protocol = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null, 
-        TimeOnly? startedIn = null, 
-        TimeOnly? endedIn = null, 
-        TreatmentStatus? status = null, 
-        TreatmentType? type = null, 
-        string? observation = null, 
-        string? externalProtocol = null, 
-        Guid? callId = null, 
-        Guid? userId = null, 
-        string? orderByDescription = null, 
-        string? orderByProtocol = null,
-        string? orderByStartedAt = null,
-        string? orderByEndedAt = null, 
-        string? orderByStartedIn = null, 
-        string? orderByEndedIn = null, 
-        string? orderByStatus = null, 
-        string? orderByType = null, 
-        string? orderByObservation = null, 
-        string? orderByExternalProtocol = null, 
-        string? orderByCall = null, 
-        string? orderByUser = null, 
-        int? page = null, int? size = null)
+    public async Task<IEnumerable<Treatment>> FindManyAsync(FindManyTreatmentsRepositoryParams @params)
     {
+        var (page, size) = @params;
         var query = context
             .Treatments
             .Include(t => t.Call)
             .Include(t => t.User)
             .AsNoTracking();
-        query = BuildQuery(
-            query, 
-            null, 
-            description, 
-            protocol, 
-            startedAt, 
-            endedAt, 
-            startedIn, 
-            endedIn, 
-            status, 
-            type, 
-            observation, 
-            externalProtocol, 
-            callId, 
-            userId);
-        query = BuildOrderBy(
-            query, 
-            orderByDescription, 
-            orderByProtocol, 
-            orderByStartedAt, 
-            orderByEndedAt, 
-            orderByStartedIn, 
-            orderByEndedIn, 
-            orderByStatus, 
-            orderByType, 
-            orderByObservation, 
-            orderByExternalProtocol, 
-            orderByCall, 
-            orderByUser);
+        query = BuildQuery(new()
+        {
+            Query = query,
+            Params = @params
+        });
+        query = BuildOrderBy(new()
+        {
+            Query = query,
+            Params = @params
+        });
         if (page.HasValue && size.HasValue)
         {
             var skip = (page.Value - 1) * size.Value;
@@ -122,216 +76,146 @@ public class TreatmentsRepository(
         context.Treatments.Remove(treatment);
     }
 
-    public async Task<int> CountAsync(
-        Guid? id = null, 
-        string? description = null, 
-        string? protocol = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null, 
-        TimeOnly? startedIn = null, 
-        TimeOnly? endedIn = null, 
-        TreatmentStatus? status = null, 
-        TreatmentType? type = null, 
-        string? observation = null, 
-        string? externalProtocol = null, 
-        Guid? callId = null, 
-        Guid? userId = null)
+    public async Task<int> CountAsync(CountTreatmentsRepositoryParams @params)
     {
         var query = context.Treatments.AsNoTracking();
-        query = BuildQuery(
-            query,
-            id,
-            description,
-            protocol,
-            startedAt,
-            endedAt,
-            startedIn,
-            endedIn,
-            status,
-            type,
-            observation,
-            externalProtocol,
-            callId,
-            userId);
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Params = @params
+        });
 
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(
-        Guid? id = null, 
-        string? description = null, 
-        string? protocol = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null, 
-        TimeOnly? startedIn = null, 
-        TimeOnly? endedIn = null, 
-        TreatmentStatus? status = null, 
-        TreatmentType? type = null, 
-        string? observation = null, 
-        string? externalProtocol = null, 
-        Guid? callId = null, 
-        Guid? userId = null)
+    public async Task<bool> ExistsAsync(ExistsTreatmentsRepositoryParams @params)
     {
-        var count = await CountAsync(
-            id, 
-            description, 
-            protocol, 
-            startedAt, 
-            endedAt, 
-            startedIn, 
-            endedIn, 
-            status, 
-            type, 
-            observation, 
-            externalProtocol, 
-            callId, 
-            userId);
+        var count = await CountAsync(@params);
 
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(Guid id, string? protocol = null)
+    public async Task<bool> ExclusiveAsync(ExclusiveTreatmentsRepositoryParams @params)
     {
         var query = context.Treatments.AsNoTracking();
-        query = query.Where(x => x.Id != id);
-        query = BuildQuery(
-            query,
-            protocol: protocol);
+        query = query.Where(x => x.Id != @params.Id);
+        query = BuildQuery(new ()
+        {
+            Query = query,
+            Params = new ()
+            {
+                Protocol = @params.Protocol,
+            }
+        });
 
         var count = await query.CountAsync();
 
         return count > 0;
     }
 
-    private IQueryable<Treatment> BuildQuery(
-        IQueryable<Treatment> query,
-        Guid? id = null,
-        string? description = null,
-        string? protocol = null,
-        DateOnly? startedAt = null,
-        DateOnly? endedAt = null,
-        TimeOnly? startedIn = null,
-        TimeOnly? endedIn = null,
-        TreatmentStatus? status = null,
-        TreatmentType? type = null,
-        string? observation = null,
-        string? externalProtocol = null,
-        Guid? callId = null,
-        Guid? userId = null)
+    private static IQueryable<Treatment> BuildQuery(BuildQueryTreatmentsRepositoryParams @queryParams)
     {
-        ArgumentNullException.ThrowIfNull(query);
-        if (id != null) 
-            query = query.Where(x => x.Id == id);
-        if (description != null) 
-            query = query.Where(x => x.Description.Contains(description));
-        if (protocol != null) 
-            query = query.Where(x => x.Protocol.Contains(protocol));
-        if (startedAt != null) 
-            query = query.Where(x => x.StartedAt == startedAt);
-        if (endedAt != null)
-            query = query.Where(x => x.EndedAt == endedAt);
-        if (startedIn != null)
-            query = query.Where(x => x.StartedIn == startedIn);
-        if (endedIn != null)
-            query = query.Where(x => x.EndedIn == endedIn);
-        if (status != null)
-            query = query.Where(x => x.Status == status);
-        if (type != null)
-            query = query.Where(x => x.Type == type);
-        if (observation != null)
-            query = query.Where(x => x.Observation.Contains(observation));
-        if (externalProtocol != null)
-            query = query.Where(x => x.ExternalProtocol.Contains(externalProtocol));
-        if (callId != null)
-            query = query.Where(x => x.CallId == callId);
-        if (userId != null)
-            query = query.Where(x => x.UserId == userId);
+        var (query, @params) = @queryParams;
+        if (@params.Id != null) 
+            query = query.Where(x => x.Id == @params.Id);
+        if (@params.Description != null) 
+            query = query.Where(x => x.Description.Contains(@params.Description));
+        if (@params.Protocol != null) 
+            query = query.Where(x => x.Protocol.Contains(@params.Protocol));
+        if (@params.StartedAt != null) 
+            query = query.Where(x => x.StartedAt == @params.StartedAt);
+        if (@params.EndedAt != null)
+            query = query.Where(x => x.EndedAt == @params.EndedAt);
+        if (@params.StartedIn != null)
+            query = query.Where(x => x.StartedIn == @params.StartedIn);
+        if (@params.EndedIn != null)
+            query = query.Where(x => x.EndedIn == @params.EndedIn);
+        if (@params.Status != null)
+            query = query.Where(x => x.Status == @params.Status);
+        if (@params.Type != null)
+            query = query.Where(x => x.Type == @params.Type);
+        if (@params.Observation != null)
+            query = query.Where(x => x.Observation.Contains(@params.Observation));
+        if (@params.ExternalProtocol != null)
+            query = query.Where(x => x.ExternalProtocol.Contains(@params.ExternalProtocol));
+        if (@params.CallId != null)
+            query = query.Where(x => x.CallId == @params.CallId);
+        if (@params.UserId != null)
+            query = query.Where(x => x.UserId == @params.UserId);
 
         return query;
     }
 
-    private IQueryable<Treatment> BuildOrderBy(
-        IQueryable<Treatment> query,
-        string? orderByDescription = null,
-        string? orderByProtocol = null,
-        string? orderByStartedAt = null,
-        string? orderByEndedAt = null,
-        string? orderByStartedIn = null,
-        string? orderByEndedIn = null,
-        string? orderByStatus = null,
-        string? orderByType = null,
-        string? orderByObservation = null,
-        string? orderByExternalProtocol = null,
-        string? orderByCall = null,
-        string? orderByUser = null)
+    private static IQueryable<Treatment> BuildOrderBy(BuildOrderByTreatmentsRepositoryParams @orderByParams)
     {
-        query = orderByDescription switch
+        var (query, @params) = @orderByParams;
+        query = @params.OrderByDescription switch
         {
             "a" => query.OrderBy(x => x.Description),
             "d" => query.OrderByDescending(x => x.Description),
             _ => query
         };
-        query = orderByProtocol switch
+        query = @params.OrderByProtocol switch
         {
             "a" => query.OrderBy(x => x.Protocol),
             "d" => query.OrderByDescending(x => x.Protocol),
             _ => query
         };
-        query = orderByStartedAt switch
+        query = @params.OrderByStartedAt switch
         {
             "a" => query.OrderBy(x => x.StartedAt),
             "d" => query.OrderByDescending(x => x.StartedAt),
             _ => query
         };
-        query = orderByEndedAt switch
+        query = @params.OrderByEndedAt switch
         {
             "a" => query.OrderBy(x => x.EndedAt),
             "d" => query.OrderByDescending(x => x.EndedAt),
             _ => query
         };
-        query = orderByStartedIn switch
+        query = @params.OrderByStartedIn switch
         {
             "a" => query.OrderBy(x => x.StartedIn),
             "d" => query.OrderByDescending(x => x.StartedIn),
             _ => query
         };
-        query = orderByEndedIn switch
+        query = @params.OrderByEndedIn switch
         {
             "a" => query.OrderBy(x => x.EndedIn),
             "d" => query.OrderByDescending(x => x.EndedIn),
             _ => query
         };
-        query = orderByStatus switch
+        query = @params.OrderByStatus switch
         {
             "a" => query.OrderBy(x => x.Status),
             "d" => query.OrderByDescending(x => x.Status),
             _ => query
         };
-        query = orderByType switch
+        query = @params.OrderByType switch
         {
             "a" => query.OrderBy(x => x.Type),
             "d" => query.OrderByDescending(x => x.Type),
             _ => query
         };
-        query = orderByObservation switch
+        query = @params.OrderByObservation switch
         {
             "a" => query.OrderBy(x => x.Observation),
             "d" => query.OrderByDescending(x => x.Observation),
             _ => query
         };
-        query = orderByExternalProtocol switch
+        query = @params.OrderByExternalProtocol switch
         {
             "a" => query.OrderBy(x => x.ExternalProtocol),
             "d" => query.OrderByDescending(x => x.ExternalProtocol),
             _ => query
         };
-        query = orderByCall switch
+        query = @params.OrderByCall switch
         {
             "a" => query.OrderBy(x => x.Call!.Description),
             "d" => query.OrderByDescending(x => x.Call!.Description),
             _ => query
         };
-        query = orderByUser switch
+        query = @params.OrderByUser switch
         {
             "a" => query.OrderBy(x => x.User!.Name),
             "d" => query.OrderByDescending(x => x.User!.Name),

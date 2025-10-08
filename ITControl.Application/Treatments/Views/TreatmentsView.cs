@@ -84,15 +84,15 @@ public class TreatmentsView : ITreatmentsView
                     Title = treatment.Call.Title,
                     Description = treatment.Call.Description,
                     Reason = treatment.Call.Reason.GetDisplayValue(),
-                    Location = new FindOneTreatmentsCallLocationResponse()
+                    User = new ()
                     {
-                        Id = treatment.Call.Location.Id,
-                        Description = treatment.Call.Location.Description,
-                        Unit = treatment.Call.Location.Unit?.Name ?? "",
-                        Address = $"{treatment.Call.Location.Unit?.StreetName}, {treatment.Call.Location.Unit?.AddressNumber}, {treatment.Call.Location.Unit?.Neighborhood}",
-                        Phone = treatment.Call.Location.Unit?.Phone ?? "",
-                        Department = treatment.Call.Location.Department?.Alias ?? "",
-                        Division = treatment.Call.Location.Division?.Name ?? "",
+                        Id = treatment.Call.User!.Id,
+                        Name = treatment.Call.User!.Name,
+                        Unit = treatment.Call.User!.Unit?.Name ?? "",
+                        Address = $"{treatment.Call.User!.Unit?.StreetName}, {treatment.Call.User!.Unit?.AddressNumber}, {treatment.Call.User!.Unit?.Neighborhood}",
+                        Phone = treatment.Call.User!.Unit?.Phone ?? "",
+                        Department = treatment.Call.User!.Department?.Alias ?? "",
+                        Division = treatment.Call.User!.Division?.Name ?? "",
                     }
                 }
                 : null,

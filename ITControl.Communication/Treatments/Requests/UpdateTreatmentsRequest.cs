@@ -1,7 +1,9 @@
 ﻿using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Treatments.Enums;
+using ITControl.Domain.Treatments.Params;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Treatments.Requests;
@@ -56,6 +58,22 @@ public class UpdateTreatmentsRequest
     [UserConnection]
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? UserId { get; set; }
+
+    public static implicit operator UpdateTreatmentParams(UpdateTreatmentsRequest request) =>
+        new()
+        {
+            Description = request.Description,
+            StartedAt = request.StartedAt,
+            EndedAt = request.EndedAt,
+            StartedIn = request.StartedIn,
+            EndedIn = request.EndedIn,
+            Status = Parser.ToEnumOptional<TreatmentStatus>(request.Status),
+            Type = Parser.ToEnumOptional<TreatmentType>(request.Type),
+            Observation = request.Observation,
+            ExternalProtocol = request.ExternalProtocol,
+            CallId = request.CallId,
+            UserId = request.UserId
+        };
 
     public static ValidationResult? ValidateStatus(string? status, ValidationContext context)
     {

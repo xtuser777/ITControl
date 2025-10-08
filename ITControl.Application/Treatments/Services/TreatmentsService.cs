@@ -2,7 +2,6 @@
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
-using ITControl.Application.Shared.Utils;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Requests;
@@ -18,68 +17,24 @@ namespace ITControl.Application.Treatments.Services;
 public class TreatmentsService(
     IUnitOfWork unitOfWork) : ITreatmentsService
 {
-    public async Task<Treatment> FindOneAsync(
-        Guid id, 
-        bool? includeCall = null, 
-        bool? includeUser = null)
+    public async Task<Treatment> FindOneAsync(FindOneTreatmentsRequest request)
     {
         return await unitOfWork
             .TreatmentsRepository
-            .FindOneAsync(id, includeCall, includeUser) 
+            .FindOneAsync(request) 
             ?? throw new NotFoundException(Errors.TREATMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Treatment>> FindManyAsync(FindManyTreatmentsRequest request)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        return await unitOfWork.TreatmentsRepository.FindManyAsync(
-            request.Description,
-            request.Protocol,
-            request.StartedAt,
-            request.EndedAt,
-            request.StartedIn,
-            request.EndedIn,
-            Parser.ToEnumOptional<TreatmentStatus>(request.Status),
-            Parser.ToEnumOptional<TreatmentType>(request.Type),
-            request.Observation,
-            request.ExternalProtocol,
-            request.CallId,
-            request.UserId,
-            request.OrderByDescription,
-            request.OrderByProtocol,
-            request.OrderByStartedAt,
-            request.OrderByEndedAt,
-            request.OrderByStartedIn,
-            request.OrderByEndedIn,
-            request.OrderByStatus,
-            request.OrderByType,
-            request.OrderByObservation,
-            request.OrderByExternalProtocol,
-            request.OrderByCall,
-            request.OrderByUser,
-            page,
-            size);
+        return await unitOfWork.TreatmentsRepository.FindManyAsync(request);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyTreatmentsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
 
-        var count = await unitOfWork.TreatmentsRepository.CountAsync(
-            null,
-            request.Description,
-            request.Protocol,
-            request.StartedAt,
-            request.EndedAt,
-            request.StartedIn,
-            request.EndedIn,
-            Parser.ToEnumOptional<TreatmentStatus>(request.Status),
-            Parser.ToEnumOptional<TreatmentType>(request.Type),
-            request.Observation,
-            request.ExternalProtocol,
-            request.CallId,
-            request.UserId);
+        var count = await unitOfWork.TreatmentsRepository.CountAsync(request);
 
         var pagination = Pagination.Build(request.Page, request.Size, count);
 
@@ -89,33 +44,13 @@ public class TreatmentsService(
     public async Task<Treatment?> CreateAsync(CreateTreatmentsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        await CheckExistenceAsync(request.CallId, request.UserId);
-        var treatment = new Treatment(
-            request.Description,
-            Guid.NewGuid().ToString().ToUpper().Replace("-", ""),
-            request.StartedAt,
-            request.EndedAt,
-            request.StartedIn,
-            request.EndedIn,
-            TreatmentStatus.Started,
-            Parser.ToEnum<TreatmentType>(request.Type),
-            request.Observation,
-            request.ExternalProtocol,
-            request.CallId,
-            request.UserId);
-        var call = await unitOfWork.CallsRepository.FindOneAsync(request.CallId) 
+        var treatment = new Treatment(request);
+        var call = await unitOfWork.CallsRepository.FindOneAsync(new () { Id = request.CallId }) 
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
         var user = await unitOfWork.UsersRepository.FindOneAsync(new()
         {
             Id = request.UserId,
-            IncludeDepartment = false,
-            IncludeUsersEquipments = false,
-            IncludePosition = false,
-            IncludeDivision = false,
-            IncludeRole = false,
-            IncludeUnit = false,
-            IncludeUsersSystems = false
         }) 
                    ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.TREATMENTS_STARTED, treatment.Protocol, call.Title, user.Name);
@@ -133,8 +68,7 @@ public class TreatmentsService(
     public async Task UpdateAsync(Guid id, UpdateTreatmentsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        await CheckExistenceAsync(request.CallId, request.UserId);
-        var treatment = await FindOneAsync(id, true, true);
+        var treatment = await FindOneAsync(new () { Id = id });
         var call = treatment.Call
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
@@ -166,19 +100,7 @@ public class TreatmentsService(
                 status: CallStatus.Closed,
                 description: message);
         }
-        treatment.Update(
-            request.Description,
-            null,
-            request.StartedAt,
-            request.EndedAt,
-            request.StartedIn,
-            request.EndedIn,
-            Parser.ToEnumOptional<TreatmentStatus>(request.Status),
-            Parser.ToEnumOptional<TreatmentType>(request.Type),
-            request.Observation,
-            request.ExternalProtocol,
-            request.CallId,
-            request.UserId);
+        treatment.Update(request);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
         await CreateNotification(treatment.Id, call.UserId, Titles.TREATMENTS_UPDATED, message, type);
@@ -188,48 +110,9 @@ public class TreatmentsService(
     public async Task DeleteAsync(Guid id)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var treatment = await FindOneAsync(id);
+        var treatment = await FindOneAsync(new() { Id = id });
         unitOfWork.TreatmentsRepository.Delete(treatment);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckExistenceAsync(Guid? callId = null, Guid? userId = null)
-    {
-        var messages = new List<string>();
-        if (callId != null)
-        {
-            await CheckCallExistenceAsync(callId.Value, messages);
-        }
-
-        if (userId != null)
-        {
-            await CheckUserExistenceAsync(userId.Value, messages);
-        }
-
-        if (messages.Count > 0)
-        {
-            throw new NotFoundException(string.Join(Environment.NewLine, messages.ToArray()));
-        }
-    }
-
-    private async Task CheckCallExistenceAsync(
-        Guid callId,
-        List<string> messages)
-    {
-        var exists = await unitOfWork.CallsRepository.ExistsAsync(id: callId);
-        if (exists == false)
-        {
-            messages.Add(Errors.CALL_NOT_FOUND);
-        }
-    }
-
-    private async Task CheckUserExistenceAsync(Guid userId, List<string> messages)
-    {
-        var user = await unitOfWork.UsersRepository.ExistsAsync(new() { Id = userId });
-        if (user == false)
-        {
-            messages.Add(Errors.USER_NOT_FOUND);
-        }
     }
 
     private async Task CreateNotification(
