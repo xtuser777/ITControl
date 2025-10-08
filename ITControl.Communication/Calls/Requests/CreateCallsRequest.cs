@@ -1,5 +1,7 @@
 ﻿using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
@@ -38,6 +40,16 @@ public class CreateCallsRequest
     [SystemConnection]
     [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid? SystemId { get; set; }
+
+    public static implicit operator Call(CreateCallsRequest request) =>
+        new(
+            request.Title,
+            request.Description,
+            Parser.ToEnum<CallReason>(request.Reason),
+            Guid.Empty,
+            request.UserId,
+            request.SystemId,
+            request.EquipmentId);
 
     public static ValidationResult? ValidateReason(string reason, ValidationContext context)
     {

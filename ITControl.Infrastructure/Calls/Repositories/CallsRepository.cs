@@ -1,68 +1,55 @@
 ﻿using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Calls.Interfaces;
+using ITControl.Domain.Calls.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
 namespace ITControl.Infrastructure.Calls.Repositories;
 
 public class CallsRepository(
     ApplicationDbContext context) : ICallsRepository
 {
-    public Task<Call?> FindOneAsync(
-        Guid id,
-        bool? includeUser = null,
-        bool? includeLocation = null,
-        bool? includeEquipment = null,
-        bool? includeSystem = null)
+    public Task<Call?> FindOneAsync(FindOneCallsRepositoryParams @params)
     {
         var query = context.Calls.AsQueryable();
         query = query.Include(c => c.CallStatus);
-        if (includeUser == true)
+        if (@params.IncludeUser == true)
         {
-            query = query.Include(c => c.User);
+            query = query
+                .Include(c => c.User).ThenInclude(u => u!.Position)
+                .Include(c => c.User).ThenInclude(u => u!.Unit)
+                .Include(c => c.User).ThenInclude(u => u!.Department)
+                .Include(c => c.User).ThenInclude(u => u!.Division);
         }
-        if (includeLocation == true)
-        {
-            query = query.Include(c => c.Location!).ThenInclude(l => l.Unit);
-        }
-        if (includeEquipment == true)
+        if (@params.IncludeEquipment == true)
         {
             query = query.Include(c => c.Equipment);
         }
-        if (includeSystem == true)
+        if (@params.IncludeSystem == true)
         {
             query = query.Include(c => c.System);
         }
 
-        return query.FirstOrDefaultAsync(c => c.Id == id);
+        return query.FirstOrDefaultAsync(c => c.Id == @params.Id);
     }
 
-    public async Task<IEnumerable<Call>> FindManyAsync(
-        string? title = null, 
-        string? description = null,
-        CallReason? reason = null,
-        CallStatus? status = null,
-        Guid? userId = null, 
-        Guid? locationId = null, 
-        string? orderByTitle = null, 
-        string? orderByDescription = null,
-        string? orderByReason = null,
-        string? orderByStatus = null,
-        string? orderByUser = null, 
-        string? orderByLocation = null, 
-        int? page = null, int? size = null)
+    public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRepositoryParams @params)
     {
+        var (page, size) = @params;
         var query = context.Calls
             .Include(c => c.CallStatus)
             .Include(c => c.User)
-            .Include(c => c.Location)
             .AsNoTracking();
-        query = BuildQuery(
-            query, null, title, description, reason, status, userId, locationId);
-        query = ApplySorting(
-            query, orderByTitle, orderByDescription, orderByStatus, orderByUser, orderByLocation);
+        query = BuildQuery(new BuildQueryCallsRepositoryParams()
+        {
+            Query = query,
+            Params = @params
+        });
+        query = ApplySorting(new BuildOrderByCallsRepositoryParams()
+        {
+            Query = query,
+            Params = @params,
+        });
         if (page.HasValue && size.HasValue)
         {
             var skip = (page.Value - 1) * size.Value;
@@ -87,121 +74,88 @@ public class CallsRepository(
         context.Calls.Remove(call);
     }
 
-    public Task<int> CountAsync(
-        Guid? id = null, 
-        string? title = null, 
-        string? description = null,
-        CallReason? reason = null,
-        CallStatus? status = null,
-        Guid? userId = null, 
-        Guid? locationId = null)
+    public Task<int> CountAsync(CountCallsRepositoryParams @params)
     {
         var query = context.Calls.AsNoTracking();
-        query = BuildQuery(query, id, title, description, reason, status, userId, locationId);
+        query = BuildQuery(new BuildQueryCallsRepositoryParams()
+        {
+            Query = query,
+            Params = @params
+        });
 
         return query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(
-        Guid? id = null, 
-        string? title = null, 
-        string? description = null,
-        CallReason? reason = null,
-        CallStatus? status = null,
-        Guid? userId = null, 
-        Guid? locationId = null)
+    public async Task<bool> ExistsAsync(ExistsCallsRepositoryParams @params)
     {
-        var count = await CountAsync(id, title, description, reason, status, userId, locationId);
+        var count = await CountAsync(@params);
 
         return count > 0;
     }
 
-    private IQueryable<Call> BuildQuery(
-        IQueryable<Call> query,
-        Guid? id = null,
-        string? title = null,
-        string? description = null,
-        CallReason? reason = null,
-        CallStatus? status = null,
-        Guid? userId = null,
-        Guid? locationId = null)
+    private static IQueryable<Call> BuildQuery(BuildQueryCallsRepositoryParams @buildParams)
     {
-        if (id.HasValue)
+        var (query, @params) = @buildParams;
+        if (@params.Id.HasValue)
         {
-            query = query.Where(c => c.Id == id.Value);
+            query = query.Where(c => c.Id == @params.Id.Value);
         }
-        if (!string.IsNullOrEmpty(title))
+        if (!string.IsNullOrEmpty(@params.Title))
         {
-            query = query.Where(c => c.Title.Contains(title));
+            query = query.Where(c => c.Title.Contains(@params.Title));
         }
-        if (!string.IsNullOrEmpty(description))
+        if (!string.IsNullOrEmpty(@params.Description))
         {
-            query = query.Where(c => c.Description.Contains(description));
+            query = query.Where(c => c.Description.Contains(@params.Description));
         }
-        if (reason.HasValue)
+        if (@params.Reason.HasValue)
         {
-            query = query.Where(c => c.Reason == reason.Value);
+            query = query.Where(c => c.Reason == @params.Reason.Value);
         }
-        if (status.HasValue)
+        if (@params.Status.HasValue)
         {
-            query = query.Where(c => c.CallStatus!.Status == status.Value);
+            query = query.Where(c => c.CallStatus!.Status == @params.Status.Value);
         }
-        if (userId.HasValue)
+        if (@params.UserId.HasValue)
         {
-            query = query.Where(c => c.UserId == userId.Value);
-        }
-        if (locationId.HasValue)
-        {
-            query = query.Where(c => c.LocationId == locationId.Value);
+            query = query.Where(c => c.UserId == @params.UserId.Value);
         }
 
         return query;
     }
 
-    private IQueryable<Call> ApplySorting(
-        IQueryable<Call> query,
-        string? orderByTitle = null,
-        string? orderByDescription = null,
-        string? orderByReason = null,
-        string? orderByStatus = null,
-        string? orderByUser = null,
-        string? orderByLocation = null)
+    private static IQueryable<Call> ApplySorting(BuildOrderByCallsRepositoryParams @orderByParams)
     {
-        if (!string.IsNullOrEmpty(orderByTitle))
+        var (query, @params) = @orderByParams;
+        if (!string.IsNullOrEmpty(@params.OrderByTitle))
         {
-            query = orderByTitle.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
+            query = @params.OrderByTitle.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
                 query.OrderBy(c => c.Title) : 
                 query.OrderByDescending(c => c.Title);
         }
-        if (!string.IsNullOrEmpty(orderByDescription))
+        if (!string.IsNullOrEmpty(@params.OrderByDescription))
         {
-            query = orderByDescription.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
+            query = @params.OrderByDescription.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
                 query.OrderBy(c => c.Description) : 
                 query.OrderByDescending(c => c.Description);
         }
-        if (!string.IsNullOrEmpty(orderByReason))
+        if (!string.IsNullOrEmpty(@params.OrderByReason))
         {
-            query = orderByReason.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
+            query = @params.OrderByReason.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
                 query.OrderBy(c => c.Reason) : 
                 query.OrderByDescending(c => c.Reason);
         }
-        if (!string.IsNullOrEmpty(orderByStatus)) 
+        if (!string.IsNullOrEmpty(@params.OrderByStatus)) 
         {
-            query = orderByStatus.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
+            query = @params.OrderByStatus.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
                 query.OrderBy(c => c.CallStatus!.Status) : 
                 query.OrderByDescending(c => c.CallStatus!.Status);
         }
-        if (!string.IsNullOrEmpty(orderByUser))
+        if (!string.IsNullOrEmpty(@params.OrderByUser))
         {
-            query = orderByUser.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
+            query = @params.OrderByUser.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
                 query.OrderBy(c => c.User!.Name) : 
                 query.OrderByDescending(c => c.User!.Name);
-        }
-        if (!string.IsNullOrEmpty(orderByLocation))
-        {
-            query = orderByLocation.Equals("a", StringComparison.CurrentCultureIgnoreCase) ? 
-                query.OrderBy(c => c.Location!.Description) : 
-                query.OrderByDescending(c => c.Location!.Description);
         }
         return query;
     }

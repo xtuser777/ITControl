@@ -33,7 +33,6 @@ public class CallsView : ICallsView
             },
             CallStatusId = call.CallStatusId,
             UserId = call.UserId,
-            LocationId = call.LocationId,
             EquipmentId = call.EquipmentId,
             SystemId = call.SystemId,
             CallStatus = call.CallStatus != null 
@@ -55,16 +54,29 @@ public class CallsView : ICallsView
                 {
                     Id = call.User.Id,
                     Name = call.User.Name,
-                }
-                : null,
-            Location = call.Location != null && call.Location.Unit != null
-                ? new FindOneCallsLocationResponse()
-                {
-                    Id = call.Location.Id,
-                    Description = call.Location.Description,
-                    Unit = call.Location.Unit.Name,
-                    Address = $"{call.Location.Unit.StreetName}, {call.Location.Unit.AddressNumber}, {call.Location.Unit.Neighborhood}",
-                    Phone = call.Location.Unit.Phone,
+                    Position = new FindOneCallsUserPositionResponse()
+                    {
+                        Id = call.User.PositionId,
+                        Description = call.User.Position!.Description,
+                    },
+                    Unit = new FindOneCallsUserUnitResponse()
+                    {
+                        Id = call.User.UnitId,
+                        Name = call.User.Unit!.Name,
+                        Address = $"{call.User.Unit.StreetName}, {call.User.Unit.AddressNumber}, {call.User.Unit.Neighborhood}",
+                        Phone = call.User.Unit.Phone,
+                    },
+                    Department = new FindOneCallsUserDepartmentResponse()
+                    {
+                        Id = call.User.DepartmentId,
+                        Name = call.User.Department!.Name,
+                        Alias = call.User.Department.Alias,
+                    },
+                    Division = new FindOneCallsUserDivisionResponse()
+                    {
+                        Id = call.User.Division!.Id,
+                        Name = call.User.Division!.Name,
+                    }
                 }
                 : null,
             Equipment = call.Equipment != null
@@ -111,7 +123,6 @@ public class CallsView : ICallsView
                        DisplayValue = call.CallStatus.Status.GetDisplayValue()
                    },
                    UserId = call.UserId,
-                   LocationId = call.LocationId,
                    EquipmentId = call.EquipmentId,
                    SystemId = call.SystemId,
                };

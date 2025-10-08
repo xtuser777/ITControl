@@ -3,67 +3,36 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
-using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Calls.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
-using ITControl.Domain.Roles.Entities;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Application.Calls.Services;
 public class CallsService(
     IUnitOfWork unitOfWork) : ICallsService
 {
-    public async Task<Call> FindOneAsync(
-        Guid id, 
-        bool? includeUser = null, 
-        bool? includeLocation = null, 
-        bool? includeEquipment = null, 
-        bool? includeSystem = null)
+    public async Task<Call> FindOneAsync(FindOneCallsRequest request)
     {
         return await unitOfWork
             .CallsRepository
-            .FindOneAsync(id, includeUser, includeLocation, includeEquipment, includeSystem)
+            .FindOneAsync(request)
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        return await unitOfWork.CallsRepository.FindManyAsync(
-            request.Title,
-            request.Description,
-            Parser.ToEnumOptional<CallReason>(request.Reason),
-            Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
-            request.UserId,
-            request.LocationId,
-            request.OrderByTitle,
-            request.OrderByDescription,
-            request.OrderByReason,
-            request.OrderByStatus,
-            request.OrderByUserId,
-            request.OrderByLocationId,
-            page,
-            size);
+        return await unitOfWork.CallsRepository.FindManyAsync(request);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyCallsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
 
-        var count = await unitOfWork.CallsRepository.CountAsync(
-            null,
-            request.Title,
-            request.Description,
-            Parser.ToEnumOptional<CallReason>(request.Reason),
-            Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
-            request.UserId,
-            request.LocationId);
+        var count = await unitOfWork.CallsRepository.CountAsync(request);
 
         var pagination = Pagination.Build(request.Page, request.Size, count);
 
@@ -73,20 +42,9 @@ public class CallsService(
     public async Task<Call?> CreateAsync(CreateCallsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        await CheckExistence(
-            userId: request.UserId,
-            equipmentId: request.EquipmentId,
-            systemId: request.SystemId);
         var user = await unitOfWork.UsersRepository.FindOneAsync(new()
         {
             Id = request.UserId,
-            IncludeDepartment = false,
-            IncludeUsersEquipments = false,
-            IncludePosition = false,
-            IncludeDivision = false,
-            IncludeRole = false,
-            IncludeUnit = false,
-            IncludeUsersSystems = false
         })
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.CALLS_OPENED, user.Name, DateTime.Now);
@@ -94,17 +52,8 @@ public class CallsService(
             Domain.Calls.Enums.CallStatus.Open,
             message);
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
-        var locations = await unitOfWork.LocationsRepository.FindManyAsync(userId: request.UserId);
-        var location = locations.SingleOrDefault() ?? throw new NotFoundException(Errors.LOCATION_NOT_FOUND);
-        var call = new Call(
-            request.Title,
-            request.Description,
-            Parser.ToEnum<CallReason>(request.Reason),
-            callStatus.Id,
-            request.UserId,
-            location.Id,
-            request.SystemId,
-            request.EquipmentId);
+        var call = (Call)request;
+        call.CallStatusId = callStatus.Id;
         await unitOfWork.CallsRepository.CreateAsync(call);
         await CreateNotification(call.Id, Titles.CALLS_NEW, message);
         await unitOfWork.Commit(transaction);
@@ -115,61 +64,10 @@ public class CallsService(
     public async Task DeleteAsync(Guid id)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var call = await FindOneAsync(id);
+        var call = await FindOneAsync(new () { Id = id });
         unitOfWork.CallsStatusesRepository.Delete(call.CallStatus!);
         unitOfWork.CallsRepository.Delete(call);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckExistence(
-        Guid? userId = null,
-        Guid? equipmentId = null,
-        Guid? systemId = null)
-    {
-        var messages = new List<string>();
-        if (userId.HasValue)
-        {
-            await CheckUserExistence(userId.Value, messages);
-        }
-        if (equipmentId.HasValue)
-        {
-            await CheckEquipmentExistence(equipmentId.Value, messages);
-        }
-        if (systemId.HasValue)
-        {
-            await CheckSystemExistence(systemId.Value, messages);
-        }
-        if (messages.Count > 0)
-        {
-            throw new BadRequestException(string.Join(", ", messages));
-        }
-    }
-
-    private async Task CheckUserExistence(Guid userId, List<string> messages)
-    {
-        var user = await unitOfWork.UsersRepository.ExistsAsync(new() { Id = userId });
-        if (user == false)
-        {
-            messages.Add(Errors.USER_NOT_FOUND);
-        }
-    }
-
-    private async Task CheckEquipmentExistence(Guid equipmentId, List<string> messages)
-    {
-        var equipment = await unitOfWork.EquipmentsRepository.ExistsAsync(id: equipmentId);
-        if (equipment == false)
-        {
-            messages.Add(Errors.EQUIPMENT_NOT_FOUND);
-        }
-    }
-
-    private async Task CheckSystemExistence(Guid systemId, List<string> messages)
-    {
-        var system = await unitOfWork.SystemsRepository.ExistsAsync(id: systemId);
-        if (system == false)
-        {
-            messages.Add(Errors.SYSTEM_NOT_FOUND);
-        }
     }
 
     private async Task CreateNotification(Guid referenceId, string title, string message)

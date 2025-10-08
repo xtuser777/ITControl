@@ -9,7 +9,6 @@ public class FindManyCallsResponse
     public TranslatableField Reason { get; set; } = null!;
     public TranslatableField Status { get; set; } = null!;
     public Guid UserId { get; set; }
-    public Guid LocationId { get; set; }
     public Guid? EquipmentId { get; set; }
     public Guid? SystemId { get; set; }
 }

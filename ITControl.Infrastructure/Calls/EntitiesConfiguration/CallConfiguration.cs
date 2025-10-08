@@ -34,11 +34,6 @@ public class CallConfiguration : IEntityTypeConfiguration<Call>
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Restrict)
             .IsRequired();
-        builder.HasOne(x => x.Location)
-            .WithMany()
-            .HasForeignKey(x => x.LocationId)
-            .OnDelete(DeleteBehavior.Restrict)
-            .IsRequired();
         builder.HasOne(x => x.System)
             .WithMany()
             .HasForeignKey(x => x.SystemId)

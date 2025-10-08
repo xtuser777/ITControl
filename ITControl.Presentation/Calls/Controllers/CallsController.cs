@@ -44,9 +44,11 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneCallsResponse?>> ShowAsync(Guid id)
+    public async Task<FindOneResponse<FindOneCallsResponse?>> ShowAsync(
+        [FromRoute] Guid id, [FromQuery] FindOneCallsRequest request)
     {
-        var call = await callsService.FindOneAsync(id, true, true, true, true);
+        request.Id = id;
+        var call = await callsService.FindOneAsync(request);
         var data = callsView.FindOne(call);
         return new FindOneResponse<FindOneCallsResponse?>()
         {
@@ -82,7 +84,7 @@ public class CallsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync([FromRoute] Guid id)
     {
         await callsService.DeleteAsync(id);
         Response.StatusCode = StatusCodes.Status204NoContent;
