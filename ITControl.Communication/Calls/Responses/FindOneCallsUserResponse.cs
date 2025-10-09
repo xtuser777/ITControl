@@ -3,8 +3,10 @@ public class FindOneCallsUserResponse
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
-    public FindOneCallsUserPositionResponse Position { get; set; } = null!;
-    public FindOneCallsUserDepartmentResponse Department { get; set; } = null!;
-    public FindOneCallsUserDivisionResponse Division { get; set; } = null!;
-    public FindOneCallsUserUnitResponse Unit { get; set; } = null!;
+    public string Unit { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Position { get; set; } = string.Empty;
+    public string Department { get; set; } = string.Empty;
+    public string Division { get; set; } = string.Empty;
 }

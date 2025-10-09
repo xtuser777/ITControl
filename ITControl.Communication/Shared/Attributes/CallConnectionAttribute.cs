@@ -13,7 +13,7 @@ public class CallConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var callsRepository = (ICallsRepository)validationContext.GetService(typeof(ICallsRepository))!;
-        bool callExists = callsRepository.ExistsAsync(id: callId).GetAwaiter().GetResult();
+        bool callExists = callsRepository.ExistsAsync(new () { Id = callId }).GetAwaiter().GetResult();
         if (!callExists)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, callId));

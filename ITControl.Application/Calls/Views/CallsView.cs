@@ -54,29 +54,12 @@ public class CallsView : ICallsView
                 {
                     Id = call.User.Id,
                     Name = call.User.Name,
-                    Position = new FindOneCallsUserPositionResponse()
-                    {
-                        Id = call.User.PositionId,
-                        Description = call.User.Position!.Description,
-                    },
-                    Unit = new FindOneCallsUserUnitResponse()
-                    {
-                        Id = call.User.UnitId,
-                        Name = call.User.Unit!.Name,
-                        Address = $"{call.User.Unit.StreetName}, {call.User.Unit.AddressNumber}, {call.User.Unit.Neighborhood}",
-                        Phone = call.User.Unit.Phone,
-                    },
-                    Department = new FindOneCallsUserDepartmentResponse()
-                    {
-                        Id = call.User.DepartmentId,
-                        Name = call.User.Department!.Name,
-                        Alias = call.User.Department.Alias,
-                    },
-                    Division = new FindOneCallsUserDivisionResponse()
-                    {
-                        Id = call.User.Division!.Id,
-                        Name = call.User.Division!.Name,
-                    }
+                    Phone = call.User.Unit!.Phone,
+                    Address = $"{call.User.Unit.StreetName}, {call.User.Unit.AddressNumber}, {call.User.Unit.Neighborhood}",
+                    Position = call.User.Position!.Description,
+                    Unit = call.User.Unit!.Name,
+                    Department = call.User.Department!.Alias,
+                    Division = call.User.Division!.Name,
                 }
                 : null,
             Equipment = call.Equipment != null
