@@ -1,4 +1,5 @@
 using ITControl.Communication.Shared.Requests;
+using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Users.Params;
 
 namespace ITControl.Communication.Users.Requests;
@@ -20,12 +21,21 @@ public class FindManyUsersRequest : PageableRequest
             Username = request.Username,
             Name = request.Name,
             Email = request.Email,
-            Active = request.Active is not null ? request.Active == "true" : null,
+            Active = Parser.ToBoolOptional(request.Active),
             OrderByUsername = request.OrderByUsername,
             OrderByEmail = request.OrderByEmail,
             OrderByActive = request.OrderByActive,
             OrderByName = request.OrderByName,
-            Page = request.Page is null ? null : int.Parse(request.Page),
-            Size = request.Size is null ? null : int.Parse(request.Size),
+            Page = Parser.ToIntOptional(request.Page),
+            Size = Parser.ToIntOptional(request.Size),
+        };
+
+    public static implicit operator CountUsersRepositoryParams(FindManyUsersRequest request) =>
+        new()
+        {
+            Username = request.Username,
+            Name = request.Name,
+            Email = request.Email,
+            Active = Parser.ToBoolOptional(request.Active),
         };
 }

@@ -26,14 +26,6 @@ public class UsersController(
         [FromQuery] FindManyUsersRequest request)
     {
         var pagination = await usersService.FindManyPaginationAsync(request);
-        if (pagination is null)
-        {
-            return new FindManyResponse<FindManyUsersResponse>()
-            {
-                Data = [],
-                Pagination = pagination
-            };
-        }
         var users = await usersService.FindManyAsync(request);
         var data = usersView.FindMany(users);
 
@@ -50,8 +42,10 @@ public class UsersController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync([FromRoute] FindOneUsersRequest request)
+    public async Task<FindOneResponse<FindOneUsersResponse?>> ShowAsync(
+        [FromRoute] Guid id, [FromQuery] FindOneUsersRequest request)
     {
+        request.Id = id;
         var user = await usersService.FindOneAsync(request);
         var data = usersView.FindOne(user);
 

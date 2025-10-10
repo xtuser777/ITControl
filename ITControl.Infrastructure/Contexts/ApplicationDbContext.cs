@@ -5,7 +5,6 @@ using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.KnowledgeBases.Entities;
-using ITControl.Domain.Locations.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Positions.Entities;
@@ -29,7 +28,6 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
     public DbSet<Department> Departments { get; set; }
     public DbSet<Division> Divisions { get; set; }
     public DbSet<Unit> Units { get; set; }
-    public DbSet<Location> Locations { get; set; }
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<ContractContact> ContractContacts { get; set; }
     public DbSet<Domain.Systems.Entities.System> Systems { get; set; }

@@ -79,6 +79,7 @@ public class CallsView : ICallsView
                     Id = call.System.Id,
                     Name = call.System.Name,
                     Version = call.System.Version,
+                    Own = call.System.Own ? "SIM" : "NÃO",
                 }
                 : null
         };

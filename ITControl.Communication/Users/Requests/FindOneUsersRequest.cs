@@ -4,7 +4,7 @@ namespace ITControl.Communication.Users.Requests;
 
 public class FindOneUsersRequest
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.Empty;
     public bool? IncludePosition { get; set; } = true;
     public bool? IncludeRole { get; set; } = true;
     public bool? IncludeUnit { get; set; } = true;

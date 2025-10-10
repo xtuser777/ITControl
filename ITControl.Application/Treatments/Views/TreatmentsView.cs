@@ -77,7 +77,7 @@ public class TreatmentsView : ITreatmentsView
             ExternalProtocol = treatment.ExternalProtocol,
             CallId = treatment.CallId,
             UserId = treatment.UserId,
-            Call = treatment.Call?.Location != null
+            Call = treatment.Call != null
                 ? new FindOneTreatmentsCallResponse()
                 {
                     Id = treatment.Call.Id,

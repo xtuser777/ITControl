@@ -97,5 +97,15 @@ namespace ITControl.Communication.Shared.Utils
             }
             throw new ArgumentException(string.Format(Errors.Parser_ToBool_Invalid_boolean_format___0_, value), nameof(value));
         }
+
+        public static int? ToIntOptional(string? value)
+        {
+            if (string.IsNullOrEmpty(value)) return null;
+            if (int.TryParse(value, out var result))
+            {
+                return result;
+            }
+            return null;
+        }
     }
 }

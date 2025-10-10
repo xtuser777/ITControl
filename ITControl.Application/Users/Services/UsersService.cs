@@ -6,30 +6,29 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Users.Entities;
-using ITControl.Domain.Users.Params;
 
 namespace ITControl.Application.Users.Services;
 
 public class UsersService(IUnitOfWork unitOfWork) : IUsersService
 {
-    public async Task<User> FindOneAsync(FindOneUsersRepositoryParams @params)
+    public async Task<User> FindOneAsync(FindOneUsersRequest request)
     {
-        return await unitOfWork.UsersRepository.FindOneAsync(@params) 
+        return await unitOfWork.UsersRepository.FindOneAsync(request) 
                ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRepositoryParams @params)
+    public async Task<IEnumerable<User>> FindManyAsync(FindManyUsersRequest request)
     {
-        return await unitOfWork.UsersRepository.FindManyAsync(@params);
+        return await unitOfWork.UsersRepository.FindManyAsync(request);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyUsersRepositoryParams @params)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyUsersRequest request)
     {
-        if (@params.Page == null || @params.Size == null) return null;
+        if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.UsersRepository.CountAsync(@params);
+        var count = await unitOfWork.UsersRepository.CountAsync(request);
         
-        var pagination = Pagination.Build(@params.Page, @params.Size, count);
+        var pagination = Pagination.Build(request.Page, request.Size, count);
         
         return pagination;
     }

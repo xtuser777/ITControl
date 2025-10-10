@@ -5,7 +5,6 @@ using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.KnowledgeBases.Interfaces;
-using ITControl.Domain.Locations.Interfaces;
 using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Domain.Pages.Interfaces;
 using ITControl.Domain.Positions.Interfaces;
@@ -35,7 +34,6 @@ public interface IUnitOfWork
     IDepartmentsRepository DepartmentsRepository { get; }
     IDivisionsRepository DivisionsRepository { get; }
     IUnitsRepository UnitsRepository { get; }
-    ILocationsRepository LocationsRepository { get; }
     IContractsRepository ContractsRepository { get; }
     IContractsContactsRepository ContractsContactsRepository { get; }
     ISystemsRepository SystemsRepository { get; }
