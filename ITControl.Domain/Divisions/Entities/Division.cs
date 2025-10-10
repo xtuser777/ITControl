@@ -11,11 +11,11 @@ public class Division : Entity
 
     public Department? Department { get; set; }
 
-    public Division(string name, Guid departmentId)
+    public Division(DivisionParams @params)
     {
         Id = Guid.NewGuid();
-        Name = name;
-        DepartmentId = departmentId;
+        Name = @params.Name;
+        DepartmentId = @params.DepartmentId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }

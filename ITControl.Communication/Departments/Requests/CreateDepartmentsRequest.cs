@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Domain.Departments.Params;
 
 namespace ITControl.Communication.Departments.Requests;
 
@@ -61,8 +62,10 @@ public class CreateDepartmentsRequest
         return ValidationResult.Success;
     }
 
-    public static implicit operator Department(CreateDepartmentsRequest request)
-    {
-        return new Department(request.Alias, request.Name);
-    }
+    public static implicit operator DepartmentParams(CreateDepartmentsRequest request) =>
+        new()
+        {
+            Alias = request.Alias,
+            Name = request.Name
+        };
 }

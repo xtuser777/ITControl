@@ -1,7 +1,7 @@
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
-using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
+using ITControl.Domain.Departments.Params;
 using ITControl.Domain.Shared.Messages;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -71,12 +71,10 @@ public class UpdateDepartmentsRequest
         return ValidationResult.Success;
     }
 
-    public static implicit operator UpdateDepartmentParams(UpdateDepartmentsRequest request)
-    {
-        return new UpdateDepartmentParams
+    public static implicit operator UpdateDepartmentParams(UpdateDepartmentsRequest request) =>
+        new()
         {
             Alias = request.Alias,
             Name = request.Name
         };
-    }
 }

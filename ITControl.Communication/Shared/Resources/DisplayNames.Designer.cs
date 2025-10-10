@@ -277,15 +277,6 @@ namespace ITControl.Communication.Shared.Resources {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a local.
-        /// </summary>
-        public static string LocationId {
-            get {
-                return ResourceManager.GetString("LocationId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a usuário logado.
         /// </summary>
         public static string LoggedUserId {

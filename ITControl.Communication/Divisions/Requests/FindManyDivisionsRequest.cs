@@ -20,4 +20,11 @@ public class FindManyDivisionsRequest : PageableRequest
             Page = request.Page != null ? int.Parse(request.Page) : null,
             Size = request.Size != null ? int.Parse(request.Size) : null
         };
+
+    public static implicit operator CountDivisionsRepositoryParams(FindManyDivisionsRequest request)
+        => new()
+        {
+            Name = request.Name,
+            DepartmentId = request.DepartmentId
+        };
 }

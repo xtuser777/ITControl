@@ -189,9 +189,6 @@
   <data name="IsRead" xml:space="preserve">
     <value>lida</value>
   </data>
-  <data name="LocationId" xml:space="preserve">
-    <value>local</value>
-  </data>
   <data name="LoggedUserId" xml:space="preserve">
     <value>usuário logado</value>
   </data>

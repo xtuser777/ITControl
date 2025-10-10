@@ -1,16 +1,15 @@
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Departments.Entities;
-using ITControl.Domain.Departments.Params;
 
 namespace ITControl.Application.Departments.Interfaces;
 
 public interface IDepartmentsService
 {
     Task<Department> FindOneAsync(Guid id);
-    Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRepositoryParams @params);
-    Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRepositoryParams @params);
-    Task<Department?> CreateAsync(Department department);
-    Task UpdateAsync(Guid id, UpdateDepartmentParams @params);
+    Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request);
+    Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRequest request);
+    Task<Department?> CreateAsync(CreateDepartmentsRequest request);
+    Task UpdateAsync(Guid id, UpdateDepartmentsRequest request);
     Task DeleteAsync(Guid id);
 }

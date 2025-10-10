@@ -2,9 +2,9 @@ using ITControl.Application.Departments.Interfaces;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
+using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Departments.Entities;
-using ITControl.Domain.Departments.Params;
 using ITControl.Domain.Exceptions;
 
 namespace ITControl.Application.Departments.Services;
@@ -19,35 +19,36 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
                ?? throw new NotFoundException(Errors.DEPARTMENT_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRepositoryParams @params)
+    public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request)
     {
-        return await unitOfWork.DepartmentsRepository.FindManyAsync(@params);
+        return await unitOfWork.DepartmentsRepository.FindManyAsync(request);
     }
 
-    public async Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRepositoryParams @params)
+    public async Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRequest request)
     {
-        if (@params.Page == null || @params.Size == null) return null;
+        if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.DepartmentsRepository.CountAsync(@params);
+        var count = await unitOfWork.DepartmentsRepository.CountAsync(request);
         
-        var pagination = Pagination.Build(@params.Page?.ToString() ?? "", @params.Size?.ToString() ?? "", count);
+        var pagination = Pagination.Build(request.Page, request.Size, count);
         
         return pagination;
     }
 
-    public async Task<Department?> CreateAsync(Department department)
+    public async Task<Department?> CreateAsync(CreateDepartmentsRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
+        var department = new Department(request);
         await unitOfWork.DepartmentsRepository.CreateAsync(department);
         await unitOfWork.Commit(transaction);
 
         return department;
     }
 
-    public async Task UpdateAsync(Guid id, UpdateDepartmentParams @params)
+    public async Task UpdateAsync(Guid id, UpdateDepartmentsRequest request)
     {
         var department = await FindOneAsync(id);
-        department.Update(@params);
+        department.Update(request);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Update(department);
         await unitOfWork.Commit(transaction);

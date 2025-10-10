@@ -74,35 +74,35 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         var (id, name) = @params;
         var query = context.Divisions.AsNoTracking();
         query = query.Where(x => x.Id != id);
-        query = BuildQuery(new () { Query = query, Name = name });
+        query = BuildQuery(new () { Query = query, Params = new() { Name = name } });
         var count = await query.CountAsync();
         
         return count > 0;
     }
 
-    private static IQueryable<Division> BuildQuery(BuildQueryDivisionsRepositoryParams @params)
+    private static IQueryable<Division> BuildQuery(BuildQueryDivisionsRepositoryParams @queryParams)
     {
-        var (query, id, name, departmentId) = @params;
-        if (id is not null) 
-            query = query.Where(x => x.Id == id);
-        if (name is not null) 
-            query = query.Where(x => x.Name.Contains(name));
-        if (departmentId is not null) 
-            query = query.Where(x => x.DepartmentId == departmentId);
+        var (query, @params) = @queryParams;
+        if (@params.Id is not null) 
+            query = query.Where(x => x.Id == @params.Id);
+        if (@params.Name is not null) 
+            query = query.Where(x => x.Name.Contains(@params.Name));
+        if (@params.DepartmentId is not null) 
+            query = query.Where(x => x.DepartmentId == @params.DepartmentId);
         
         return query;
     }
 
-    private static IQueryable<Division> BuildOrderBy(BuildOrderByDivisionsRepositoryParams @params)
+    private static IQueryable<Division> BuildOrderBy(BuildOrderByDivisionsRepositoryParams @orderByParams)
     {
-        var (query, orderByName, orderByDepartment) = @params;
-        query = orderByName switch
+        var (query, @params) = @orderByParams;
+        query = @params.OrderByName switch
         {
             "a" => query.OrderBy(p => p.Name),
             "d" => query.OrderByDescending(p => p.Name),
             _ => query
         };
-        query = orderByDepartment switch
+        query = @params.OrderByDepartment switch
         {
             "a" => query.Include(x => x.Department).OrderBy(p => p.Department!.Alias),
             "d" => query.Include(x => x.Department).OrderByDescending(p => p.Department!.Alias),

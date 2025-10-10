@@ -5,15 +5,13 @@ namespace ITControl.Domain.Divisions.Params;
 public class BuildQueryDivisionsRepositoryParams
 {
     public IQueryable<Division> Query { get; set; } = null!;
-    public Guid? Id { get; set; }
-    public string? Name { get; set; }
-    public Guid? DepartmentId { get; set; }
+    public CountDivisionsRepositoryParams Params { get; set; } = null!;
 
-    public void Deconstruct(out IQueryable<Division> query, out Guid? id, out string? name, out Guid? departmentId)
+    public void Deconstruct(
+        out IQueryable<Division> query,
+        out CountDivisionsRepositoryParams @params)
     {
         query = Query;
-        id = Id;
-        name = Name;
-        departmentId = DepartmentId;
+        @params = Params;
     }
 }

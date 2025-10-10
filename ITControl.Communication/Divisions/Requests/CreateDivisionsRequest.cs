@@ -1,9 +1,9 @@
-using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
-using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Divisions.Interfaces;
+using ITControl.Domain.Divisions.Params;
 using ITControl.Domain.Shared.Messages;
-using ITControl.Domain.Divisions.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Divisions.Requests;
 
@@ -37,6 +37,10 @@ public class CreateDivisionsRequest
         return ValidationResult.Success;
     }
 
-    public static implicit operator Division(CreateDivisionsRequest request)
-        => new(request.Name, request.DepartmentId);
+    public static implicit operator DivisionParams(CreateDivisionsRequest request)
+        => new()
+        {
+            Name = request.Name,
+            DepartmentId = request.DepartmentId
+        };
 }

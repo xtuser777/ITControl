@@ -36,4 +36,14 @@ public class FindManyDepartmentsRequest : PageableRequest
             Size = size
         };
     }
+
+    public static implicit operator CountDepartmentsRepositoryParams(FindManyDepartmentsRequest request)
+    {
+        var (alias, name, _, _, _, _) = request;
+        return new CountDepartmentsRepositoryParams
+        {
+            Alias = alias,
+            Name = name
+        };
+    }
 }

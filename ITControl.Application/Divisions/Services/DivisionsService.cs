@@ -2,51 +2,52 @@ using ITControl.Application.Divisions.Interfaces;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
+using ITControl.Communication.Divisions.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Divisions.Entities;
-using ITControl.Domain.Divisions.Params;
 using ITControl.Domain.Exceptions;
 
 namespace ITControl.Application.Divisions.Services;
 
 public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
 {
-    public async Task<Division> FindOneAsync(FindOneDivisionsRepositoryParams @params)
+    public async Task<Division> FindOneAsync(FindOneDivisionsRequest request)
     {
-        return await unitOfWork.DivisionsRepository.FindOneAsync(@params)
+        return await unitOfWork.DivisionsRepository.FindOneAsync(request)
                ?? throw new NotFoundException(Errors.DIVISION_NOT_FOUND);
     }
     
-    public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRepositoryParams @params)
+    public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRequest request)
     {
-        return await unitOfWork.DivisionsRepository.FindManyAsync(@params);
+        return await unitOfWork.DivisionsRepository.FindManyAsync(request);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginatedAsync(FindManyDivisionsRepositoryParams @params)
+    public async Task<PaginationResponse?> FindManyPaginatedAsync(FindManyDivisionsRequest request)
     {
-        if (@params.Page == null || @params.Size == null) return null;
+        if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.DivisionsRepository.CountAsync(@params);
+        var count = await unitOfWork.DivisionsRepository.CountAsync(request);
         
         var pagination = Pagination.Build(
-            @params.Page.ToString() ?? "", @params.Size.ToString() ?? "", count);
+            request.Page, request.Size, count);
         
         return pagination;
     }
 
-    public async Task<Division?> CreateAsync(Division division)
+    public async Task<Division?> CreateAsync(CreateDivisionsRequest request)
     {
-         await using var transaction = unitOfWork.BeginTransaction;
+        await using var transaction = unitOfWork.BeginTransaction;
+        var division = new Division(request);
         await unitOfWork.DivisionsRepository.CreateAsync(division);
         await unitOfWork.Commit(transaction);
 
         return division;
     }
 
-    public async Task UpdateAsync(Guid id, UpdateDivisionParams @params)
+    public async Task UpdateAsync(Guid id, UpdateDivisionsRequest request)
     {
         var division = await FindOneAsync(new () { Id = id });
-        division.Update(@params);
+        division.Update(request);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DivisionsRepository.Update(division);
         await unitOfWork.Commit(transaction);
