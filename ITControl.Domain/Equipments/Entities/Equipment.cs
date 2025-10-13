@@ -1,30 +1,25 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Equipments.Entities;
 
 public sealed class Equipment : Entity
 {
-    public Equipment(
-        string name, 
-        string description, 
-        EquipmentType type, 
-        string ip, 
-        string mac, 
-        string tag, 
-        bool rented, 
-        Guid? contractId)
+    public Equipment() { }
+
+    public Equipment(EquipmentParams @params)
     {
         Id = Guid.NewGuid();
-        Name = name;
-        Description = description;
-        Type = type;
-        Ip = ip;
-        Mac = mac;
-        Tag = tag;
-        Rented = rented;
-        ContractId = contractId;
+        Name = @params.Name;
+        Description = @params.Description;
+        Type = @params.Type;
+        Ip = @params.Ip;
+        Mac = @params.Mac;
+        Tag = @params.Tag;
+        Rented = @params.Rented;
+        ContractId = @params.ContractId;
         CreatedAt = DateTime.UtcNow;
         UpdatedAt = DateTime.UtcNow;
     }
@@ -39,24 +34,16 @@ public sealed class Equipment : Entity
     public Guid? ContractId { get; set; }
     public Contract? Contract { get; set; }
 
-    public void Update(
-        string? name = null,
-        string? description = null,
-        EquipmentType? type = null,
-        string? ip = null,
-        string? mac = null,
-        string? tag = null,
-        bool? rented = null,
-        Guid? contractId = null)
+    public void Update(UpdateEquipmentParams @params)
     {
-        Name = name ?? Name;
-        Description = description ?? Description;
-        Type = type ?? Type;
-        Ip = ip ?? Ip;
-        Mac = mac ?? Mac;
-        Tag = tag ?? Tag;
-        Rented = rented ?? Rented;
-        ContractId = contractId ?? ContractId;
+        Name = @params.Name ?? Name;
+        Description = @params.Description ?? Description;
+        Type = @params.Type ?? Type;
+        Ip = @params.Ip ?? Ip;
+        Mac = @params.Mac ?? Mac;
+        Tag = @params.Tag ?? Tag;
+        Rented = @params.Rented ?? Rented;
+        ContractId = @params.ContractId ?? ContractId;
         UpdatedAt = DateTime.UtcNow;
     }
 }

@@ -1,53 +1,20 @@
 using ITControl.Domain.Equipments.Entities;
-using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Equipments.Params;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Equipments.Interfaces;
 
 public interface IEquipmentsRepository
 {
-    Task<Equipment?> FindOneAsync(
-        Guid id, bool? includeContract = false);
+    Task<Equipment?> FindOneAsync(FindOneEquipmentsRepositoryParams @params);
     Task<IEnumerable<Equipment>> FindManyAsync(
-        string? name = null,
-        string? description = null,
-        string? ip = null,
-        string? mac = null,
-        string? tag = null,
-        bool? rented = null,
-        EquipmentType? type = null,
-        string? orderByName = null,
-        string? orderByDescription = null,
-        string? orderByIp = null,
-        string? orderByMac = null,
-        string? orderByTag = null,
-        string? orderByRented = null,
-        string? orderByType = null,
-        int? page = null,
-        int? size = null);
+        FindManyEquipmentsRepositoryParams findManyParams,
+        OrderByEquipmentsRepositoryParams orderByParams,
+        PaginationParams paginationParams);
     Task CreateAsync(Equipment equipment);
     void Update(Equipment equipment);
     void Delete(Equipment equipment);
-    Task<int> CountAsync(
-        Guid? id = null,
-        string? name = null,
-        string? description = null,
-        string? ip = null,
-        string? mac = null,
-        string? tag = null,
-        bool? rented = null,
-        EquipmentType? type = null);
-    Task<bool> ExistsAsync(
-        Guid? id = null,
-        string? name = null,
-        string? description = null,
-        string? ip = null,
-        string? mac = null,
-        string? tag = null,
-        bool? rented = null,
-        EquipmentType? type = null);
-    Task<bool> ExclusiveAsync(
-        Guid id,
-        string? ip = null,
-        string? mac = null,
-        string? tag = null);
+    Task<int> CountAsync(CountEquipmentsRepositoryParams @params);
+    Task<bool> ExistsAsync(ExistsEquipmentsRepositoryParams @params);
+    Task<bool> ExclusiveAsync(ExclusiveEquipmentsRepositoryParams @params);
 }
