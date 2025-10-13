@@ -1,6 +1,7 @@
 ﻿using ITControl.Domain.Positions.Interfaces;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Positions.Params;
 
 namespace ITControl.Communication.Shared.Attributes;
 
@@ -13,12 +14,7 @@ public class PositionConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var positionRepository = (IPositionsRepository)validationContext.GetService(typeof(IPositionsRepository))!;
-        var exists = positionRepository.ExistsAsync(id: positionId).GetAwaiter().GetResult();
-        if (exists == false)
-        {
-            return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, positionId));
-        }
-
-        return ValidationResult.Success;
+        var exists = positionRepository.ExistsAsync(new ExistsPositionsRepositoryParams { Id = positionId }).GetAwaiter().GetResult();
+        return !exists ? new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, positionId)) : ValidationResult.Success;
     }
 }

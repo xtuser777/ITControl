@@ -20,13 +20,16 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
 
     public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRepositoryParams @params)
     {
-        var (name, departmentId, orderByName, orderByDepartment, page, size) = @params;
+        var (page, size) = @params;
         var query = context.Divisions.AsNoTracking();
-        query = BuildQuery(new() { Query = query, Name = name, DepartmentId = departmentId });
-        query = BuildOrderBy(new () { 
+        query = BuildQuery(new BuildQueryDivisionsRepositoryParams
+        {
             Query = query, 
-            OrderByName = orderByName, 
-            OrderByDepartment = orderByDepartment
+            Params = @params
+        });
+        query = BuildOrderBy(new BuildOrderByDivisionsRepositoryParams { 
+            Query = query, 
+            Params = @params
         });
         if (page != null && size != null) 
             query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
@@ -51,12 +54,10 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
 
     public async Task<int> CountAsync(CountDivisionsRepositoryParams @params)
     {
-        var (id, name, departmentId) = @params;
         var query = context.Divisions.AsNoTracking();
-        query = BuildQuery(new() { 
+        query = BuildQuery(new BuildQueryDivisionsRepositoryParams { 
             Query = query, 
-            Id = id, Name = name, 
-            DepartmentId = departmentId 
+            Params = @params
         });
         
         return await query.CountAsync();
@@ -74,7 +75,14 @@ public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepos
         var (id, name) = @params;
         var query = context.Divisions.AsNoTracking();
         query = query.Where(x => x.Id != id);
-        query = BuildQuery(new () { Query = query, Params = new() { Name = name } });
+        query = BuildQuery(new BuildQueryDivisionsRepositoryParams
+        {
+            Query = query, 
+            Params = new CountDivisionsRepositoryParams
+            {
+                Name = name
+            }
+        });
         var count = await query.CountAsync();
         
         return count > 0;

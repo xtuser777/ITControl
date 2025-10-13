@@ -5,8 +5,8 @@ using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Users.Entities;
-using ITControl.Infrastructure.Pages.Repositories;
 using Microsoft.Extensions.Configuration;
 
 namespace ITControl.Application.Auth.Services;
@@ -81,6 +81,6 @@ public class AuthService(
             throw new UnauthorizedAccessException(Errors.AUTH_INVALID_PASSWORD);
         }
 
-        return (User)user;
+        return user;
     }
 }

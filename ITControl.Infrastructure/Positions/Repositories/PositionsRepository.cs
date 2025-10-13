@@ -1,5 +1,6 @@
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Positions.Interfaces;
+using ITControl.Domain.Positions.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,22 +8,27 @@ namespace ITControl.Infrastructure.Positions.Repositories;
 
 public class PositionsRepository(ApplicationDbContext context) : IPositionsRepository
 {
-    public async Task<Position?> FindOneAsync(Guid id)
+    public async Task<Position?> FindOneAsync(FindOnePositionRepositoryParams @params)
     {
-        return await context.Positions.FindAsync(id);
+        return await context.Positions.FindAsync(@params.Id);
     }
 
-    public async Task<IEnumerable<Position>> FindManyAsync(string? description = null, string? orderByDecription = null, int? page = null, int? size = null)
+    public async Task<IEnumerable<Position>> FindManyAsync(FindManyPositionsRepositoryParams @params)
     {
+        var (page, size) = @params;
         var query = context.Positions.AsNoTracking();
-        if (description != null) query = query.Where(p => p.Description.Contains(description));
-        query = orderByDecription switch
+        query = BuildQuery(new BuildQueryPositionsRepositoryParams
         {
-            "a" => query.OrderBy(p => p.Description),
-            "d" => query.OrderByDescending(p => p.Description),
-            _ => query
-        };
-        if (page != null && size != null) query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+            Query = query,
+            Params = @params
+        });
+        query = BuildOrderBy(new BuildOrderByPositionsRepositoryParams
+        {
+            Query = query,
+            Params = @params
+        });
+        if (page != null && size != null) 
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
         
         return await query.ToListAsync();
     }
@@ -42,31 +48,59 @@ public class PositionsRepository(ApplicationDbContext context) : IPositionsRepos
         context.Positions.Remove(position);
     }
 
-    public async Task<int> CountAsync(Guid? id = null, string? description = null)
+    public async Task<int> CountAsync(CountPositionsRepositoryParams @params)
     {
         var query = context.Positions.AsNoTracking();
-        if (id != null) query = query.Where(p => p.Id == id);
-        if (description != null) query = query.Where(p => p.Description.Contains(description));
+        query = BuildQuery(new BuildQueryPositionsRepositoryParams
+        {
+            Query = query,
+            Params = @params
+        });
         var count = await query.CountAsync();
         
         return count;
     }
 
-    public async Task<bool> ExistsAsync(Guid? id = null, string? description = null)
+    public async Task<bool> ExistsAsync(ExistsPositionsRepositoryParams @params)
     {
-        var count = await CountAsync(id, description);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(Guid id, string? description = null)
+    public async Task<bool> ExclusiveAsync(ExclusivePositionsRepositoryParams @params)
     {
         var query = context.Positions
             .AsNoTracking()
-            .Where(p => p.Id != id);
-        if (description != null) query = query.Where(p => p.Description.Contains(description));
+            .Where(p => p.Id != @params.Id);
+        if (@params.Description != null) 
+            query = query.Where(p => p.Description.Contains(@params.Description));
         var count = await query.CountAsync();
         
         return count > 0;
+    }
+
+    private static IQueryable<Position> BuildQuery(BuildQueryPositionsRepositoryParams @queryParams)
+    {
+        var (query, @params) = @queryParams;
+        if (@params.Id != null) 
+            query = query.Where(p => p.Id == @params.Id);
+        if (@params.Description != null) 
+            query = query.Where(p => p.Description.Contains(@params.Description));
+
+        return query;
+    }
+
+    private static IQueryable<Position> BuildOrderBy(BuildOrderByPositionsRepositoryParams @orderByParams)
+    {
+        var (query, @params) = @orderByParams;
+        query = @params.OrderByDescription switch
+        {
+            "a" => query.OrderBy(p => p.Description),
+            "d" => query.OrderByDescending(p => p.Description),
+            _ => query
+        };
+
+        return query;
     }
 }

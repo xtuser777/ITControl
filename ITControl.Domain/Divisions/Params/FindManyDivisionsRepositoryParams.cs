@@ -10,17 +10,9 @@ public class FindManyDivisionsRepositoryParams
     public int? Size { get; set; }
 
     public void Deconstruct(
-        out string? name,
-        out Guid? departmentId,
-        out string? orderByName,
-        out string? orderByDepartment,
         out int? page,
         out int? size)
     {
-        name = Name;
-        departmentId = DepartmentId;
-        orderByName = OrderByName;
-        orderByDepartment = OrderByDepartment;
         page = Page;
         size = Size;
     }

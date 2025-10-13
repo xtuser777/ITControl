@@ -2,6 +2,7 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Pages.Params;
 
 namespace ITControl.Communication.Pages.Requests;
 
@@ -13,5 +14,8 @@ public class CreatePagesRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 
-    public static implicit operator Page(CreatePagesRequest request) => new(request.Name);
+    public static implicit operator PageParams(CreatePagesRequest request) => new()
+    {
+        Name = request.Name
+    };
 }

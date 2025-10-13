@@ -13,14 +13,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
 {
     public async Task<IEnumerable<Position>> FindManyAsync(FindManyPositionsRequest request)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        var positions = await unitOfWork.PositionsRepository.FindManyAsync(
-            request.Description,
-            request.OrderByDescription,
-            page,
-            size
-        );
+        var positions = await unitOfWork.PositionsRepository.FindManyAsync(request);
         
         return positions;
     }
@@ -29,7 +22,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.PositionsRepository.CountAsync(description: request.Description);
+        var count = await unitOfWork.PositionsRepository.CountAsync(request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -38,14 +31,13 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
 
     public async Task<Position> FindOneAsync(Guid id)
     {
-        return await unitOfWork.PositionsRepository.FindOneAsync(id) 
+        return await unitOfWork.PositionsRepository.FindOneAsync(new () { Id = id }) 
                ?? throw new NotFoundException(Errors.POSITION_NOT_FOUND);
     }
 
     public async Task<Position?> CreateAsync(CreatePositionsRequest request)
     {
-        await CheckConflicts(description: request.Description);
-        var position = new Position(request.Description);
+        var position = new Position(request);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PositionsRepository.CreateAsync(position);
         await unitOfWork.Commit(transaction);
@@ -55,9 +47,8 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
 
     public async Task UpdateAsync(Guid id, UpdatePositionsRequest request)
     {
-        await CheckConflicts(id, description: request.Description);
         var position = await FindOneAsync(id);
-        position.Update(request.Description);
+        position.Update(request);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PositionsRepository.Update(position);
         await unitOfWork.Commit(transaction);
@@ -69,28 +60,5 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PositionsRepository.Delete(position);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckConflicts(Guid? id = null, string? description = null)
-    {
-        var messages = new List<string>();
-        
-        if (description != null)
-            await CheckDescriptionConflict(id, description, messages);
-        
-        if (messages.Count > 0)
-            throw new ConflictException(string.Join(", ", messages));
-    }
-
-    private async Task CheckDescriptionConflict(Guid? id, string description, List<string> messages)
-    {
-        var exists = id != null 
-            ? await unitOfWork.PositionsRepository.ExclusiveAsync((Guid)id, description) 
-            : await unitOfWork.PositionsRepository.ExistsAsync(description: description);
-
-        if (exists)
-        {
-            messages.Add(Errors.POSITION_DESCRIPTION_EXISTS);
-        }
     }
 }

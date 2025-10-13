@@ -1,3 +1,4 @@
+using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Pages.Entities;
@@ -5,11 +6,13 @@ namespace ITControl.Domain.Pages.Entities;
 public class Page : Entity
 {
     public string Name { get; set; } = string.Empty;
+    
+    public Page() {}
 
-    public Page(string name)
+    public Page(PageParams @params)
     {
         Id = Guid.NewGuid();
-        Name = name;
+        Name = @params.Name;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
@@ -19,9 +22,4 @@ public class Page : Entity
         Name = @params.Name ?? Name;
         UpdatedAt = DateTime.Now;
     }
-}
-
-public class UpdatePageParams
-{
-    public string? Name { get; set; }
 }

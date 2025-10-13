@@ -1,4 +1,5 @@
 using ITControl.Communication.Shared.Requests;
+using ITControl.Domain.Pages.Params;
 using ITControl.Infrastructure.Pages.Repositories;
 
 namespace ITControl.Communication.Pages.Requests;

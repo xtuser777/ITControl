@@ -2,7 +2,6 @@ using ITControl.Application.Pages.Interfaces;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Pages.Response;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Pages.Entities;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -43,7 +42,7 @@ namespace ITControl.Presentation.Pages.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOnePagesResponse?>> ShowAsync(Guid id)
+        public async Task<FindOneResponse<FindOnePagesResponse?>> ShowAsync([FromRoute] Guid id)
         {
             var page = await pagesService.FindOneAsync(id);
             var data = pagesView.FindOne(page);
@@ -62,7 +61,7 @@ namespace ITControl.Presentation.Pages.Controllers
         public async Task<FindOneResponse<CreatePagesResponse?>> CreateAsync(
             [FromBody] CreatePagesRequest request)
         {
-            var page = await pagesService.CreateAsync((Page)request);
+            var page = await pagesService.CreateAsync(request);
             var data = pagesView.Create(page);
             this.Response.StatusCode = 201;
             return new FindOneResponse<CreatePagesResponse?>()
@@ -81,8 +80,8 @@ namespace ITControl.Presentation.Pages.Controllers
             Guid id, 
             [FromBody] UpdatePagesRequest request)
         {
-            await pagesService.UpdateAsync(id, (UpdatePageParams)request);
-            this.Response.StatusCode = 204;
+            await pagesService.UpdateAsync(id, request);
+            Response.StatusCode = 204;
         }
 
         [HttpDelete("{id:guid}")]
@@ -94,7 +93,7 @@ namespace ITControl.Presentation.Pages.Controllers
         public async Task DeleteAsync(Guid id)
         {
             await pagesService.DeleteAsync(id);
-            this.Response.StatusCode = 204;
+            Response.StatusCode = 204;
         }
     }
 }

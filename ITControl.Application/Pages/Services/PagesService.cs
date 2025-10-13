@@ -6,6 +6,7 @@ using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Exceptions;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Pages.Params;
 using ITControl.Infrastructure.Pages.Repositories;
 
 namespace ITControl.Application.Pages.Services;
@@ -14,14 +15,14 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 {
     public async Task<IEnumerable<Page>> FindManyAsync(FindManyPagesRequest request)
     {
-        return await unitOfWork.PagesRepository.FindManyAsync((FindManyPagesRepositoryParams)request);
+        return await unitOfWork.PagesRepository.FindManyAsync(request);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyPagesRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.PagesRepository.CountAsync((CountPagesRepositoryParams)request);
+        var count = await unitOfWork.PagesRepository.CountAsync(request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -36,9 +37,10 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
                ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
-    public async Task<Page?> CreateAsync(Page page)
+    public async Task<Page?> CreateAsync(CreatePagesRequest request)
     {
         await using var transaction = unitOfWork.BeginTransaction;
+        var page = new Page(request);
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
         
