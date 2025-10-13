@@ -2,7 +2,7 @@
 
 namespace ITControl.Communication.Supplements.Requests;
 
-public class FindManySupplementsRequest : PageableRequest
+public record FindManySupplementsRequest : PageableRequest
 {
     public string? Brand { get; set; } = null!;
     public string? Model { get; set; } = null!;

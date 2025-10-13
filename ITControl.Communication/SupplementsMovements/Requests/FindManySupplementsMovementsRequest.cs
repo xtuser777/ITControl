@@ -2,7 +2,7 @@
 
 namespace ITControl.Communication.SupplementsMovements.Requests;
 
-public class FindManySupplementsMovementsRequest : PageableRequest
+public record FindManySupplementsMovementsRequest : PageableRequest
 {
     public int? Quantity { get; set; }
     public DateOnly? MovementDate { get; set; }

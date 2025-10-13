@@ -11,39 +11,26 @@ namespace ITControl.Application.Contracts.Services;
 
 public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 {
-    public async Task<Contract> FindOneAsync(
-        Guid id, 
-        bool? includeContractsContacts = null)
+    public async Task<Contract> FindOneAsync(FindOneContractsRequest request)
     {
         return await unitOfWork
             .ContractsRepository
-            .FindOneAsync(id, includeContractsContacts) 
+            .FindOneAsync(request) 
                ?? throw new NotFoundException(Errors.CONTRACT_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<Contract>> FindManyAsync(FindManyContractsRequest request)
+    public async Task<IEnumerable<Contract>> FindManyAsync(
+        FindManyContractsRequest findManyRequest,
+        OrderByContractsRequest orderByRequest)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        return await unitOfWork.ContractsRepository.FindManyAsync(
-            objectName: request.ObjectName,
-            startedAt: request.StartedAt,
-            endedAt: request.EndedAt,
-            orderByObjectName: request.OrderByObjectName,
-            orderByStartedAt: request.OrderByStartedAt,
-            orderByEndedAt: request.OrderByEndedAt,
-            page: page,
-            size: size);
+        return await unitOfWork.ContractsRepository.FindManyAsync(findManyRequest, orderByRequest);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyContractsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.ContractsRepository.CountAsync(
-            objectName: request.ObjectName,
-            startedAt: request.StartedAt,
-            endedAt: request.EndedAt);
+        var count = await unitOfWork.ContractsRepository.CountAsync(request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -52,18 +39,10 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 
     public async Task<Contract?> CreateAsync(CreateContractsRequest request)
     {
-        var contract = new Contract(
-            request.ObjectName,
-            request.StartedAt,
-            request.EndedAt);
+        var contract = new Contract(request);
         var contractsContacts = request
             .Contacts
-            .Select(x => new ContractContact(
-            x.Name,
-            x.Email,
-            x.Phone,
-            x.Cellphone,
-            contract.Id)).ToList();
+            .Select(x => new ContractContact(contract.Id, x)).ToList();
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsRepository.CreateAsync(contract);
         await unitOfWork.ContractsContactsRepository.CreateManyAsync(contractsContacts);
@@ -74,17 +53,10 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 
     public async Task UpdateAsync(Guid id, UpdateContractsRequest request)
     {
-        var contract = await FindOneAsync(id);
-        contract.Update(
-            request.ObjectName,
-            request.StartedAt,
-            request.EndedAt);
+        var contract = await FindOneAsync(new () { Id = id });
+        contract.Update(request);
         var contractsContacts = request.Contacts.Select(x => new ContractContact(
-            x.Name,
-            x.Email,
-            x.Phone,
-            x.Cellphone,
-            contract.Id)).ToList();
+            contract.Id, x)).ToList();
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsContactsRepository.DeleteManyByContractAsync(contract);
         await unitOfWork.ContractsContactsRepository.CreateManyAsync(contractsContacts);
@@ -94,7 +66,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var contract = await FindOneAsync(id);
+        var contract = await FindOneAsync(new() { Id = id });
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsContactsRepository.DeleteManyByContractAsync(contract);
         unitOfWork.ContractsRepository.Delete(contract);

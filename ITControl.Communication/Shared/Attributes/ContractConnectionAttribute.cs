@@ -11,7 +11,7 @@ public class ContractConnectionAttribute : ValidationAttribute
         if (value is not Guid contractId || contractId == Guid.Empty)
             return ValidationResult.Success;
         var contractsRepository = (IContractsRepository)validationContext.GetService(typeof(IContractsRepository))!;
-        var exists = contractsRepository.ExistsAsync(id: contractId).GetAwaiter().GetResult();
+        var exists = contractsRepository.ExistsAsync(new() { Id = contractId }).GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, contractId));
 

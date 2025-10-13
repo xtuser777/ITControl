@@ -2,7 +2,7 @@ using ITControl.Communication.Shared.Requests;
 
 namespace ITControl.Communication.Equipments.Requests;
 
-public class FindManyEquipmentsRequest : PageableRequest
+public record FindManyEquipmentsRequest : PageableRequest
 {
     public string? Name { get; set; }
     public string? Description { get; set; }

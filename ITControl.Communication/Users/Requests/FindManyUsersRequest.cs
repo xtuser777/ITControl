@@ -4,7 +4,7 @@ using ITControl.Domain.Users.Params;
 
 namespace ITControl.Communication.Users.Requests;
 
-public class FindManyUsersRequest : PageableRequest
+public record FindManyUsersRequest : PageableRequest
 {
     public string? Username { get; set; }
     public string? Name { get; set; }

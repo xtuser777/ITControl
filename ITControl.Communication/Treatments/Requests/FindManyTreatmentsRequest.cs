@@ -5,7 +5,7 @@ using ITControl.Domain.Treatments.Params;
 
 namespace ITControl.Communication.Treatments.Requests;
 
-public class FindManyTreatmentsRequest : PageableRequest
+public record FindManyTreatmentsRequest : PageableRequest
 {
     public string? Description { get; set; }
     public string? Protocol { get; set; }

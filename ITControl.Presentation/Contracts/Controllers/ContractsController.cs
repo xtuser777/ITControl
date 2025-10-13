@@ -2,6 +2,7 @@ using ITControl.Application.Contracts.Interfaces;
 using ITControl.Communication.Contracts.Requests;
 using ITControl.Communication.Contracts.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Contracts.Headers;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,10 @@ namespace ITControl.Presentation.Contracts.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyContractsResponse>> IndexAsync(
-            [FromQuery] FindManyContractsRequest request)
+            [FromQuery] FindManyContractsRequest request, 
+            [FromHeader] OrderByContractsHeaders orderByRequest)
         {
-            var contracts = await contractsService.FindManyAsync(request);
+            var contracts = await contractsService.FindManyAsync(request, orderByRequest);
             var pagination = await contractsService.FindManyPaginationAsync(request);
             var data = contractsView.FindMany(contracts);
 
@@ -42,9 +44,11 @@ namespace ITControl.Presentation.Contracts.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneContractsResponse?>> ShowAsync(Guid id)
+        public async Task<FindOneResponse<FindOneContractsResponse?>> ShowAsync(
+            [FromRoute] Guid id, [FromQuery] FindOneContractsRequest request)
         {
-            var contract = await contractsService.FindOneAsync(id);
+            request.Id = id;
+            var contract = await contractsService.FindOneAsync(request);
             var data = contractsView.FindOne(contract);
             
             return new FindOneResponse<FindOneContractsResponse?>()

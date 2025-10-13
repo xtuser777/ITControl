@@ -2,7 +2,7 @@ using ITControl.Communication.Shared.Requests;
 
 namespace ITControl.Communication.Systems.Requests;
 
-public class FindManySystemsRequest : PageableRequest
+public record FindManySystemsRequest : PageableRequest
 {
     public string? Name { get; set; }
     public string? Version { get; set; }

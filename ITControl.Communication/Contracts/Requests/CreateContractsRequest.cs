@@ -1,10 +1,11 @@
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Contracts.Params;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Contracts.Requests;
 
-public class CreateContractsRequest
+public record CreateContractsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
@@ -25,4 +26,12 @@ public class CreateContractsRequest
     [RequiredField]
     [Display(Name = nameof(Contacts), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateContractsContactsRequest> Contacts { get; set; } = [];
+
+    public static implicit operator ContractParams(CreateContractsRequest request) =>
+        new()
+        {
+            ObjectName = request.ObjectName,
+            StartedAt = request.StartedAt,
+            EndedAt = request.EndedAt
+        };
 }

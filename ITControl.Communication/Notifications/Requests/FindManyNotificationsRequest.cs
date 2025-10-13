@@ -2,7 +2,7 @@
 
 namespace ITControl.Communication.Notifications.Requests;
 
-public class FindManyNotificationsRequest : PageableRequest
+public record FindManyNotificationsRequest : PageableRequest
 {
     public string? Title { get; set; }
     public string? Message { get; set; }

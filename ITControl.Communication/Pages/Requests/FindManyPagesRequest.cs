@@ -1,10 +1,9 @@
 using ITControl.Communication.Shared.Requests;
 using ITControl.Domain.Pages.Params;
-using ITControl.Infrastructure.Pages.Repositories;
 
 namespace ITControl.Communication.Pages.Requests;
 
-public class FindManyPagesRequest : PageableRequest
+public record FindManyPagesRequest : PageableRequest
 {
     public string? Name { get; set; }
     public string? OrderByName { get; set; }

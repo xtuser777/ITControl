@@ -11,6 +11,10 @@ public class Division : Entity
 
     public Department? Department { get; set; }
 
+    public Division()
+    {
+    }
+
     public Division(DivisionParams @params)
     {
         Id = Guid.NewGuid();

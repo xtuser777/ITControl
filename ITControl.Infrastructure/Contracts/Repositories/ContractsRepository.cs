@@ -1,41 +1,36 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Interfaces;
+using ITControl.Domain.Contracts.Params;
 using ITControl.Infrastructure.Contexts;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace ITControl.Infrastructure.Contracts.Repositories;
 
 public class ContractsRepository(ApplicationDbContext context) : IContractsRepository
 {
-    public async Task<Contract?> FindOneAsync(
-        Guid id, bool? includeContractsContacts = null)
+    private IQueryable<Contract> query = null!;
+
+    public async Task<Contract?> FindOneAsync(FindOneContractsRepositoryParams @params)
     {
-        var query = context.Contracts.AsQueryable();
-        if (includeContractsContacts != null) 
+        var (id, includeContractsContacts) = @params;
+        query = context.Contracts.AsQueryable();
+        if (includeContractsContacts is true) 
             query = query.Include(x => x.ContractContacts);
         
         return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
-        string? objectName = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null, 
-        string? orderByObjectName = null,
-        string? orderByStartedAt = null,
-        string? orderByEndedAt = null,
-        int? page = null,
-        int? size = null)
+        FindManyContractsRepositoryParams findManyParams,
+        OrderByContractsRepositoryParams orderByParams)
     {
-        var query = context.Contracts.AsNoTracking();
-        query = BuildQuery(
-            query: query,
-            objectName: objectName,
-            startedAt: startedAt,
-            endedAt: endedAt);
-        query = BuildOrderBy(query, orderByObjectName, orderByStartedAt, orderByEndedAt);
-        
+        var (page, size) = findManyParams;
+        query = context.Contracts.AsNoTracking();
+        BuildQuery(findManyParams);
+        BuildOrderBy(orderByParams);
+        if (page != null && size != null)
+            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+
         return await query.ToListAsync();
     }
 
@@ -54,92 +49,52 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         context.Contracts.Remove(contract);
     }
 
-    public async Task<int> CountAsync(
-        Guid? id = null, 
-        string? objectName = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null)
+    public async Task<int> CountAsync(CountContractsRepositoryParams @params)
     {
-        var query = context.Contracts.AsNoTracking();
-        query = BuildQuery(
-            query: query,
-            id: id,
-            objectName: objectName,
-            startedAt: startedAt,
-            endedAt: endedAt);
+        query = context.Contracts.AsNoTracking();
+        BuildQuery(@params);
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(
-        Guid? id = null, 
-        string? objectName = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null)
+    public async Task<bool> ExistsAsync(ExistsContractsRepositoryParams @params)
     {
-        var count = await CountAsync(id, objectName, startedAt, endedAt);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(
-        Guid id, 
-        string? objectName = null, 
-        DateOnly? startedAt = null, 
-        DateOnly? endedAt = null)
+    private void BuildQuery(CountContractsRepositoryParams @params)
     {
-        var query = context.Contracts.AsNoTracking();
-        query = query.Where(x => x.Id != id);
-        query = BuildQuery(
-            query: query,
-            objectName: objectName,
-            startedAt: startedAt,
-            endedAt: endedAt);
-        var count = await query.CountAsync();
-        
-        return count > 0;
+        if (@params.Id != null) 
+            query = query.Where(x => x.Id == @params.Id);
+        if (@params.ObjectName != null) 
+            query = query.Where(x => x.ObjectName.Contains(@params.ObjectName));
+        if (@params.StartedAt != null) 
+            query = query.Where(x => x.StartedAt.Equals(@params.StartedAt));
+        if (@params.EndedAt != null) 
+            query = query.Where(x => x.EndedAt.Equals(@params.EndedAt));
     }
 
-    private IQueryable<Contract> BuildQuery(
-        IQueryable<Contract> query,
-        Guid? id = null,
-        string? objectName = null,
-        DateOnly? startedAt = null,
-        DateOnly? endedAt = null)
+    private void BuildOrderBy(OrderByContractsRepositoryParams @params)
     {
-        if (id != null) query = query.Where(x => x.Id == id);
-        if (objectName != null) query = query.Where(x => x.ObjectName.Contains(objectName));
-        if (startedAt != null) query = query.Where(x => x.StartedAt.Equals(startedAt));
-        if (endedAt != null) query = query.Where(x => x.EndedAt.Equals(endedAt));
-        
-        return query;
-    }
-
-    private IQueryable<Contract> BuildOrderBy(
-        IQueryable<Contract> query, 
-        string? orderByObjectName = null,
-        string? orderByStartedAt = null,
-        string? orderByEndedAt = null)
-    {
-        query = orderByObjectName switch
+        query = @params.ObjectName switch
         {
             "a" => query.OrderBy(p => p.ObjectName),
             "d" => query.OrderByDescending(p => p.ObjectName),
             _ => query
         };
-        query = orderByStartedAt switch
+        query = @params.StartedAt switch
         {
             "a" => query.OrderBy(p => p.StartedAt),
             "d" => query.OrderByDescending(p => p.StartedAt),
             _ => query
         };
-        query = orderByEndedAt switch
+        query = @params.EndedAt switch
         {
             "a" => query.OrderBy(p => p.EndedAt),
             "d" => query.OrderByDescending(p => p.EndedAt),
             _ => query
         };
-        
-        return query;
     }
 }

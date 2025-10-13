@@ -3,7 +3,7 @@ using ITControl.Domain.Divisions.Params;
 
 namespace ITControl.Communication.Divisions.Requests;
 
-public class FindManyDivisionsRequest : PageableRequest
+public record FindManyDivisionsRequest : PageableRequest
 {
     public string? Name { get; set; }
     public Guid? DepartmentId { get; set; }

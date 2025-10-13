@@ -3,7 +3,7 @@ using ITControl.Domain.Appointments.Params;
 
 namespace ITControl.Communication.Appointments.Requests;
 
-public class FindManyAppointmentsRequest : PageableRequest
+public record FindManyAppointmentsRequest : PageableRequest
 {
     public string? Description { get; set; }
     public DateOnly? ScheduledAt { get; set; }

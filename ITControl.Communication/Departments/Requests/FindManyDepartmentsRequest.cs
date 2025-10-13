@@ -1,10 +1,9 @@
-using Azure.Core;
 using ITControl.Communication.Shared.Requests;
 using ITControl.Domain.Departments.Params;
 
 namespace ITControl.Communication.Departments.Requests;
 
-public class FindManyDepartmentsRequest : PageableRequest
+public record FindManyDepartmentsRequest : PageableRequest
 {
     public string? Alias { get; set; }
     public string? Name { get; set; }

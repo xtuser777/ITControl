@@ -7,8 +7,8 @@ namespace ITControl.Domain.Calls.Entities;
 
 public sealed class Call : Entity
 {
-    public string Title { get; set; }
-    public string Description { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
     public CallReason Reason { get; set; }
     public Guid CallStatusId { get; set; }
     public Guid UserId { get; set; }
@@ -19,6 +19,10 @@ public sealed class Call : Entity
     public User? User { get; set; }
     public Systems.Entities.System? System { get; set; }
     public Equipment? Equipment { get; set; }
+
+    public Call()
+    {
+    }
 
     public Call(
         string title, 

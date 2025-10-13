@@ -1,37 +1,38 @@
+using ITControl.Domain.Contracts.Params;
 using ITControl.Domain.Shared.Entities;
-using ITControl.Domain.Validation;
 
 namespace ITControl.Domain.Contracts.Entities;
 
 public sealed class ContractContact : Entity
 {
-    public ContractContact(
-        string name, string email, string phone, string cellphone, Guid contractId)
+    public ContractContact()
+    {
+    }
+
+    public ContractContact(Guid contractId, ContractContactParams @params)
     {
         Id = Guid.NewGuid();
-        Name = name;
-        Email = email;
-        Phone = phone;
-        Cellphone = cellphone;
+        Name = @params.Name;
+        Email = @params.Email;
+        Phone = @params.Phone;
+        Cellphone = @params.Cellphone;
         ContractId = contractId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public string Name { get; set; }
-    public string Email { get; set; }
-    public string Phone { get; set; }
-    public string Cellphone { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+    public string Cellphone { get; set; } = string.Empty;
     public Guid ContractId { get; set; }
     
-    public void Update(
-        string? name = null, string? email = null, 
-        string? phone = null, string? cellphone = null)
+    public void Update(UpdateContractContactParams @params)
     {
-        Name = name ?? Name;
-        Email = email ?? Email;
-        Phone = phone ?? Phone;
-        Cellphone = cellphone ?? Cellphone;
+        Name = @params.Name ?? Name;
+        Email = @params.Email ?? Email;
+        Phone = @params.Phone ?? Phone;
+        Cellphone = @params.Cellphone ?? Cellphone;
         UpdatedAt = DateTime.Now;
     }
 

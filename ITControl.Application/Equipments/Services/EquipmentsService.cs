@@ -65,7 +65,6 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task<Equipment?> CreateAsync(CreateEquipmentsRequest request)
     {
-        await CheckExistence(request.ContractId);
         var equipment = new Equipment(
             request.Name, 
             request.Description,
@@ -84,7 +83,6 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 
     public async Task UpdateAsync(Guid id, UpdateEquipmentsRequest request)
     {
-        await CheckExistence(request.ContractId);
         var equipment = await FindOneAsync(id);
         equipment.Update(
             request.Name, 
@@ -106,21 +104,5 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckExistence(Guid? contractId)
-    {
-        var messages = new List<string>();
-
-        if (contractId != null) await CheckContractExistence((Guid)contractId, messages);
-        
-        if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
-    }
-
-    private async Task CheckContractExistence(Guid contractId, List<string> messages)
-    {
-        var exists = await unitOfWork.ContractsRepository.ExistsAsync(contractId);
-        if (!exists)
-            messages.Add(Errors.CONTRACT_NOT_FOUND);
     }
 }

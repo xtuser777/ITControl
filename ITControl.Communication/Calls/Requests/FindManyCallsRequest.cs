@@ -2,7 +2,7 @@
 using ITControl.Domain.Calls.Params;
 
 namespace ITControl.Communication.Calls.Requests;
-public class FindManyCallsRequest : PageableRequest
+public record FindManyCallsRequest : PageableRequest
 {
     public string? Title { get; set; }
     public string? Description { get; set; }

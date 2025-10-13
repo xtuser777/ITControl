@@ -2,10 +2,11 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Contracts.Params;
 
 namespace ITControl.Communication.Contracts.Requests;
 
-public class CreateContractsContactsRequest
+public record CreateContractsContactsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
@@ -29,4 +30,13 @@ public class CreateContractsContactsRequest
     [StringMaxLength(11)]
     [Display(Name = nameof(Cellphone), ResourceType = typeof(DisplayNames))]
     public string Cellphone { get; set; } = string.Empty;
+
+    public static implicit operator ContractContactParams(CreateContractsContactsRequest request) =>
+        new()
+        {
+            Name = request.Name,
+            Email = request.Email,
+            Phone = request.Phone,
+            Cellphone = request.Cellphone
+        };
 }

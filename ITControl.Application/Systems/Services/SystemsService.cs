@@ -56,7 +56,6 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
 
     public async Task<Domain.Systems.Entities.System?> CreateAsync(CreateSystemsRequest request)
     {
-        await CheckExistence(request.ContractId);
         var system = new Domain.Systems.Entities.System(
             request.Name,
             request.Version,
@@ -73,7 +72,6 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
 
     public async Task UpdateAsync(Guid id, UpdateSystemsRequest request)
     {
-        await CheckExistence(request.ContractId);
         var system = await FindOneAsync(id);
         system.Update(
             name: request.Name,
@@ -93,21 +91,5 @@ public class SystemsService(IUnitOfWork unitOfWork) : ISystemsService
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.SystemsRepository.Delete(system);
         await unitOfWork.Commit(transaction);
-    }
-
-    private async Task CheckExistence(Guid? contractId)
-    {
-        var messages = new List<string>();
-
-        if (contractId != null) await CheckContractExistence((Guid)contractId, messages);
-        
-        if (messages.Count > 0) throw new NotFoundException(string.Join(",", messages));
-    }
-
-    private async Task CheckContractExistence(Guid contractId, List<string> messages)
-    {
-        var exists = await unitOfWork.ContractsRepository.ExistsAsync(contractId);
-        if (!exists)
-            messages.Add(Errors.CONTRACT_NOT_FOUND);
     }
 }

@@ -5,7 +5,7 @@ using ITControl.Infrastructure.KnowledgeBases.Repositories;
 
 namespace ITControl.Communication.KnowledgeBases.Requests;
 
-public class FindManyKnowledgeBasesRequest : PageableRequest
+public record FindManyKnowledgeBasesRequest : PageableRequest
 {
     public string? Title { get; set; }
     public string? Content { get; set; }

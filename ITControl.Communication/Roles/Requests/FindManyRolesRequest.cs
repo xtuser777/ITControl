@@ -2,7 +2,7 @@ using ITControl.Communication.Shared.Requests;
 
 namespace ITControl.Communication.Roles.Requests;
 
-public class FindManyRolesRequest : PageableRequest
+public record FindManyRolesRequest : PageableRequest
 {
     public string? Name { get; set; }
     public string? Active { get; set; }

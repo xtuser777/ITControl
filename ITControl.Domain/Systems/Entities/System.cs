@@ -5,6 +5,10 @@ namespace ITControl.Domain.Systems.Entities;
 
 public class System : Entity
 {
+    public System()
+    {
+    }
+
     public System(
         string name,
         string version,
@@ -24,8 +28,8 @@ public class System : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public string Name { get; set; }
-    public string Version { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Version { get; set; } = string.Empty;
     public DateOnly ImplementedAt { get; set; }
     public DateOnly? EndedAt { get; set; }
     public bool Own { get; set; }
