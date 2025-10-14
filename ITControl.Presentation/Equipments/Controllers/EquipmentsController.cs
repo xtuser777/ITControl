@@ -2,6 +2,7 @@ using ITControl.Application.Equipments.Interfaces;
 using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Equipments.Headers;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,10 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyEquipmentsResponse>> IndexAsync(
-            [FromQuery] FindManyEquipmentsRequest request)
+            [FromQuery] FindManyEquipmentsRequest request,
+            [FromHeader] OrderByEquipmentsHeaders equipmentsHeaders)
         {
-            var equipments = await equipmentsService.FindManyAsync(request);
+            var equipments = await equipmentsService.FindManyAsync(request, equipmentsHeaders);
             var pagination = await equipmentsService.FindManyPaginationAsync(request);
             var data = equipmentsView.FindMany(equipments);
 
@@ -42,9 +44,11 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> ShowAsync(Guid id)
+        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> ShowAsync(
+            [FromRoute] Guid id, [FromQuery] FindOneEquipmentsRequest request)
         {
-            var equipment = await equipmentsService.FindOneAsync(id, true);
+            request.Id = id;
+            var equipment = await equipmentsService.FindOneAsync(request);
             var data = equipmentsView.FindOne(equipment);
             
             return new FindOneResponse<FindOneEquipmentsResponse?>()

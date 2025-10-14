@@ -13,7 +13,7 @@ public class EquipmentConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var equipmentsRepository = (IEquipmentsRepository)validationContext.GetService(typeof(IEquipmentsRepository))!;
-        var exists = equipmentsRepository.ExistsAsync(id: equipmentId).GetAwaiter().GetResult();
+        var exists = equipmentsRepository.ExistsAsync(new() { Id = equipmentId }).GetAwaiter().GetResult();
         if (!exists)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, equipmentId));

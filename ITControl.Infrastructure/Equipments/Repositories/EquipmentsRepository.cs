@@ -1,5 +1,4 @@
 using ITControl.Domain.Equipments.Entities;
-using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Shared.Params;
@@ -28,7 +27,7 @@ public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRep
     {
         var (page, size) = paginationParams;
         query = context.Equipments.AsNoTracking();
-        BuildWhere((CountEquipmentsRepositoryParams)findManyParams);
+        BuildWhere(findManyParams);
         BuildOrderBy(orderByParams);
         if (page != null && size != null) 
             query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
@@ -75,10 +74,14 @@ public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRep
         return count > 0;
     }
 
-    private void BuildWhere(CountEquipmentsRepositoryParams @params)
+    private void BuildWhere(FindManyEquipmentsRepositoryParams @findManyParams)
     {
-        if (@params.Id != null) 
-            query = query.Where(x => x.Id == @params.Id);
+        var @params = @findManyParams;
+        if (findManyParams is CountEquipmentsRepositoryParams countParams)
+        {
+            if (countParams.Id != null)
+                query = query.Where(x => x.Id == countParams.Id);
+        }
         if (@params.Name!= null) 
             query = query.Where(x => x.Name.Contains(@params.Name));
         if (@params.Description!= null) 

@@ -3,10 +3,11 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Domain.Equipments.Params;
 
 namespace ITControl.Communication.Equipments.Requests;
 
-public class CreateEquipmentsRequest
+public record CreateEquipmentsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
@@ -81,4 +82,17 @@ public class CreateEquipmentsRequest
         }
         return ValidationResult.Success;
     }
+
+    public static implicit operator EquipmentParams(CreateEquipmentsRequest request) =>
+        new()
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Ip = request.Ip,
+            Mac = request.Mac,
+            Tag = request.Tag,
+            Type = Enum.Parse<EquipmentType>(request.Type),
+            Rented = request.Rented,
+            ContractId = request.ContractId
+        };
 }

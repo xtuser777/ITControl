@@ -3,10 +3,12 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Equipments.Params;
 
 namespace ITControl.Communication.Equipments.Requests;
 
-public class UpdateEquipmentsRequest
+public record UpdateEquipmentsRequest
 {
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
@@ -78,4 +80,16 @@ public class UpdateEquipmentsRequest
         }
         return ValidationResult.Success;
     }
+
+    public static implicit operator UpdateEquipmentParams(UpdateEquipmentsRequest request) => new()
+    {
+        Name = request.Name,
+        Description = request.Description,
+        Type = Parser.ToEnumOptional<EquipmentType>(request.Type),
+        Ip = request.Ip,
+        Mac = request.Mac,
+        Tag = request.Tag,
+        Rented = request.Rented,
+        ContractId = request.ContractId
+    };
 }
