@@ -1,6 +1,6 @@
 using System.Net;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 

@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Contracts.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Contracts.Entities;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Contracts.Services;
 

@@ -1,4 +1,4 @@
-namespace ITControl.Domain.Exceptions;
+namespace ITControl.Domain.Shared.Exceptions;
 
 public class BadRequestException(string message) : ITControlException(message)
 {

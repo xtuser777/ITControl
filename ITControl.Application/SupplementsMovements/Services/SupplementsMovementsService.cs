@@ -4,7 +4,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.SupplementsMovements.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.SupplementsMovements.Requests;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.SupplementsMovements.Entities;
 
 namespace ITControl.Application.SupplementsMovements.Services;

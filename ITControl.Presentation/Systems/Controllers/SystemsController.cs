@@ -3,6 +3,7 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Systems.Requests;
 using ITControl.Communication.Systems.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Systems.Headers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +24,10 @@ namespace ITControl.Presentation.Systems.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManySystemsResponse>> IndexAsync(
-            [FromQuery] FindManySystemsRequest request)
+            [FromQuery] FindManySystemsRequest request,
+            [FromHeader] OrderBySystemsHeaders orderBySystemsHeaders)
         {
-            var systems = await systemsService.FindManyAsync(request);
+            var systems = await systemsService.FindManyAsync(request, orderBySystemsHeaders);
             var pagination = await systemsService.FindManyPaginationAsync(request);
             var data = systemsView.FindMany(systems);
 
@@ -42,9 +44,11 @@ namespace ITControl.Presentation.Systems.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneSystemsResponse?>> ShowAsync(Guid id)
+        public async Task<FindOneResponse<FindOneSystemsResponse?>> ShowAsync(
+            [FromRoute] Guid id, [FromQuery] FindOneSystemsRequest request)
         {
-            var system = await systemsService.FindOneAsync(id);
+            request.Id = id;
+            var system = await systemsService.FindOneAsync(request);
             var data = systemsView.FindOne(system);
             
             return new FindOneResponse<FindOneSystemsResponse?>()

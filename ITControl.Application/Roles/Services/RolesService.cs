@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Roles.Entities;
 

@@ -1,4 +1,4 @@
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Domain.Validation;
 

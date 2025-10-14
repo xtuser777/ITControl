@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Utils;
 using ITControl.Application.Supplements.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Supplements.Requests;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Supplements.Entities;
 using ITControl.Domain.Supplements.Enums;
 

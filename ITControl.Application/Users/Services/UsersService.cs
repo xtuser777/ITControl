@@ -4,7 +4,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Users.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Users.Requests;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Application.Users.Services;
@@ -60,7 +60,6 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
         
-        await using var transaction = unitOfWork.BeginTransaction;
         var user = await FindOneAsync(new () { Id = id });
         user.Update(request);
         var usersEquipments = from equipment in request.Equipments
@@ -73,6 +72,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         var usersSystems = from system in request.Systems
             select
                 new UserSystem(user.Id, system.SystemId);
+        using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);

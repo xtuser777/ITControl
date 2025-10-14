@@ -4,7 +4,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Units.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Units.Requests;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Units.Entities;
 
 namespace ITControl.Application.Units.Services;

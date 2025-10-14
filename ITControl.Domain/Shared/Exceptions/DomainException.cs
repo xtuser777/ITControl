@@ -1,4 +1,4 @@
-namespace ITControl.Domain.Exceptions;
+namespace ITControl.Domain.Shared.Exceptions;
 
 public class DomainException(IEnumerable<string> messages) : ITControlException(string.Join(", ", messages))
 {

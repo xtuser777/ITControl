@@ -1,10 +1,11 @@
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Systems.Params;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Systems.Requests;
 
-public class UpdateSystemsRequest
+public record UpdateSystemsRequest
 {
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
@@ -31,4 +32,15 @@ public class UpdateSystemsRequest
     [ContractConnection]
     [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
+
+    public static implicit operator UpdateSystemParams(UpdateSystemsRequest request) =>
+        new()
+        {
+            Name = request.Name,
+            Version = request.Version,
+            ImplementedAt = request.ImplementedAt,
+            EndedAt = request.EndedAt,
+            Own = request.Own,
+            ContractId = request.ContractId
+        };
 }

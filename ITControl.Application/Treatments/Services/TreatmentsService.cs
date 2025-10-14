@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Requests;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Treatments.Entities;

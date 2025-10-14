@@ -2,7 +2,7 @@
 using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Auth.Controllers

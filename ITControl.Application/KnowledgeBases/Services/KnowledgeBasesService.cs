@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.KnowledgeBases.Interfaces;
 using ITControl.Infrastructure.KnowledgeBases.Repositories;

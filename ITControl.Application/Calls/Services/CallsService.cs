@@ -6,7 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Calls.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Exceptions;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;

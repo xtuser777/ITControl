@@ -1,4 +1,4 @@
-﻿using ITControl.Domain.Exceptions;
+﻿using ITControl.Domain.Shared.Exceptions;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 

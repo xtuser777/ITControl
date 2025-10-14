@@ -4,10 +4,9 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Exceptions;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Params;
-using ITControl.Infrastructure.Pages.Repositories;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Pages.Services;
 

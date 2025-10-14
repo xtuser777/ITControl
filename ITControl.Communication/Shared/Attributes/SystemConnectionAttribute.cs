@@ -13,7 +13,7 @@ public class SystemConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var systemsRepository = (ISystemsRepository)validationContext.GetService(typeof(ISystemsRepository))!;
-        bool systemExists = systemsRepository.ExistsAsync(id: systemId).GetAwaiter().GetResult();
+        bool systemExists = systemsRepository.ExistsAsync(new() { Id = systemId }).GetAwaiter().GetResult();
         if (!systemExists)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, systemId));

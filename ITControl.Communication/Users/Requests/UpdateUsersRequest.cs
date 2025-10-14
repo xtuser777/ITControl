@@ -104,7 +104,7 @@ public class UpdateUsersRequest
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
         var exists = usersRepository
-            .ExistsAsync(new() { Username = username })
+            .ExclusiveAsync(new() { Username = username })
             .GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
@@ -120,9 +120,9 @@ public class UpdateUsersRequest
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
         var exists = usersRepository
-            .ExistsAsync(new() { Email = email })
+            .ExclusiveAsync(new() { Email = email })
             .GetAwaiter().GetResult();
-        if (!exists)
+        if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;
@@ -136,7 +136,7 @@ public class UpdateUsersRequest
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
         var exists = usersRepository
-            .ExistsAsync(new() { Document = document })
+            .ExclusiveAsync(new() { Document = document })
             .GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
