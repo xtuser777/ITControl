@@ -7,11 +7,14 @@ namespace ITControl.Infrastructure.Roles.Repositories;
 
 public class RolesPagesRepository(ApplicationDbContext context) : IRolesPagesRepository
 {
-    public async Task<IEnumerable<RolePage>> FindManyAsync(Guid? pageId = null, Guid? roleId = null)
+    public async Task<IEnumerable<RolePage>> FindManyAsync(
+        Guid? pageId = null, Guid? roleId = null)
     {
         var query = context.RolesPages.AsNoTracking();
-        if (pageId != null) query = query.Where(r => r.PageId == pageId);
-        if (roleId != null) query = query.Where(r => r.RoleId == roleId);
+        if (pageId != null) 
+            query = query.Where(r => r.PageId == pageId);
+        if (roleId != null) 
+            query = query.Where(r => r.RoleId == roleId);
         
         return await query.ToListAsync();
     }
@@ -23,6 +26,9 @@ public class RolesPagesRepository(ApplicationDbContext context) : IRolesPagesRep
 
     public async Task DeleteManyByRoleAsync(Role role)
     {
-        await context.RolesPages.Where(x => x.RoleId == role.Id).ExecuteDeleteAsync();
+        var rps = await context.RolesPages
+            .Where(x => x.RoleId == role.Id)
+            .ToListAsync();
+        context.RolesPages.RemoveRange(rps);
     }
 }

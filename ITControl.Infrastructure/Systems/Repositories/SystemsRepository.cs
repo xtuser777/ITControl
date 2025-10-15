@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ITControl.Infrastructure.Systems.Repositories;
 
 public class SystemsRepository(ApplicationDbContext context) 
-    : BaseRepository<Domain.Systems.Entities.System>, ISystemsRepository
+    : BaseRepository, ISystemsRepository
 {
     public async Task<Domain.Systems.Entities.System?> FindOneAsync(FindOneSystemsRepositoryParams @params)
     {
@@ -30,7 +30,7 @@ public class SystemsRepository(ApplicationDbContext context)
         BuildOrderBy(orderByParams);
         ApplyPagination(paginationParams);
 
-        return await query.ToListAsync();
+        return (IEnumerable<Domain.Systems.Entities.System>)await query.ToListAsync();
     }
 
     public async Task CreateAsync(Domain.Systems.Entities.System system)
@@ -62,31 +62,4 @@ public class SystemsRepository(ApplicationDbContext context)
         
         return count > 0;
     }
-
-    //private void BuildQuery(FindManySystemsRepositoryParams @params)
-    //{
-    //    foreach (var property in @params.GetType().GetProperties())
-    //    {
-    //        var value = property.GetValue(@params);
-    //        if (value is null) continue;
-    //        if (property.PropertyType == typeof(string))
-    //            query = query.Where(x => EF.Property<string>(x, property.Name).Contains((string)value));
-    //        else
-    //            query = query.Where(x => EF.Property<object>(x, property.Name) == value);
-    //    }
-    //}
-
-    //private void BuildOrderBy(OrderBySystemsRepositoryParams @params)
-    //{
-    //    foreach (var property in @params.GetType().GetProperties())
-    //    {
-    //        if (property.GetValue(@params) is not string value) continue;
-    //        query = value switch
-    //        {
-    //            "a" => query.OrderBy(p => EF.Property<object>(p, property.Name)),
-    //            "d" => query.OrderByDescending(p => EF.Property<object>(p, property.Name)),
-    //            _ => query,
-    //        };
-    //    }
-    //}
 }

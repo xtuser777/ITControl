@@ -1,3 +1,4 @@
+using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Roles.Entities;
@@ -9,19 +10,21 @@ public sealed class Role : Entity
 
     public ICollection<RolePage>? RolesPages { get; set; }
 
-    public Role(string name, bool active)
+    public Role() { }
+
+    public Role(RoleParams @params)
     {
         Id = Guid.NewGuid();
-        Name = name;
-        Active = active;
+        Name = @params.Name;
+        Active = @params.Active;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(string? name = null, bool? active = null)
+    public void Update(UpdateRoleParams @params)
     {
-        Name = name ?? Name;
-        Active = active ?? Active;
+        Name = @params.Name ?? Name;
+        Active = @params.Active ?? Active;
         UpdatedAt = DateTime.Now;
     }
 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Roles.Requests;
 
-public class CreateRolesPagesRequest
+public record CreateRolesPagesRequest
 {
     [RequiredField]
     [GuidValue]

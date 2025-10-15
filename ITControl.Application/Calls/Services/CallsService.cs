@@ -72,7 +72,7 @@ public class CallsService(
 
     private async Task CreateNotification(Guid referenceId, string title, string message)
     {
-        var rolesMaster = await unitOfWork.RolesRepository.FindManyAsync(name: "MASTER");
+        var rolesMaster = await unitOfWork.RolesRepository.FindManyAsync(new () { Name = "MASTER" });
         var roles = rolesMaster.ToList();
         if (roles.Count == 0)
             throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);

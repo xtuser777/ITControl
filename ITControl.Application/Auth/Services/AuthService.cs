@@ -45,7 +45,14 @@ public class AuthService(
 
     private async Task<List<string>> Permissions(Guid roleId)
     {
-        var role = await unitOfWork.RolesRepository.FindOneAsync(roleId, true) 
+        var role = await unitOfWork.RolesRepository.FindOneAsync(new() { 
+            Id = roleId, 
+            Includes = new() { 
+                RolesPages = new() {
+                    Page = true 
+                } 
+            } 
+        }) 
             ?? throw new UnauthorizedAccessException(Errors.ROLE_NOT_FOUND);
         if (!role.Active)
         {

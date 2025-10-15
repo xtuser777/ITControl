@@ -1,39 +1,38 @@
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Interfaces;
+using ITControl.Domain.Roles.Params;
+using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Roles.Repositories;
 
-public class RolesRepository(ApplicationDbContext context): IRolesRepository
+public class RolesRepository(ApplicationDbContext context)
+    : BaseRepository, IRolesRepository
 {
-    public async Task<Role?> FindOneAsync(
-        Guid id, bool? includeRolesPages = null)
+    public async Task<Role?> FindOneAsync(FindOneRolesRepositoryParams @params)
     {
-        var query = context.Roles.AsQueryable();
-        if (includeRolesPages != null)
-        {
-            query = query.Include(x => x.RolesPages!).ThenInclude(rp => rp.Page);
-        }
+        var (id, includes) = @params;
+        query = context.Roles.AsQueryable();
+        ApplyIncludes(includes);
 
-        return await query.Where(x => x.Id == id).FirstOrDefaultAsync();
+        return (Role?)await query.Where(x => x.Id == id).FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(
-        string? name = null, 
-        bool? active = null, 
-        string? orderByName = null, 
-        string? orderByActive = null, 
-        int? page = null, 
-        int? size = null)
+        FindManyRolesRepositoryParams findManyRolesParams,
+        OrderByRolesRepositoryParams? orderByRolesParams = null,
+        PaginationParams? paginationParams = null)
     {
-        var query = context.Roles.AsNoTracking();
-        query = BuildQuery(query, name, active);
-        query = BuildOrderBy(query, orderByName, orderByActive);
-        if (page != null && size != null) 
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
-        
-        return await query.ToListAsync();
+        query = context.Roles.AsNoTracking();
+        BuildQuery(findManyRolesParams);
+        BuildOrderBy(orderByRolesParams);
+        ApplyPagination(paginationParams);
+
+        var entities = await query.ToListAsync();
+
+        return from entity in entities select (Role)entity;
     }
 
     public async Task CreateAsync(Role page)
@@ -51,60 +50,29 @@ public class RolesRepository(ApplicationDbContext context): IRolesRepository
         context.Roles.Remove(page);
     }
 
-    public async Task<int> CountAsync(Guid? id = null, string? name = null, bool? active = null)
+    public async Task<int> CountAsync(CountRolesRepositoryParams @params)
     {
-        var query = context.Roles.AsNoTracking();
-        query = BuildQuery(query, name, active);
+        query = context.Roles.AsNoTracking();
+        BuildQuery(@params);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(Guid? id = null, string? name = null, bool? active = null)
+    public async Task<bool> ExistsAsync(ExistsRolesRepositoryParams @params)
     {
-        var count = await CountAsync(id, name, active);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(Guid id, string? name = null)
+    public async Task<bool> ExclusiveAsync(ExclusiveRolesRepositoryParams @params)
     {
-        var query = context.Roles
+        query = context.Roles
             .AsNoTracking()
-            .Where(p => p.Id != id);
-        query = BuildQuery(query, name);
+            .Where(p => p.Id != @params.Id);
+        @params.Id = null!;
+        BuildQuery(@params);
         var count = await query.CountAsync();
         
         return count > 0;
-    }
-
-    private IQueryable<Role> BuildQuery(
-        IQueryable<Role> query, 
-        string? name = null, 
-        bool? active = null)
-    {
-        if (name != null) query = query.Where(r => r.Name.Contains(name));
-        if (active != null) query = query.Where(r => r.Active == active);
-        
-        return query;
-    }
-
-    private IQueryable<Role> BuildOrderBy(
-        IQueryable<Role> query, 
-        string? orderByName = null, 
-        string? orderByActive = null)
-    {
-        query = orderByName switch
-        {
-            "a" => query.OrderBy(p => p.Name),
-            "d" => query.OrderByDescending(p => p.Name),
-            _ => query
-        };
-        query = orderByActive switch
-        {
-            "a" => query.OrderBy(p => p.Active),
-            "d" => query.OrderByDescending(p => p.Active),
-            _ => query
-        };
-        
-        return query;
     }
 }

@@ -13,7 +13,7 @@ public class RoleConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var roleRepository = (IRolesRepository)validationContext.GetService(typeof(IRolesRepository))!;
-        var exists = roleRepository.ExistsAsync(id: roleId).GetAwaiter().GetResult();
+        var exists = roleRepository.ExistsAsync(new() { Id = roleId }).GetAwaiter().GetResult();
         if (exists == false)
         {
             return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, roleId));

@@ -2,6 +2,7 @@ using ITControl.Application.Roles.Interfaces;
 using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Roles.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Roles.Headers;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,10 @@ namespace ITControl.Presentation.Roles.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<FindManyResponse<FindManyRolesResponse>> IndexAsync(
-            [FromQuery] FindManyRolesRequest request)
+            [FromQuery] FindManyRolesRequest request,
+            [FromHeader] OrderByRolesHeaders orderByRolesHeaders)
         {
-            var roles = await rolesService.FindManyAsync(request);
+            var roles = await rolesService.FindManyAsync(request, orderByRolesHeaders);
             var data = rolesView.FindMany(roles);
             var pagination = await rolesService.FindManyPaginatedAsync(request);
 
@@ -42,9 +44,11 @@ namespace ITControl.Presentation.Roles.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneRolesResponse?>> ShowAsync(Guid id)
+        public async Task<FindOneResponse<FindOneRolesResponse?>> ShowAsync(
+            [FromRoute] Guid id, [FromQuery] FindOneRolesRequest request)
         {
-            var role = await rolesService.FindOneAsync(id, true);
+            request.Id = id;
+            var role = await rolesService.FindOneAsync(request);
             var data = rolesView.FindOne(role);
             
             return new FindOneResponse<FindOneRolesResponse?>()
