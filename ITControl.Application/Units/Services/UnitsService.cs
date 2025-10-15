@@ -11,29 +11,25 @@ namespace ITControl.Application.Units.Services;
 
 public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 {
-    public async Task<Unit> FindOneAsync(Guid id)
+    public async Task<Unit> FindOneAsync(FindOneUnitsRequest request)
     {
-        return await unitOfWork.UnitsRepository.FindOneAsync(id) 
+        return await unitOfWork.UnitsRepository.FindOneAsync(request) 
                ?? throw new NotFoundException(Errors.UNIT_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<Unit>> FindManyAsync(FindManyUnitsRequest request)
+    public async Task<IEnumerable<Unit>> FindManyAsync(
+        FindManyUnitsRequest request,
+        OrderByUnitsRequest orderByRequest)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
         return await unitOfWork.UnitsRepository.FindManyAsync(
-            name: request.Name,
-            orderByName: request.OrderByName,
-            page: page,
-            size: size);
+            request, orderByRequest, request);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyUnitsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.UnitsRepository.CountAsync(
-            name: request.Name);
+        var count = await unitOfWork.UnitsRepository.CountAsync(request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -42,13 +38,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 
     public async Task<Unit?> CreateAsync(CreateUnitsRequest request)
     {
-        var unit = new Unit(
-            name: request.Name,
-            addressNumber: request.AddressNumber,
-            neighborhood: request.Neighborhood,
-            streetName: request.StreetName,
-            postalCode: request.PostalCode,
-            phone: request.Phone);
+        var unit = new Unit(request);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UnitsRepository.CreateAsync(unit);
         await unitOfWork.Commit(transaction);
@@ -58,22 +48,16 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
 
     public async Task UpdateAsync(Guid id, UpdateUnitsRequest request)
     {
-        var unit = await FindOneAsync(id);
-        unit.Update(
-            name: request.Name,
-            addressNumber: request.AddressNumber,
-            neighborhood: request.Neighborhood,
-            streetName: request.StreetName,
-            postalCode: request.PostalCode,
-            phone: request.Phone);
         await using var transaction = unitOfWork.BeginTransaction;
+        var unit = await FindOneAsync(new() { Id = id });
+        unit.Update(request);
         unitOfWork.UnitsRepository.Update(unit);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        var unit = await FindOneAsync(id);
+        var unit = await FindOneAsync(new() { Id = id });
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.UnitsRepository.Delete(unit);
         await unitOfWork.Commit(transaction);

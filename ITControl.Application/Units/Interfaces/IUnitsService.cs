@@ -6,8 +6,10 @@ namespace ITControl.Application.Units.Interfaces;
 
 public interface IUnitsService
 {
-    Task<Unit> FindOneAsync(Guid id);
-    Task<IEnumerable<Unit>> FindManyAsync(FindManyUnitsRequest request);
+    Task<Unit> FindOneAsync(FindOneUnitsRequest request);
+    Task<IEnumerable<Unit>> FindManyAsync(
+        FindManyUnitsRequest request,
+        OrderByUnitsRequest orderByRequest);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyUnitsRequest request);
     Task<Unit?> CreateAsync(CreateUnitsRequest request);
     Task UpdateAsync(Guid id, UpdateUnitsRequest request);

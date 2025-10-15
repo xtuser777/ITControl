@@ -3,6 +3,7 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Units.Requests;
 using ITControl.Communication.Units.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Units.Headers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,9 +24,10 @@ public class UnitsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindManyResponse<FindManyUnitsResponse>> IndexAsync(
-        [FromQuery] FindManyUnitsRequest request)
+        [FromQuery] FindManyUnitsRequest request,
+        [FromHeader] OrderByUnitsHeaders headers)
     {
-        var units = await unitsService.FindManyAsync(request);
+        var units = await unitsService.FindManyAsync(request, headers);
         var pagination = await unitsService.FindManyPaginationAsync(request);
         var data = unitsView.FindMany(units);
 
@@ -44,7 +46,7 @@ public class UnitsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindOneResponse<FindOneUnitsResponse?>> ShowAsync([FromRoute] Guid id)
     {
-        var unit = await unitsService.FindOneAsync(id);
+        var unit = await unitsService.FindOneAsync(new () { Id = id });
         var data = unitsView.FindOne(unit);
 
         return new FindOneResponse<FindOneUnitsResponse?>()

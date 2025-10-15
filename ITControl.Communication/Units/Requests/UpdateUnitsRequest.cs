@@ -1,10 +1,11 @@
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Units.Params;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Units.Requests;
 
-public class UpdateUnitsRequest
+public record UpdateUnitsRequest
 {
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
@@ -29,4 +30,14 @@ public class UpdateUnitsRequest
     [StringMaxLength(5)]
     [Display(Name = nameof(AddressNumber), ResourceType = typeof(DisplayNames))]
     public string? AddressNumber { get; set; }
+
+    public static implicit operator UpdateUnitParams(UpdateUnitsRequest request) => new()
+    {
+        Name = request.Name,
+        Phone = request.Phone,
+        PostalCode = request.PostalCode,
+        StreetName = request.StreetName,
+        Neighborhood = request.Neighborhood,
+        AddressNumber = request.AddressNumber
+    };
 }
