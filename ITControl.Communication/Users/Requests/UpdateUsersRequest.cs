@@ -3,6 +3,8 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Domain.Users.Params;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Routing;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Users.Requests;
@@ -103,10 +105,15 @@ public class UpdateUsersRequest
         var usersRepository = context
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
+        var httpContextAccessor = context.
+            GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
+        var httpContext = httpContextAccessor?.HttpContext ?? throw new NullReferenceException();
+        var idRoute = httpContext.GetRouteData().Values["id"]?.ToString() ?? "";
+        Guid.TryParse(idRoute, out Guid id);
         var exists = usersRepository
-            .ExclusiveAsync(new() { Username = username })
+            .ExclusiveAsync(new() { Id = id, Username = username })
             .GetAwaiter().GetResult();
-        if (!exists)
+        if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;
@@ -119,8 +126,13 @@ public class UpdateUsersRequest
         var usersRepository = context
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
+        var httpContextAccessor = context.
+            GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
+        var httpContext = httpContextAccessor?.HttpContext ?? throw new NullReferenceException();
+        var idRoute = httpContext.GetRouteData().Values["id"]?.ToString() ?? "";
+        Guid.TryParse(idRoute, out Guid id);
         var exists = usersRepository
-            .ExclusiveAsync(new() { Email = email })
+            .ExclusiveAsync(new() { Id = id, Email = email })
             .GetAwaiter().GetResult();
         if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
@@ -135,10 +147,15 @@ public class UpdateUsersRequest
         var usersRepository = context
             .GetService(typeof(IUsersRepository)) as IUsersRepository
             ?? throw new NullReferenceException();
+        var httpContextAccessor = context.
+            GetService(typeof(IHttpContextAccessor)) as IHttpContextAccessor;
+        var httpContext = httpContextAccessor?.HttpContext ?? throw new NullReferenceException();
+        var idRoute = httpContext.GetRouteData().Values["id"]?.ToString() ?? "";
+        Guid.TryParse(idRoute, out Guid id);
         var exists = usersRepository
-            .ExclusiveAsync(new() { Document = document })
+            .ExclusiveAsync(new() { Id = id, Document = document })
             .GetAwaiter().GetResult();
-        if (!exists)
+        if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;

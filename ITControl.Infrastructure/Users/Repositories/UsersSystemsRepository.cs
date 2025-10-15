@@ -8,11 +8,14 @@ namespace ITControl.Infrastructure.Users.Repositories;
 public class UsersSystemsRepository(
     ApplicationDbContext context) : IUsersSystemsRepository
 {
-    public async Task<IEnumerable<UserSystem>> FindManyAsync(Guid? userId = null, Guid? systemId = null)
+    public async Task<IEnumerable<UserSystem>> FindManyAsync(
+        Guid? userId = null, Guid? systemId = null)
     {
         var query = context.UsersSystems.AsNoTracking();
-        if (userId != null) query = query.Where(x => x.UserId == userId.Value);
-        if (systemId != null) query = query.Where(x => x.SystemId == systemId.Value);
+        if (userId != null) 
+            query = query.Where(x => x.UserId == userId.Value);
+        if (systemId != null) 
+            query = query.Where(x => x.SystemId == systemId.Value);
         
         return await query.ToListAsync();
     }
@@ -24,6 +27,9 @@ public class UsersSystemsRepository(
 
     public async Task DeleteManyByUserAsync(User user)
     {
-        await context.UsersSystems.Where(x => x.UserId == user.Id).ExecuteDeleteAsync();
+        var uss = await context.UsersSystems
+            .Where(x => x.UserId == user.Id)
+            .ToListAsync();
+        context.UsersSystems.RemoveRange(uss);
     }
 }

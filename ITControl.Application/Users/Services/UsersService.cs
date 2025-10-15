@@ -60,6 +60,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     public async Task UpdateAsync(Guid id, UpdateUsersRequest request)
     {
         
+        using var transaction = unitOfWork.BeginTransaction;
         var user = await FindOneAsync(new () { Id = id });
         user.Update(request);
         var usersEquipments = from equipment in request.Equipments
@@ -72,7 +73,6 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         var usersSystems = from system in request.Systems
             select
                 new UserSystem(user.Id, system.SystemId);
-        using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UsersEquipmentsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersSystemsRepository.DeleteManyByUserAsync(user);
         await unitOfWork.UsersEquipmentsRepository.CreateManyAsync(usersEquipments);
