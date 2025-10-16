@@ -2,6 +2,7 @@
 using ITControl.Communication.Notifications.Requests;
 using ITControl.Communication.Notifications.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Notifications.Headers;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,9 +24,10 @@ public class NotificationsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<FindManyResponse<FindManyNotificationsResponse>> IndexAsync(
-        [FromQuery] FindManyNotificationsRequest request)
+        [FromQuery] FindManyNotificationsRequest request,
+        [FromHeader] OrderByNotificationsHeaders headers)
     {
-        var notifications = await notificationsService.FindManyAsync(request);
+        var notifications = await notificationsService.FindManyAsync(request, headers);
         var response = new FindManyResponse<FindManyNotificationsResponse>
         {
             Data = notificationsView.FindMany(notifications)
@@ -44,10 +46,11 @@ public class NotificationsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneNotificationsResponse?>> ShowAsync([FromRoute] Guid id)
+    public async Task<FindOneResponse<FindOneNotificationsResponse?>> ShowAsync(
+        [FromRoute] Guid id, [FromQuery] FindOneNotificationsRequest request)
     {
-        var notification = await notificationsService.FindOneAsync(
-            id, true, true, true, true);
+        request.Id = id;
+        var notification = await notificationsService.FindOneAsync(request);
         var response = new FindOneResponse<FindOneNotificationsResponse?>
         {
             Data = notificationsView.FindOne(notification)

@@ -6,13 +6,10 @@ namespace ITControl.Application.Notifications.Interfaces;
 
 public interface INotificationsService
 {
-    Task<Notification> FindOneAsync(
-        Guid id,
-        bool? includeUser = null,
-        bool? includeCall = null,
-        bool? includeAppointment = null,
-        bool? includeTreatment = null);
-    Task<IEnumerable<Notification>> FindManyAsync(FindManyNotificationsRequest request);
+    Task<Notification> FindOneAsync(FindOneNotificationsRequest request);
+    Task<IEnumerable<Notification>> FindManyAsync(
+        FindManyNotificationsRequest request,
+        OrderByNotificationsRequest orderByNotificationsRequest);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyNotificationsRequest request);
     Task<int> CountUnreadAsync(Guid userId);
     Task UpdateAsync(Guid id, UpdateNotificationsRequest request);

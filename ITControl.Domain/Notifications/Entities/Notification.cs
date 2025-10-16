@@ -1,6 +1,7 @@
 ﻿using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Users.Entities;
@@ -23,25 +24,19 @@ public sealed class Notification : Entity
     public Appointment? Appointment { get; set; }
     public Treatment? Treatment { get; set; }
 
-    public Notification(
-        string title, 
-        string message, 
-        NotificationType type, 
-        NotificationReference reference,
-        Guid userId,
-        Guid? callId,
-        Guid? appointmentId,
-        Guid? treatmentId)
+    public Notification() { }
+
+    public Notification(NotificationParams @params)
     {
         Id = Guid.NewGuid();
-        UserId = userId;
-        Title = title;
-        Message = message;
-        Type = type;
-        Reference = reference;
-        CallId = callId;
-        AppointmentId = appointmentId;
-        TreatmentId = treatmentId;
+        UserId = @params.UserId;
+        Title = @params.Title;
+        Message = @params.Message;
+        Type = @params.Type;
+        Reference = @params.Reference;
+        CallId = @params.CallId;
+        AppointmentId = @params.AppointmentId;
+        TreatmentId = @params.TreatmentId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
@@ -52,26 +47,17 @@ public sealed class Notification : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(
-        string? title = null,
-        string? message = null,
-        NotificationType? type = null,
-        NotificationReference? reference = null,
-        bool? isRead = null,
-        Guid? userId = null,
-        Guid? callId = null,
-        Guid? appointmentId = null,
-        Guid? treatmentId = null)
+    public void Update(UpdateNotificationParams @params)
     {
-        Title = title ?? Title;
-        Message = message ?? Message;
-        Type = type ?? Type;
-        Reference = reference ?? Reference;
-        IsRead = isRead ?? IsRead;
-        UserId = userId ?? UserId;
-        CallId = callId ?? CallId;
-        AppointmentId = appointmentId ?? AppointmentId;
-        TreatmentId = treatmentId ?? TreatmentId;
+        Title = @params.Title ?? Title;
+        Message = @params.Message ?? Message;
+        Type = @params.Type ?? Type;
+        Reference = @params.Reference ?? Reference;
+        IsRead = @params.IsRead ?? IsRead;
+        UserId = @params.UserId ?? UserId;
+        CallId = @params.CallId ?? CallId;
+        AppointmentId = @params.AppointmentId ?? AppointmentId;
+        TreatmentId = @params.TreatmentId ?? TreatmentId;
         UpdatedAt = DateTime.Now;
     }
 }

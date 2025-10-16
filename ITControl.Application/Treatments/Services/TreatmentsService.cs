@@ -5,9 +5,10 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Treatments.Requests;
-using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
 using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
@@ -123,14 +124,15 @@ public class TreatmentsService(
         NotificationType type)
     {
         var notification = new Notification(
-            title,
-            message,
-            type,
-            NotificationReference.Treatment,
-            userId,
-            null,
-            null,
-            referenceId);
+            new NotificationParams
+            {
+                Title = title,
+                Message = message,
+                Type = type,
+                Reference = NotificationReference.Treatment,
+                UserId = userId,
+                TreatmentId = referenceId
+            });
         await unitOfWork.NotificationsRepository.CreateAsync(notification);
     }
 }

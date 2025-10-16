@@ -9,6 +9,7 @@ using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Notifications.Params;
 
 namespace ITControl.Application.Appointments.Services;
 
@@ -100,14 +101,15 @@ public class AppointmentsService(
         NotificationType type)
     {
         var notification = new Notification(
-            title,
-            message,
-            type,
-            NotificationReference.Appointment,
-            userId,
-            null,
-            null,
-            referenceId);
+            new NotificationParams
+            {
+                Title = title,
+                Message = message,
+                Type = type,
+                Reference = NotificationReference.Appointment,
+                UserId = userId,
+                AppointmentId = referenceId
+            });
         await unitOfWork.NotificationsRepository.CreateAsync(notification);
     }
 }

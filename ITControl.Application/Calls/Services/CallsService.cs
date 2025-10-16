@@ -6,9 +6,10 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Calls.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Shared.Exceptions;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Application.Calls.Services;
@@ -80,14 +81,15 @@ public class CallsService(
         foreach (var user in users)
         {
             var notification = new Notification(
-                title: title,
-                message: message,
-                type: NotificationType.Info,
-                reference: NotificationReference.Call,
-                userId: user.Id,
-                callId: referenceId,
-                appointmentId: null,
-                treatmentId: null);
+                new NotificationParams
+                {
+                    Title = title,
+                    Message = message,
+                    Type = NotificationType.Info,
+                    Reference = NotificationReference.Call,
+                    UserId = user.Id,
+                    CallId = referenceId
+                });
             await unitOfWork.NotificationsRepository.CreateAsync(notification);
         }
     }
