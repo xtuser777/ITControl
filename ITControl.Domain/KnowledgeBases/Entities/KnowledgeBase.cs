@@ -1,4 +1,5 @@
 ﻿using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
 
@@ -17,20 +18,14 @@ public sealed class KnowledgeBase : Entity
     {
     }
 
-    public KnowledgeBase(
-        string title,
-        string content,
-        TimeOnly estimatedTime,
-        CallReason reason,
-        Guid userId
-    )
+    public KnowledgeBase(KnowledgeBaseParams @params)
     {
         Id = Guid.NewGuid();
-        Title = title;
-        Content = content;
-        EstimatedTime = estimatedTime;
-        Reason = reason;
-        UserId = userId;
+        Title = @params.Title;
+        Content = @params.Content;
+        EstimatedTime = @params.EstimatedTime;
+        Reason = @params.Reason;
+        UserId = @params.UserId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
@@ -44,29 +39,5 @@ public sealed class KnowledgeBase : Entity
         Reason = reason ?? Reason;
         UserId = userId ?? UserId;
         UpdatedAt = DateTime.Now;
-    }
-}
-
-public class UpdateKnowledgeBaseParams
-{
-    public string? Title { get; set; }
-    public string? Content { get; set; }
-    public TimeOnly? EstimatedTime { get; set; }
-    public CallReason? Reason { get; set; }
-    public Guid? UserId { get; set; }
-
-    internal void Deconstruct(
-        out string? title,
-        out string? content,
-        out TimeOnly? estimatedTime,
-        out CallReason? reason,
-        out Guid? userId
-    )
-    {
-        title = Title;
-        content = Content;
-        estimatedTime = EstimatedTime;
-        reason = Reason;
-        userId = UserId;
     }
 }

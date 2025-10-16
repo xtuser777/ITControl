@@ -3,6 +3,7 @@ using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Utils;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Users.Params;
 
@@ -32,11 +33,12 @@ public sealed class User : Entity
 
     public User() { }
 
+    [Obsolete]
     public User(UserParams @params)
     {
         Id = Guid.NewGuid();
         Username = @params.Username;
-        Password = @params.Password;
+        Password = Crypt.HashPassword(@params.Password);
         Email = @params.Email;
         Name = @params.Name;
         Document = @params.Document;
@@ -53,10 +55,11 @@ public sealed class User : Entity
         UsersEquipments = @params.UsersEquipments;
     }
 
+    [Obsolete]
     public void Update(UpdateUserParams @params)
     {
         Username = @params.Username ?? Username;
-        Password = @params.Password ?? Password;
+        Password = Crypt.HashPassword(@params.Password ?? Password);
         Email = @params.Email ?? Email;
         Name = @params.Name ?? Name;
         Document = @params.Document ?? Document;

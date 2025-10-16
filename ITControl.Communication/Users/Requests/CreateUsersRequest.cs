@@ -1,10 +1,9 @@
 using ITControl.Communication.Shared.Attributes;
-using ITControl.Domain.Shared.Messages;
-using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Resources;
-using ITControl.Domain.Users.Entities;
+using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Domain.Users.Params;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Users.Requests;
 
@@ -113,7 +112,7 @@ public class CreateUsersRequest
         var exists = usersRepository
             .ExistsAsync(new () { Username = username })
             .GetAwaiter().GetResult();
-        if (!exists) 
+        if (exists) 
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;
@@ -129,7 +128,7 @@ public class CreateUsersRequest
         var exists = usersRepository
             .ExistsAsync(new() { Email = email })
             .GetAwaiter().GetResult();
-        if (!exists)
+        if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;
@@ -145,7 +144,7 @@ public class CreateUsersRequest
         var exists = usersRepository
             .ExistsAsync(new() { Document = document })
             .GetAwaiter().GetResult();
-        if (!exists)
+        if (exists)
             return new ValidationResult(string.Format(Errors.UniqueField, context.DisplayName));
 
         return ValidationResult.Success;

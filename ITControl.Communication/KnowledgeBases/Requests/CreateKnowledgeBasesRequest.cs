@@ -1,13 +1,13 @@
-﻿using ITControl.Communication.Shared.Resources;
-using ITControl.Communication.Shared.Attributes;
+﻿using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Calls.Enums;
-using ITControl.Domain.KnowledgeBases.Entities;
+using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.KnowledgeBases.Requests;
 
-public class CreateKnowledgeBasesRequest
+public record CreateKnowledgeBasesRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
@@ -35,14 +35,15 @@ public class CreateKnowledgeBasesRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    public static implicit operator KnowledgeBase(CreateKnowledgeBasesRequest request) =>
-        new(
-            request.Title,
-            request.Content,
-            request.EstimatedTime,
-            Enum.Parse<CallReason>(request.Reason, true),
-            request.UserId
-        );
+    public static implicit operator KnowledgeBaseParams(CreateKnowledgeBasesRequest request) =>
+        new()
+        {
+            Title = request.Title,
+            Content = request.Content,
+            EstimatedTime = request.EstimatedTime,
+            Reason = Enum.Parse<CallReason>(request.Reason, true),
+            UserId = request.UserId
+        };
 
     public static ValidationResult? ValidateReason(string reason, ValidationContext context)
     {

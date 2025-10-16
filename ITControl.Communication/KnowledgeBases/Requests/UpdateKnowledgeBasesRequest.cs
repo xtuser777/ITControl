@@ -1,14 +1,14 @@
-﻿using ITControl.Communication.Shared.Resources;
-using ITControl.Communication.Shared.Attributes;
+﻿using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Calls.Enums;
-using ITControl.Domain.KnowledgeBases.Entities;
+using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Shared.Utils;
 using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.KnowledgeBases.Requests;
 
-public class UpdateKnowledgeBasesRequest
+public record UpdateKnowledgeBasesRequest
 {
     [StringMaxLength(100)]
     [Display(Name = nameof(Title), ResourceType = typeof(DisplayNames))]

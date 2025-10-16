@@ -34,11 +34,10 @@ public class DocumentValueAttribute : ValidationAttribute
             return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
         string documentWithoutDigits1 = document[..^2];
         var total1 = 0;
-        var mul1 = 2;
         for (var i = 0; i < documentWithoutDigits1.Length; i++)
         {
             var digitInt = Convert.ToInt32(documentWithoutDigits1[i].ToString());
-            total1 += digitInt * mul1++;
+            total1 += digitInt * (10 - i);
         }
         var rest1 = total1 % 11;
         var digit1 = rest1 < 2 ? 0 : 11 - rest1;
@@ -46,11 +45,10 @@ public class DocumentValueAttribute : ValidationAttribute
             return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
         string documentWithoutDigits2 = documentWithoutDigits1 + digit1;
         var total2 = 0;
-        var mul2 = 2;
         for (var i = 0; i < documentWithoutDigits2.Length; i++)
         {
             var digitInt = Convert.ToInt32(documentWithoutDigits2[i].ToString());
-            total2 += digitInt * mul2++;
+            total2 += digitInt * (11 - i);
         }
         var rest2 = total2 % 11;
         var digit2 = rest2 < 2 ? 0 : 11 - rest2;

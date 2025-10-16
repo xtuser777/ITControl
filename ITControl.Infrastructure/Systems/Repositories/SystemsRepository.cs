@@ -30,7 +30,9 @@ public class SystemsRepository(ApplicationDbContext context)
         BuildOrderBy(orderByParams);
         ApplyPagination(paginationParams);
 
-        return (IEnumerable<Domain.Systems.Entities.System>)await query.ToListAsync();
+        var entities = await query.ToListAsync();
+
+        return entities.Cast<Domain.Systems.Entities.System>();
     }
 
     public async Task CreateAsync(Domain.Systems.Entities.System system)
