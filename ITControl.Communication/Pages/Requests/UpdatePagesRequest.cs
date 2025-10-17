@@ -1,12 +1,11 @@
-using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
-using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Pages.Entities;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Pages.Params;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Pages.Requests;
 
-public class UpdatePagesRequest
+public record UpdatePagesRequest
 {
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]

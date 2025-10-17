@@ -1,12 +1,11 @@
-using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
-using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Pages.Entities;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Pages.Params;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Pages.Requests;
 
-public class CreatePagesRequest
+public record CreatePagesRequest
 {
     [RequiredField]
     [StringMinLength(3)]

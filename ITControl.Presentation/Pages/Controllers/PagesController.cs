@@ -2,6 +2,7 @@ using ITControl.Application.Pages.Interfaces;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Pages.Response;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Pages.Headers;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -14,43 +15,44 @@ namespace ITControl.Presentation.Pages.Controllers
     [PermissionsFilter]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PagesController(
-        IPagesService pagesService, 
-        IPagesView pagesView) : ControllerBase
+        IPagesService service, 
+        IPagesView view) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(typeof(FindManyResponse<FindManyPagesResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyPagesResponse>> IndexAsync(
-            [FromQuery] FindManyPagesRequest request)
+        public async Task<IActionResult> IndexAsync(
+            [FromQuery] FindManyPagesRequest request,
+            [FromHeader] OrderByPagesHeaders headers)
         {
-            var pages = await pagesService.FindManyAsync(request);
-            var pagination = await pagesService.FindManyPaginationAsync(request);
-            var data = pagesView.FindMany(pages);
+            var pages = await service.FindManyAsync(request, headers);
+            var pagination = await service.FindManyPaginationAsync(request);
+            var data = view.FindMany(pages);
 
-            return new FindManyResponse<FindManyPagesResponse>()
+            return Ok(new FindManyResponse<FindManyPagesResponse>
             {
                 Data = data,
                 Pagination = pagination
-            };
+            });
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(FindOneResponse<FindOnePagesResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOnePagesResponse?>> ShowAsync([FromRoute] Guid id)
+        public async Task<IActionResult> ShowAsync([AsParameters] FindOnePagesRequest request)
         {
-            var page = await pagesService.FindOneAsync(id);
-            var data = pagesView.FindOne(page);
+            var page = await service.FindOneAsync(request);
+            var data = view.FindOne(page);
             
-            return new FindOneResponse<FindOnePagesResponse?>()
+            return Ok(new FindOneResponse<FindOnePagesResponse?>
             {
                 Data = data,
-            };
+            });
         }
 
         [HttpPost]
@@ -58,16 +60,13 @@ namespace ITControl.Presentation.Pages.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreatePagesResponse?>> CreateAsync(
+        public async Task<IActionResult> CreateAsync(
             [FromBody] CreatePagesRequest request)
         {
-            var page = await pagesService.CreateAsync(request);
-            var data = pagesView.Create(page);
-            this.Response.StatusCode = 201;
-            return new FindOneResponse<CreatePagesResponse?>()
-            {
-                Data = data,
-            };
+            var page = await service.CreateAsync(request);
+            var data = view.Create(page);
+            var uri = Url.Action("ShowAsync", new { id = data?.Id });
+            return Created(uri, new { Data = data });
         }
 
         [HttpPut("{id:guid}")]
@@ -76,12 +75,13 @@ namespace ITControl.Presentation.Pages.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task UpdateAsync(
+        public async Task<IActionResult> UpdateAsync(
             Guid id, 
             [FromBody] UpdatePagesRequest request)
         {
-            await pagesService.UpdateAsync(id, request);
-            Response.StatusCode = 204;
+            await service.UpdateAsync(id, request);
+            
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -90,10 +90,11 @@ namespace ITControl.Presentation.Pages.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid id)
         {
-            await pagesService.DeleteAsync(id);
-            Response.StatusCode = 204;
+            await service.DeleteAsync(id);
+            
+            return NoContent();
         }
     }
 }

@@ -1,7 +1,5 @@
 namespace ITControl.Domain.Pages.Params;
 
-public class ExclusivePagesRepositoryParams
+public record ExclusivePagesRepositoryParams : ExistsPagesRepositoryParams
 {
-    public Guid Id { get; set; }
-    public string? Name { get; set; }
 }

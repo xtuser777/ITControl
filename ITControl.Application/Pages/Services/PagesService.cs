@@ -5,16 +5,18 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Pages.Entities;
-using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Pages.Services;
 
 public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 {
-    public async Task<IEnumerable<Page>> FindManyAsync(FindManyPagesRequest request)
+    public async Task<IEnumerable<Page>> FindManyAsync(
+        FindManyPagesRequest findManyRequest,
+        OrderByPagesRequest orderByRequest)
     {
-        return await unitOfWork.PagesRepository.FindManyAsync(request);
+        return await unitOfWork.PagesRepository.FindManyAsync(
+            findManyRequest, orderByRequest, findManyRequest);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyPagesRequest request)
@@ -28,11 +30,11 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         return pagination;
     }
 
-    public async Task<Page> FindOneAsync(Guid id)
+    public async Task<Page> FindOneAsync(FindOnePagesRequest request)
     {
         return await unitOfWork
             .PagesRepository
-            .FindOneAsync(new FindOnePagesRepositoryParams() { Id = id }) 
+            .FindOneAsync(request) 
                ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
@@ -46,10 +48,10 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         return page;
     }
 
-    public async Task UpdateAsync(Guid id, UpdatePageParams @params)
+    public async Task UpdateAsync(Guid id, UpdatePagesRequest request)
     {
-        var page = await FindOneAsync(id);
-        page.Update(@params);
+        var page = await FindOneAsync(new() { Id = id });
+        page.Update(request);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);
@@ -57,7 +59,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 
     public async Task DeleteAsync(Guid id)
     {
-        var page = await FindOneAsync(id);
+        var page = await FindOneAsync(new() { Id = id });
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);

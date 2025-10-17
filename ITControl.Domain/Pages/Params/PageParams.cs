@@ -1,6 +1,6 @@
 namespace ITControl.Domain.Pages.Params;
 
-public class PageParams
+public record PageParams
 {
     public string Name { get; set; } = string.Empty;
 }

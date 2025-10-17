@@ -1,5 +1,5 @@
 namespace ITControl.Domain.Pages.Params;
 
-public class ExistsPagesRepositoryParams : CountPagesRepositoryParams
+public record ExistsPagesRepositoryParams : CountPagesRepositoryParams
 {
 }
