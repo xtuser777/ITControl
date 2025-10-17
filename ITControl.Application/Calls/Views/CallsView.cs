@@ -56,7 +56,7 @@ public class CallsView : ICallsView
                     Name = call.User.Name,
                     Phone = call.User.Unit!.Phone,
                     Address = $"{call.User.Unit.StreetName}, {call.User.Unit.AddressNumber}, {call.User.Unit.Neighborhood}",
-                    Position = call.User.Position!.Description,
+                    Position = call.User.Position!.Name,
                     Unit = call.User.Unit!.Name,
                     Department = call.User.Department!.Alias,
                     Division = call.User.Division!.Name,

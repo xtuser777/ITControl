@@ -10,16 +10,16 @@ public sealed class Position : Entity
     public Position(PositionParams @params)
     {
         Id = Guid.NewGuid();
-        Description = @params.Description;
+        Name = @params.Name;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public string Description { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 
     public void Update(UpdatePositionParams @params)
     {
-        Description = @params.Description ?? Description;
+        Name = @params.Name ?? Name;
         UpdatedAt = DateTime.Now;
     }
 }

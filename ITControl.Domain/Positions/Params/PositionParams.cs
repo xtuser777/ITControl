@@ -1,6 +1,6 @@
 namespace ITControl.Domain.Positions.Params;
 
-public class PositionParams
+public record PositionParams
 {
-    public string Description { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
 }

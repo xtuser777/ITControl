@@ -2,16 +2,18 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Positions.Params;
+using ITControl.Domain.Positions.Interfaces;
 
 namespace ITControl.Communication.Positions.Requests;
 
-public class CreatePositionsRequest
+public record CreatePositionsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
-    public string Description { get; set; } = string.Empty;
+    [UniqueField(typeof(IPositionsRepository), typeof(ExistsPositionsRepositoryParams))]
+    [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
+    public string Name { get; set; } = string.Empty;
     
     public static implicit operator PositionParams(CreatePositionsRequest request) =>
-        new() { Description = request.Description };
+        new() { Name = request.Name };
 }

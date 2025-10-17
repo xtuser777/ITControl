@@ -14,7 +14,7 @@ public class PositionsView : IPositionsView
         var response = new FindOnePositionsResponse()
         {
             Id = position.Id,
-            Description = position.Description
+            Name = position.Name
         };
         
         return response;
@@ -28,7 +28,7 @@ public class PositionsView : IPositionsView
             select new FindManyPositionsResponse()
             {
                 Id = position.Id,
-                Description = position.Description,
+                Name = position.Name,
             }; 
     }
 

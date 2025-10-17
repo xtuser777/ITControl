@@ -1,6 +1,6 @@
 namespace ITControl.Domain.Positions.Params;
 
-public class UpdatePositionParams
+public record UpdatePositionParams
 {
-    public string? Description { get; set; }
+    public string? Name { get; set; } = null;
 }

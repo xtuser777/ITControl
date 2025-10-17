@@ -219,8 +219,8 @@ public class UsersRepository(ApplicationDbContext context) : IUsersRepository
         };
         @params.Query = @params.OrderByPosition switch
         {
-            "a" => @params.Query.Include(x=>x.Position).OrderBy(p => p.Position!.Description),
-            "d" => @params.Query.Include(x=>x.Position).OrderByDescending(p => p.Position!.Description),
+            "a" => @params.Query.Include(x=>x.Position).OrderBy(p => p.Position),
+            "d" => @params.Query.Include(x=>x.Position).OrderByDescending(p => p.Position),
             _ => @params.Query
         };
         @params.Query = @params.OrderByRole switch

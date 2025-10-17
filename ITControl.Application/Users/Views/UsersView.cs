@@ -44,7 +44,7 @@ public class UsersView : IUsersView
                 ? new FindOneUsersPositionResponse()
                 {
                     Id = user.PositionId,
-                    Description = user.Position.Description,
+                    Description = user.Position.Name,
                 }
                 : null,
             Role = user.Role != null

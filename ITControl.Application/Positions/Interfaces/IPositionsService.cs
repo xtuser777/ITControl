@@ -6,9 +6,11 @@ namespace ITControl.Application.Positions.Interfaces;
 
 public interface IPositionsService
 {
-    Task<IEnumerable<Position>> FindManyAsync(FindManyPositionsRequest request);
+    Task<Position> FindOneAsync(FindOnePositionsRequest request);
+    Task<IEnumerable<Position>> FindManyAsync(
+        FindManyPositionsRequest request,
+        OrderByPositionsRequest orderByRequest);
     Task<PaginationResponse?> FindManyPaginationAsync(FindManyPositionsRequest request);
-    Task<Position> FindOneAsync(Guid id);
     Task<Position?> CreateAsync(CreatePositionsRequest request);
     Task UpdateAsync(Guid id, UpdatePositionsRequest request);
     Task DeleteAsync(Guid id);

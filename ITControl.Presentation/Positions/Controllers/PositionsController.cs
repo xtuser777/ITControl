@@ -22,35 +22,32 @@ public class PositionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyPositionsResponse>> IndexAsync(
-        [FromQuery] FindManyPositionsRequest request)
+    public async Task<IActionResult> IndexAsync(
+        [FromQuery] FindManyPositionsRequest request,
+        [FromHeader] OrderByPositionsRequest orderBy)
     {
-        var positions = await positionsService.FindManyAsync(request);
+        var positions = await positionsService.FindManyAsync(request, orderBy);
         var data = positionsView.FindMany(positions);
         var pagination = await positionsService.FindManyPaginationAsync(request);
 
-        return new FindManyResponse<FindManyPositionsResponse>()
-        {
+        return Ok(new {
             Data = data,
             Pagination = pagination,
-        };
+        });
     }
 
-    [HttpGet("{id:guid}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(FindOneResponse<FindOnePositionsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOnePositionsResponse?>> ShowAsync(Guid id)
+    public async Task<IActionResult> ShowAsync([AsParameters] FindOnePositionsRequest request)
     {
-        var position = await positionsService.FindOneAsync(id);
+        var position = await positionsService.FindOneAsync(request);
         var data = positionsView.FindOne(position);
 
-        return new FindOneResponse<FindOnePositionsResponse?>()
-        {
-            Data = data,
-        };
+        return Ok(new { Data = data });
     }
 
     [HttpPost]

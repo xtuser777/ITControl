@@ -57,7 +57,7 @@ public class BaseRepository
         foreach (var property in @params.GetType().GetProperties())
         {
             var value = property.GetValue(@params);
-            if (value is null) continue;
+            if (value is null || property.Name == "ExcludeId") continue;
             if (property.PropertyType == typeof(string))
                 query = query.Where(x => EF.Property<string>(x!, property.Name).Contains((string)value));
             else

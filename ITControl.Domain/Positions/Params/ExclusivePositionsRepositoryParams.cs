@@ -1,7 +1,9 @@
+using ITControl.Domain.Shared.Params;
+
 namespace ITControl.Domain.Positions.Params;
 
-public class ExclusivePositionsRepositoryParams
+public class ExclusivePositionsRepositoryParams 
+    : ExistsPositionsRepositoryParams, IExclusiveRepositoryParams
 {
-    public Guid Id { get; set; } = Guid.Empty;
-    public string? Description { get; set; } = null;
+    public Guid ExcludeId { get; set; }
 }
