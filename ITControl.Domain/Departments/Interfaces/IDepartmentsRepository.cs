@@ -1,16 +1,11 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Params;
+using ITControl.Domain.Shared;
+using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Departments.Interfaces;
 
-public interface IDepartmentsRepository
+public interface IDepartmentsRepository : IRepository
 {
-    Task<Department?> FindOneAsync(FindOneDepartmentsRepositoryParams @params);
-    Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRepositoryParams @params);
-    Task CreateAsync(Department department);
-    void Update(Department department);
-    void Delete(Department department);
-    Task<int> CountAsync(CountDepartmentsRepositoryParams @params);
-    Task<bool> ExistsAsync(ExistsDepartmentsRepositoryParams @params);
-    Task<bool> ExclusiveAsync(ExclusiveDepartmentsRepositoryParams @params);
 }

@@ -5,30 +5,40 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Departments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Departments.Entities;
+using ITControl.Domain.Departments.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Departments.Services;
 
 public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 {
-    public async Task<Department> FindOneAsync(Guid id)
+    public async Task<Department> FindOneAsync(FindOneDepartmentsRequest request)
     {
-        return await unitOfWork
-            .DepartmentsRepository
-            .FindOneAsync(new () { Id = id })
+        return (Department)(await unitOfWork
+                   .DepartmentsRepository
+                   .FindOneAsync(
+                       (FindOneDepartmentsRepositoryParams)request))!
                ?? throw new NotFoundException(Errors.DEPARTMENT_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<Department>> FindManyAsync(FindManyDepartmentsRequest request)
+    public async Task<IEnumerable<Department>> FindManyAsync(
+        FindManyDepartmentsRequest request,
+        OrderByDepartmentsRequest orderByRequest)
     {
-        return await unitOfWork.DepartmentsRepository.FindManyAsync(request);
+        var entities = await unitOfWork.DepartmentsRepository.FindManyAsync(
+            (FindManyDepartmentsRepositoryParams)request, 
+            (OrderByDepartmentsRepositoryParams)orderByRequest, 
+            request);
+        
+        return entities.Cast<Department>();
     }
 
     public async Task<PaginationResponse?> FindManyPagination(FindManyDepartmentsRequest request)
     {
         if (request.Page == null || request.Size == null) return null;
         
-        var count = await unitOfWork.DepartmentsRepository.CountAsync(request);
+        var count = await unitOfWork.DepartmentsRepository.CountAsync(
+            (CountDepartmentsRepositoryParams)request);
         
         var pagination = Pagination.Build(request.Page, request.Size, count);
         
@@ -47,7 +57,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task UpdateAsync(Guid id, UpdateDepartmentsRequest request)
     {
-        var department = await FindOneAsync(id);
+        var department = await FindOneAsync(new () { Id = id });
         department.Update(request);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Update(department);
@@ -56,7 +66,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
 
     public async Task DeleteAsync(Guid id)
     {
-        var department = await FindOneAsync(id);
+        var department = await FindOneAsync(new () { Id = id });
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Delete(department);
         await unitOfWork.Commit(transaction);

@@ -1,7 +1,7 @@
 ﻿namespace ITControl.Domain.Departments.Params;
 
-public class DepartmentParams
+public record DepartmentParams
 {
-    public string Alias { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
+    public string Alias { get; init; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 }

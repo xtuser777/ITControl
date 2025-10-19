@@ -1,122 +1,82 @@
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Divisions.Params;
+using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Divisions.Repositories;
 
-public class DivisionsRepository(ApplicationDbContext context) : IDivisionsRepository
+public class DivisionsRepository(ApplicationDbContext context) : 
+    BaseRepository, IDivisionsRepository
 {
-    public async Task<Division?> FindOneAsync(FindOneDivisionsRepositoryParams @params)
+    public async Task<Entity?> FindOneAsync(IFindOneRepositoryParams @params)
     {
-        var (id, includeDepartment) = @params;
-        var query = context.Divisions.AsQueryable();
-        if (includeDepartment is not null) 
-            query = query.Include(x => x.Department);
+        query = context.Divisions.AsQueryable();
+        ApplyIncludes(((FindOneDivisionsRepositoryParams)@params).Includes);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return await query.FirstOrDefaultAsync(x => 
+            x.Id == ((FindOneDivisionsRepositoryParams)@params).Id);
+    }
+    
+    public async Task<Entity?> FindOneAsync(Guid id)
+    {
+        return await context.Divisions.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Division>> FindManyAsync(FindManyDivisionsRepositoryParams @params)
+    public async Task<IEnumerable<Entity>> FindManyAsync(
+        IFindManyRepositoryParams findManyParams,
+        IOrderByRepositoryParams? orderByParams = null,
+        PaginationParams? paginationParams = null)
     {
-        var (page, size) = @params;
-        var query = context.Divisions.AsNoTracking();
-        query = BuildQuery(new BuildQueryDivisionsRepositoryParams
-        {
-            Query = query, 
-            Params = @params
-        });
-        query = BuildOrderBy(new BuildOrderByDivisionsRepositoryParams { 
-            Query = query, 
-            Params = @params
-        });
-        if (page != null && size != null) 
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        query = context.Divisions.AsNoTracking();
+        BuildQuery((FindManyDivisionsRepositoryParams)findManyParams);
+        BuildOrderBy((OrderByDivisionsRepositoryParams?)orderByParams);
+        ApplyPagination(paginationParams);
         
         return await query.ToListAsync();
     }
 
-    public async Task CreateAsync(Division division)
+    public async Task CreateAsync(Entity entity)
     {
-        await context.Divisions.AddAsync(division);
+        await context.Divisions.AddAsync((Division)entity);
     }
 
-    public void Update(Division division)
+    public void Update(Entity entity)
     {
-        context.Divisions.Update(division);
+        context.Divisions.Update((Division)entity);
     }
 
-    public void Delete(Division division)
+    public void Delete(Entity entity)
     {
-        context.Divisions.Remove(division);
+        context.Divisions.Remove((Division)entity);
     }
 
-    public async Task<int> CountAsync(CountDivisionsRepositoryParams @params)
+    public async Task<int> CountAsync(ICountRepositoryParams @params)
     {
-        var query = context.Divisions.AsNoTracking();
-        query = BuildQuery(new BuildQueryDivisionsRepositoryParams { 
-            Query = query, 
-            Params = @params
-        });
+        query = context.Divisions.AsNoTracking();
+        BuildQuery((CountDivisionsRepositoryParams)@params);
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsDivisionsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(IExistsRepositoryParams @params)
     {
         var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(ExclusiveDivisionsRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(IExclusiveRepositoryParams @params)
     {
-        var (id, name) = @params;
-        var query = context.Divisions.AsNoTracking();
-        query = query.Where(x => x.Id != id);
-        query = BuildQuery(new BuildQueryDivisionsRepositoryParams
-        {
-            Query = query, 
-            Params = new CountDivisionsRepositoryParams
-            {
-                Name = name
-            }
-        });
+        query = context.Divisions.AsNoTracking();
+        query = query.Where(x => 
+            x.Id != ((ExclusiveDivisionsRepositoryParams)@params).ExcludeId);
+        BuildQuery((ExclusiveDivisionsRepositoryParams)@params);
         var count = await query.CountAsync();
         
         return count > 0;
-    }
-
-    private static IQueryable<Division> BuildQuery(BuildQueryDivisionsRepositoryParams @queryParams)
-    {
-        var (query, @params) = @queryParams;
-        if (@params.Id is not null) 
-            query = query.Where(x => x.Id == @params.Id);
-        if (@params.Name is not null) 
-            query = query.Where(x => x.Name.Contains(@params.Name));
-        if (@params.DepartmentId is not null) 
-            query = query.Where(x => x.DepartmentId == @params.DepartmentId);
-        
-        return query;
-    }
-
-    private static IQueryable<Division> BuildOrderBy(BuildOrderByDivisionsRepositoryParams @orderByParams)
-    {
-        var (query, @params) = @orderByParams;
-        query = @params.OrderByName switch
-        {
-            "a" => query.OrderBy(p => p.Name),
-            "d" => query.OrderByDescending(p => p.Name),
-            _ => query
-        };
-        query = @params.OrderByDepartment switch
-        {
-            "a" => query.Include(x => x.Department).OrderBy(p => p.Department!.Alias),
-            "d" => query.Include(x => x.Department).OrderByDescending(p => p.Department!.Alias),
-            _ => query
-        };
-
-        return query;
     }
 }

@@ -4,7 +4,7 @@ using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Divisions.Entities;
 
-public class Division : Entity
+public sealed class Division : Entity
 {
     public string Name { get; set; } = string.Empty;
     public Guid DepartmentId { get; set; }

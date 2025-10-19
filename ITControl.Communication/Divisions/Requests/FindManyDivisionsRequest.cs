@@ -1,24 +1,20 @@
 using ITControl.Communication.Shared.Requests;
+using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Divisions.Params;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Communication.Divisions.Requests;
 
 public record FindManyDivisionsRequest : PageableRequest
 {
-    public string? Name { get; set; }
-    public Guid? DepartmentId { get; set; }
-    public string? OrderByName { get; set; }
-    public string? OrderByDepartment { get; set; }
+    public string? Name { get; init; } = null;
+    public Guid? DepartmentId { get; init; } = null;
 
     public static implicit operator FindManyDivisionsRepositoryParams(FindManyDivisionsRequest request)
         => new()
         {
             Name = request.Name,
             DepartmentId = request.DepartmentId,
-            OrderByName = request.OrderByName,
-            OrderByDepartment = request.OrderByDepartment,
-            Page = request.Page != null ? int.Parse(request.Page) : null,
-            Size = request.Size != null ? int.Parse(request.Size) : null
         };
 
     public static implicit operator CountDivisionsRepositoryParams(FindManyDivisionsRequest request)
@@ -26,5 +22,12 @@ public record FindManyDivisionsRequest : PageableRequest
         {
             Name = request.Name,
             DepartmentId = request.DepartmentId
+        };
+
+    public static implicit operator PaginationParams(FindManyDivisionsRequest request) =>
+        new PaginationParams
+        {
+            Page = Parser.ToIntOptional(request.Page),
+            Size = Parser.ToIntOptional(request.Size),
         };
 }

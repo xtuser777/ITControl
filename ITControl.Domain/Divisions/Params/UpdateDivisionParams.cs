@@ -1,9 +1,9 @@
 ﻿namespace ITControl.Domain.Divisions.Params;
 
-public class UpdateDivisionParams
+public record UpdateDivisionParams
 {
-    public string? Name { get; set; }
-    public Guid? DepartmentId { get; set; }
+    public string? Name { get; init; } = null;
+    public Guid? DepartmentId { get; init; } = null;
 
     public void Deconstruct(out string? name, out Guid? departmentId)
     {

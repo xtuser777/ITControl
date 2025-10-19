@@ -1,157 +1,75 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Departments.Params;
+using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Departments.Repositories;
 
-public class DepartmentsRepository(ApplicationDbContext context) : IDepartmentsRepository
+public class DepartmentsRepository(ApplicationDbContext context) : 
+    BaseRepository, IDepartmentsRepository
 {
-    public async Task<Department?> FindOneAsync(
-        FindOneDepartmentsRepositoryParams @params)
+    public async Task<Entity?> FindOneAsync(
+        IFindOneRepositoryParams @params)
     {
-        return await context.Departments.FindAsync(@params.Id);
+        return await context.Departments.FindAsync(
+            ((FindOneDepartmentsRepositoryParams)@params).Id);
     }
 
-    public async Task<IEnumerable<Department>> FindManyAsync(
-        FindManyDepartmentsRepositoryParams @params)
+    public async Task<IEnumerable<Entity>> FindManyAsync(
+        IFindManyRepositoryParams findManyParams,
+        IOrderByRepositoryParams? orderByParams,
+        PaginationParams? paginationParams)
     {
-        var query = context.Departments.AsNoTracking();
-        var (alias, name, orderByAlias, orderByName, page, size) = @params;
-        query = BuildQuery(new ()
-        {
-            Query = query,
-            Alias = alias,
-            Name = name
-        });
-        query = BuildOrderBy(new ()
-        {
-            Query = query,
-            OrderByAlias = orderByAlias,
-            OrderByName = orderByName
-        });
-        if (page != null && size != null) 
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
+        query = context.Departments.AsNoTracking();
+        BuildQuery((FindManyDepartmentsRepositoryParams)findManyParams);
+        BuildOrderBy((OrderByDepartmentsRepositoryParams?)orderByParams);
+        ApplyPagination(paginationParams);
         
         return await query.ToListAsync();
     }
 
-    public async Task CreateAsync(Department department)
+    public async Task CreateAsync(Entity entity)
     {
-        await context.Departments.AddAsync(department);
+        await context.Departments.AddAsync((Department)entity);
     }
 
-    public void Update(Department department)
+    public void Update(Entity entity)
     {
-        context.Departments.Update(department);
+        context.Departments.Update((Department)entity);
     }
 
-    public void Delete(Department department)
+    public void Delete(Entity entity)
     {
-        context.Departments.Remove(department);
+        context.Departments.Remove((Department)entity);
     }
 
-    public async Task<int> CountAsync(CountDepartmentsRepositoryParams @params)
+    public async Task<int> CountAsync(ICountRepositoryParams @params)
     {
-        var query = context.Departments.AsNoTracking();
-        var (id, alias, name) = @params;
-        query = BuildQuery(new ()
-        {
-            Query = query,
-            Id = id,
-            Alias = alias,
-            Name = name,
-        });
+        query = context.Departments.AsNoTracking();
+        BuildQuery((CountDepartmentsRepositoryParams)@params);
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsDepartmentsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(IExistsRepositoryParams @params)
     {
-        var (id, alias, name) = @params;
-        var count = await CountAsync(new ()
-        {
-            Id = id,
-            Alias = alias,
-            Name = name,
-        });
+        var count = await CountAsync((ExistsDepartmentsRepositoryParams)@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(ExclusiveDepartmentsRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(IExclusiveRepositoryParams @params)
     {
-        var query = context.Departments.AsNoTracking();
-        var (id, alias, name) = @params;
-        query = query.Where(x => x.Id != id);
-        query = BuildQuery(new ()
-        {
-            Query = query,
-            Alias = alias,
-            Name = name,
-        });
+        query = context.Departments.AsNoTracking();
+        query = query.Where(x => 
+            x.Id != ((ExclusiveDepartmentsRepositoryParams)@params).ExcludeId);
+        BuildQuery((ExclusiveDepartmentsRepositoryParams)@params);
         var count = await query.CountAsync();
         
         return count > 0;
-    }
-
-    private static IQueryable<Department> BuildQuery(BuildQueryParams @params)
-    {
-        var (query, id, alias, name) = @params;
-        if (id is not null) query = query.Where(x => x.Id == id);
-        if (alias is not null) query = query.Where(x => x.Alias.Contains(alias));
-        if (name is not null) query = query.Where(x => x.Name.Contains(name));
-        
-        return query;
-    }
-
-    private static IQueryable<Department> BuildOrderBy(BuildOrderByParams @params)
-    {
-        var (query, orderByAlias, orderByName) = @params;
-        query = orderByAlias switch
-        {
-            "a" => query.OrderBy(p => p.Alias),
-            "d" => query.OrderByDescending(p => p.Alias),
-            _ => query
-        };
-        query = orderByName switch
-        {
-            "a" => query.OrderBy(p => p.Name),
-            "d" => query.OrderByDescending(p => p.Name),
-            _ => query
-        };
-        
-        return query;
-    }
-}
-
-class BuildQueryParams
-{
-    public IQueryable<Department> Query { get; set; } = null!;
-    public Guid? Id { get; set; }
-    public string? Alias { get; set; }
-    public string? Name { get; set; }
-
-    internal void Deconstruct(out IQueryable<Department> query, out Guid? id, out string? alias, out string? name)
-    {
-        query = Query;
-        id = Id;
-        alias = Alias;
-        name = Name;
-    }
-}
-
-class BuildOrderByParams
-{
-    public IQueryable<Department> Query { get; set; } = null!;
-    public string? OrderByAlias { get; set; }
-    public string? OrderByName { get; set; }
-
-    internal void Deconstruct(out IQueryable<Department> query, out string? orderByAlias, out string? orderByName)
-    {
-        query = Query;
-        orderByAlias = OrderByAlias;
-        orderByName = OrderByName;
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace ITControl.Domain.Departments.Params;
 
-public class UpdateDepartmentParams
+public record UpdateDepartmentParams
 {
-    public string? Alias { get; set; }
-    public string? Name { get; set; }
+    public string? Alias { get; init; } = null;
+    public string? Name { get; init; } = null;
 }

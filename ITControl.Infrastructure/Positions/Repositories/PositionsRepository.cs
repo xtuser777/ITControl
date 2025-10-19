@@ -20,12 +20,12 @@ public class PositionsRepository(ApplicationDbContext context)
 
     public async Task<IEnumerable<Entity>> FindManyAsync(
         IFindManyRepositoryParams findManyParams,
-        IOrderByRepositoryParams orderByParams,
-        PaginationParams paginationParams)
+        IOrderByRepositoryParams? orderByParams,
+        PaginationParams? paginationParams)
     {
         query = context.Positions.AsNoTracking();
         BuildQuery((FindManyPositionsRepositoryParams)findManyParams);
-        BuildOrderBy((OrderByPositionsRepositoryParams)orderByParams);
+        BuildOrderBy((OrderByPositionsRepositoryParams?)orderByParams);
         ApplyPagination(paginationParams);
 
         var entities = await query.ToListAsync();

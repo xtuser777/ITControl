@@ -1,6 +1,7 @@
 ﻿using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Shared.Messages;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Divisions.Params;
 
 namespace ITControl.Communication.Shared.Attributes;
 
@@ -13,7 +14,7 @@ public class DivisionConnectionAttribute : ValidationAttribute
         var divisionsRepository = 
             (IDivisionsRepository)validationContext.GetService(typeof(IDivisionsRepository))!;
         var exists = divisionsRepository
-            .ExistsAsync(new () { Id = divisionId })
+            .ExistsAsync(new ExistsDivisionsRepositoryParams { Id = divisionId })
             .GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(

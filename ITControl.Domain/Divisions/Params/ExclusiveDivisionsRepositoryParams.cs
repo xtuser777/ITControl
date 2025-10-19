@@ -1,13 +1,9 @@
-﻿namespace ITControl.Domain.Divisions.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class ExclusiveDivisionsRepositoryParams
+namespace ITControl.Domain.Divisions.Params;
+
+public record ExclusiveDivisionsRepositoryParams :
+    ExistsDivisionsRepositoryParams, IExclusiveRepositoryParams
 {
-    public Guid Id { get; set; }
-    public string? Name { get; set; }
-
-    public void Deconstruct(out Guid id, out string? name)
-    {
-        id = Id;
-        name = Name;
-    }
+    public Guid ExcludeId { get; set; }
 }

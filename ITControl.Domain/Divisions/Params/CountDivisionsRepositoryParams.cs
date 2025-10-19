@@ -1,15 +1,9 @@
-﻿namespace ITControl.Domain.Divisions.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class CountDivisionsRepositoryParams
+namespace ITControl.Domain.Divisions.Params;
+
+public record CountDivisionsRepositoryParams : 
+    FindManyDivisionsRepositoryParams, ICountRepositoryParams
 {
-    public Guid? Id { get; set; }
-    public string? Name { get; set; }
-    public Guid? DepartmentId { get; set; }
-    
-    public void Deconstruct(out Guid? id, out string? name, out Guid? departmentId)
-    {
-        id = Id;
-        name = Name;
-        departmentId = DepartmentId;
-    }
+    public Guid? Id { get; set; } = null;
 }

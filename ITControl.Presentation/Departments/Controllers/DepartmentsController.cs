@@ -22,35 +22,34 @@ namespace ITControl.Presentation.Departments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyDepartmentsResponse>> IndexAsync(
-            [FromQuery] FindManyDepartmentsRequest request)
+        public async Task<IActionResult> IndexAsync(
+            [FromQuery] FindManyDepartmentsRequest request,
+            [FromHeader] OrderByDepartmentsRequest orderBy)
         {
-            var departments = await departmentsService.FindManyAsync(request);
+            var departments = await departmentsService.FindManyAsync(request, orderBy);
             var pagination = await departmentsService.FindManyPagination(request);
             var data = departmentsView.FindMany(departments);
 
-            return new FindManyResponse<FindManyDepartmentsResponse>()
+            return Ok(new 
             {
                 Data = data,
                 Pagination = pagination
-            };
+            });
         }
 
-        [HttpGet("{id:guid}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(typeof(FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneDepartmentsResponse?>> ShowAsync(Guid id)
+        public async Task<IActionResult> ShowAsync(
+            [AsParameters] FindOneDepartmentsRequest request)
         {
-            var department = await departmentsService.FindOneAsync(id);
+            var department = await departmentsService.FindOneAsync(request);
             var data = departmentsView.FindOne(department);
             
-            return new FindOneResponse<FindOneDepartmentsResponse?>()
-            {
-                Data = data,
-            };
+            return Ok(new { Data = data });
         }
 
         [HttpPost]
@@ -58,16 +57,13 @@ namespace ITControl.Presentation.Departments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateDepartmentsResponse?>> CreateAsync(
+        public async Task<IActionResult> CreateAsync(
             [FromBody] CreateDepartmentsRequest request)
         {
             var department = await departmentsService.CreateAsync(request);
             var data = departmentsView.Create(department);
-            Response.StatusCode = 201;
-            return new FindOneResponse<CreateDepartmentsResponse?>()
-            {
-                Data = data,
-            };
+            var uri = "";
+            return Created(uri, new { Data = data });
         }
 
         [HttpPut("{id:guid}")]
@@ -76,12 +72,12 @@ namespace ITControl.Presentation.Departments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task UpdateAsync(
+        public async Task<IActionResult> UpdateAsync(
             Guid id, 
             [FromBody] UpdateDepartmentsRequest request)
         {
             await departmentsService.UpdateAsync(id, request);
-            Response.StatusCode = 204;
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -90,10 +86,10 @@ namespace ITControl.Presentation.Departments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid id)
         {
             await departmentsService.DeleteAsync(id);
-            Response.StatusCode = 204;
+            return NoContent();
         }
     }
 }

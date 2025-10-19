@@ -1,5 +1,8 @@
-﻿namespace ITControl.Domain.Divisions.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class ExistsDivisionsRepositoryParams : CountDivisionsRepositoryParams
+namespace ITControl.Domain.Divisions.Params;
+
+public record ExistsDivisionsRepositoryParams : 
+    CountDivisionsRepositoryParams, IExistsRepositoryParams
 {
 }

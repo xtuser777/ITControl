@@ -6,10 +6,15 @@ namespace ITControl.Domain.Shared;
 public interface IRepository
 {
     Task<Entity?> FindOneAsync(IFindOneRepositoryParams @params);
+
+    public Task<Entity?> FindOneAsync(Guid id)
+    {
+        return Task.FromResult<Entity?>(null);
+    }
     Task<IEnumerable<Entity>> FindManyAsync(
         IFindManyRepositoryParams findManyParams,
-        IOrderByRepositoryParams orderByParams,
-        PaginationParams paginationParams);
+        IOrderByRepositoryParams? orderByParams = null,
+        PaginationParams? paginationParams = null);
     Task CreateAsync(Entity entity);
     public void Update(Entity entity) { }
     public void Delete(Entity entity) { }

@@ -1,13 +1,15 @@
-﻿namespace ITControl.Domain.Divisions.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class FindOneDivisionsRepositoryParams
+namespace ITControl.Domain.Divisions.Params;
+
+public record FindOneDivisionsRepositoryParams : IFindOneRepositoryParams
 {
-    public Guid Id { get; set; }
-    public bool? IncludeDepartment { get; set; }
+    public Guid Id { get; init; }
+    public IncludesDivisionsParams? Includes { get; init; } = null;
     
-    public void Deconstruct(out Guid id, out bool? includeDepartment)
+    public void Deconstruct(out Guid id, out IncludesDivisionsParams? includes)
     {
         id = Id;
-        includeDepartment = IncludeDepartment;
+        includes = Includes;
     }
 }

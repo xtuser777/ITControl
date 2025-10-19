@@ -1,16 +1,23 @@
 ﻿using ITControl.Domain.Divisions.Params;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Communication.Divisions.Requests;
 
-public class FindOneDivisionsRequest
+public record FindOneDivisionsRequest
 {
-    public Guid Id { get; set; } = Guid.Empty;
-    public bool? IncludeDepartment { get; set; } = true;
+    [FromRoute]
+    public Guid Id { get; init; } = Guid.Empty;
+    
+    [FromQuery]
+    public bool? IncludeDepartment { get; init; } = true;
 
     public static implicit operator FindOneDivisionsRepositoryParams(FindOneDivisionsRequest request)
         => new()
         {
             Id = request.Id,
-            IncludeDepartment = request.IncludeDepartment ?? true
+            Includes = new IncludesDivisionsParams
+            {
+                Department = request.IncludeDepartment,
+            }
         };
 }
