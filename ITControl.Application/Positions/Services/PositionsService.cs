@@ -4,9 +4,9 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Positions.Requests;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Positions.Params;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Positions.Services;
 

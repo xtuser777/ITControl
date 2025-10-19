@@ -1,7 +1,7 @@
-using ITControl.Application.Notifications.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
+using ITControl.Application.Notifications.Interfaces;
 using ITControl.Application.Shared.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Shared.Controllers;
 

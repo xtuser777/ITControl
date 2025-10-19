@@ -1,4 +1,4 @@
-using ITControl.Communication.Equipments.Requests;
+using ITControl.Application.Equipments.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Entities;
 
@@ -6,11 +6,11 @@ namespace ITControl.Application.Equipments.Interfaces;
 
 public interface IEquipmentsService
 {
-    Task<Equipment> FindOneAsync(FindOneEquipmentsRequest request);
+    Task<Equipment> FindOneAsync(FindOneEquipmentsServiceParams @params);
     Task<IEnumerable<Equipment>> FindManyAsync(
-        FindManyEquipmentsRequest request, OrderByEquipmentsRequest orderByRequest);
-    Task<PaginationResponse?> FindManyPaginationAsync(FindManyEquipmentsRequest request);
-    Task<Equipment?> CreateAsync(CreateEquipmentsRequest request);
-    Task UpdateAsync(Guid id, UpdateEquipmentsRequest request);
-    Task DeleteAsync(Guid id);
+        FindManyEquipmentsServiceParams @params);
+    Task<PaginationResponse?> FindManyPaginationAsync(FindManyPaginationEquipmentsServiceParams @params);
+    Task<Equipment?> CreateAsync(CreateEquipmentsServiceParams @params);
+    Task UpdateAsync(UpdateEquipmentsServiceParams @params);
+    Task DeleteAsync(DeleteEquipmentsServiceParams @params);
 }

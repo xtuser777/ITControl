@@ -1,7 +1,6 @@
 ﻿using ITControl.Application.Supplements.Interfaces;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Supplements.Responses;
-using ITControl.Domain.Shared.Attributes;
 using ITControl.Domain.Shared.Extensions;
 using ITControl.Domain.Supplements.Entities;
 

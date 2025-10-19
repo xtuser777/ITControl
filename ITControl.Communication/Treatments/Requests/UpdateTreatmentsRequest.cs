@@ -1,10 +1,10 @@
-﻿using ITControl.Communication.Shared.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
-using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Treatments.Requests;
 

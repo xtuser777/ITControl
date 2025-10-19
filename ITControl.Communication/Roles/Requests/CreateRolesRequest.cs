@@ -1,8 +1,8 @@
-using ITControl.Communication.Shared.Resources;
-using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Roles.Params;
+using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Roles.Interfaces;
+using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Messages;
 namespace ITControl.Communication.Roles.Requests;
 

@@ -12,49 +12,49 @@ namespace ITControl.Infrastructure.Divisions.Repositories;
 public class DivisionsRepository(ApplicationDbContext context) : 
     BaseRepository, IDivisionsRepository
 {
-    public async Task<Entity?> FindOneAsync(IFindOneRepositoryParams @params)
+    public async Task<Division?> FindOneAsync(FindOneRepositoryParams @params)
     {
         query = context.Divisions.AsQueryable();
-        ApplyIncludes(((FindOneDivisionsRepositoryParams)@params).Includes);
+        ApplyIncludes(@params.Includes);
         
-        return await query.FirstOrDefaultAsync(x => 
-            x.Id == ((FindOneDivisionsRepositoryParams)@params).Id);
+        return (Division?)await query.FirstOrDefaultAsync(x => 
+            x.Id == @params.Id);
     }
     
-    public async Task<Entity?> FindOneAsync(Guid id)
+    public async Task<Division?> FindOneAsync(Guid id)
     {
         return await context.Divisions.FindAsync(id);
     }
 
-    public async Task<IEnumerable<Entity>> FindManyAsync(
-        IFindManyRepositoryParams findManyParams,
-        IOrderByRepositoryParams? orderByParams = null,
+    public async Task<IEnumerable<Division>> FindManyAsync(
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams = null,
         PaginationParams? paginationParams = null)
     {
         query = context.Divisions.AsNoTracking();
         BuildQuery((FindManyDivisionsRepositoryParams)findManyParams);
         BuildOrderBy((OrderByDivisionsRepositoryParams?)orderByParams);
         ApplyPagination(paginationParams);
-        
-        return await query.ToListAsync();
+        var entities = await query.ToListAsync();
+        return entities.Cast<Division>();
     }
 
-    public async Task CreateAsync(Entity entity)
+    public async Task CreateAsync(Division entity)
     {
-        await context.Divisions.AddAsync((Division)entity);
+        await context.Divisions.AddAsync(entity);
     }
 
-    public void Update(Entity entity)
+    public void Update(Division entity)
     {
-        context.Divisions.Update((Division)entity);
+        context.Divisions.Update(entity);
     }
 
-    public void Delete(Entity entity)
+    public void Delete(Division entity)
     {
-        context.Divisions.Remove((Division)entity);
+        context.Divisions.Remove(entity);
     }
 
-    public async Task<int> CountAsync(ICountRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyRepositoryParams @params)
     {
         query = context.Divisions.AsNoTracking();
         BuildQuery((CountDivisionsRepositoryParams)@params);
@@ -62,18 +62,16 @@ public class DivisionsRepository(ApplicationDbContext context) :
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(IExistsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(IExclusiveRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(FindManyRepositoryParams @params)
     {
         query = context.Divisions.AsNoTracking();
-        query = query.Where(x => 
-            x.Id != ((ExclusiveDivisionsRepositoryParams)@params).ExcludeId);
         BuildQuery((ExclusiveDivisionsRepositoryParams)@params);
         var count = await query.CountAsync();
         

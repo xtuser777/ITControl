@@ -1,29 +1,28 @@
-﻿using ITControl.Domain.Shared.Entities;
-using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Shared;
 
-public interface IRepository
+public interface IRepository<T>
 {
-    Task<Entity?> FindOneAsync(IFindOneRepositoryParams @params);
+    Task<T?> FindOneAsync(FindOneRepositoryParams @params);
 
-    public Task<Entity?> FindOneAsync(Guid id)
+    public Task<T?> FindOneAsync(Guid id)
     {
-        return Task.FromResult<Entity?>(null);
+        return Task.FromResult<T?>(default);
     }
-    Task<IEnumerable<Entity>> FindManyAsync(
-        IFindManyRepositoryParams findManyParams,
-        IOrderByRepositoryParams? orderByParams = null,
+    Task<IEnumerable<T>> FindManyAsync(
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams = null,
         PaginationParams? paginationParams = null);
-    Task CreateAsync(Entity entity);
-    public void Update(Entity entity) { }
-    public void Delete(Entity entity) { }
-    Task<int> CountAsync(ICountRepositoryParams @params);
-    public Task<bool> ExistsAsync(IExistsRepositoryParams @params)
+    Task CreateAsync(T entity);
+    public void Update(T entity) { }
+    public void Delete(T entity) { }
+    Task<int> CountAsync(FindManyRepositoryParams @params);
+    public Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         return Task.FromResult(true);
     }
-    public Task<bool> ExclusiveAsync(IExclusiveRepositoryParams @params)
+    public Task<bool> ExclusiveAsync(FindManyRepositoryParams @params)
     {
         return Task.FromResult(true);
     }

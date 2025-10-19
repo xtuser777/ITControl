@@ -1,6 +1,9 @@
-﻿namespace ITControl.Domain.Equipments.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record ExclusiveEquipmentsRepositoryParams: FindManyEquipmentsRepositoryParams
+namespace ITControl.Domain.Equipments.Params;
+
+public record ExclusiveEquipmentsRepositoryParams : 
+    FindManyEquipmentsRepositoryParams, IExclusiveRepositoryParams
 {
-    public Guid Id { get; set; }
+    public Guid ExcludeId { get; set; }
 }

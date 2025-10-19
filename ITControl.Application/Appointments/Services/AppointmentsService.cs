@@ -6,10 +6,10 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Appointments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Appointments.Entities;
-using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Appointments.Services;
 

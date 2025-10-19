@@ -2,7 +2,7 @@
 
 namespace ITControl.Domain.Divisions.Params;
 
-public record OrderByDivisionsRepositoryParams : IOrderByRepositoryParams
+public record OrderByDivisionsRepositoryParams : OrderByRepositoryParams
 {
     public string? Name { get; set; } = null;
     public string? Department { get; set; } = null;

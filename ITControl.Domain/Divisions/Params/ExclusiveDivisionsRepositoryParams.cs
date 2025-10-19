@@ -3,7 +3,7 @@
 namespace ITControl.Domain.Divisions.Params;
 
 public record ExclusiveDivisionsRepositoryParams :
-    ExistsDivisionsRepositoryParams, IExclusiveRepositoryParams
+    FindManyDivisionsRepositoryParams, IExclusiveRepositoryParams
 {
     public Guid ExcludeId { get; set; }
 }

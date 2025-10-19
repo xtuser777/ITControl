@@ -1,6 +1,6 @@
-﻿using ITControl.Communication.Shared.Resources;
+﻿using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
-using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Notifications.Params;
 
 namespace ITControl.Communication.Notifications.Requests;

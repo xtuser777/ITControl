@@ -1,6 +1,6 @@
-using ITControl.Communication.Shared.Resources;
-using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
+using ITControl.Communication.Shared.Attributes;
+using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Contracts.Params;
 
 namespace ITControl.Communication.Contracts.Requests;

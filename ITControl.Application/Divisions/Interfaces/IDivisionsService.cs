@@ -1,4 +1,4 @@
-using ITControl.Communication.Divisions.Requests;
+using ITControl.Application.Divisions.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Divisions.Entities;
 
@@ -6,12 +6,12 @@ namespace ITControl.Application.Divisions.Interfaces;
 
 public interface IDivisionsService
 {
-    Task<Division> FindOneAsync(FindOneDivisionsRequest request);
+    Task<Division> FindOneAsync(FindOneDivisionsServiceParams @params);
     Task<IEnumerable<Division>> FindManyAsync(
-        FindManyDivisionsRequest request,
-        OrderByDivisionsRequest orderByDivisionsRequest);
-    Task<PaginationResponse?> FindManyPaginatedAsync(FindManyDivisionsRequest request);
-    Task<Division?> CreateAsync(CreateDivisionsRequest request);
-    Task UpdateAsync(UpdateDivisionsRequest request);
-    Task DeleteAsync(DeleteDivisionsRequest request);
+        FindManyDivisionsServiceParams @params);
+    Task<PaginationResponse?> FindManyPaginatedAsync(
+        FindManyPaginationDivisionsServiceParams @params);
+    Task<Division?> CreateAsync(CreateDivisionsServiceParams @params);
+    Task UpdateAsync(UpdateDivisionsServiceParams @params);
+    Task DeleteAsync(DeleteDivisionsServiceParams @params);
 }

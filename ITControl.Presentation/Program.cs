@@ -1,3 +1,4 @@
+using System.Text;
 using ITControl.Application.Auth.Interfaces;
 using ITControl.Application.Auth.Services;
 using ITControl.Communication.Shared.Converters;
@@ -7,7 +8,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 

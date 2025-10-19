@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Shared.Repositories;
 
-public class BaseRepository
+public abstract class BaseRepository
 {
     protected IQueryable<Entity> query = null!;
 
-    protected void ApplyIncludes<Y>(Y? @params)
+    protected void ApplyIncludes<T>(T? @params)
     {
         if (@params is null) return;
         foreach (var property in @params.GetType().GetProperties())
@@ -51,21 +51,20 @@ public class BaseRepository
             query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
     }
 
-    protected void BuildQuery<Y>(Y @params)
+    protected void BuildQuery<T>(T @params)
     {
         if (@params is null) return;
         foreach (var property in @params.GetType().GetProperties())
         {
             var value = property.GetValue(@params);
             if (value is null || property.Name == "ExcludeId") continue;
-            if (property.PropertyType == typeof(string))
-                query = query.Where(x => EF.Property<string>(x!, property.Name).Contains((string)value));
-            else
-                query = query.Where(x => EF.Property<object>(x!, property.Name) == value);
+            query = property.PropertyType == typeof(string) 
+                ? query.Where(x => EF.Property<string>(x!, property.Name).Contains((string)value)) 
+                : query.Where(x => EF.Property<object>(x!, property.Name) == value);
         }
     }
 
-    protected void BuildOrderBy<Y>(Y @params)
+    protected void BuildOrderBy<T>(T @params)
     {
         if (@params is null) return;
         foreach (var property in @params.GetType().GetProperties())

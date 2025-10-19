@@ -1,5 +1,5 @@
-﻿namespace ITControl.Domain.Shared.Params;
+namespace ITControl.Domain.Shared.Params;
 
-public class FindManyRepositoryParams : IFindManyRepositoryParams, ICountRepositoryParams, IExistsRepositoryParams, IExclusiveRepositoryParams
+public record FindManyRepositoryParams
 {
 }

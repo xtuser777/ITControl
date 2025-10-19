@@ -1,7 +1,6 @@
-﻿using ITControl.Domain.Shared.Messages;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Shared.Attributes;
 

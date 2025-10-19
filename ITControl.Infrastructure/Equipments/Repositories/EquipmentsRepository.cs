@@ -1,38 +1,41 @@
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Interfaces;
-using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Equipments.Repositories;
 
-public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRepository
+public class EquipmentsRepository(ApplicationDbContext context) : 
+    BaseRepository, IEquipmentsRepository
 {
-    private IQueryable<Equipment> query = null!;
-
-    public async Task<Equipment?> FindOneAsync(FindOneEquipmentsRepositoryParams @params)
+    public async Task<Equipment?> FindOneAsync(FindOneRepositoryParams @params)
     {
-        var (id, includeContract) = @params;
-        var query = context.Equipments.AsQueryable();
-        if (includeContract.HasValue) query = query.Include(x => x.Contract);
+        var (id, includes) = @params;
+        query = context.Equipments.AsQueryable();
+        ApplyIncludes(includes);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return (Equipment?)await query
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+    
+    public async Task<Equipment?> FindOneAsync(Guid id)
+    {
+        return await context.Equipments.FindAsync(id);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(
-        FindManyEquipmentsRepositoryParams findManyParams,
-        OrderByEquipmentsRepositoryParams orderByParams,
-        PaginationParams paginationParams)
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams = null,
+        PaginationParams? paginationParams = null)
     {
-        var (page, size) = paginationParams;
         query = context.Equipments.AsNoTracking();
-        BuildWhere(findManyParams);
+        BuildQuery(findManyParams);
         BuildOrderBy(orderByParams);
-        if (page != null && size != null) 
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
-        
-        return await query.ToListAsync();
+        ApplyPagination(paginationParams);
+        var entities = await query.ToListAsync();
+        return entities.Cast<Equipment>();
     }
 
     public async Task CreateAsync(Equipment equipment)
@@ -50,97 +53,26 @@ public class EquipmentsRepository(ApplicationDbContext context) : IEquipmentsRep
         context.Equipments.Remove(equipment);
     }
 
-    public async Task<int> CountAsync(CountEquipmentsRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyRepositoryParams @params)
     {
         query = context.Equipments.AsNoTracking();
-        BuildWhere(@params);
+        BuildQuery(@params);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsEquipmentsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(ExclusiveEquipmentsRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(FindManyRepositoryParams @params)
     {
         query = context.Equipments.AsNoTracking();
-        BuildWhere(new CountEquipmentsRepositoryParams() { 
-            Ip = @params.Ip, Mac = @params.Mac, Tag = @params.Tag});
+        BuildQuery(@params);
         var count = await query.CountAsync();
         
         return count > 0;
-    }
-
-    private void BuildWhere(FindManyEquipmentsRepositoryParams @findManyParams)
-    {
-        var @params = @findManyParams;
-        if (findManyParams is CountEquipmentsRepositoryParams countParams)
-        {
-            if (countParams.Id != null)
-                query = query.Where(x => x.Id == countParams.Id);
-        }
-        if (@params.Name!= null) 
-            query = query.Where(x => x.Name.Contains(@params.Name));
-        if (@params.Description!= null) 
-            query = query.Where(x => x.Description.Contains(@params.Description));
-        if (@params.Ip!= null) 
-            query = query.Where(x => x.Ip.Contains(@params.Ip));
-        if (@params.Mac!= null) 
-            query = query.Where(x => x.Mac.Contains(@params.Mac));
-        if (@params.Tag!= null) 
-            query = query.Where(x => x.Tag.Contains(@params.Tag));
-        if (@params.Rented != null) 
-            query = query.Where(x => x.Rented == @params.Rented );
-        if (@params.Type != null) 
-            query = query.Where(x => x.Type == @params.Type );
-    }
-
-    private void BuildOrderBy(OrderByEquipmentsRepositoryParams @params)
-    {
-        query = @params.Name switch
-        {
-            "a" => query.OrderBy(p => p.Name),
-            "d" => query.OrderByDescending(p => p.Name),
-            _ => query
-        };
-        query = @params.Description switch
-        {
-            "a" => query.OrderBy(p => p.Description),
-            "d" => query.OrderByDescending(p => p.Description),
-            _ => query
-        };
-        query = @params.Ip switch
-        {
-            "a" => query.OrderBy(p => p.Ip),
-            "d" => query.OrderByDescending(p => p.Ip),
-            _ => query
-        };
-        query = @params.Mac switch
-        {
-            "a" => query.OrderBy(p => p.Mac),
-            "d" => query.OrderByDescending(p => p.Mac),
-            _ => query
-        };
-        query = @params.Tag switch
-        {
-            "a" => query.OrderBy(p => p.Tag),
-            "d" => query.OrderByDescending(p => p.Tag),
-            _ => query
-        };
-        query = @params.Type switch
-        {
-            "a" => query.OrderBy(p => p.Type),
-            "d" => query.OrderByDescending(p => p.Type),
-            _ => query
-        };
-        query = @params.Rented switch
-        {
-            "a" => query.OrderBy(p => p.Rented),
-            "d" => query.OrderByDescending(p => p.Rented),
-            _ => query
-        };
     }
 }

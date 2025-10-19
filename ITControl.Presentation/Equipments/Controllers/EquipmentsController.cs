@@ -1,8 +1,7 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Presentation.Equipments.Headers;
+using ITControl.Presentation.Equipments.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -23,19 +22,18 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyEquipmentsResponse>> IndexAsync(
-            [FromQuery] FindManyEquipmentsRequest request,
-            [FromHeader] OrderByEquipmentsHeaders equipmentsHeaders)
+        public async Task<IActionResult> IndexAsync(
+            [AsParameters] IndexEquipmentsControllerParams @params)
         {
-            var equipments = await equipmentsService.FindManyAsync(request, equipmentsHeaders);
-            var pagination = await equipmentsService.FindManyPaginationAsync(request);
+            var equipments = await equipmentsService.FindManyAsync(@params);
+            var pagination = await equipmentsService.FindManyPaginationAsync(@params);
             var data = equipmentsView.FindMany(equipments);
 
-            return new FindManyResponse<FindManyEquipmentsResponse>()
+            return Ok(new
             {
                 Data = data,
                 Pagination = pagination
-            };
+            });
         }
 
         [HttpGet("{id:guid}")]
@@ -44,17 +42,13 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneEquipmentsResponse?>> ShowAsync(
-            [FromRoute] Guid id, [FromQuery] FindOneEquipmentsRequest request)
+        public async Task<IActionResult> ShowAsync(
+            [AsParameters] ShowEquipmentsControllerParams @params)
         {
-            request.Id = id;
-            var equipment = await equipmentsService.FindOneAsync(request);
+            var equipment = await equipmentsService.FindOneAsync(@params);
             var data = equipmentsView.FindOne(equipment);
             
-            return new FindOneResponse<FindOneEquipmentsResponse?>()
-            {
-                Data = data,
-            };
+            return Ok(new { Data = data });
         }
 
         [HttpPost]
@@ -62,16 +56,13 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateEquipmentsResponse?>> CreateAsync(
-            [FromBody] CreateEquipmentsRequest request)
+        public async Task<IActionResult> CreateAsync(
+            [AsParameters] CreateEquipmentsControllerParams @params)
         {
-            var equipment = await equipmentsService.CreateAsync(request);
+            var equipment = await equipmentsService.CreateAsync(@params);
             var data = equipmentsView.Create(equipment);
-            Response.StatusCode = 201;
-            return new FindOneResponse<CreateEquipmentsResponse?>()
-            {
-                Data = data,
-            };
+            var uri = $"/Equipments/{data?.Id}";
+            return Created(uri, new { Data = data });
         }
 
         [HttpPut("{id:guid}")]
@@ -80,12 +71,11 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task UpdateAsync(
-            Guid id, 
-            [FromBody] UpdateEquipmentsRequest request)
+        public async Task<IActionResult> UpdateAsync(
+            [AsParameters] UpdateEquipmentsControllerParams @params)
         {
-            await equipmentsService.UpdateAsync(id, request);
-            Response.StatusCode = 204;
+            await equipmentsService.UpdateAsync(@params);
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -94,10 +84,11 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(
+            [AsParameters] DeleteEquipmentsControllerParams @params)
         {
-            await equipmentsService.DeleteAsync(id);
-            Response.StatusCode = 204;
+            await equipmentsService.DeleteAsync(@params);
+            return NoContent();
         }
     }
 }

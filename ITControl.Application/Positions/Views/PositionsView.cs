@@ -1,7 +1,7 @@
 using ITControl.Application.Positions.Interfaces;
 using ITControl.Communication.Positions.Responses;
-using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Positions.Entities;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Positions.Views;
 

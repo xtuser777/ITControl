@@ -4,12 +4,12 @@ namespace ITControl.Domain.Equipments.Params;
 
 public record UpdateEquipmentParams
 {
-    public string? Name { get; set; } = null;
-    public string? Description { get; set; } = null;
-    public EquipmentType? Type { get; set; } = null;
-    public string? Ip { get; set; } = null;
-    public string? Mac { get; set; } = null;
-    public string? Tag { get; set; } = null;
-    public bool? Rented { get; set; } = null;
-    public Guid? ContractId { get; set; } = null;
+    public string? Name { get; init; } = null;
+    public string? Description { get; init; } = null;
+    public EquipmentType? Type { get; init; } = null;
+    public string? Ip { get; init; } = null;
+    public string? Mac { get; init; } = null;
+    public string? Tag { get; init; } = null;
+    public bool? Rented { get; init; } = null;
+    public Guid? ContractId { get; init; } = null;
 }

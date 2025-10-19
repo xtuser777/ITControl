@@ -1,10 +1,11 @@
-using ITControl.Communication.Shared.Attributes;
 using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Equipments.Enums;
+using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
-using ITControl.Domain.Shared.Messages;
 using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
+using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Equipments.Requests;
 
@@ -19,14 +20,17 @@ public record UpdateEquipmentsRequest
     public string? Description { get; set; }
 
     [StringMaxLength(15)]
+    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string? Ip { get; set; }
 
     [StringMaxLength(17)]
+    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string? Mac { get; set; }
 
     [StringMaxLength(50)]
+    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string? Tag { get; set; }
 

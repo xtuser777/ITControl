@@ -2,7 +2,7 @@
 
 namespace ITControl.Domain.Divisions.Params;
 
-public record FindManyDivisionsRepositoryParams : IFindManyRepositoryParams
+public record FindManyDivisionsRepositoryParams : FindManyRepositoryParams
 {
     public string? Name { get; set; } = null;
     public Guid? DepartmentId { get; set; } = null;

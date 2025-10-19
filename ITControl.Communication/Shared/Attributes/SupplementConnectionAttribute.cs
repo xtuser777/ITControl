@@ -1,6 +1,6 @@
-﻿using ITControl.Domain.Shared.Messages;
+﻿using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Supplements.Interfaces;
-using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Shared.Attributes;
 

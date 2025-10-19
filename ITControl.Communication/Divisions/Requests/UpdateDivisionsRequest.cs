@@ -9,8 +9,6 @@ namespace ITControl.Communication.Divisions.Requests;
 
 public record UpdateDivisionsRequest
 {
-    [FromRoute(Name = "id")]
-    public Guid Id { get; init; }
     
     [FromBody]
     [StringMaxLength(100)]
@@ -23,12 +21,6 @@ public record UpdateDivisionsRequest
     [DepartmentConnection]
     [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
     public Guid? DepartmentId { get; set; }
-
-    public static implicit operator FindOneDivisionsRequest(UpdateDivisionsRequest request)
-        => new FindOneDivisionsRequest
-        {
-            Id = request.Id,
-        };
 
     public static implicit operator UpdateDivisionParams(UpdateDivisionsRequest request)
         => new()

@@ -1,5 +1,8 @@
-﻿namespace ITControl.Domain.Equipments.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record ExistsEquipmentsRepositoryParams : CountEquipmentsRepositoryParams
+namespace ITControl.Domain.Equipments.Params;
+
+public record ExistsEquipmentsRepositoryParams : 
+    CountEquipmentsRepositoryParams, IExistsRepositoryParams
 {
 }

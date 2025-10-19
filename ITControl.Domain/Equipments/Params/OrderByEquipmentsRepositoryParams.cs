@@ -1,12 +1,14 @@
-﻿namespace ITControl.Domain.Equipments.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record OrderByEquipmentsRepositoryParams
+namespace ITControl.Domain.Equipments.Params;
+
+public record OrderByEquipmentsRepositoryParams : OrderByRepositoryParams
 {
-    public string? Name { get; set; } = null;
-    public string? Description { get; set; } = null;
-    public string? Ip { get; set; } = null;
-    public string? Mac { get; set; } = null;
-    public string? Tag { get; set; } = null;
-    public string? Rented { get; set; } = null;
-    public string? Type { get; set; } = null;
+    public string? Name { get; init; } = null;
+    public string? Description { get; init; } = null;
+    public string? Ip { get; init; } = null;
+    public string? Mac { get; init; } = null;
+    public string? Tag { get; init; } = null;
+    public string? Rented { get; init; } = null;
+    public string? Type { get; init; } = null;
 }

@@ -1,8 +1,8 @@
 using ITControl.Application.Equipments.Interfaces;
+using ITControl.Application.Equipments.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Equipments.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Shared.Exceptions;
@@ -11,34 +11,39 @@ namespace ITControl.Application.Equipments.Services;
 
 public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 {
-    public async Task<Equipment> FindOneAsync(FindOneEquipmentsRequest request)
+    public async Task<Equipment> FindOneAsync(FindOneEquipmentsServiceParams @params)
     {
         return await unitOfWork
             .EquipmentsRepository
-            .FindOneAsync(request) 
+            .FindOneAsync(@params) 
                ?? throw new NotFoundException(Errors.EQUIPMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(
-        FindManyEquipmentsRequest request, OrderByEquipmentsRequest orderByRequest)
+        FindManyEquipmentsServiceParams @params)
     {
-        return await unitOfWork.EquipmentsRepository.FindManyAsync(request, orderByRequest, request);
+        return await unitOfWork.EquipmentsRepository.FindManyAsync(
+            @params.FindManyParams, 
+            @params.OrderByParams, 
+            @params.PaginationParams);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyEquipmentsRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationEquipmentsServiceParams @params)
     {
-        if (request.Page == null || request.Size == null) return null;
+        if (@params.Page == null || @params.Size == null) return null;
         
-        var count = await unitOfWork.EquipmentsRepository.CountAsync(request);
+        var count = await unitOfWork.EquipmentsRepository
+            .CountAsync(@params.CountParams);
         
-        var pagination = Pagination.Build(request.Page, request.Size, count);
+        var pagination = Pagination.Build(@params.Page, @params.Size, count);
         
         return pagination;
     }
 
-    public async Task<Equipment?> CreateAsync(CreateEquipmentsRequest request)
+    public async Task<Equipment?> CreateAsync(CreateEquipmentsServiceParams @params)
     {
-        var equipment = new Equipment(request);
+        var equipment = new Equipment(@params.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.EquipmentsRepository.CreateAsync(equipment);
         await unitOfWork.Commit(transaction);
@@ -46,18 +51,18 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         return equipment;
     }
 
-    public async Task UpdateAsync(Guid id, UpdateEquipmentsRequest request)
+    public async Task UpdateAsync(UpdateEquipmentsServiceParams @params)
     {
-        var equipment = await FindOneAsync(new () { Id = id });
-        equipment.Update(request);
+        var equipment = await FindOneAsync(@params);
+        equipment.Update(@params.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Update(equipment);
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(DeleteEquipmentsServiceParams @params)
     {
-        var equipment = await FindOneAsync(new() { Id = id });
+        var equipment = await FindOneAsync(@params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);

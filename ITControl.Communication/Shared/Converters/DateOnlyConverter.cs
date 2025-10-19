@@ -1,6 +1,6 @@
-﻿using ITControl.Domain.Shared.Exceptions;
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Communication.Shared.Converters;
 

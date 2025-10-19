@@ -1,7 +1,7 @@
 using ITControl.Application.Divisions.Interfaces;
-using ITControl.Communication.Divisions.Requests;
 using ITControl.Communication.Divisions.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Divisions.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,17 +18,16 @@ public class DivisionsController(
     IDivisionsView divisionsView) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> IndexAsync(
-        [FromQuery] FindManyDivisionsRequest request,
-        [FromHeader] OrderByDivisionsRequest orderByDivisionsRequest)
+        [AsParameters] IndexDivisionsControllerParams @params)
     {
-        var divisions = await divisionsService.FindManyAsync(
-            request, orderByDivisionsRequest);
-        var pagination = await divisionsService.FindManyPaginatedAsync(request);
+        var divisions = await divisionsService.FindManyAsync(@params);
+        var pagination = await divisionsService.FindManyPaginatedAsync(@params);
         var data = divisionsView.FindMany(divisions);
 
         return Ok(new 
@@ -51,9 +50,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ShowAsync(
-        [AsParameters] FindOneDivisionsRequest request)
+        [AsParameters] ShowDivisionsControllerParams @params)
     {
-        var division = await divisionsService.FindOneAsync(request); 
+        var division = await divisionsService.FindOneAsync(@params); 
         var data = divisionsView.FindOne(division);
         
         return Ok(new { Data = data });
@@ -71,9 +70,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateAsync(
-        [FromBody] CreateDivisionsRequest request)
+        [AsParameters] CreateDivisionsControllerParams @params)
     {
-        var division = await divisionsService.CreateAsync(request);
+        var division = await divisionsService.CreateAsync(@params);
         var data = divisionsView.Create(division);
         var uri = $"/divisions/{data?.Id}";
         return Created(uri, new { Data = data });
@@ -91,9 +90,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UpdateAsync(
-        [AsParameters] UpdateDivisionsRequest request)
+        [AsParameters] UpdateDivisionsControllerParams @params)
     {
-        await divisionsService.UpdateAsync(request);
+        await divisionsService.UpdateAsync(@params);
         return NoContent();
     }
 
@@ -109,9 +108,9 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteAsync(
-        [AsParameters] DeleteDivisionsRequest request)
+        [AsParameters] DeleteDivisionsControllerParams @params)
     {
-        await divisionsService.DeleteAsync(request);
+        await divisionsService.DeleteAsync(@params);
         return NoContent();
     }
 }
