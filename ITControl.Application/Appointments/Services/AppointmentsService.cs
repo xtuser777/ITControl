@@ -10,6 +10,7 @@ using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Application.Appointments.Services;
 
@@ -53,7 +54,7 @@ public class AppointmentsService(
         var appointment = new Appointment(@params.Params);
         await unitOfWork.AppointmentsRepository.CreateAsync(appointment);
         var call = await unitOfWork.CallsRepository.FindOneAsync(
-            new () { Id = @params.Params.CallId })  
+            new FindOneRepositoryParams { Id = @params.Params.CallId })  
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var user = await unitOfWork.UsersRepository.FindOneAsync(
             new() { Id = @params.Params.UserId }) 

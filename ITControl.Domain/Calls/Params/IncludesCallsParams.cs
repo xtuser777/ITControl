@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Calls.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record IncludesCallsParams
+namespace ITControl.Domain.Calls.Params;
+
+public record IncludesCallsParams : IncludesParams
 {
     public bool? User { get; set; } = null;
     public bool? Equipment { get; set; } = null;

@@ -9,6 +9,7 @@ using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
 using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
@@ -46,7 +47,8 @@ public class TreatmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var treatment = new Treatment(request);
-        var call = await unitOfWork.CallsRepository.FindOneAsync(new () { Id = request.CallId }) 
+        var call = await unitOfWork.CallsRepository.FindOneAsync(
+                       new FindOneRepositoryParams { Id = request.CallId }) 
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
         var user = await unitOfWork.UsersRepository.FindOneAsync(new()

@@ -1,5 +1,8 @@
 ﻿using ITControl.Communication.Shared.Requests;
+using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Calls.Params;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Communication.Calls.Requests;
 public record FindManyCallsRequest : PageableRequest
@@ -9,29 +12,31 @@ public record FindManyCallsRequest : PageableRequest
     public string? Reason { get; set; }
     public string? Status { get; set; }
     public Guid? UserId { get; set; }
-    public string? OrderByTitle { get; set; }
-    public string? OrderByDescription { get; set; }
-    public string? OrderByReason { get; set; }
-    public string? OrderByStatus { get; set; }
-    public string? OrderByUser { get; set; }
 
     public static implicit operator FindManyCallsRepositoryParams(FindManyCallsRequest request) =>
         new()
         {
             Title = request.Title,
             Description = request.Description,
-            Reason = Enum.TryParse<Domain.Calls.Enums.CallReason>(request.Reason, true, out var reason) ? reason : null,
-            Status = Enum.TryParse<Domain.Calls.Enums.CallStatus>(request.Status, true, out var status) ? status : null,
+            Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
+            Status = Parser.ToEnumOptional<CallStatus>(request.Status),
             UserId = request.UserId,
-            OrderByTitle = request.OrderByTitle,
-            OrderByDescription = request.OrderByDescription,
-            OrderByReason = request.OrderByReason,
-            OrderByStatus = request.OrderByStatus,
-            OrderByUser = request.OrderByUser,
-            Page = string.IsNullOrEmpty(request.Page) ? null : int.Parse(request.Page),
-            Size = string.IsNullOrEmpty(request.Size) ? null : int.Parse(request.Size)
         };
 
     public static implicit operator CountCallsRepositoryParams(FindManyCallsRequest request) =>
-        (FindManyCallsRepositoryParams)request;
+        new ()
+        {
+            Title = request.Title,
+            Description = request.Description,
+            Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
+            Status = Parser.ToEnumOptional<CallStatus>(request.Status),
+            UserId = request.UserId,
+        };
+
+    public static implicit operator PaginationParams(FindManyCallsRequest request) =>
+        new ()
+        {
+            Page = Parser.ToIntOptional(request.Page),
+            Size = Parser.ToIntOptional(request.Size),
+        };
 }

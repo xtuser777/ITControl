@@ -1,13 +1,15 @@
-﻿using ITControl.Communication.Calls.Requests;
+﻿using ITControl.Application.Calls.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
 
 namespace ITControl.Application.Calls.Interfaces;
 public interface ICallsService
 {
-    Task<Call> FindOneAsync(FindOneCallsRequest request);
-    Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request);
-    Task<PaginationResponse?> FindManyPaginationAsync(FindManyCallsRequest request);
-    Task<Call?> CreateAsync(CreateCallsRequest request);
-    Task DeleteAsync(Guid id);
+    Task<Call> FindOneAsync(FindOneCallsServiceParams @params);
+    Task<IEnumerable<Call>> FindManyAsync(
+        FindManyCallsServiceParams @params);
+    Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationCallsServiceParams @params);
+    Task<Call?> CreateAsync(CreateCallsServiceParams @params);
+    Task DeleteAsync(DeleteCallsServiceParams @params);
 }

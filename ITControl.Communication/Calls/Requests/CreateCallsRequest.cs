@@ -4,6 +4,7 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Calls.Params;
 using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Calls.Requests;
@@ -41,15 +42,16 @@ public class CreateCallsRequest
     [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid? SystemId { get; set; }
 
-    public static implicit operator Call(CreateCallsRequest request) =>
-        new(
-            request.Title,
-            request.Description,
-            Parser.ToEnum<CallReason>(request.Reason),
-            Guid.Empty,
-            request.UserId,
-            request.SystemId,
-            request.EquipmentId);
+    public static implicit operator CallParams(CreateCallsRequest request) =>
+        new()
+        {
+            Title = request.Title,
+            Description = request.Description,
+            Reason = Parser.ToEnum<CallReason>(request.Reason),
+            EquipmentId = request.EquipmentId,  
+            SystemId = request.SystemId,
+            UserId = request.UserId,
+        };
 
     public static ValidationResult? ValidateReason(string reason, ValidationContext context)
     {

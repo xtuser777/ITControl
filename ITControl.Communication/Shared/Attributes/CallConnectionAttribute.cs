@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Calls.Interfaces;
+using ITControl.Domain.Calls.Params;
 using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Shared.Attributes;
@@ -12,11 +13,18 @@ public class CallConnectionAttribute : ValidationAttribute
         {
             return ValidationResult.Success;
         }
-        var callsRepository = (ICallsRepository)validationContext.GetService(typeof(ICallsRepository))!;
-        bool callExists = callsRepository.ExistsAsync(new () { Id = callId }).GetAwaiter().GetResult();
+        var callsRepository = 
+            (ICallsRepository)validationContext
+                .GetService(typeof(ICallsRepository))!;
+        bool callExists = callsRepository
+            .ExistsAsync(new ExistsCallsRepositoryParams { Id = callId })
+            .GetAwaiter().GetResult();
         if (!callExists)
         {
-            return new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, callId));
+            return new ValidationResult(
+                string.Format(
+                    Errors.ConnectionNotFound, 
+                    validationContext.DisplayName, callId));
         }
 
         return ValidationResult.Success;

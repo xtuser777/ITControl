@@ -1,4 +1,5 @@
 using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Calls.Params;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
@@ -24,24 +25,17 @@ public sealed class Call : Entity
     {
     }
 
-    public Call(
-        string title, 
-        string description, 
-        CallReason reason,
-        Guid callStatusId,
-        Guid userId, 
-        Guid? systemId, 
-        Guid? equipmentId)
+    public Call(CallParams callParams)
     {
         
         Id = Guid.NewGuid();
-        Title = title;
-        Description = description;
-        Reason = reason;
-        CallStatusId = callStatusId;
-        UserId = userId;
-        SystemId = systemId;
-        EquipmentId = equipmentId;
+        Title = callParams.Title;
+        Description = callParams.Description;
+        Reason = callParams.Reason;
+        CallStatusId = Guid.Empty;
+        UserId = callParams.UserId;
+        SystemId = callParams.SystemId;
+        EquipmentId = callParams.EquipmentId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }

@@ -1,4 +1,5 @@
 ﻿using ITControl.Application.Calls.Interfaces;
+using ITControl.Application.Calls.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
@@ -16,36 +17,41 @@ namespace ITControl.Application.Calls.Services;
 public class CallsService(
     IUnitOfWork unitOfWork) : ICallsService
 {
-    public async Task<Call> FindOneAsync(FindOneCallsRequest request)
+    public async Task<Call> FindOneAsync(FindOneCallsServiceParams @params)
     {
         return await unitOfWork
             .CallsRepository
-            .FindOneAsync(request)
+            .FindOneAsync(@params)
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
     }
 
-    public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRequest request)
+    public async Task<IEnumerable<Call>> FindManyAsync(FindManyCallsServiceParams @params)
     {
-        return await unitOfWork.CallsRepository.FindManyAsync(request);
+        return await unitOfWork.CallsRepository.FindManyAsync(
+            @params.FindManyParams,
+            @params.OrderByParams,
+            @params.PaginationParams);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyCallsRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationCallsServiceParams @params)
     {
-        if (request.Page == null || request.Size == null) return null;
+        if (@params.Page == null || @params.Size == null) return null;
 
-        var count = await unitOfWork.CallsRepository.CountAsync(request);
+        var count = await unitOfWork.CallsRepository
+            .CountAsync(@params.CountParams);
 
-        var pagination = Pagination.Build(request.Page, request.Size, count);
+        var pagination = Pagination.Build(@params.Page, @params.Size, count);
 
         return pagination;
     }
 
-    public async Task<Call?> CreateAsync(CreateCallsRequest request)
+    public async Task<Call?> CreateAsync(CreateCallsServiceParams @params)
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var user = await unitOfWork.UsersRepository.FindOneAsync(new()
         {
-            Id = request.UserId,
+            Id = @params.Params.UserId,
         })
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.CALLS_OPENED, user.Name, DateTime.Now);
@@ -53,8 +59,10 @@ public class CallsService(
             Domain.Calls.Enums.CallStatus.Open,
             message);
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
-        var call = (Call)request;
-        call.CallStatusId = callStatus.Id;
+        var call = new Call(@params.Params)
+        {
+            CallStatusId = callStatus.Id
+        };
         await unitOfWork.CallsRepository.CreateAsync(call);
         await CreateNotification(call.Id, Titles.CALLS_NEW, message);
         await unitOfWork.Commit(transaction);
@@ -62,10 +70,10 @@ public class CallsService(
         return call;
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(DeleteCallsServiceParams @params)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var call = await FindOneAsync(new () { Id = id });
+        var call = await FindOneAsync(@params);
         unitOfWork.CallsStatusesRepository.Delete(call.CallStatus!);
         unitOfWork.CallsRepository.Delete(call);
         await unitOfWork.Commit(transaction);
