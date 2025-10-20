@@ -1,8 +1,8 @@
 using ITControl.Application.Pages.Interfaces;
+using ITControl.Application.Pages.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Shared.Exceptions;
@@ -11,55 +11,57 @@ namespace ITControl.Application.Pages.Services;
 
 public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 {
-    public async Task<IEnumerable<Page>> FindManyAsync(
-        FindManyPagesRequest findManyRequest,
-        OrderByPagesRequest orderByRequest)
+    public async Task<Page> FindOneAsync(FindOnePagesServiceParams @params)
     {
-        return await unitOfWork.PagesRepository.FindManyAsync(
-            findManyRequest, orderByRequest, findManyRequest);
+        return await unitOfWork
+            .PagesRepository
+            .FindOneAsync(@params)
+               ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManyPagesRequest request)
+    public async Task<IEnumerable<Page>> FindManyAsync(
+        FindManyPagesServiceParams @params)
     {
-        if (request.Page == null || request.Size == null) return null;
+        return await unitOfWork.PagesRepository.FindManyAsync(
+            @params.FindManyParams,
+            @params.OrderByParams,
+            @params.PaginationParams);
+    }
+
+    public async Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationPagesServiceParams @params)
+    {
+        if (@params.Page == null || @params.Size == null) return null;
         
-        var count = await unitOfWork.PagesRepository.CountAsync(request);
+        var count = await unitOfWork.PagesRepository.CountAsync(@params.CountParams);
         
-        var pagination = Pagination.Build(request.Page, request.Size, count);
+        var pagination = Pagination.Build(@params.Page, @params.Size, count);
         
         return pagination;
     }
 
-    public async Task<Page> FindOneAsync(FindOnePagesRequest request)
-    {
-        return await unitOfWork
-            .PagesRepository
-            .FindOneAsync(request) 
-               ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
-    }
-
-    public async Task<Page?> CreateAsync(CreatePagesRequest request)
+    public async Task<Page?> CreateAsync(CreatePagesServiceParams @params)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var page = new Page(request);
+        var page = new Page(@params.Params);
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
         
         return page;
     }
 
-    public async Task UpdateAsync(Guid id, UpdatePagesRequest request)
+    public async Task UpdateAsync(UpdatePagesServiceParams @params)
     {
-        var page = await FindOneAsync(new() { Id = id });
-        page.Update(request);
+        var page = await FindOneAsync(@params);
+        page.Update(@params.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(DeletePagesServiceParams @params)
     {
-        var page = await FindOneAsync(new() { Id = id });
+        var page = await FindOneAsync(@params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);

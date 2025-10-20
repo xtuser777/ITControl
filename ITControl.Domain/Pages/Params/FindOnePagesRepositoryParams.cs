@@ -1,6 +1,7 @@
+using ITControl.Domain.Shared.Params;
+
 namespace ITControl.Domain.Pages.Params;
 
-public record FindOnePagesRepositoryParams
+public record FindOnePagesRepositoryParams : FindOneRepositoryParams
 {
-    public Guid Id { get; set; }
 }

@@ -1,12 +1,9 @@
-﻿namespace ITControl.Domain.Appointments.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class CountAppointmentsRepositoryParams
+namespace ITControl.Domain.Appointments.Params;
+
+public record CountAppointmentsRepositoryParams :
+    FindManyAppointmentsRepositoryParams, ICountRepositoryParams
 {
     public Guid? Id { get; set; } = null;
-    public string? Description { get; set; } = null;
-    public DateOnly? ScheduledAt { get; set; } = null;
-    public TimeOnly? ScheduledIn { get; set; } = null;
-    public string? Observation { get; set; } = null;
-    public Guid? UserId { get; set; } = null;
-    public Guid? CallId { get; set; } = null;
 }

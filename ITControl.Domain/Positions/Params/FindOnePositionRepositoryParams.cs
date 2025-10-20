@@ -2,7 +2,6 @@ using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Positions.Params;
 
-public class FindOnePositionRepositoryParams : IFindOneRepositoryParams
+public record FindOnePositionRepositoryParams : FindOneRepositoryParams
 {
-    public Guid Id { get; set; }
 }

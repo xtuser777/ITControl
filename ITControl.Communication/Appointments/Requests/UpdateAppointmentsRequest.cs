@@ -7,6 +7,7 @@ namespace ITControl.Communication.Appointments.Requests;
 
 public class UpdateAppointmentsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
 

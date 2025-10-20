@@ -5,7 +5,7 @@ using ITControl.Domain.Appointments.Params;
 
 namespace ITControl.Communication.Appointments.Requests;
 
-public class CreateAppointmentsRequest
+public record CreateAppointmentsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
@@ -40,7 +40,7 @@ public class CreateAppointmentsRequest
     [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
     public Guid CallId { get; set; }
 
-    public static implicit operator AppointmentsParams(CreateAppointmentsRequest request) =>
+    public static implicit operator AppointmentParams(CreateAppointmentsRequest request) =>
         new()
         {
             Description = request.Description,

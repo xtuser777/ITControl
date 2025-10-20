@@ -1,7 +1,7 @@
 using ITControl.Application.Positions.Interfaces;
-using ITControl.Communication.Positions.Requests;
 using ITControl.Communication.Positions.Responses;
 using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Positions.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -18,53 +18,48 @@ public class PositionsController(
     IPositionsView positionsView) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(FindManyResponse<FindManyPositionsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManyPositionsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> IndexAsync(
-        [FromQuery] FindManyPositionsRequest request,
-        [FromHeader] OrderByPositionsRequest orderBy)
+        [AsParameters] IndexPositionsParams @params)
     {
-        var positions = await positionsService.FindManyAsync(request, orderBy);
+        var positions = await positionsService.FindManyAsync(@params);
         var data = positionsView.FindMany(positions);
-        var pagination = await positionsService.FindManyPaginationAsync(request);
-
-        return Ok(new {
-            Data = data,
-            Pagination = pagination,
-        });
+        var pagination = await positionsService.FindManyPaginationAsync(@params);
+        return Ok(new { Data = data, Pagination = pagination });
     }
 
     [HttpGet("{id}")]
-    [ProducesResponseType(typeof(FindOneResponse<FindOnePositionsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOnePositionsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<IActionResult> ShowAsync([AsParameters] FindOnePositionsRequest request)
+    public async Task<IActionResult> ShowAsync(
+        [AsParameters] ShowPositionsParams @params)
     {
-        var position = await positionsService.FindOneAsync(request);
+        var position = await positionsService.FindOneAsync(@params);
         var data = positionsView.FindOne(position);
-
         return Ok(new { Data = data });
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(FindOneResponse<CreatePositionsResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreatePositionsResponse?>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreatePositionsResponse?>> CreateAsync(
-        [FromBody] CreatePositionsRequest request)
+    public async Task<IActionResult> CreateAsync(
+        [AsParameters] CreatePositionsParams @params)
     {
-        var position = await positionsService.CreateAsync(request);
+        var position = await positionsService.CreateAsync(@params);
         var data = positionsView.Create(position);
-        Response.StatusCode = 201;
-        return new FindOneResponse<CreatePositionsResponse?>()
-        {
-            Data = data,
-        };
+        var uri = Url.Action("ShowAsync", new { id = data?.Id });
+        return Created(uri, new { Data = data });
     }
 
     [HttpPut("{id:guid}")]
@@ -74,11 +69,9 @@ public class PositionsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<ActionResult> UpdateAsync(
-        Guid id, 
-        [FromBody] UpdatePositionsRequest request)
+        [AsParameters] UpdatePositionsParams @params)
     {
-        await positionsService.UpdateAsync(id, request);
-        
+        await positionsService.UpdateAsync(@params);
         return NoContent();
     }
 
@@ -88,10 +81,10 @@ public class PositionsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<ActionResult> DeleteAsync(Guid id)
+    public async Task<ActionResult> DeleteAsync(
+        [AsParameters] DeletePositionsParams @params)
     {
-        await positionsService.DeleteAsync(id);
-        
+        await positionsService.DeleteAsync(@params);
         return NoContent();
     }
 }

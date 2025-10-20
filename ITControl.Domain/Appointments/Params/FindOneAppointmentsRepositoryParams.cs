@@ -1,8 +1,7 @@
-﻿namespace ITControl.Domain.Appointments.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class FindOneAppointmentsRepositoryParams
+namespace ITControl.Domain.Appointments.Params;
+
+public record FindOneAppointmentsRepositoryParams : FindOneRepositoryParams
 {
-    public Guid Id { get; set; }
-    public bool? IncludeUser { get; set; } = null;
-    public bool? IncludeCall { get; set; } = null;
 }

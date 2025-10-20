@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Shared;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Http;
@@ -26,15 +27,20 @@ public class UniqueFieldAttribute : ValidationAttribute
         {
             return ValidationResult.Success;
         }
-        var repository = (IRepository)context.GetService(_repositoryType)!;
-        var httpContextAccessor = (IHttpContextAccessor)context.GetService(typeof(IHttpContextAccessor))!;
+        var repository = (IRepository<Entity>)context.GetService(_repositoryType)!;
+        var httpContextAccessor = 
+            (IHttpContextAccessor)context.GetService(typeof(IHttpContextAccessor))!;
         var httpContext = httpContextAccessor.HttpContext!;
         var method = httpContext.Request.Method;
+        var propertyName = context.MemberName!;
         if (method == HttpMethods.Post)
         {
-            var existsParams = _paramsType.GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object?>())!;
-            existsParams.GetType().GetProperty("Name")!.SetValue(existsParams, value.ToString()!);
-            var existsTask = repository.ExistsAsync((IExistsRepositoryParams)existsParams);
+            var existsParams = 
+                (FindManyRepositoryParams)_paramsType.GetConstructor(Type.EmptyTypes)!
+                .Invoke(Array.Empty<object?>())!;
+            existsParams.GetType().GetProperty(propertyName)!
+                .SetValue(existsParams, value.ToString()!);
+            var existsTask = repository.ExistsAsync(existsParams);
             existsTask.Wait();
             if (existsTask.Result)
             {
@@ -47,12 +53,16 @@ public class UniqueFieldAttribute : ValidationAttribute
             var idString = httpContext.GetRouteData().Values["id"]?.ToString() ?? "";
             if (Guid.TryParse(idString, out var id))
             {
-                var exclusiveParams = _paramsType.GetConstructor(Type.EmptyTypes)!.Invoke(Array.Empty<object?>())!;
-                exclusiveParams.GetType().GetProperty("ExcludeId")!.SetValue(exclusiveParams, id);
-                exclusiveParams.GetType().GetProperty("Name")!.SetValue(exclusiveParams, value.ToString()!);
-                var exclusiveTask = repository.ExclusiveAsync((IExclusiveRepositoryParams)exclusiveParams);
-                exclusiveTask.Wait();
-                if (exclusiveTask.Result)
+                var exclusiveParams =
+                    (FindManyRepositoryParams)_paramsType.GetConstructor(Type.EmptyTypes)!
+                    .Invoke(Array.Empty<object?>())!;
+                exclusiveParams.GetType().GetProperty("ExcludeId")!
+                    .SetValue(exclusiveParams, id);
+                exclusiveParams.GetType().GetProperty(propertyName)!
+                    .SetValue(exclusiveParams, value.ToString()!);
+                var exclusive = repository.ExclusiveAsync(exclusiveParams)
+                    .GetAwaiter().GetResult();
+                if (exclusive)
                 {
                     return new ValidationResult(
                         FormatErrorMessage(context.DisplayName));

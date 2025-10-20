@@ -2,7 +2,7 @@ using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Positions.Params;
 
-public class FindManyPositionsRepositoryParams : IFindManyRepositoryParams
+public record FindManyPositionsRepositoryParams : FindManyRepositoryParams
 {
     public string? Name { get; set; } = null;
 }

@@ -2,7 +2,6 @@
 
 namespace ITControl.Domain.Departments.Params;
 
-public record FindOneDepartmentsRepositoryParams : IFindOneRepositoryParams
+public record FindOneDepartmentsRepositoryParams : FindOneRepositoryParams
 {
-    public Guid Id { get; init; }
 }

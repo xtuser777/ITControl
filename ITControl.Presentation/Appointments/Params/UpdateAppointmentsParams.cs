@@ -1,0 +1,21 @@
+﻿using ITControl.Application.Appointments.Params;
+using ITControl.Communication.Appointments.Requests;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ITControl.Presentation.Appointments.Params;
+
+public record UpdateAppointmentsParams
+{
+    [FromRoute]
+    public Guid Id { get; set; }
+    [FromBody]
+    public UpdateAppointmentsRequest Request { get; set; } = new();
+
+    public static implicit operator UpdateAppointmentsServiceParams(
+        UpdateAppointmentsParams presentationParams) =>
+        new()
+        {
+            Id = presentationParams.Id,
+            Params = presentationParams.Request
+        };
+}

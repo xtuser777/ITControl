@@ -1,7 +1,6 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Departments.Params;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -12,16 +11,15 @@ namespace ITControl.Infrastructure.Departments.Repositories;
 public class DepartmentsRepository(ApplicationDbContext context) : 
     BaseRepository, IDepartmentsRepository
 {
-    public async Task<Entity?> FindOneAsync(
-        IFindOneRepositoryParams @params)
+    public async Task<Department?> FindOneAsync(
+        FindOneRepositoryParams @params)
     {
-        return await context.Departments.FindAsync(
-            ((FindOneDepartmentsRepositoryParams)@params).Id);
+        return await context.Departments.FindAsync(@params.Id);
     }
 
-    public async Task<IEnumerable<Entity>> FindManyAsync(
-        IFindManyRepositoryParams findManyParams,
-        IOrderByRepositoryParams? orderByParams,
+    public async Task<IEnumerable<Department>> FindManyAsync(
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams,
         PaginationParams? paginationParams)
     {
         query = context.Departments.AsNoTracking();
@@ -29,25 +27,25 @@ public class DepartmentsRepository(ApplicationDbContext context) :
         BuildOrderBy((OrderByDepartmentsRepositoryParams?)orderByParams);
         ApplyPagination(paginationParams);
         
-        return await query.ToListAsync();
+        return (await query.ToListAsync()).Cast<Department>();
     }
 
-    public async Task CreateAsync(Entity entity)
+    public async Task CreateAsync(Department entity)
     {
-        await context.Departments.AddAsync((Department)entity);
+        await context.Departments.AddAsync(entity);
     }
 
-    public void Update(Entity entity)
+    public void Update(Department entity)
     {
-        context.Departments.Update((Department)entity);
+        context.Departments.Update(entity);
     }
 
-    public void Delete(Entity entity)
+    public void Delete(Department entity)
     {
-        context.Departments.Remove((Department)entity);
+        context.Departments.Remove(entity);
     }
 
-    public async Task<int> CountAsync(ICountRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyRepositoryParams @params)
     {
         query = context.Departments.AsNoTracking();
         BuildQuery((CountDepartmentsRepositoryParams)@params);
@@ -55,18 +53,16 @@ public class DepartmentsRepository(ApplicationDbContext context) :
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(IExistsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         var count = await CountAsync((ExistsDepartmentsRepositoryParams)@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(IExclusiveRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(FindManyRepositoryParams @params)
     {
         query = context.Departments.AsNoTracking();
-        query = query.Where(x => 
-            x.Id != ((ExclusiveDepartmentsRepositoryParams)@params).ExcludeId);
         BuildQuery((ExclusiveDepartmentsRepositoryParams)@params);
         var count = await query.CountAsync();
         

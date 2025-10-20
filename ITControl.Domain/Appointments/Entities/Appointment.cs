@@ -18,7 +18,7 @@ public sealed class Appointment : Entity
 
     public Appointment() { }
 
-    public Appointment(AppointmentsParams @params)
+    public Appointment(AppointmentParams @params)
     {
         Id = Guid.NewGuid();
         Description = @params.Description;
