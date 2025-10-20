@@ -1,16 +1,9 @@
 ﻿using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Calls.Params;
+using ITControl.Domain.Shared;
 
 namespace ITControl.Domain.Calls.Interfaces;
 
-public interface ICallsRepository
+public interface ICallsRepository : IRepository<Call>
 {
-    Task<Call?> FindOneAsync(FindOneCallsRepositoryParams @params);
-    Task<IEnumerable<Call>> FindManyAsync(FindManyCallsRepositoryParams @params);
-    Task CreateAsync(Call call);
-    void Update(Call call);
-    void Delete(Call call);
-    Task<int> CountAsync(CountCallsRepositoryParams @params);
-    Task<bool> ExistsAsync(ExistsCallsRepositoryParams @params);
 }
 

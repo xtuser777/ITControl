@@ -1,9 +1,7 @@
-﻿namespace ITControl.Domain.Calls.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public class FindOneCallsRepositoryParams
+namespace ITControl.Domain.Calls.Params;
+
+public record FindOneCallsRepositoryParams : FindOneRepositoryParams
 {
-    public Guid Id { get; set; }
-    public bool? IncludeUser { get; set; } = null;
-    public bool? IncludeEquipment { get; set; } = null;
-    public bool? IncludeSystem { get; set; } = null;
 }
