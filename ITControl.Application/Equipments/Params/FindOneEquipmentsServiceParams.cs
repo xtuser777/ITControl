@@ -8,7 +8,8 @@ public record FindOneEquipmentsServiceParams
     public Guid Id { get; set; }
     public IncludesEquipmentsParams? Includes { get; set; } = null;
 
-    public static implicit operator FindOneRepositoryParams(FindOneEquipmentsServiceParams param)
+    public static implicit operator FindOneRepositoryParams(
+        FindOneEquipmentsServiceParams param)
         => new FindOneEquipmentsRepositoryParams
         {
             Id = param.Id,

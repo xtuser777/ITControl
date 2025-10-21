@@ -1,5 +1,4 @@
 using ITControl.Domain.Equipments.Params;
-using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Communication.Equipments.Requests;
@@ -27,7 +26,8 @@ public record OrderByEquipmentsRequest
     [FromHeader(Name = "X-Order-By-Rented")]
     public string? Rented { get; init; } = null;
 
-    public static implicit operator OrderByEquipmentsRepositoryParams(OrderByEquipmentsRequest request) =>
+    public static implicit operator OrderByEquipmentsRepositoryParams(
+        OrderByEquipmentsRequest request) =>
         new()
         {
             Name = request.Name,

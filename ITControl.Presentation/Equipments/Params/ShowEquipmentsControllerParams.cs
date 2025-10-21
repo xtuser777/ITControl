@@ -12,7 +12,8 @@ public record ShowEquipmentsControllerParams
     [FromQuery]
     public bool? IncludeContract { get; init; } = true;
 
-    public static implicit operator FindOneEquipmentsServiceParams(ShowEquipmentsControllerParams @params)
+    public static implicit operator FindOneEquipmentsServiceParams(
+        ShowEquipmentsControllerParams @params)
         => new()
         {
             Id = @params.Id,

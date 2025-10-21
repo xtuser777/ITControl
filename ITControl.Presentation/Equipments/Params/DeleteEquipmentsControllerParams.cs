@@ -8,7 +8,8 @@ public record DeleteEquipmentsControllerParams
     [FromRoute(Name = "id")]
     public Guid Id { get; init; }
 
-    public static implicit operator DeleteEquipmentsServiceParams(DeleteEquipmentsControllerParams @params)
+    public static implicit operator DeleteEquipmentsServiceParams(
+        DeleteEquipmentsControllerParams @params)
         => new()
         {
             Id = @params.Id,

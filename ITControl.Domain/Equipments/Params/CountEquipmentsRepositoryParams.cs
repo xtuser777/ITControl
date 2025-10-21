@@ -1,9 +1,7 @@
-﻿using ITControl.Domain.Shared.Params;
-
-namespace ITControl.Domain.Equipments.Params;
+﻿namespace ITControl.Domain.Equipments.Params;
 
 public record CountEquipmentsRepositoryParams : 
-    FindManyEquipmentsRepositoryParams, ICountRepositoryParams
+    FindManyEquipmentsRepositoryParams
 {
     public Guid? Id { get; init; } = null;
 }

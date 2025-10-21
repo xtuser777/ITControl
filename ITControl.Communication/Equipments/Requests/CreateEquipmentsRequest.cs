@@ -22,19 +22,25 @@ public record CreateEquipmentsRequest
 
     [RequiredField]
     [StringMaxLength(15)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExistsEquipmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IEquipmentsRepository), 
+        typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string Ip { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(17)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExistsEquipmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IEquipmentsRepository), 
+        typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string Mac { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(50)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExistsEquipmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IEquipmentsRepository), 
+        typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string Tag { get; set; } = string.Empty;
 
@@ -66,23 +72,30 @@ public record CreateEquipmentsRequest
         return ValidationResult.Success;
     }
 
-    public static ValidationResult? ValidateContractId(Guid? x, ValidationContext context)
+    public static ValidationResult? ValidateContractId(
+        Guid? x, ValidationContext context)
     {
         var rentedProperty = context.ObjectType.GetProperty(nameof(Rented));
         if (rentedProperty == null)
             return new ValidationResult(string.Empty);
-        var rentedValue = (bool)(rentedProperty.GetValue(context.ObjectInstance) ?? throw new NullReferenceException());
+        var rentedValue = 
+            (bool)(rentedProperty.
+            GetValue(context.ObjectInstance) ?? throw new NullReferenceException());
         if (rentedValue && x == null)
-            return new ValidationResult(string.Format(Errors.REQUIRED, context.DisplayName));
+            return new ValidationResult(
+                string.Format(Errors.REQUIRED, context.DisplayName));
         return ValidationResult.Success;
     }
 
-    public static ValidationResult? ValidateType(string x, ValidationContext context)
+    public static ValidationResult? ValidateType(
+        string x, ValidationContext context)
     {
         if (!Enum.TryParse(typeof(EquipmentType), x, out var _))
         {
             var types = string.Join(", ", Enum.GetNames(typeof(EquipmentType)));
-            return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
+            return new ValidationResult(
+                string.Format(
+                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
         }
         return ValidationResult.Success;
     }

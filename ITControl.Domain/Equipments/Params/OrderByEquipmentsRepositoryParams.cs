@@ -2,7 +2,8 @@
 
 namespace ITControl.Domain.Equipments.Params;
 
-public record OrderByEquipmentsRepositoryParams : OrderByRepositoryParams
+public record OrderByEquipmentsRepositoryParams : 
+    OrderByRepositoryParams
 {
     public string? Name { get; init; } = null;
     public string? Description { get; init; } = null;

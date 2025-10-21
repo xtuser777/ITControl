@@ -11,24 +11,29 @@ namespace ITControl.Communication.Equipments.Requests;
 
 public record UpdateEquipmentsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
-    
+
+    [StringMinLength(1)]
     [StringMaxLength(255)]
     [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string? Description { get; set; }
 
+    [StringMinLength(15)]
     [StringMaxLength(15)]
     [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string? Ip { get; set; }
 
+    [StringMinLength(17)]
     [StringMaxLength(17)]
     [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string? Mac { get; set; }
 
+    [StringMinLength(3)]
     [StringMaxLength(50)]
     [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
@@ -49,7 +54,8 @@ public record UpdateEquipmentsRequest
     [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
 
-    public static ValidationResult? ValidateRented(bool? x, ValidationContext context)
+    public static ValidationResult? ValidateRented(
+        bool? x, ValidationContext context)
     {
         if (x == null)
             return ValidationResult.Success;
@@ -62,30 +68,38 @@ public record UpdateEquipmentsRequest
         return ValidationResult.Success;
     }
 
-    public static ValidationResult? ValidateContractId(Guid? x, ValidationContext context)
+    public static ValidationResult? ValidateContractId(
+        Guid? x, ValidationContext context)
     {
         var rentedProperty = context.ObjectType.GetProperty(nameof(Rented));
         if (rentedProperty == null)
             return ValidationResult.Success;
-        var rentedValue = (bool)(rentedProperty.GetValue(context.ObjectInstance) ?? throw new NullReferenceException());
+        var rentedValue = 
+            (bool)(rentedProperty.
+            GetValue(context.ObjectInstance) ?? throw new NullReferenceException());
         if (rentedValue && x == null)
-            return new ValidationResult(string.Format(Errors.REQUIRED, context.DisplayName));
+            return new ValidationResult(
+                string.Format(Errors.REQUIRED, context.DisplayName));
         return ValidationResult.Success;
     }
 
-    public static ValidationResult? ValidateType(string? x, ValidationContext context)
+    public static ValidationResult? ValidateType(
+        string? x, ValidationContext context)
     {
         if (x == null)
             return ValidationResult.Success;
         if (!Enum.TryParse(typeof(EquipmentType), x, out var _))
         {
             var types = string.Join(", ", Enum.GetNames(typeof(EquipmentType)));
-            return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
+            return new ValidationResult(
+                string.Format(
+                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
         }
         return ValidationResult.Success;
     }
 
-    public static implicit operator UpdateEquipmentParams(UpdateEquipmentsRequest request) => new()
+    public static implicit operator UpdateEquipmentParams(
+        UpdateEquipmentsRequest request) => new()
     {
         Name = request.Name,
         Description = request.Description,

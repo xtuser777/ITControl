@@ -1,7 +1,5 @@
 using ITControl.Application.Equipments.Params;
 using ITControl.Communication.Equipments.Requests;
-using ITControl.Domain.Equipments.Params;
-using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Params;
@@ -14,7 +12,8 @@ public record IndexEquipmentsControllerParams
     [FromHeader]
     public OrderByEquipmentsRequest OrderByRequest { get; set; }  = null!;
 
-    public static implicit operator FindManyEquipmentsServiceParams(IndexEquipmentsControllerParams @params)
+    public static implicit operator FindManyEquipmentsServiceParams(
+        IndexEquipmentsControllerParams @params)
     {
         var serviceParams = new FindManyEquipmentsServiceParams()
         {
@@ -26,7 +25,8 @@ public record IndexEquipmentsControllerParams
         return serviceParams;
     }
 
-    public static implicit operator FindManyPaginationEquipmentsServiceParams(IndexEquipmentsControllerParams @params)
+    public static implicit operator FindManyPaginationEquipmentsServiceParams(
+        IndexEquipmentsControllerParams @params)
         => new()
         {
             CountParams = @params.FindManyRequest,

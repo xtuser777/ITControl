@@ -16,7 +16,8 @@ public record FindManyEquipmentsRequest : PageableRequest
     public string? Type { get; init; } = null;
     public string? Rented { get; init; } = null;
 
-    public static implicit operator FindManyEquipmentsRepositoryParams(FindManyEquipmentsRequest request) =>
+    public static implicit operator FindManyEquipmentsRepositoryParams(
+        FindManyEquipmentsRequest request) =>
         new()
         {
             Name = request.Name,
@@ -28,7 +29,8 @@ public record FindManyEquipmentsRequest : PageableRequest
             Rented = Parser.ToBoolOptional(request.Rented)
         };
 
-    public static implicit operator CountEquipmentsRepositoryParams(FindManyEquipmentsRequest request)
+    public static implicit operator CountEquipmentsRepositoryParams(
+        FindManyEquipmentsRequest request)
         => new()
         {
             Name = request.Name,
@@ -36,7 +38,8 @@ public record FindManyEquipmentsRequest : PageableRequest
             Ip = request.Ip,
         };
 
-    public static implicit operator PaginationParams(FindManyEquipmentsRequest request) =>
+    public static implicit operator PaginationParams(
+        FindManyEquipmentsRequest request) =>
         new()
         {
             Page = Parser.ToIntOptional(request.Page),

@@ -18,17 +18,20 @@ namespace ITControl.Presentation.Equipments.Controllers
         IEquipmentsView equipmentsView) : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType(typeof(FindManyResponse<FindManyEquipmentsResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(FindManyResponse<FindManyEquipmentsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> IndexAsync(
             [AsParameters] IndexEquipmentsControllerParams @params)
         {
-            var equipments = await equipmentsService.FindManyAsync(@params);
-            var pagination = await equipmentsService.FindManyPaginationAsync(@params);
+            var equipments = await equipmentsService
+                .FindManyAsync(@params);
+            var pagination = await equipmentsService
+                .FindManyPaginationAsync(@params);
             var data = equipmentsView.FindMany(equipments);
-
             return Ok(new
             {
                 Data = data,
@@ -37,9 +40,12 @@ namespace ITControl.Presentation.Equipments.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(FindOneResponse<FindOneEquipmentsResponse?>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<FindOneEquipmentsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ShowAsync(
@@ -47,13 +53,14 @@ namespace ITControl.Presentation.Equipments.Controllers
         {
             var equipment = await equipmentsService.FindOneAsync(@params);
             var data = equipmentsView.FindOne(equipment);
-            
             return Ok(new { Data = data });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(FindOneResponse<CreateEquipmentsResponse?>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<CreateEquipmentsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateAsync(
@@ -80,8 +87,10 @@ namespace ITControl.Presentation.Equipments.Controllers
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteAsync(

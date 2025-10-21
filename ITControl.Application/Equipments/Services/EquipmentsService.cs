@@ -11,7 +11,8 @@ namespace ITControl.Application.Equipments.Services;
 
 public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 {
-    public async Task<Equipment> FindOneAsync(FindOneEquipmentsServiceParams @params)
+    public async Task<Equipment> FindOneAsync(
+        FindOneEquipmentsServiceParams @params)
     {
         return await unitOfWork
             .EquipmentsRepository
@@ -41,7 +42,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         return pagination;
     }
 
-    public async Task<Equipment?> CreateAsync(CreateEquipmentsServiceParams @params)
+    public async Task<Equipment?> CreateAsync(
+        CreateEquipmentsServiceParams @params)
     {
         var equipment = new Equipment(@params.Params);
         await using var transaction = unitOfWork.BeginTransaction;
@@ -51,7 +53,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         return equipment;
     }
 
-    public async Task UpdateAsync(UpdateEquipmentsServiceParams @params)
+    public async Task UpdateAsync(
+        UpdateEquipmentsServiceParams @params)
     {
         var equipment = await FindOneAsync(@params);
         equipment.Update(@params.Params);
@@ -60,7 +63,8 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(DeleteEquipmentsServiceParams @params)
+    public async Task DeleteAsync(
+        DeleteEquipmentsServiceParams @params)
     {
         var equipment = await FindOneAsync(@params);
         await using var transaction = unitOfWork.BeginTransaction;

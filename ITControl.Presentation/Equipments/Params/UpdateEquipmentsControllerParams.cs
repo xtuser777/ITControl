@@ -6,11 +6,14 @@ namespace ITControl.Presentation.Equipments.Params;
 
 public record UpdateEquipmentsControllerParams
 {
-    [FromRoute(Name = "id")] public Guid Id { get; set; }
+    [FromRoute(Name = "id")] 
+    public Guid Id { get; set; }
 
-    [FromBody] public UpdateEquipmentsRequest Request { get; set; } = null!;
+    [FromBody] 
+    public UpdateEquipmentsRequest Request { get; set; } = new();
 
-    public static implicit operator UpdateEquipmentsServiceParams(UpdateEquipmentsControllerParams @params)
+    public static implicit operator UpdateEquipmentsServiceParams(
+        UpdateEquipmentsControllerParams @params)
         => new()
         {
             Id = @params.Id,
