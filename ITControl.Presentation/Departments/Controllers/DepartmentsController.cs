@@ -40,7 +40,8 @@ namespace ITControl.Presentation.Departments.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -55,7 +56,8 @@ namespace ITControl.Presentation.Departments.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(FindOneResponse<CreateDepartmentsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<CreateDepartmentsResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -85,8 +87,10 @@ namespace ITControl.Presentation.Departments.Controllers
 
         [HttpDelete("{id:guid}")]
         [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> Delete(

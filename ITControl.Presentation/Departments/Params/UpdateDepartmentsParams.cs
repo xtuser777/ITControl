@@ -12,7 +12,8 @@ public record UpdateDepartmentsParams
     [FromBody]
     public UpdateDepartmentsRequest Request { get; set; } = null!;
 
-    public static implicit operator UpdateDepartmentsServiceParams(UpdateDepartmentsParams params_) =>
+    public static implicit operator UpdateDepartmentsServiceParams(
+        UpdateDepartmentsParams params_) =>
         new()
         {
             Id = params_.Id,

@@ -8,13 +8,19 @@ namespace ITControl.Communication.Departments.Requests;
 
 public record UpdateDepartmentsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(10)]
-    [UniqueField(typeof(IDepartmentsRepository), typeof(ExclusiveDepartmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IDepartmentsRepository), 
+        typeof(ExclusiveDepartmentsRepositoryParams))]
     [Display(Name = nameof(Alias), ResourceType = typeof(DisplayNames))]
     public string? Alias { get; set; }
-    
+
+    [StringMinLength(1)]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IDepartmentsRepository), typeof(ExclusiveDepartmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IDepartmentsRepository), 
+        typeof(ExclusiveDepartmentsRepositoryParams))]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
 

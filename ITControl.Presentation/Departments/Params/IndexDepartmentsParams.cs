@@ -1,12 +1,16 @@
 ﻿using ITControl.Application.Departments.Params;
 using ITControl.Communication.Departments.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Departments.Params;
 
 public record IndexDepartmentsParams
 {
-    public FindManyDepartmentsRequest FindManyRequest { get; set; } = null!;
-    public OrderByDepartmentsRequest OrderByRequest { get; set; } = null!;
+    [FromQuery]
+    public FindManyDepartmentsRequest FindManyRequest { get; set; } = new();
+
+    [FromHeader]
+    public OrderByDepartmentsRequest OrderByRequest { get; set; } = new();
 
     public static implicit operator FindManyDepartmentsServiceParams(
         IndexDepartmentsParams paramsObj) =>

@@ -10,13 +10,17 @@ public record CreateDepartmentsRequest
 {
     [RequiredField]
     [StringMaxLength(10)]
-    [UniqueField(typeof(IDepartmentsRepository), typeof(ExistsDepartmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IDepartmentsRepository), 
+        typeof(ExistsDepartmentsRepositoryParams))]
     [Display(Name = nameof(Alias), ResourceType = typeof(DisplayNames))]
     public string Alias { get; set; } = string.Empty;
 
     [RequiredField]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IDepartmentsRepository), typeof(ExistsDepartmentsRepositoryParams))]
+    [UniqueField(
+        typeof(IDepartmentsRepository), 
+        typeof(ExistsDepartmentsRepositoryParams))]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 

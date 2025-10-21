@@ -1,6 +1,5 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
-using ITControl.Domain.Departments.Params;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -23,8 +22,8 @@ public class DepartmentsRepository(ApplicationDbContext context) :
         PaginationParams? paginationParams)
     {
         query = context.Departments.AsNoTracking();
-        BuildQuery((FindManyDepartmentsRepositoryParams)findManyParams);
-        BuildOrderBy((OrderByDepartmentsRepositoryParams?)orderByParams);
+        BuildQuery(findManyParams);
+        BuildOrderBy(orderByParams);
         ApplyPagination(paginationParams);
         
         return (await query.ToListAsync()).Cast<Department>();
@@ -45,25 +44,28 @@ public class DepartmentsRepository(ApplicationDbContext context) :
         context.Departments.Remove(entity);
     }
 
-    public async Task<int> CountAsync(FindManyRepositoryParams @params)
+    public async Task<int> CountAsync(
+        FindManyRepositoryParams @params)
     {
         query = context.Departments.AsNoTracking();
-        BuildQuery((CountDepartmentsRepositoryParams)@params);
+        BuildQuery(@params);
         
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExistsAsync(
+        FindManyRepositoryParams @params)
     {
-        var count = await CountAsync((ExistsDepartmentsRepositoryParams)@params);
+        var count = await CountAsync(@params);
         
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(
+        FindManyRepositoryParams @params)
     {
         query = context.Departments.AsNoTracking();
-        BuildQuery((ExclusiveDepartmentsRepositoryParams)@params);
+        BuildQuery(@params);
         var count = await query.CountAsync();
         
         return count > 0;
