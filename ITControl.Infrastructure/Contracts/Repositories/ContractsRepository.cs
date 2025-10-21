@@ -1,36 +1,34 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Interfaces;
-using ITControl.Domain.Contracts.Params;
+using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Contracts.Repositories;
 
-public class ContractsRepository(ApplicationDbContext context) : IContractsRepository
+public class ContractsRepository(ApplicationDbContext context) : 
+    BaseRepository, IContractsRepository
 {
-    private IQueryable<Contract> query = null!;
+    private new IQueryable<Contract> query = null!;
 
-    public async Task<Contract?> FindOneAsync(FindOneContractsRepositoryParams @params)
+    public async Task<Contract?> FindOneAsync(FindOneRepositoryParams @params)
     {
-        var (id, includeContractsContacts) = @params;
+        var (id, includes) = @params;
         query = context.Contracts.AsQueryable();
-        if (includeContractsContacts is true) 
-            query = query.Include(x => x.ContractContacts);
-        
+        ApplyIncludes(includes);
         return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
-        FindManyContractsRepositoryParams findManyParams,
-        OrderByContractsRepositoryParams orderByParams)
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams = null,
+        PaginationParams? paginationParams = null)
     {
-        var (page, size) = findManyParams;
         query = context.Contracts.AsNoTracking();
         BuildQuery(findManyParams);
         BuildOrderBy(orderByParams);
-        if (page != null && size != null)
-            query = query.Skip((page.Value - 1) * size.Value).Take(size.Value);
-
+        ApplyPagination(paginationParams);
         return await query.ToListAsync();
     }
 
@@ -49,7 +47,7 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         context.Contracts.Remove(contract);
     }
 
-    public async Task<int> CountAsync(CountContractsRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyRepositoryParams @params)
     {
         query = context.Contracts.AsNoTracking();
         BuildQuery(@params);
@@ -57,44 +55,10 @@ public class ContractsRepository(ApplicationDbContext context) : IContractsRepos
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsContractsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         var count = await CountAsync(@params);
         
         return count > 0;
-    }
-
-    private void BuildQuery(CountContractsRepositoryParams @params)
-    {
-        if (@params.Id != null) 
-            query = query.Where(x => x.Id == @params.Id);
-        if (@params.ObjectName != null) 
-            query = query.Where(x => x.ObjectName.Contains(@params.ObjectName));
-        if (@params.StartedAt != null) 
-            query = query.Where(x => x.StartedAt.Equals(@params.StartedAt));
-        if (@params.EndedAt != null) 
-            query = query.Where(x => x.EndedAt.Equals(@params.EndedAt));
-    }
-
-    private void BuildOrderBy(OrderByContractsRepositoryParams @params)
-    {
-        query = @params.ObjectName switch
-        {
-            "a" => query.OrderBy(p => p.ObjectName),
-            "d" => query.OrderByDescending(p => p.ObjectName),
-            _ => query
-        };
-        query = @params.StartedAt switch
-        {
-            "a" => query.OrderBy(p => p.StartedAt),
-            "d" => query.OrderByDescending(p => p.StartedAt),
-            _ => query
-        };
-        query = @params.EndedAt switch
-        {
-            "a" => query.OrderBy(p => p.EndedAt),
-            "d" => query.OrderByDescending(p => p.EndedAt),
-            _ => query
-        };
     }
 }

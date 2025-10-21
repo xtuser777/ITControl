@@ -7,6 +7,7 @@ namespace ITControl.Communication.Contracts.Requests;
 
 public record UpdateContractsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(ObjectName), ResourceType = typeof(DisplayNames))]
     public string? ObjectName { get; set; }
