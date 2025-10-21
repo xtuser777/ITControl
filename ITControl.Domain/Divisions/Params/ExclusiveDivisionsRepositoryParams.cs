@@ -1,9 +1,7 @@
-﻿using ITControl.Domain.Shared.Params;
-
-namespace ITControl.Domain.Divisions.Params;
+﻿namespace ITControl.Domain.Divisions.Params;
 
 public record ExclusiveDivisionsRepositoryParams :
-    FindManyDivisionsRepositoryParams, IExclusiveRepositoryParams
+    FindManyDivisionsRepositoryParams
 {
     public Guid ExcludeId { get; set; }
 }

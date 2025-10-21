@@ -12,7 +12,8 @@ public record ShowDivisionsControllerParams
     [FromQuery]
     public bool? IncludeDepartment { get; set; } = true;
 
-    public static implicit operator FindOneDivisionsServiceParams(ShowDivisionsControllerParams param)
+    public static implicit operator FindOneDivisionsServiceParams(
+        ShowDivisionsControllerParams param)
         => new()
         {
             Id = param.Id,

@@ -9,8 +9,9 @@ public record CreateDivisionsControllerParams
     [FromBody]
     public CreateDivisionsRequest Request { get; set; } = null!;
 
-    public static implicit operator CreateDivisionsServiceParams(CreateDivisionsControllerParams param)
-        => new CreateDivisionsServiceParams
+    public static implicit operator CreateDivisionsServiceParams(
+        CreateDivisionsControllerParams param)
+        => new ()
         {
             Params = param.Request,
         };

@@ -10,17 +10,24 @@ public record CreateDivisionsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IDivisionsRepository), typeof(ExistsDivisionsRepositoryParams))]
-    [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
+    [UniqueField(
+        typeof(IDivisionsRepository), 
+        typeof(ExistsDivisionsRepositoryParams))]
+    [Display(
+        Name = nameof(Name), 
+        ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 
     [RequiredField]
     [GuidValue]
     [DepartmentConnection]
-    [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
+    [Display(
+        Name = nameof(DepartmentId), 
+        ResourceType = typeof(DisplayNames))]
     public Guid DepartmentId { get; set; }
 
-    public static implicit operator DivisionParams(CreateDivisionsRequest request)
+    public static implicit operator DivisionParams(
+        CreateDivisionsRequest request)
         => new()
         {
             Name = request.Name,

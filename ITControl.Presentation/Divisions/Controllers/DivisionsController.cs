@@ -20,7 +20,8 @@ public class DivisionsController(
     [HttpGet]
     [ProducesResponseType(
         typeof(FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> IndexAsync(
@@ -29,7 +30,6 @@ public class DivisionsController(
         var divisions = await divisionsService.FindManyAsync(@params);
         var pagination = await divisionsService.FindManyPaginatedAsync(@params);
         var data = divisionsView.FindMany(divisions);
-
         return Ok(new 
         {
             Data = data,
@@ -54,7 +54,6 @@ public class DivisionsController(
     {
         var division = await divisionsService.FindOneAsync(@params); 
         var data = divisionsView.FindOne(division);
-        
         return Ok(new { Data = data });
     }
 

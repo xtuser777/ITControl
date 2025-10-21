@@ -8,8 +8,9 @@ public record DeleteDivisionsControllerParams
     [FromRoute]
     public Guid Id { get; set; }
 
-    public static implicit operator DeleteDivisionsServiceParams(DeleteDivisionsControllerParams @params)
-        => new DeleteDivisionsServiceParams
+    public static implicit operator DeleteDivisionsServiceParams(
+        DeleteDivisionsControllerParams @params)
+        => new ()
         {
             Id = @params.Id
         };

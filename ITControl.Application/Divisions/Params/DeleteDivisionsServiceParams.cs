@@ -4,7 +4,8 @@ public record DeleteDivisionsServiceParams
 {
     public Guid Id { get; set; }
 
-    public static implicit operator FindOneDivisionsServiceParams(DeleteDivisionsServiceParams param)
+    public static implicit operator FindOneDivisionsServiceParams(
+        DeleteDivisionsServiceParams param)
         => new()
         {
             Id = param.Id,

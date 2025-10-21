@@ -7,7 +7,8 @@ public record FindOneDivisionsServiceParams
     public Guid Id { get; set; }
     public IncludesDivisionsParams? Includes { get; set; } = null;
 
-    public static implicit operator FindOneDivisionsRepositoryParams(FindOneDivisionsServiceParams @params)
+    public static implicit operator FindOneDivisionsRepositoryParams(
+        FindOneDivisionsServiceParams @params)
         => new()
         {
             Id = @params.Id,
