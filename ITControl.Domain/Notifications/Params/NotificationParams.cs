@@ -4,12 +4,12 @@ namespace ITControl.Domain.Notifications.Params;
 
 public record NotificationParams
 {
-    public string Title { get; set; } = string.Empty;
-    public string Message { get; set; } = string.Empty;
-    public NotificationType Type { get; set; }
-    public NotificationReference Reference { get; set; }
-    public Guid UserId { get; set; }
-    public Guid? CallId { get; set; } = null;
-    public Guid? AppointmentId { get; set; } = null;
-    public Guid? TreatmentId { get; set; } = null;
+    public string Title { get; init; } = string.Empty;
+    public string Message { get; init; } = string.Empty;
+    public NotificationType Type { get; init; }
+    public NotificationReference Reference { get; init; }
+    public Guid UserId { get; init; }
+    public Guid? CallId { get; init; } = null;
+    public Guid? AppointmentId { get; init; } = null;
+    public Guid? TreatmentId { get; init; } = null;
 }

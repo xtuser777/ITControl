@@ -1,6 +1,9 @@
-﻿namespace ITControl.Domain.Notifications.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record OrderByNotificationsRepositoryParams
+namespace ITControl.Domain.Notifications.Params;
+
+public record OrderByNotificationsRepositoryParams :
+    OrderByRepositoryParams
 {
     public string? Title { get; set; } = null;
     public string? Message { get; set; } = null;

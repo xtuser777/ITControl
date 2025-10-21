@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Notifications.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record IncludesNotificationsParams
+namespace ITControl.Domain.Notifications.Params;
+
+public record IncludesNotificationsParams : IncludesParams
 {
     public bool? User { get; set; } = null;
     public bool? Call { get; set; } = null;

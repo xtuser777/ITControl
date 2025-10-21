@@ -1,13 +1,8 @@
-﻿namespace ITControl.Domain.Notifications.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record FindOneNotificationsRepositoryParams
+namespace ITControl.Domain.Notifications.Params;
+
+public record FindOneNotificationsRepositoryParams :
+    FindOneRepositoryParams
 {
-    public Guid Id { get; set; }
-    public IncludesNotificationsParams? Includes { get; set; } = null;
-
-    public void Deconstruct(out Guid id, out IncludesNotificationsParams? includes)
-    {
-        id = Id;
-        includes = Includes;
-    }
 }

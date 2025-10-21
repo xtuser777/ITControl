@@ -1,8 +1,10 @@
 ﻿using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Notifications.Params;
 
-public record FindManyNotificationsRepositoryParams
+public record FindManyNotificationsRepositoryParams :
+    FindManyRepositoryParams
 {
     public string? Title { get; set; } = null;
     public string? Message { get; set; } = null;

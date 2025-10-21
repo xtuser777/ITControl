@@ -11,7 +11,8 @@ public record UpdateNotificationsRequest
     [Display(Name = nameof(IsRead), ResourceType = typeof(DisplayNames))]
     public bool? IsRead { get; set; }
 
-    public static implicit operator UpdateNotificationParams(UpdateNotificationsRequest request)
+    public static implicit operator UpdateNotificationParams(
+        UpdateNotificationsRequest request)
     {
         return new UpdateNotificationParams
         {

@@ -1,5 +1,6 @@
 ﻿using ITControl.Communication.Shared.Requests;
 using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Params;
 
@@ -15,35 +16,38 @@ public record FindManyNotificationsRequest : PageableRequest
     public Guid? UserId { get; set; }
     public DateTime? CreatedAt { get; set; }
 
-    public static implicit operator FindManyNotificationsRepositoryParams(FindManyNotificationsRequest request)
+    public static implicit operator FindManyNotificationsRepositoryParams(
+        FindManyNotificationsRequest request)
     {
         return new FindManyNotificationsRepositoryParams
         {
             Title = request.Title,
             Message = request.Message,
-            Type = Parser.ToEnumOptional<Domain.Notifications.Enums.NotificationType>(request.Type),
-            Reference = Parser.ToEnumOptional<Domain.Notifications.Enums.NotificationReference>(request.Reference),
+            Type = Parser.ToEnumOptional<NotificationType>(request.Type),
+            Reference = Parser.ToEnumOptional<NotificationReference>(request.Reference),
             IsRead = request.IsRead,
             UserId = request.UserId,
             CreatedAt = request.CreatedAt
         };
     }
 
-    public static implicit operator CountNotificationsRepositoryParams(FindManyNotificationsRequest request)
+    public static implicit operator CountNotificationsRepositoryParams(
+        FindManyNotificationsRequest request)
     {
         return new CountNotificationsRepositoryParams
         {
             Title = request.Title,
             Message = request.Message,
-            Type = Parser.ToEnumOptional<Domain.Notifications.Enums.NotificationType>(request.Type),
-            Reference = Parser.ToEnumOptional<Domain.Notifications.Enums.NotificationReference>(request.Reference),
+            Type = Parser.ToEnumOptional<NotificationType>(request.Type),
+            Reference = Parser.ToEnumOptional<NotificationReference>(request.Reference),
             IsRead = request.IsRead,
             UserId = request.UserId,
             CreatedAt = request.CreatedAt
         };
     }
 
-    public static implicit operator PaginationParams(FindManyNotificationsRequest request)
+    public static implicit operator PaginationParams(
+        FindManyNotificationsRequest request)
     {
         return new PaginationParams
         {

@@ -1,4 +1,4 @@
-﻿using ITControl.Communication.Notifications.Requests;
+﻿using ITControl.Application.Notifications.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Notifications.Entities;
 
@@ -6,11 +6,12 @@ namespace ITControl.Application.Notifications.Interfaces;
 
 public interface INotificationsService
 {
-    Task<Notification> FindOneAsync(FindOneNotificationsRequest request);
+    Task<Notification> FindOneAsync(
+        FindOneNotificationsServiceParams @params);
     Task<IEnumerable<Notification>> FindManyAsync(
-        FindManyNotificationsRequest request,
-        OrderByNotificationsRequest orderByNotificationsRequest);
-    Task<PaginationResponse?> FindManyPaginationAsync(FindManyNotificationsRequest request);
+        FindManyNotificationsServiceParams @params);
+    Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationNotificationsServiceParams @params);
     Task<int> CountUnreadAsync(Guid userId);
-    Task UpdateAsync(Guid id, UpdateNotificationsRequest request);
+    Task UpdateAsync(UpdateNotificationsServiceParams @params);
 }
