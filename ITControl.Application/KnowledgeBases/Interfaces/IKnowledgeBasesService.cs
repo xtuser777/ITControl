@@ -1,4 +1,4 @@
-﻿using ITControl.Communication.KnowledgeBases.Requests;
+﻿using ITControl.Application.KnowledgeBases.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.KnowledgeBases.Entities;
 
@@ -6,12 +6,14 @@ namespace ITControl.Application.KnowledgeBases.Interfaces;
 
 public interface IKnowledgeBasesService
 {
-    Task<KnowledgeBase> FindOneAsync(FindOneKnowledgeBasesRequest request);
+    Task<KnowledgeBase> FindOneAsync(
+        FindOneKnowledgeBasesServiceParams @params);
     Task<IEnumerable<KnowledgeBase>> FindManyAsync(
-        FindManyKnowledgeBasesRequest request,
-        OrderByKnowledgeBasesRequest orderByKnowledgeBasesRequest);
-    Task<PaginationResponse?> FindManyPaginationAsync(FindManyKnowledgeBasesRequest request);
-    Task<KnowledgeBase> CreateAsync(CreateKnowledgeBasesRequest request);
-    Task UpdateAsync(Guid id, UpdateKnowledgeBasesRequest request);
-    Task DeleteAsync(Guid id);
+        FindManyKnowledgeBasesServiceParams @params);
+    Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationKnowledgeBasesServiceParams @params);
+    Task<KnowledgeBase> CreateAsync(
+        CreateKnowledgeBasesServiceParams @params);
+    Task UpdateAsync(UpdateKnowledgeBasesServiceParams @params);
+    Task DeleteAsync(DeleteKnowledgeBasesServiceParams @params);
 }

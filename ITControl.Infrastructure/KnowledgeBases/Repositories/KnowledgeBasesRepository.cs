@@ -1,6 +1,5 @@
 ﻿using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.KnowledgeBases.Interfaces;
-using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -9,10 +8,11 @@ using Microsoft.EntityFrameworkCore;
 namespace ITControl.Infrastructure.KnowledgeBases.Repositories;
 
 public class KnowledgeBasesRepository(
-    ApplicationDbContext context) : BaseRepository, IKnowledgeBasesRepository
+    ApplicationDbContext context) : 
+    BaseRepository, IKnowledgeBasesRepository
 {
     public async Task<KnowledgeBase?> FindOneAsync(
-        FindOneKnowledgeBasesRepositoryParams @params)
+        FindOneRepositoryParams @params)
     {
         var (id, includes) = @params;
         query = context.KnowledgeBases.AsQueryable();
@@ -23,9 +23,9 @@ public class KnowledgeBasesRepository(
     }
 
     public async Task<IEnumerable<KnowledgeBase>> FindManyAsync(
-        FindManyKnowledgeBasesRepositoryParams findManyParams,
-        OrderByKnowledgeBasesRepositoryParams orderByParams,
-        PaginationParams paginationParams)
+        FindManyRepositoryParams findManyParams,
+        OrderByRepositoryParams? orderByParams = null,
+        PaginationParams? paginationParams = null)
     {
         query = context.KnowledgeBases
             .Include(kb => kb.User)
@@ -33,9 +33,7 @@ public class KnowledgeBasesRepository(
         BuildQuery(findManyParams);
         BuildOrderBy(orderByParams);
         ApplyPagination(paginationParams);
-
         var entities = await query.ToListAsync();
-
         return entities.Cast<KnowledgeBase>();
     }
 
@@ -54,18 +52,16 @@ public class KnowledgeBasesRepository(
         context.KnowledgeBases.Remove(knowledgeBase);
     }
 
-    public async Task<int> CountAsync(CountKnowledgeBasesRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyRepositoryParams @params)
     {
         query = context.KnowledgeBases.AsNoTracking();
         BuildQuery(@params);
-
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsKnowledgeBasesRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
     {
         var count = await CountAsync(@params);
-
         return count > 0;
     }
 }

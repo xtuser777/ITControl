@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.KnowledgeBases.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record IncludesKnowledgeBasesParams
+namespace ITControl.Domain.KnowledgeBases.Params;
+
+public record IncludesKnowledgeBasesParams : IncludesParams
 {
     public bool? User { get; set; } = null;
 }

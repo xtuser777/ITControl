@@ -14,7 +14,8 @@ public record FindManyKnowledgeBasesRequest : PageableRequest
     public string? Reason { get; set; }
     public Guid? UserId { get; set; }
 
-    public static implicit operator FindManyKnowledgeBasesRepositoryParams(FindManyKnowledgeBasesRequest request) =>
+    public static implicit operator FindManyKnowledgeBasesRepositoryParams(
+        FindManyKnowledgeBasesRequest request) =>
         new()
         {
             Title = request.Title,
@@ -24,7 +25,8 @@ public record FindManyKnowledgeBasesRequest : PageableRequest
             UserId = request.UserId,
         };
 
-    public static implicit operator CountKnowledgeBasesRepositoryParams(FindManyKnowledgeBasesRequest request) =>
+    public static implicit operator CountKnowledgeBasesRepositoryParams(
+        FindManyKnowledgeBasesRequest request) =>
         new()
         {
             Title = request.Title,
@@ -34,7 +36,8 @@ public record FindManyKnowledgeBasesRequest : PageableRequest
             UserId = request.UserId
         };
 
-    public static implicit operator PaginationParams(FindManyKnowledgeBasesRequest request) =>
+    public static implicit operator PaginationParams(
+        FindManyKnowledgeBasesRequest request) =>
         new()
         {
             Page = Parser.ToIntOptional(request.Page),

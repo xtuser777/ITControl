@@ -35,7 +35,8 @@ public record CreateKnowledgeBasesRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    public static implicit operator KnowledgeBaseParams(CreateKnowledgeBasesRequest request) =>
+    public static implicit operator KnowledgeBaseParams(
+        CreateKnowledgeBasesRequest request) =>
         new()
         {
             Title = request.Title,
@@ -45,13 +46,16 @@ public record CreateKnowledgeBasesRequest
             UserId = request.UserId
         };
 
-    public static ValidationResult? ValidateReason(string reason, ValidationContext context)
+    public static ValidationResult? ValidateReason(
+        string reason, ValidationContext context)
     {
         if (Enum.TryParse<CallReason>(reason, true, out _))
         {
             return ValidationResult.Success;
         }
         var enumValues = string.Join(", ", Enum.GetNames(typeof(CallReason)));
-        return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
+        return new ValidationResult(
+            string.Format(
+                Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
     }
 }

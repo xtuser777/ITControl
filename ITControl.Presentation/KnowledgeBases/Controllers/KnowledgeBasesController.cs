@@ -1,6 +1,8 @@
 ﻿using ITControl.Application.KnowledgeBases.Interfaces;
-using ITControl.Communication.KnowledgeBases.Requests;
-using ITControl.Presentation.KnowledgeBases.Headers;
+using ITControl.Communication.Equipments.Responses;
+using ITControl.Communication.KnowledgeBases.Responses;
+using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.KnowledgeBases.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -16,51 +18,86 @@ public class KnowledgeBasesController(
     IKnowledgeBasesView knowledgeBasesView) : ControllerBase
 {
     [HttpGet]
+    [ProducesResponseType(
+            typeof(FindManyResponse<FindManyKnowledgeBasesResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Index(
-        [FromQuery] FindManyKnowledgeBasesRequest request,
-        [FromHeader] OrderByKnowledgeBasesHeaders headers)
+        [AsParameters] IndexKnowledgeBasesParams index)
     {
-        var knowledgeBases = await knowledgeBasesService.FindManyAsync(request, headers);
-        var pagination = await knowledgeBasesService.FindManyPaginationAsync(request);
+        var knowledgeBases = 
+            await knowledgeBasesService.FindManyAsync(index);
+        var pagination = 
+            await knowledgeBasesService.FindManyPaginationAsync(index);
         var data = knowledgeBasesView.FindMany(knowledgeBases);
-        
         return Ok(new { data, pagination });
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOneKnowledgeBasesResponse?>), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Show(
-        [FromRoute] Guid id, [FromQuery] FindOneKnowledgeBasesRequest request)
+        [AsParameters] ShowKnowledgeBasesParams show)
     {
-        request.Id = id;
-        var knowledgeBase = await knowledgeBasesService.FindOneAsync(request);
+        var knowledgeBase = await knowledgeBasesService.FindOneAsync(show);
         var data = knowledgeBasesView.FindOne(knowledgeBase);
-        
         return Ok(new { data });
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateKnowledgeBasesRequest request)
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreateKnowledgeBasesResponse?>), 
+        StatusCodes.Status201Created)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Create(
+        [AsParameters] CreateKnowledgeBasesParams create)
     {
-        var createdKnowledgeBase = await knowledgeBasesService.CreateAsync(request);
+        var createdKnowledgeBase = 
+            await knowledgeBasesService.CreateAsync(create);
         var data = knowledgeBasesView.Create(createdKnowledgeBase);
-        
-        return CreatedAtAction(nameof(Show), new { id = createdKnowledgeBase.Id }, new { data });
+        return CreatedAtAction(nameof(Show), 
+            new { id = createdKnowledgeBase.Id }, new { data });
     }
 
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> Update(
-        [FromRoute] Guid id, [FromBody] UpdateKnowledgeBasesRequest request)
+        [AsParameters] UpdateKnowledgeBasesParams update)
     {
-        await knowledgeBasesService.UpdateAsync(id, request);
-        
+        await knowledgeBasesService.UpdateAsync(update);
         return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+            typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Delete(
+        [AsParameters] DeleteKnowledgeBasesParams delete)
     {
-        await knowledgeBasesService.DeleteAsync(id);
-        
+        await knowledgeBasesService.DeleteAsync(delete);
         return NoContent();
     }
 }

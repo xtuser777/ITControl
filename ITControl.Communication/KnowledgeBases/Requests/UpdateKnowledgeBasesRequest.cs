@@ -10,6 +10,7 @@ namespace ITControl.Communication.KnowledgeBases.Requests;
 
 public record UpdateKnowledgeBasesRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(Title), ResourceType = typeof(DisplayNames))]
     public string? Title { get; set; } = string.Empty;
@@ -32,17 +33,19 @@ public record UpdateKnowledgeBasesRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? UserId { get; set; }
 
-    public static implicit operator UpdateKnowledgeBaseParams(UpdateKnowledgeBasesRequest request) =>
+    public static implicit operator UpdateKnowledgeBaseParams(
+        UpdateKnowledgeBasesRequest request) =>
         new()
         {
-            Title = string.IsNullOrWhiteSpace(request.Title) ? null : request.Title,
-            Content = string.IsNullOrWhiteSpace(request.Content) ? null : request.Content,
+            Title = request.Title,
+            Content = request.Content,
             EstimatedTime = request.EstimatedTime,
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
             UserId = request.UserId
         };
 
-    public static ValidationResult? ValidateReason(string? reason, ValidationContext context)
+    public static ValidationResult? ValidateReason(
+        string? reason, ValidationContext context)
     {
         if (reason == null) return ValidationResult.Success;
         if (Enum.TryParse<CallReason>(reason, true, out _))
@@ -50,6 +53,8 @@ public record UpdateKnowledgeBasesRequest
             return ValidationResult.Success;
         }
         var enumValues = string.Join(", ", Enum.GetNames(typeof(CallReason)));
-        return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
+        return new ValidationResult(
+            string.Format(
+                Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
     }
 }

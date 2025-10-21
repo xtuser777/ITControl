@@ -1,6 +1,9 @@
-﻿namespace ITControl.Domain.KnowledgeBases.Params;
+﻿using ITControl.Domain.Shared.Params;
 
-public record OrderByKnowledgeBasesRepositoryParams
+namespace ITControl.Domain.KnowledgeBases.Params;
+
+public record OrderByKnowledgeBasesRepositoryParams :
+    OrderByRepositoryParams
 {
     public string? Title { get; set; } = null;
     public string? Content { get; set; } = null;

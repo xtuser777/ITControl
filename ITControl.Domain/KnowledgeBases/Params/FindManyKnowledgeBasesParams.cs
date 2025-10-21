@@ -1,10 +1,8 @@
 ﻿using ITControl.Domain.Calls.Enums;
-using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.KnowledgeBases.Params;
 
-public record FindManyKnowledgeBasesRepositoryParams :
-    FindManyRepositoryParams
+public record FindManyKnowledgeBasesParams
 {
     public string? Title { get; set; } = null;
     public string? Content { get; set; } = null;

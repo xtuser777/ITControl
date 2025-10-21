@@ -1,0 +1,18 @@
+﻿using ITControl.Application.KnowledgeBases.Params;
+using ITControl.Communication.KnowledgeBases.Requests;
+using Microsoft.AspNetCore.Mvc;
+
+namespace ITControl.Presentation.KnowledgeBases.Params;
+
+public record CreateKnowledgeBasesParams
+{
+    [FromBody]
+    public CreateKnowledgeBasesRequest Request { get; set; } = new();
+
+    public static implicit operator CreateKnowledgeBasesServiceParams(
+        CreateKnowledgeBasesParams request)
+        => new()
+        {
+            Params = request.Request
+        };
+}
