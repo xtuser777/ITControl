@@ -8,6 +8,7 @@ public record UpdatePagesParams
 {
     [FromRoute(Name = "id")]
     public Guid Id { get; set; }
+    
     [FromBody]
     public UpdatePagesRequest Request { get; set; } = new();
 

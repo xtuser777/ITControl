@@ -2,7 +2,7 @@
 
 public record DeletePagesServiceParams
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     public static implicit operator FindOnePagesServiceParams(
         DeletePagesServiceParams serviceParams) =>

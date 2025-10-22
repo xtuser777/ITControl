@@ -5,7 +5,16 @@ namespace ITControl.Application.Pages.Params;
 
 public record FindManyPagesServiceParams
 {
-    public FindManyPagesRepositoryParams FindManyParams { get; set; } = new();
-    public OrderByPagesRepositoryParams OrderByParams { get; set; } = new();
-    public PaginationParams PaginationParams { get; set; } = new();
+    public FindManyPagesParams FindManyParams { get; init; } = new();
+    public OrderByPagesParams OrderByParams { get; init; } = new();
+    public PaginationParams PaginationParams { get; init; } = new();
+
+    public static implicit operator FindManyPagesRepositoryParams(
+        FindManyPagesServiceParams @params)
+        => new()
+        {
+            FindMany = @params.FindManyParams,
+            OrderBy = @params.OrderByParams,
+            Pagination = @params.PaginationParams,
+        };
 }

@@ -10,11 +10,16 @@ public record UpdatePagesRequest
 {
     [StringMinLength(1)]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IPagesRepository), typeof(ExclusivePagesRepositoryParams))]
-    [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
+    [UniqueField(
+        typeof(IPagesRepository), 
+        typeof(ExclusivePagesRepositoryParams))]
+    [Display(
+        Name = nameof(Name), 
+        ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
 
-    public static implicit operator UpdatePageParams(UpdatePagesRequest request) => 
+    public static implicit operator UpdatePageParams(
+        UpdatePagesRequest request) => 
         new() 
         { 
             Name = request.Name 

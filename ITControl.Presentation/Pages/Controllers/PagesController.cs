@@ -1,5 +1,4 @@
 using ITControl.Application.Pages.Interfaces;
-using ITControl.Communication.Pages.Requests;
 using ITControl.Communication.Pages.Response;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Presentation.Pages.Params;
@@ -13,17 +12,23 @@ namespace ITControl.Presentation.Pages.Controllers
     [Route("[controller]")]
     [ApiController]
     [PermissionsFilter]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(
+        AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PagesController(
         IPagesService service, 
         IPagesView view) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(
-            typeof(FindManyResponse<FindManyPagesResponse>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+            typeof(FindManyResponse<FindManyPagesResponse>), 
+            StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> IndexAsync(
             [AsParameters] IndexPagesParams @params)
         {
@@ -35,11 +40,17 @@ namespace ITControl.Presentation.Pages.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(
-            typeof(FindOneResponse<FindOnePagesResponse?>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+            typeof(FindOneResponse<FindOnePagesResponse?>), 
+            StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), 
+            StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ShowAsync(
             [AsParameters] ShowPagesParams @params)
         {
@@ -50,10 +61,15 @@ namespace ITControl.Presentation.Pages.Controllers
 
         [HttpPost]
         [ProducesResponseType(
-            typeof(FindOneResponse<CreatePagesResponse?>), StatusCodes.Status201Created)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+            typeof(FindOneResponse<CreatePagesResponse?>), 
+            StatusCodes.Status201Created)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateAsync(
             [AsParameters] CreatePagesParams @params)
         {
@@ -64,11 +80,18 @@ namespace ITControl.Presentation.Pages.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateAsync(
             [AsParameters] UpdatePagesParams @params)
         {
@@ -77,11 +100,18 @@ namespace ITControl.Presentation.Pages.Controllers
         }
 
         [HttpDelete("{id:guid}")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(
+            typeof(ErrorJsonResponse), 
+            StatusCodes.Status404NotFound)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(
+            typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteAsync(
             [AsParameters] DeletePagesParams @params)
         {

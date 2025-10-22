@@ -4,7 +4,17 @@ namespace ITControl.Application.Pages.Params;
 
 public record FindManyPaginationPagesServiceParams
 {
-    public CountPagesRepositoryParams CountParams { get; set; } = new();
-    public string? Page { get; set; } = null;
-    public string? Size { get; set; } = null;
+    public CountPagesRepositoryParams CountParams { get; init; } = new();
+    public string? Page { get; init; } = null;
+    public string? Size { get; init; } = null;
+
+    public void Deconstruct(out string? page, out string? size)
+    {
+        page = Page;
+        size = Size;
+    }
+    
+    public static implicit operator CountPagesRepositoryParams(
+        FindManyPaginationPagesServiceParams @params)
+        => @params.CountParams;
 }

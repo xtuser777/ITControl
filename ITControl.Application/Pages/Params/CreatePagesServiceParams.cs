@@ -4,5 +4,5 @@ namespace ITControl.Application.Pages.Params;
 
 public record CreatePagesServiceParams
 {
-    public PageParams Params { get; set; } = new();
+    public PageParams Params { get; init; } = new();
 }

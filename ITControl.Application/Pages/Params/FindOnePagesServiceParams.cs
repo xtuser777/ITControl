@@ -4,7 +4,7 @@ namespace ITControl.Application.Pages.Params;
 
 public record FindOnePagesServiceParams
 {
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     public static implicit operator FindOnePagesRepositoryParams(
         FindOnePagesServiceParams serviceParams) =>

@@ -8,10 +8,12 @@ public record IndexPagesParams
 {
     [FromQuery]
     public FindManyPagesRequest FindManyRequest { get; set; } = new();
+    
     [FromHeader]
     public OrderByPagesRequest OrderByRequest { get; set; } = new();
 
-    public static implicit operator FindManyPaginationPagesServiceParams(IndexPagesParams paramsModel) =>
+    public static implicit operator FindManyPaginationPagesServiceParams(
+        IndexPagesParams paramsModel) =>
         new()
         {
             CountParams = paramsModel.FindManyRequest,
@@ -19,7 +21,8 @@ public record IndexPagesParams
             Size = paramsModel.FindManyRequest.Size,
         };
 
-    public static implicit operator FindManyPagesServiceParams(IndexPagesParams paramsModel)
+    public static implicit operator FindManyPagesServiceParams(
+        IndexPagesParams paramsModel)
         => new()
         {
             FindManyParams = paramsModel.FindManyRequest,

@@ -22,21 +22,17 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
     public async Task<IEnumerable<Page>> FindManyAsync(
         FindManyPagesServiceParams @params)
     {
-        return await unitOfWork.PagesRepository.FindManyAsync(
-            @params.FindManyParams,
-            @params.OrderByParams,
-            @params.PaginationParams);
+        return await unitOfWork.PagesRepository.FindManyAsync(@params);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
         FindManyPaginationPagesServiceParams @params)
     {
-        if (@params.Page == null || @params.Size == null) return null;
-        
-        var count = await unitOfWork.PagesRepository.CountAsync(@params.CountParams);
-        
-        var pagination = Pagination.Build(@params.Page, @params.Size, count);
-        
+        var (page, size) = @params;
+        if (page == null || size == null) return null;
+        var count = await unitOfWork.PagesRepository
+            .CountAsync(@params);
+        var pagination = Pagination.Build(page, size, count);
         return pagination;
     }
 

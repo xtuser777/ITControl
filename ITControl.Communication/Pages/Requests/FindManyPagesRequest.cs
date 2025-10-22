@@ -9,19 +9,22 @@ public record FindManyPagesRequest : PageableRequest
 {
     public string? Name { get; set; }
 
-    public static implicit operator FindManyPagesRepositoryParams(FindManyPagesRequest request) => 
+    public static implicit operator FindManyPagesParams(
+        FindManyPagesRequest request) => 
         new() 
         { 
             Name = request.Name, 
         };
 
-    public static implicit operator CountPagesRepositoryParams(FindManyPagesRequest request) =>
+    public static implicit operator CountPagesRepositoryParams(
+        FindManyPagesRequest request) =>
         new()
         {
             Name = request.Name,
         };
 
-    public static implicit operator PaginationParams(FindManyPagesRequest request) =>
+    public static implicit operator PaginationParams(
+        FindManyPagesRequest request) =>
         new() 
         { 
             Page = Parser.ToIntOptional(request.Page),
