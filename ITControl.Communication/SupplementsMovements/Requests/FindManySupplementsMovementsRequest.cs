@@ -1,4 +1,7 @@
 ﻿using ITControl.Communication.Shared.Requests;
+using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Shared.Params;
+using ITControl.Domain.SupplementsMovements.Params;
 
 namespace ITControl.Communication.SupplementsMovements.Requests;
 
@@ -12,12 +15,40 @@ public record FindManySupplementsMovementsRequest : PageableRequest
     public Guid? UnitId { get; set; }
     public Guid? DepartmentId { get; set; }
     public Guid? DivisionId { get; set; }
-    public string? OrderByQuantity { get; set; }
-    public string? OrderByMovementDate { get; set; }
-    public string? OrderByObservation { get; set; }
-    public string? OrderBySupplement { get; set; }
-    public string? OrderByUser { get; set; }
-    public string? OrderByUnit { get; set; }
-    public string? OrderByDepartment { get; set; }
-    public string? OrderByDivision { get; set; }
+
+    public static implicit operator FindManySupplementsMovementsParams(
+        FindManySupplementsMovementsRequest request)
+        => new()
+        {
+            Quantity = request.Quantity,
+            MovementDate = request.MovementDate,
+            Observation = request.Observation,
+            SupplementId = request.SupplementId,
+            UserId = request.UserId,
+            UnitId = request.UnitId,
+            DepartmentId = request.DepartmentId,
+            DivisionId = request.DivisionId,
+        };
+
+    public static implicit operator CountSupplementsMovementsRepositoryParams(
+        FindManySupplementsMovementsRequest request)
+        => new()
+        {
+            Quantity = request.Quantity,
+            MovementDate = request.MovementDate,
+            Observation = request.Observation,
+            SupplementId = request.SupplementId,
+            UserId = request.UserId,
+            UnitId = request.UnitId,
+            DepartmentId = request.DepartmentId,
+            DivisionId = request.DivisionId,
+        };
+
+    public static implicit operator PaginationParams(
+        FindManySupplementsMovementsRequest request)
+        => new()
+        {
+            Page = Parser.ToIntOptional(request.Page),
+            Size = Parser.ToIntOptional(request.Size),
+        };
 }

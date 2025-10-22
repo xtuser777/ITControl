@@ -2,9 +2,11 @@
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.SupplementsMovements.Interfaces;
+using ITControl.Application.SupplementsMovements.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.SupplementsMovements.Requests;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.SupplementsMovements.Entities;
 
 namespace ITControl.Application.SupplementsMovements.Services;
@@ -12,105 +14,85 @@ namespace ITControl.Application.SupplementsMovements.Services;
 public class SupplementsMovementsService(
     IUnitOfWork unitOfWork) : ISupplementsMovementsService
 {
-    public async Task<SupplementMovement> FindOneAsync(Guid id, bool? includeSupplement = null, 
-        bool? includeUser = null, bool? includeUnit = null, bool? includeDepartment = null, 
-        bool? includeDivision = null)
+    public async Task<SupplementMovement> FindOneAsync(
+        FindOneSupplementsMovementsServiceParams @params)
     {
         return await unitOfWork.SupplementsMovementsRepository
-            .FindOneAsync(id, includeSupplement, includeUser, includeUnit, includeDepartment, includeDivision)
+            .FindOneAsync(@params)
             ?? throw new NotFoundException(Errors.SupplementMovimentNotFound);
     }
 
-    public async Task<IEnumerable<SupplementMovement>> FindManyAsync(FindManySupplementsMovementsRequest request)
+    public async Task<IEnumerable<SupplementMovement>> FindManyAsync(
+        FindManySupplementsMovementsServiceParams @params)
     {
-        int? page = request.Page != null ? int.Parse(request.Page) : null;
-        int? size = request.Size != null ? int.Parse(request.Size) : null;
-        return await unitOfWork.SupplementsMovementsRepository.FindManyAsync(
-            quantity: request.Quantity,
-            movementDate: request.MovementDate,
-            observation: request.Observation,
-            supplementId: request.SupplementId,
-            userId: request.UserId,
-            unitId: request.UnitId,
-            departmentId: request.DepartmentId,
-            divisionId: request.DivisionId,
-            orderByQuantity: request.OrderByQuantity,
-            orderByMovementDate: request.OrderByMovementDate,
-            orderByObservation: request.OrderByObservation,
-            orderBySupplement: request.OrderBySupplement,
-            orderByUser: request.OrderByUser,
-            orderByUnit: request.OrderByUnit,
-            orderByDepartment: request.OrderByDepartment,
-            orderByDivision: request.OrderByDivision,
-            page: page,
-            size: size);
+        return await unitOfWork
+            .SupplementsMovementsRepository
+            .FindManyAsync(@params);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(FindManySupplementsMovementsRequest request)
+    public async Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationSupplementsMovementsServiceParams @params)
     {
-        if (request.Page == null || request.Size == null) return null;
-
-        var count = await unitOfWork.SupplementsMovementsRepository.CountAsync(
-            quantity: request.Quantity,
-            movementDate: request.MovementDate,
-            observation: request.Observation,
-            supplementId: request.SupplementId,
-            userId: request.UserId,
-            unitId: request.UnitId,
-            departmentId: request.DepartmentId,
-            divisionId: request.DivisionId);
-
-        var pagination = Pagination.Build(request.Page, request.Size, count);
-
+        var (page, size) = @params;
+        if (page == null || size == null) return null;
+        var count = await unitOfWork
+            .SupplementsMovementsRepository
+            .CountAsync(@params);
+        var pagination = Pagination.Build(page, size, count);
         return pagination;
     }
 
-    public async Task<SupplementMovement> CreateAsync(CreateSupplementsMovementsRequest request)
+    public async Task<SupplementMovement> CreateAsync(
+        CreateSupplementsMovementsServiceParams @params)
     {
-        var supplementMovement = new SupplementMovement(
-            quantity: request.Quantity,
-            movementDate: request.MovementDate,
-            observation: request.Observation,
-            supplementId: request.SupplementId,
-            userId: request.UserId,
-            unitId: request.UnitId,
-            departmentId: request.DepartmentId,
-            divisionId: request.DivisionId);
-        using var transaction = unitOfWork.BeginTransaction;
+        var supplementMovement = new SupplementMovement(@params.Params);
+        await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SupplementsMovementsRepository.CreateAsync(supplementMovement);
-        await DecrementSupplementStock(request.SupplementId, request.Quantity);
+        await DecrementSupplementStock(
+            @params.Params.SupplementId, 
+            @params.Params.Quantity);
         await unitOfWork.Commit(transaction);
 
         return supplementMovement;
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(
+        DeleteSupplementsMovementsServiceParams @params)
     {
-        var supplementMovement = await FindOneAsync(id);
-        using var transaction = unitOfWork.BeginTransaction;
-        await AddSupplementStock(supplementMovement.SupplementId, supplementMovement.Quantity);
-        unitOfWork.SupplementsMovementsRepository.Delete(supplementMovement);
+        var supplementMovement = await FindOneAsync(@params);
+        await using var transaction = unitOfWork.BeginTransaction;
+        await AddSupplementStock(
+            supplementMovement.SupplementId, 
+            supplementMovement.Quantity);
+        unitOfWork.SupplementsMovementsRepository
+            .Delete(supplementMovement);
         await unitOfWork.Commit(transaction);
     }
 
     private async Task DecrementSupplementStock(Guid supplementId, int quantity)
     {
-        var supplement = await unitOfWork.SupplementsRepository.FindOneAsync(supplementId);
+        var findOneParams = new FindOneRepositoryParams { Id = supplementId };
+        var supplement = await unitOfWork
+            .SupplementsRepository.FindOneAsync(findOneParams);
         if (supplement != null)
         {
             var newQuantity = supplement.QuantityInStock - quantity;
-            supplement.Update(quantityInStock: newQuantity);
+            supplement.Update(
+                new () { QuantityInStock = newQuantity });
             unitOfWork.SupplementsRepository.Update(supplement);
         }
     }
 
     private async Task AddSupplementStock(Guid supplementId, int quantity)
     {
-        var supplement = await unitOfWork.SupplementsRepository.FindOneAsync(supplementId);
+        var findOneParams = new FindOneRepositoryParams { Id = supplementId };
+        var supplement = await unitOfWork
+            .SupplementsRepository.FindOneAsync(findOneParams);
         if (supplement != null)
         {
             var newQuantity = supplement.QuantityInStock + quantity;
-            supplement.Update(quantityInStock: newQuantity);
+            supplement.Update(
+                new () { QuantityInStock = newQuantity });
             unitOfWork.SupplementsRepository.Update(supplement);
         }
     }

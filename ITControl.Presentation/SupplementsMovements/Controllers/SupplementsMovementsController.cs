@@ -1,7 +1,7 @@
 ﻿using ITControl.Application.SupplementsMovements.Interfaces;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.SupplementsMovements.Requests;
 using ITControl.Communication.SupplementsMovements.Responses;
+using ITControl.Presentation.SupplementsMovements.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.SupplementsMovements.Controllers;
@@ -13,56 +13,98 @@ public class SupplementsMovementsController(
     ISupplementsMovementsView supplementsMovementsView) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Index([FromQuery] FindManySupplementsMovementsRequest request)
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManySupplementsMovementsResponse>), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Index(
+        [AsParameters] IndexSupplementsMovementsParams indexParams)
     {
-        var supplementsMovements = await supplementsMovementsService.FindManyAsync(request);
-        var pagination = await supplementsMovementsService.FindManyPaginationAsync(request);
-        var data = supplementsMovementsView.FindMany(supplementsMovements);
-        var response = new FindManyResponse<FindManySupplementsMovementsResponse>()
+        var supplementsMovements = 
+            await supplementsMovementsService.FindManyAsync(indexParams);
+        var pagination = 
+            await supplementsMovementsService.FindManyPaginationAsync(indexParams);
+        var data = 
+            supplementsMovementsView.FindMany(supplementsMovements);
+        var response = new
         {
             Data = data,
             Pagination = pagination
         };
-
         return Ok(response);
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<IActionResult> Show([FromRoute] Guid id,
-        [FromQuery] bool? includeSupplement = true,
-        [FromQuery] bool? includeUser = true,
-        [FromQuery] bool? includeUnit = true,
-        [FromQuery] bool? includeDepartment = true,
-        [FromQuery] bool? includeDivision = true)
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOneSupplementsMovementsResponse?>), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Show(
+        [AsParameters] ShowSupplementsMovementsParams showParams)
     {
-        var supplementMovement = await supplementsMovementsService.FindOneAsync(
-            id, includeSupplement, includeUser, includeUnit, includeDepartment, includeDivision);
-        var data = supplementsMovementsView.FindOne(supplementMovement);
-        var response = new FindOneResponse<FindOneSupplementsMovementsResponse?>()
-        {
-            Data = data
-        };
-
+        var supplementMovement = 
+            await supplementsMovementsService.FindOneAsync(showParams);
+        var data = 
+            supplementsMovementsView.FindOne(supplementMovement);
+        var response = new { Data = data };
         return Ok(response);
     }
 
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateSupplementsMovementsRequest request)
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreateSupplementsMovementsResponse?>), 
+        StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Create(
+        [AsParameters] CreateSupplementsMovementsParams createParams)
     {
-        var supplementMovement = await supplementsMovementsService.CreateAsync(request);
-        var data = supplementsMovementsView.Create(supplementMovement);
-        var response = new FindOneResponse<CreateSupplementsMovementsResponse?>()
-        {
-            Data = data
-        };
+        var supplementMovement = 
+            await supplementsMovementsService.CreateAsync(createParams);
+        var data = 
+            supplementsMovementsView.Create(supplementMovement);
+        var response = new { Data = data };
 
-        return CreatedAtAction(nameof(Show), new { id = supplementMovement.Id }, response);
+        return CreatedAtAction(
+            nameof(Show), new { id = supplementMovement.Id }, response);
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Delete(
+        [AsParameters] DeleteSupplementsMovementsParams deleteParams)
     {
-        await supplementsMovementsService.DeleteAsync(id);
+        await supplementsMovementsService.DeleteAsync(deleteParams);
         return NoContent();
     }
 }

@@ -2,6 +2,7 @@
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Supplements.Entities;
+using ITControl.Domain.SupplementsMovements.Params;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Users.Entities;
 
@@ -26,55 +27,32 @@ public sealed class SupplementMovement : Entity
 
     public SupplementMovement() { }
     
-    public SupplementMovement(
-        int quantity, 
-        DateOnly movementDate, 
-        string observation,
-        Guid supplementId, 
-        Guid userId,
-        Guid unitId,
-        Guid departmentId, 
-        Guid? divisionId = null)
+    public SupplementMovement(SupplementMovementParams @params)
     {
         Id = Guid.NewGuid();
-        Quantity = quantity;
-        MovementDate = movementDate;
-        Observation = observation;
-        SupplementId = supplementId;
-        UserId = userId;
-        UnitId = unitId;
-        DepartmentId = departmentId;
-        DivisionId = divisionId;
+        Quantity = @params.Quantity;
+        MovementDate = @params.MovementDate;
+        Observation = @params.Observation;
+        SupplementId = @params.SupplementId;
+        UserId = @params.UserId;
+        UnitId = @params.UnitId;
+        DepartmentId = @params.DepartmentId;
+        DivisionId = @params.DivisionId;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(
-        int? quantity = null, 
-        DateOnly? movementDate = null, 
-        string? observation = null,
-        Guid? supplementId = null, 
-        Guid? userId = null,
-        Guid? unitId = null,
-        Guid? departmentId = null, 
-        Guid? divisionId = null)
+    public void Update(UpdateSupplementMovementParams @params)
     {
-        if (quantity is not null)
-            Quantity = quantity.Value;
-        if (movementDate is not null)
-            MovementDate = movementDate.Value;
-        if (observation is not null)
-            Observation = observation;
-        if (supplementId is not null)
-            SupplementId = supplementId.Value;
-        if (userId is not null)
-            UserId = userId.Value;
-        if (unitId is not null)
-            UnitId = unitId.Value;
-        if (departmentId is not null)
-            DepartmentId = departmentId.Value;
-        if (divisionId is not null)
-            DivisionId = divisionId;
+        
+        Quantity = @params.Quantity ?? Quantity;
+        MovementDate = @params.MovementDate ?? MovementDate;
+        Observation = @params.Observation ?? Observation;
+        SupplementId = @params.SupplementId ?? SupplementId;
+        UserId = @params.UserId ?? UserId;
+        UnitId = @params.UnitId ?? UnitId;
+        DepartmentId = @params.DepartmentId ?? DepartmentId;
+        DivisionId = @params.DivisionId ?? DivisionId;
         UpdatedAt = DateTime.Now;
     }
 }
