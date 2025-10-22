@@ -3,6 +3,7 @@ using ITControl.Communication.Shared.Responses;
 using ITControl.Communication.Supplements.Requests;
 using ITControl.Communication.Supplements.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Supplements.Params;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +14,31 @@ namespace ITControl.Presentation.Supplements.Controllers;
 [ApiController]
 [Produces("application/json")]
 [PermissionsFilter]
-[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+[Authorize(
+    AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class SupplementsController(
     ISupplementsService supplementsService,
     ISupplementsView supplementsView) : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<FindManyResponse<FindManySupplementsResponse>>> Index([FromQuery] FindManySupplementsRequest request)
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManySupplementsResponse>), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Index(
+        [AsParameters] IndexSupplementsParams @params)
     {
-        var supplements = await supplementsService.FindManyAsync(request);
-        var pagination = await supplementsService.FindManyPagination(request);
-        var response = new FindManyResponse<FindManySupplementsResponse>()
+        var supplements = 
+            await supplementsService.FindManyAsync(@params);
+        var pagination = 
+            await supplementsService.FindManyPagination(@params);
+        var response = new 
         {
             Data = supplementsView.FindMany(supplements),
             Pagination = pagination
@@ -32,11 +47,25 @@ public class SupplementsController(
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<FindOneResponse<FindOneSupplementsResponse>>> Show([FromRoute] Guid id)
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOneSupplementsResponse?>), 
+        StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Show(
+        [AsParameters] ShowSupplementsParams @params)
     {
-        var supplement = await supplementsService.FindOneAsync(id);
+        var supplement = 
+            await supplementsService.FindOneAsync(@params);
         var data = supplementsView.FindOne(supplement);
-        var response = new FindOneResponse<FindOneSupplementsResponse?>()
+        var response = new
         {
             Data = data
         };
@@ -44,28 +73,67 @@ public class SupplementsController(
     }
 
     [HttpPost]
-    public async Task<ActionResult<FindOneResponse<CreateSupplementsResponse>>> Create([FromBody] CreateSupplementsRequest request)
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreateSupplementsResponse?>), 
+        StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Create(
+        [AsParameters] CreateSupplementsParams @params)
     {
-        var supplement = await supplementsService.CreateAsync(request);
+        var supplement = 
+            await supplementsService.CreateAsync(@params);
         var data = supplementsView.Create(supplement);
-        var response = new FindOneResponse<CreateSupplementsResponse?>()
+        var response = new
         {
             Data = data
         };
-        return CreatedAtAction(nameof(Show), new { id = data?.Id }, response);
+        return CreatedAtAction(
+            nameof(Show), new { id = data?.Id }, response);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateSupplementsRequest request)
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Update(
+        [AsParameters] UpdateSupplementsParams @params)
     {
-        await supplementsService.UpdateAsync(id, request);
+        await supplementsService.UpdateAsync(@params);
         return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Delete([FromRoute] Guid id)
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), 
+        StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType(
+        typeof(void), StatusCodes.Status403Forbidden)]
+    public async Task<IActionResult> Delete(
+        [AsParameters] DeleteSupplementsParams @params)
     {
-        await supplementsService.DeleteAsync(id);
+        await supplementsService.DeleteAsync(@params);
         return NoContent();
     }
 }

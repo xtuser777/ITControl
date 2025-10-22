@@ -38,7 +38,7 @@ namespace ITControl.Presentation.Pages.Controllers
             return Ok(new { Data = data, Pagination = pagination });
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         [ProducesResponseType(
             typeof(FindOneResponse<FindOnePagesResponse?>), 
             StatusCodes.Status200OK)]

@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Domain.Supplements.Enums;
+using ITControl.Domain.Supplements.Params;
 
 namespace ITControl.Communication.Supplements.Requests;
 
@@ -29,10 +32,22 @@ public class CreateSupplementsRequest
 
     public static ValidationResult? ValidateType(string x, ValidationContext context)
     {
-        var validTypes = Enum.GetNames(typeof(Domain.Supplements.Enums.SupplementType));
+        var validTypes = Enum.GetNames(typeof(SupplementType));
         var types = string.Join(", ", validTypes);
-        if (!validTypes.Contains(x))
-            return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
-        return ValidationResult.Success;
+        return !validTypes.Contains(x) 
+            ? new ValidationResult(
+                string.Format(
+                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types)) 
+            : ValidationResult.Success;
     }
+
+    public static implicit operator SupplementParams(
+        CreateSupplementsRequest request)
+        => new()
+        {
+            Brand = request.Brand,
+            Model = request.Model,
+            Type = Parser.ToEnum<SupplementType>(request.Type),
+            QuantityInStock = request.Stock
+        };
 }

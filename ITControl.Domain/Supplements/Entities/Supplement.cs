@@ -1,5 +1,6 @@
 ﻿using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Supplements.Enums;
+using ITControl.Domain.Supplements.Params;
 
 namespace ITControl.Domain.Supplements.Entities;
 
@@ -14,27 +15,23 @@ public sealed class Supplement : Entity
     {
     }
 
-    public Supplement(string brand, string model, SupplementType type, int quantityInStock)
+    public Supplement(SupplementParams @params)
     {
         Id = Guid.NewGuid();
-        Brand = brand;
-        Model = model;
-        Type = type;
-        QuantityInStock = quantityInStock;
+        Brand = @params.Brand;
+        Model = @params.Model;
+        Type = @params.Type;
+        QuantityInStock = @params.QuantityInStock;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
 
-    public void Update(string? brand = null, string? model = null, SupplementType? type = null, int? quantityInStock = null)
+    public void Update(UpdateSupplementParams @params)
     {
-        if (brand is not null)
-            Brand = brand;
-        if (model is not null)
-            Model = model;
-        if (type is not null)
-            Type = type.Value;
-        if (quantityInStock is not null)
-            QuantityInStock = quantityInStock.Value;
+        Brand = @params.Brand ?? Brand;
+        Model = @params.Model ?? Model;
+        Type = @params.Type ?? Type;
+        QuantityInStock = @params.QuantityInStock ?? QuantityInStock;
         UpdatedAt = DateTime.Now;
     }
 }

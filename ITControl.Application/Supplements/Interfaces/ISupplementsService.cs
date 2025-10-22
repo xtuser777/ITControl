@@ -1,15 +1,19 @@
-﻿using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Supplements.Requests;
+﻿using ITControl.Application.Supplements.Params;
+using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Supplements.Entities;
 
 namespace ITControl.Application.Supplements.Interfaces;
 
 public interface ISupplementsService
 {
-    Task<Supplement> FindOneAsync(Guid id);
-    Task<IEnumerable<Supplement>> FindManyAsync(FindManySupplementsRequest request);
-    Task<PaginationResponse?> FindManyPagination(FindManySupplementsRequest request);
-    Task<Supplement?> CreateAsync(CreateSupplementsRequest request);
-    Task UpdateAsync(Guid id, UpdateSupplementsRequest request);
-    Task DeleteAsync(Guid id);
+    Task<Supplement> FindOneAsync(
+        FindOneSupplementsServiceParams @params);
+    Task<IEnumerable<Supplement>> FindManyAsync(
+        FindManySupplementsServiceParams @params);
+    Task<PaginationResponse?> FindManyPagination(
+        FindManyPaginationSupplementsServiceParams @params);
+    Task<Supplement?> CreateAsync(
+        CreateSupplementsServiceParams @params);
+    Task UpdateAsync(UpdateSupplementsServiceParams @params);
+    Task DeleteAsync(DeleteSupplementsServiceParams @params);
 }
