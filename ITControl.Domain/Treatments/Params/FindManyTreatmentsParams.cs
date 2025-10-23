@@ -1,10 +1,10 @@
-﻿using ITControl.Domain.Treatments.Enums;
+﻿using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Treatments.Enums;
 
 namespace ITControl.Domain.Treatments.Params;
 
-public class CountTreatmentsRepositoryParams
+public record FindManyTreatmentsParams : FindManyParams
 {
-    public Guid? Id { get; set; } = null;
     public string? Description { get; set; } = null;
     public string? Protocol { get; set; } = null;
     public DateOnly? StartedAt { get; set; } = null;

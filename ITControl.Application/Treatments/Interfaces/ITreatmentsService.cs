@@ -1,20 +1,19 @@
-﻿using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Treatments.Requests;
+﻿using ITControl.Application.Shared.Params;
+using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Treatments.Entities;
 
 namespace ITControl.Application.Treatments.Interfaces;
 
 public interface ITreatmentsService
 {
-    Task<Treatment> FindOneAsync(FindOneTreatmentsRequest request);
+    Task<Treatment> FindOneAsync(FindOneServiceParams parameters);
     Task<IEnumerable<Treatment>> FindManyAsync(
-        FindManyTreatmentsRequest request);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyTreatmentsRequest request);
+        FindManyPaginationServiceParams parameters);
     Task<Treatment?> CreateAsync(
-        CreateTreatmentsRequest request);
+        CreateServiceParams parameters);
     Task UpdateAsync(
-        Guid id, 
-        UpdateTreatmentsRequest request);
-    Task DeleteAsync(Guid id);
+        UpdateServiceParams parameters);
+    Task DeleteAsync(DeleteServiceParams parameters);
 }

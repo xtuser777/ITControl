@@ -1,8 +1,8 @@
 ﻿using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Treatments.Requests;
 using ITControl.Communication.Treatments.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Treatments.Params;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,56 +18,60 @@ public class TreatmentsController(
     ITreatmentsView treatmentsView) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(FindManyResponse<FindManyTreatmentsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManyTreatmentsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyTreatmentsResponse>> IndexAsync(
-        [FromQuery] FindManyTreatmentsRequest request)
+    public async Task<IActionResult> IndexAsync(
+        [AsParameters] IndexTreatmentsParams parameters)
     {
-        var treatments = await treatmentsService.FindManyAsync(request);
-        var pagination = await treatmentsService.FindManyPaginationAsync(request);
+        var treatments = 
+            await treatmentsService.FindManyAsync(parameters);
+        var pagination = 
+            await treatmentsService.FindManyPaginationAsync(parameters);
         var data = treatmentsView.FindMany(treatments);
-        return new FindManyResponse<FindManyTreatmentsResponse>()
+        return Ok(new
         {
             Data = data,
             Pagination = pagination
-        };
+        });
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(FindOneResponse<FindOneTreatmentsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOneTreatmentsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneTreatmentsResponse?>> ShowAsync(
-        [FromRoute] Guid id, [FromQuery] FindOneTreatmentsRequest request)
+    public async Task<IActionResult> ShowAsync(
+        [AsParameters] ShowTreatmentsParams parameters)
     {
-        request.Id = id;
-        var treatment = await treatmentsService.FindOneAsync(request);
+        var treatment = await treatmentsService.FindOneAsync(parameters);
         var data = treatmentsView.FindOne(treatment);
-        return new FindOneResponse<FindOneTreatmentsResponse?>()
+        return Ok(new
         {
             Data = data,
-        };
+        });
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(FindOneResponse<CreateTreatmentsResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreateTreatmentsResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreateTreatmentsResponse?>> CreateAsync(
-        [FromBody] CreateTreatmentsRequest request)
+    public async Task<IActionResult> CreateAsync(
+        [AsParameters] CreateTreatmentsParams parameters)
     {
-        var treatment = await treatmentsService.CreateAsync(request);
+        var treatment = await treatmentsService.CreateAsync(parameters);
         var data = treatmentsView.Create(treatment);
-        Response.StatusCode = StatusCodes.Status201Created;
-        return new FindOneResponse<CreateTreatmentsResponse?>()
+        var uri = $"/treatments/{treatment?.Id}";
+        return Created(uri, new
         {
             Data = data,
-        };
+        });
     }
 
     [HttpPut("{id:guid}")]
@@ -76,12 +80,11 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task UpdateAsync(
-        Guid id, 
-        [FromBody] UpdateTreatmentsRequest request)
+    public async Task<IActionResult> UpdateAsync(
+        [AsParameters] UpdateTreatmentsParams parameters)
     {
-        await treatmentsService.UpdateAsync(id, request);
-        Response.StatusCode = StatusCodes.Status204NoContent;
+        await treatmentsService.UpdateAsync(parameters);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
@@ -90,9 +93,10 @@ public class TreatmentsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task DeleteAsync(Guid id)
+    public async Task<IActionResult> DeleteAsync(
+        [AsParameters] DeleteTreatmentsParams parameters)
     {
-        await treatmentsService.DeleteAsync(id);
-        Response.StatusCode = StatusCodes.Status204NoContent;
+        await treatmentsService.DeleteAsync(parameters);
+        return NoContent();
     }
 }

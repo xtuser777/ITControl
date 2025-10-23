@@ -10,6 +10,7 @@ namespace ITControl.Communication.Treatments.Requests;
 
 public class UpdateTreatmentsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string? Description { get; set; }
@@ -41,6 +42,7 @@ public class UpdateTreatmentsRequest
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string? Type { get; set; }
     
+    [StringMinLength(1)]
     [StringMaxLength(255)]
     [Display(Name = nameof(Observation), ResourceType = typeof(DisplayNames))]
     public string? Observation { get; set; }
@@ -59,7 +61,8 @@ public class UpdateTreatmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? UserId { get; set; }
 
-    public static implicit operator UpdateTreatmentParams(UpdateTreatmentsRequest request) =>
+    public static implicit operator UpdateTreatmentParams(
+        UpdateTreatmentsRequest request) =>
         new()
         {
             Description = request.Description,

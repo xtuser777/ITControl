@@ -5,7 +5,7 @@ using ITControl.Domain.Treatments.Params;
 
 namespace ITControl.Communication.Treatments.Requests;
 
-public record FindManyTreatmentsRequest : PageableRequest
+public record FindManyTreatmentsRequest : FindManyRequest
 {
     public string? Description { get; set; }
     public string? Protocol { get; set; }
@@ -19,20 +19,9 @@ public record FindManyTreatmentsRequest : PageableRequest
     public string? ExternalProtocol { get; set; }
     public Guid? CallId { get; set; }
     public Guid? UserId { get; set; }
-    public string? OrderByDescription { get; set; }
-    public string? OrderByProtocol { get; set; }
-    public string? OrderByStartedAt { get; set; }
-    public string? OrderByEndedAt { get; set; }
-    public string? OrderByStartedIn { get; set; }
-    public string? OrderByEndedIn { get; set; }
-    public string? OrderByStatus { get; set; }
-    public string? OrderByType { get; set; }
-    public string? OrderByObservation { get; set; }
-    public string? OrderByExternalProtocol { get; set; }
-    public string? OrderByCall { get; set; }
-    public string? OrderByUser { get; set; }
 
-    public static implicit operator FindManyTreatmentsRepositoryParams(FindManyTreatmentsRequest request) =>
+    public static implicit operator FindManyTreatmentsParams(
+        FindManyTreatmentsRequest request) =>
         new()
         {
             Description = request.Description,
@@ -47,23 +36,10 @@ public record FindManyTreatmentsRequest : PageableRequest
             ExternalProtocol = request.ExternalProtocol,
             CallId = request.CallId,
             UserId = request.UserId,
-            OrderByDescription = request.OrderByDescription,
-            OrderByProtocol = request.OrderByProtocol,
-            OrderByStartedAt = request.OrderByStartedAt,
-            OrderByEndedAt = request.OrderByEndedAt,
-            OrderByStartedIn = request.OrderByStartedIn,
-            OrderByEndedIn = request.OrderByEndedIn,
-            OrderByStatus = request.OrderByStatus,
-            OrderByType = request.OrderByType,
-            OrderByObservation = request.OrderByObservation,
-            OrderByExternalProtocol = request.OrderByExternalProtocol,
-            OrderByCall = request.OrderByCall,
-            OrderByUser = request.OrderByUser,
-            Page = request.Page is null ? null : int.Parse(request.Page),
-            Size = request.Size is null ? null : int.Parse(request.Size)
         };
 
-    public static implicit operator CountTreatmentsRepositoryParams(FindManyTreatmentsRequest request) =>
+    public static implicit operator CountTreatmentsParams(
+        FindManyTreatmentsRequest request) =>
         new()
         {
             Description = request.Description,
