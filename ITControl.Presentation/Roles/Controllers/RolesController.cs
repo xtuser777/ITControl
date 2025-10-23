@@ -1,8 +1,7 @@
 using ITControl.Application.Roles.Interfaces;
-using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Roles.Responses;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Presentation.Roles.Headers;
+using ITControl.Presentation.Roles.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,59 +18,59 @@ namespace ITControl.Presentation.Roles.Controllers
         IRolesView rolesView) : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType(typeof(FindManyResponse<FindManyRolesResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(FindManyResponse<FindManyRolesResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManyRolesResponse>> IndexAsync(
-            [FromQuery] FindManyRolesRequest request,
-            [FromHeader] OrderByRolesHeaders orderByRolesHeaders)
+        public async Task<IActionResult> IndexAsync(
+            [AsParameters] IndexRolesParams parameters)
         {
-            var roles = await rolesService.FindManyAsync(request, orderByRolesHeaders);
+            var roles = await rolesService.FindManyAsync(parameters);
+            var pagination = await rolesService.FindManyPaginatedAsync(parameters);
             var data = rolesView.FindMany(roles);
-            var pagination = await rolesService.FindManyPaginatedAsync(request);
 
-            return new FindManyResponse<FindManyRolesResponse>()
+            return Ok(new 
             {
-                Data = data,
-                Pagination = pagination
-            };
+                Data = data, Pagination = pagination
+            });
         }
 
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(FindOneResponse<FindOneRolesResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<FindOneRolesResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneRolesResponse?>> ShowAsync(
-            [FromRoute] Guid id, [FromQuery] FindOneRolesRequest request)
+        public async Task<IActionResult> ShowAsync(
+            [AsParameters] ShowRolesParams parameters)
         {
-            request.Id = id;
-            var role = await rolesService.FindOneAsync(request);
+            var role = await rolesService.FindOneAsync(parameters);
             var data = rolesView.FindOne(role);
             
-            return new FindOneResponse<FindOneRolesResponse?>()
+            return Ok(new 
             {
                 Data = data,
-            };
+            });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(FindOneResponse<CreateRolesResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<CreateRolesResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateRolesResponse?>> CreateAsync(
-            [FromBody] CreateRolesRequest request)
+        public async Task<IActionResult> CreateAsync(
+            [AsParameters] CreateRolesParams parameters)
         {
-            var role = await rolesService.CreateAsync(request);
+            var role = await rolesService.CreateAsync(parameters);
             var data = rolesView.Create(role);
-            Response.StatusCode = 201;
-            return new FindOneResponse<CreateRolesResponse?>()
+            var uri = $"/roles/{role?.Id}";
+            return Created(uri, new 
             {
                 Data = data,
-            };
+            });
         }
 
         [HttpPut("{id:guid}")]
@@ -80,12 +79,11 @@ namespace ITControl.Presentation.Roles.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task UpdateAsync(
-            Guid id, 
-            [FromBody] UpdateRolesRequest request)
+        public async Task<IActionResult> UpdateAsync(
+            [AsParameters] UpdateRolesParams parameters)
         {
-            await rolesService.UpdateAsync(id, request);
-            Response.StatusCode = 204;
+            await rolesService.UpdateAsync(parameters);
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -94,10 +92,11 @@ namespace ITControl.Presentation.Roles.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(
+            DeleteRolesParams parameters)
         {
-            await rolesService.DeleteAsync(id);
-            Response.StatusCode = 204;
+            await rolesService.DeleteAsync(parameters);
+            return NoContent();
         }
     }
 }

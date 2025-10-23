@@ -6,6 +6,7 @@ using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Params;
+using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Users.Entities;
 using ITControl.Infrastructure.Users.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -51,7 +52,7 @@ public class AuthService(
     {
         var role = await unitOfWork.RolesRepository.FindOneAsync(new() { 
             Id = roleId, 
-            Includes = new() { 
+            Includes = new IncludesRolesParams() { 
                 RolesPages = new() {
                     Page = true 
                 } 

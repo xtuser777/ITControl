@@ -9,6 +9,7 @@ using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Users.Params;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
@@ -81,8 +82,9 @@ public class CallsService(
 
     private async Task CreateNotification(Guid referenceId, string title, string message)
     {
+        var findManyRolesParams = new FindManyRolesParams() { Name = "MASTER" };
         var rolesMaster = await unitOfWork.RolesRepository
-            .FindManyAsync(new () { Name = "MASTER" });
+            .FindManyAsync(new () { FindMany = findManyRolesParams});
         var roles = rolesMaster.ToList();
         if (roles.Count == 0)
             throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);
