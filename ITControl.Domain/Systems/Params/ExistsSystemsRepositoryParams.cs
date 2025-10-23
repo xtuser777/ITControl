@@ -1,5 +1,4 @@
 ﻿namespace ITControl.Domain.Systems.Params;
 
-public record ExistsSystemsRepositoryParams : CountSystemsRepositoryParams
-{
-}
+public record ExistsSystemsRepositoryParams : 
+    CountSystemsRepositoryParams;

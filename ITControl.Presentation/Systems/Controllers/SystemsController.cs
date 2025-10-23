@@ -1,9 +1,8 @@
 using ITControl.Application.Systems.Interfaces;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Systems.Requests;
 using ITControl.Communication.Systems.Responses;
 using ITControl.Presentation.Shared.Filters;
-using ITControl.Presentation.Systems.Headers;
+using ITControl.Presentation.Systems.Params;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,59 +18,54 @@ namespace ITControl.Presentation.Systems.Controllers
         ISystemsView systemsView) : ControllerBase
     {
         [HttpGet]
-        [ProducesResponseType(typeof(FindManyResponse<FindManySystemsResponse>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(FindManyResponse<FindManySystemsResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindManyResponse<FindManySystemsResponse>> IndexAsync(
-            [FromQuery] FindManySystemsRequest request,
-            [FromHeader] OrderBySystemsHeaders orderBySystemsHeaders)
+        public async Task<IActionResult> IndexAsync(
+            [AsParameters] IndexSystemsParams parameters)
         {
-            var systems = await systemsService.FindManyAsync(request, orderBySystemsHeaders);
-            var pagination = await systemsService.FindManyPaginationAsync(request);
+            var systems = 
+                await systemsService.FindManyAsync(parameters);
+            var pagination = 
+                await systemsService.FindManyPaginationAsync(parameters);
             var data = systemsView.FindMany(systems);
-
-            return new FindManyResponse<FindManySystemsResponse>()
+            return Ok(new
             {
                 Data = data,
                 Pagination = pagination
-            };
+            });
         }
 
         [HttpGet("{id:guid}")]
-        [ProducesResponseType(typeof(FindOneResponse<FindOneSystemsResponse?>), StatusCodes.Status200OK)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<FindOneSystemsResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<FindOneSystemsResponse?>> ShowAsync(
-            [FromRoute] Guid id, [FromQuery] FindOneSystemsRequest request)
+        public async Task<IActionResult> ShowAsync(
+            [AsParameters] ShowSystemsParams parameters)
         {
-            request.Id = id;
-            var system = await systemsService.FindOneAsync(request);
+            var system = await systemsService.FindOneAsync(parameters);
             var data = systemsView.FindOne(system);
-            
-            return new FindOneResponse<FindOneSystemsResponse?>()
-            {
-                Data = data,
-            };
+            return Ok(new { Data = data });
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(FindOneResponse<CreateSystemsResponse?>), StatusCodes.Status201Created)]
+        [ProducesResponseType(
+            typeof(FindOneResponse<CreateSystemsResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<FindOneResponse<CreateSystemsResponse?>> CreateAsync(
-            [FromBody]CreateSystemsRequest request)
+        public async Task<IActionResult> CreateAsync(
+            [AsParameters] CreateSystemsParams parameters)
         {
-            var system = await systemsService.CreateAsync(request);
+            var system = await systemsService.CreateAsync(parameters);
             var data = systemsView.Create(system);
-            Response.StatusCode = 201;
-            return new FindOneResponse<CreateSystemsResponse?>()
-            {
-                Data = data,
-            };
+            var uri = $"/Systems/{system?.Id}";
+            return Created(uri, new { Data = data });
         }
 
         [HttpPut("{id:guid}")]
@@ -80,12 +74,11 @@ namespace ITControl.Presentation.Systems.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task UpdateAsync(
-            Guid id, 
-            [FromBody] UpdateSystemsRequest request)
+        public async Task<IActionResult> UpdateAsync(
+            [AsParameters] UpdateSystemsParams parameters)
         {
-            await systemsService.UpdateAsync(id, request);
-            Response.StatusCode = 204;
+            await systemsService.UpdateAsync(parameters);
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -94,10 +87,11 @@ namespace ITControl.Presentation.Systems.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(
+            [AsParameters] DeleteSystemsParams parameters)
         {
-            await systemsService.DeleteAsync(id);
-            Response.StatusCode = 204;
+            await systemsService.DeleteAsync(parameters);
+            return NoContent();
         }
     }
 }

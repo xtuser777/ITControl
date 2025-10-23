@@ -1,16 +1,27 @@
 using ITControl.Domain.Systems.Params;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Communication.Systems.Requests;
 
 public record OrderBySystemsRequest
 {
-    public string? Name { get; set; }
-    public string? Version { get; set; }
-    public string? ImplementedAt { get; set; }
-    public string? EndedAt { get; set; }
-    public string? Own { get; set; }
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? Name { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Version")]
+    public string? Version { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Implemented-At")]
+    public string? ImplementedAt { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Ended-At")]
+    public string? EndedAt { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Own")]
+    public string? Own { get; init; }
 
-    public static implicit operator OrderBySystemsRepositoryParams(OrderBySystemsRequest request) =>
+    public static implicit operator OrderBySystemsParams(
+        OrderBySystemsRequest request) =>
         new()
         {
             Name = request.Name,

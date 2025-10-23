@@ -1,6 +1,5 @@
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.Systems.Interfaces;
-using ITControl.Domain.Systems.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,28 +9,25 @@ namespace ITControl.Infrastructure.Systems.Repositories;
 public class SystemsRepository(ApplicationDbContext context) 
     : BaseRepository, ISystemsRepository
 {
-    public async Task<Domain.Systems.Entities.System?> FindOneAsync(FindOneSystemsRepositoryParams @params)
+    public async Task<Domain.Systems.Entities.System?> FindOneAsync(
+        FindOneRepositoryParams @params)
     {
-        var (id, includeContract) = @params;
-        var query = context.Systems.AsQueryable();
-        if (includeContract is true) 
-            query = query.Include(x => x.Contract);
+        var (id, includes) = @params;
+        query = context.Systems.AsQueryable();
+        ApplyIncludes(includes);
         
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return (Domain.Systems.Entities.System?)await query
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(
-        FindManySystemsRepositoryParams findManyParams,
-        OrderBySystemsRepositoryParams orderByParams,
-        PaginationParams paginationParams)
+        FindManyRepositoryParams findManyParams)
     {
         query = context.Systems.AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
-
+        BuildQuery(findManyParams.FindMany);
+        BuildOrderBy(findManyParams.OrderBy);
+        ApplyPagination(findManyParams.Pagination);
         var entities = await query.ToListAsync();
-
         return entities.Cast<Domain.Systems.Entities.System>();
     }
 
@@ -50,18 +46,16 @@ public class SystemsRepository(ApplicationDbContext context)
         context.Systems.Remove(system);
     }
 
-    public async Task<int> CountAsync(CountSystemsRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyParams countParams)
     {
         query = context.Systems.AsNoTracking();
-        BuildQuery(@params);
-        
+        BuildQuery(countParams);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsSystemsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams existsParams)
     {
-        var count = await CountAsync(@params);
-        
+        var count = await CountAsync(existsParams);
         return count > 0;
     }
 }

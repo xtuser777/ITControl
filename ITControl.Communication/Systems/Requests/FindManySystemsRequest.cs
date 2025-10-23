@@ -14,7 +14,8 @@ public record FindManySystemsRequest : PageableRequest
     public string? Own { get; set; }
     public Guid? ContractId { get; set; }
 
-    public static implicit operator FindManySystemsRepositoryParams(FindManySystemsRequest request) =>
+    public static implicit operator FindManySystemsParams(
+        FindManySystemsRequest request) =>
         new()
         {
             Name = request.Name,
@@ -25,7 +26,8 @@ public record FindManySystemsRequest : PageableRequest
             ContractId = request.ContractId
         };
 
-    public static implicit operator CountSystemsRepositoryParams(FindManySystemsRequest request) =>
+    public static implicit operator CountSystemsRepositoryParams(
+        FindManySystemsRequest request) =>
         new()
         {
             Name = request.Name,
@@ -36,7 +38,8 @@ public record FindManySystemsRequest : PageableRequest
             ContractId = request.ContractId
         };
 
-    public static implicit operator PaginationParams(FindManySystemsRequest request) =>
+    public static implicit operator PaginationParams(
+        FindManySystemsRequest request) =>
         new()
         {
             Size = Parser.ToIntOptional(request.Size),

@@ -1,13 +1,6 @@
-﻿namespace ITControl.Domain.Systems.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record FindOneSystemsRepositoryParams
-{
-    public Guid Id { get; set; }
-    public bool? IncludeContract { get; set; } = null;
+namespace ITControl.Domain.Systems.Params;
 
-    public void Deconstruct(out Guid id, out bool? includeContract)
-    {
-        id = Id;
-        includeContract = IncludeContract;
-    }
-}
+public record FindOneSystemsRepositoryParams :
+    FindOneRepositoryParams;

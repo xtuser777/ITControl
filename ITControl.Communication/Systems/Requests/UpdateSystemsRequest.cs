@@ -7,10 +7,12 @@ namespace ITControl.Communication.Systems.Requests;
 
 public record UpdateSystemsRequest
 {
+    [StringMinLength(1)]
     [StringMaxLength(100)]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
     
+    [StringMinLength(1)]
     [StringMaxLength(50)]
     [Display(Name = nameof(Version), ResourceType = typeof(DisplayNames))]
     public string? Version { get; set; }
@@ -33,7 +35,8 @@ public record UpdateSystemsRequest
     [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
 
-    public static implicit operator UpdateSystemParams(UpdateSystemsRequest request) =>
+    public static implicit operator UpdateSystemParams(
+        UpdateSystemsRequest request) =>
         new()
         {
             Name = request.Name,

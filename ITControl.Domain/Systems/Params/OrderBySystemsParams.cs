@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Systems.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record OrderBySystemsRepositoryParams
+namespace ITControl.Domain.Systems.Params;
+
+public record OrderBySystemsParams : OrderByParams
 {
     public string? Name { get; set; } = null;
     public string? Version { get; set; } = null;

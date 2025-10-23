@@ -2,10 +2,10 @@
 
 public record UpdateSystemParams
 {
-    public string? Name { get; set; } = null;
-    public string? Version { get; set; } = null;
-    public DateOnly? ImplementedAt { get; set; } = null;
-    public DateOnly? EndedAt { get; set; } = null;
-    public bool? Own { get; set; } = null;
-    public Guid? ContractId { get; set; } = null;
+    public string? Name { get; init; } = null;
+    public string? Version { get; init; } = null;
+    public DateOnly? ImplementedAt { get; init; } = null;
+    public DateOnly? EndedAt { get; init; } = null;
+    public bool? Own { get; init; } = null;
+    public Guid? ContractId { get; init; } = null;
 }
