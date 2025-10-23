@@ -1,7 +1,6 @@
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Interfaces;
-using ITControl.Domain.Roles.Params;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -11,28 +10,26 @@ namespace ITControl.Infrastructure.Roles.Repositories;
 public class RolesRepository(ApplicationDbContext context)
     : BaseRepository, IRolesRepository
 {
-    public async Task<Role?> FindOneAsync(FindOneRolesRepositoryParams @params)
+    public async Task<Role?> FindOneAsync(
+        FindOneRepositoryParams parameters)
     {
-        var (id, includes) = @params;
+        var (id, includes) = parameters;
         query = context.Roles.AsQueryable();
         ApplyIncludes(includes);
 
-        return (Role?)await query.Where(x => x.Id == id).FirstOrDefaultAsync();
+        return (Role?)await query
+            .Where(x => x.Id == id)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(
-        FindManyRolesRepositoryParams findManyRolesParams,
-        OrderByRolesRepositoryParams? orderByRolesParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.Roles.AsNoTracking();
-        BuildQuery(findManyRolesParams);
-        BuildOrderBy(orderByRolesParams);
-        ApplyPagination(paginationParams);
-
-        var entities = await query.ToListAsync();
-
-        return from entity in entities select (Role)entity;
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
+        return (await query.ToListAsync()).Cast<Role>();
     }
 
     public async Task CreateAsync(Role page)
@@ -50,29 +47,27 @@ public class RolesRepository(ApplicationDbContext context)
         context.Roles.Remove(page);
     }
 
-    public async Task<int> CountAsync(CountRolesRepositoryParams @params)
+    public async Task<int> CountAsync(
+        FindManyParams parameters)
     {
         query = context.Roles.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsRolesRepositoryParams @params)
+    public async Task<bool> ExistsAsync(
+        FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
-        
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(ExclusiveRolesRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(
+        FindManyParams parameters)
     {
-        query = context.Roles
-            .AsNoTracking()
-            .Where(p => p.Id != @params.Id);
-        @params.Id = null!;
-        BuildQuery(@params);
+        query = context.Roles.AsNoTracking();
+        BuildQuery(parameters);
         var count = await query.CountAsync();
-        
         return count > 0;
     }
 }

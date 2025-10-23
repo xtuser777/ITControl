@@ -1,4 +1,4 @@
-using ITControl.Communication.Roles.Requests;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Roles.Entities;
 
@@ -6,11 +6,12 @@ namespace ITControl.Application.Roles.Interfaces;
 
 public interface IRolesService
 {
-    Task<Role> FindOneAsync(FindOneRolesRequest request);
+    Task<Role> FindOneAsync(FindOneServiceParams parameters);
     Task<IEnumerable<Role>> FindManyAsync(
-        FindManyRolesRequest request, OrderByRolesRequest orderByRolesRequest);
-    Task<PaginationResponse?> FindManyPaginatedAsync(FindManyRolesRequest request);
-    Task<Role?> CreateAsync(CreateRolesRequest request);
-    Task UpdateAsync(Guid id, UpdateRolesRequest request);
-    Task DeleteAsync(Guid id);
+        FindManyServiceParams parameters);
+    Task<PaginationResponse?> FindManyPaginatedAsync(
+        FindManyPaginationServiceParams parameters);
+    Task<Role?> CreateAsync(CreateServiceParams parameters);
+    Task UpdateAsync(UpdateServiceParams parameters);
+    Task DeleteAsync(DeleteServiceParams parameters);
 }

@@ -1,72 +1,77 @@
 using ITControl.Application.Roles.Interfaces;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Roles.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Roles.Entities;
+using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Roles.Services;
 
 public class RolesService(IUnitOfWork unitOfWork) : IRolesService
 {
-    public async Task<Role> FindOneAsync(FindOneRolesRequest request)
+    public async Task<Role> FindOneAsync(
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
-            .RolesRepository.FindOneAsync(request) 
+            .RolesRepository.FindOneAsync(parameters) 
                ?? throw new NotFoundException(Errors.ROLE_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Role>> FindManyAsync(
-        FindManyRolesRequest request, OrderByRolesRequest orderByRolesRequest)
+        FindManyServiceParams parameters)
     {
-        return await unitOfWork.RolesRepository.FindManyAsync(
-            request, orderByRolesRequest, request);
+        return await unitOfWork.RolesRepository
+            .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginatedAsync(FindManyRolesRequest request)
+    public async Task<PaginationResponse?> FindManyPaginatedAsync(
+        FindManyPaginationServiceParams parameters)
     {
-        if (request.Page == null || request.Size == null) return null;
-        
-        var count = await unitOfWork.RolesRepository.CountAsync(request);
-        
-        var pagination = Pagination.Build(request.Page, request.Size, count);
-        
+        var count = await unitOfWork.RolesRepository
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
-    public async Task<Role?> CreateAsync(CreateRolesRequest request)
+    public async Task<Role?> CreateAsync(
+        CreateServiceParams parameters)
     {
-        var role = new Role(request);
-        var rolesPages = from page in request.RolesPages
-            select new RolePage(roleId: role.Id, pageId: page.PageId);
+        var role = new Role((RoleParams)parameters.Params);
+        var rolesPages = 
+            ((RoleParams)parameters.Params).Pages.ToList();
+        rolesPages.ForEach(rp => rp.RoleId = role.Id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.RolesRepository.CreateAsync(role);
-        await unitOfWork.RolesPagesRepository.CreateManyAsync(rolesPages);
+        await unitOfWork.RolesPagesRepository
+            .CreateManyAsync(rolesPages);
         await unitOfWork.Commit(transaction);
         
         return role;
     }
 
-    public async Task UpdateAsync(Guid id, UpdateRolesRequest request)
+    public async Task UpdateAsync(
+        UpdateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var role = await FindOneAsync(new () { Id = id });
-        role.Update(request);
-        var rolesPages = from page in request.RolesPages
-            select new RolePage(
-                roleId: role.Id,
-                pageId: page.PageId);
+        var role = await FindOneAsync(parameters);
+        role.Update((UpdateRoleParams)parameters.Params);
+        var rolesPages = 
+            ((UpdateRoleParams)parameters.Params).Pages.ToList();
+        rolesPages.ForEach(rp => rp.RoleId = role.Id);
         await unitOfWork.RolesPagesRepository.DeleteManyByRoleAsync(role);
         await unitOfWork.RolesPagesRepository.CreateManyAsync(rolesPages);
         unitOfWork.RolesRepository.Update(role);
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task DeleteAsync(
+        DeleteServiceParams parameters)
     {
-        var role = await FindOneAsync(new() { Id = id });
+        var role = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.RolesRepository.Delete(role);
         await unitOfWork.Commit(transaction);

@@ -1,7 +1,11 @@
-﻿namespace ITControl.Domain.Roles.Params;
+﻿using ITControl.Domain.Roles.Entities;
+using ITControl.Domain.Shared.Params2;
 
-public record RoleParams
+namespace ITControl.Domain.Roles.Params;
+
+public record RoleParams : EntityParams
 {
-    public string Name { get; set; } = string.Empty;
-    public bool Active { get; set; }
+    public string Name { get; init; } = string.Empty;
+    public bool Active { get; init; }
+    public IEnumerable<RolePage> Pages { get; set; } = [];
 }

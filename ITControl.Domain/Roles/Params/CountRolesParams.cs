@@ -1,6 +1,6 @@
 ﻿namespace ITControl.Domain.Roles.Params;
 
-public record CountRolesRepositoryParams : FindManyRolesRepositoryParams
+public record CountRolesParams : FindManyRolesParams
 {
     public Guid? Id { get; set; } = null;
 }

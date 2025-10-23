@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Roles.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record IncludesRolesPagesParams
+namespace ITControl.Domain.Roles.Params;
+
+public record IncludesRolesPagesParams : IncludesParams
 {
     public bool? Page { get; set; } = null;
 }
