@@ -1,34 +1,29 @@
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Units.Interfaces;
-using ITControl.Domain.Units.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Units.Repositories;
 
-public class UnitsRepository(ApplicationDbContext context) : BaseRepository, IUnitsRepository
+public class UnitsRepository(ApplicationDbContext context) : 
+    BaseRepository, IUnitsRepository
 {
-    public async Task<Unit?> FindOneAsync(FindOneUnitsRepositoryParams @params)
+    public async Task<Unit?> FindOneAsync(FindOneRepositoryParams parameters)
     {
-        return await context.Units.SingleOrDefaultAsync(x => x.Id == @params.Id);
+        return await context.Units
+            .SingleOrDefaultAsync(x => x.Id == parameters.Id);
     }
 
     public async Task<IEnumerable<Unit>> FindManyAsync(
-        FindManyUnitsRepositoryParams findManyParams,
-        OrderByUnitsRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams findManyParams)
     {
         query = context.Units.AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
-
-        var entities = await query.ToListAsync();
-
-        return from entity in entities
-            select (Unit)entity;
+        BuildQuery(findManyParams.FindMany);
+        BuildOrderBy(findManyParams.OrderBy);
+        ApplyPagination(findManyParams.Pagination);
+        return (await query.ToListAsync()).Cast<Unit>();;
     }
 
     public async Task CreateAsync(Unit unit)
@@ -46,29 +41,24 @@ public class UnitsRepository(ApplicationDbContext context) : BaseRepository, IUn
         context.Units.Remove(unit);
     }
 
-    public async Task<int> CountAsync(CountUnitsRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.Units.AsNoTracking();
-        BuildQuery(@params);
-        
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(ExistsUnitsRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
-        
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 
-    public async Task<bool> ExclusiveAsync(ExclusiveUnitsRepositoryParams @params)
+    public async Task<bool> ExclusiveAsync(FindManyParams parameters)
     {
         query = context.Units.AsNoTracking();
-        query = query.Where(x => x.Id != @params.Id);
-        @params.Id = null;
-        BuildQuery(@params);
+        BuildQuery(parameters);
         var count = await query.CountAsync();
-        
         return count > 0;
     }
 }

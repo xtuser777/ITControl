@@ -1,12 +1,15 @@
 using ITControl.Domain.Units.Params;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Communication.Units.Requests;
 
 public record OrderByUnitsRequest
 {
-    public string? Name { get; set; }
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? Name { get; init; }
 
-    public static implicit operator OrderByUnitsRepositoryParams(OrderByUnitsRequest request) => new()
+    public static implicit operator OrderByUnitsParams(
+        OrderByUnitsRequest request) => new()
     {
         Name = request.Name
     };

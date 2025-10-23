@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Units.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record OrderByUnitsRepositoryParams
+namespace ITControl.Domain.Units.Params;
+
+public record OrderByUnitsParams : OrderByParams
 {
     public string? Name { get; set; } = null;
     public string? Phone { get; set; } = null;

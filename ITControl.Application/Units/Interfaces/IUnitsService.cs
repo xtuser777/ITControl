@@ -1,17 +1,19 @@
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Units.Requests;
 using ITControl.Domain.Units.Entities;
 
 namespace ITControl.Application.Units.Interfaces;
 
 public interface IUnitsService
 {
-    Task<Unit> FindOneAsync(FindOneUnitsRequest request);
+    Task<Unit> FindOneAsync(
+        FindOneServiceParams parameters);
     Task<IEnumerable<Unit>> FindManyAsync(
-        FindManyUnitsRequest request,
-        OrderByUnitsRequest orderByRequest);
-    Task<PaginationResponse?> FindManyPaginationAsync(FindManyUnitsRequest request);
-    Task<Unit?> CreateAsync(CreateUnitsRequest request);
-    Task UpdateAsync(Guid id, UpdateUnitsRequest request);
-    Task DeleteAsync(Guid id);
+        FindManyServiceParams parameters);
+    Task<PaginationResponse?> FindManyPaginationAsync(
+        FindManyPaginationServiceParams parameters);
+    Task<Unit?> CreateAsync(
+        CreateServiceParams parameters);
+    Task UpdateAsync(UpdateServiceParams parameters);
+    Task DeleteAsync(DeleteServiceParams parameters);
 }

@@ -37,7 +37,9 @@ public record CreateUnitsRequest
     [Display(Name = nameof(AddressNumber), ResourceType = typeof(DisplayNames))]
     public string AddressNumber { get; set; } = string.Empty;
 
-    public static implicit operator UnitParams(CreateUnitsRequest request) => new()
+    public static implicit operator UnitParams(
+        CreateUnitsRequest request)
+        => new()
     {
         Name = request.Name,
         Phone = request.Phone,

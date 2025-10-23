@@ -1,6 +1,6 @@
 ﻿namespace ITControl.Domain.Units.Params;
 
-public record CountUnitsRepositoryParams : FindManyUnitsRepositoryParams
+public record CountUnitsParams : FindManyUnitsParams
 {
     public Guid? Id { get; set; } = null;
 }

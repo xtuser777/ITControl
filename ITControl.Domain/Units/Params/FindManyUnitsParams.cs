@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Units.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record FindManyUnitsRepositoryParams
+namespace ITControl.Domain.Units.Params;
+
+public record FindManyUnitsParams : FindManyParams
 {
     public string? Name { get; set; } = null;
     public string? Phone { get; set; } = null;

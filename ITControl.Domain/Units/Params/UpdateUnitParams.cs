@@ -1,11 +1,13 @@
-﻿namespace ITControl.Domain.Units.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record UpdateUnitParams
+namespace ITControl.Domain.Units.Params;
+
+public record UpdateUnitParams : UpdateEntityParams
 {
-    public string? Name { get; set; } = null;
-    public string? Phone { get; set; } = null;
-    public string? PostalCode { get; set; } = null;
-    public string? StreetName { get; set; } = null;
-    public string? Neighborhood { get; set; } = null;
-    public string? AddressNumber { get; set; } = null;
+    public string? Name { get; init; } = null;
+    public string? Phone { get; init; } = null;
+    public string? PostalCode { get; init; } = null;
+    public string? StreetName { get; init; } = null;
+    public string? Neighborhood { get; init; } = null;
+    public string? AddressNumber { get; init; } = null;
 }

@@ -1,9 +1,8 @@
 using ITControl.Application.Units.Interfaces;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Units.Requests;
 using ITControl.Communication.Units.Responses;
 using ITControl.Presentation.Shared.Filters;
-using ITControl.Presentation.Units.Headers;
+using ITControl.Presentation.Units.Params;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -19,57 +18,59 @@ public class UnitsController(
     IUnitsView unitsView) : ControllerBase
 {
     [HttpGet]
-    [ProducesResponseType(typeof(FindManyResponse<FindManyUnitsResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindManyResponse<FindManyUnitsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindManyResponse<FindManyUnitsResponse>> IndexAsync(
-        [FromQuery] FindManyUnitsRequest request,
-        [FromHeader] OrderByUnitsHeaders headers)
+    public async Task<IActionResult> IndexAsync(
+        [AsParameters] IndexUnitsParams parameters)
     {
-        var units = await unitsService.FindManyAsync(request, headers);
-        var pagination = await unitsService.FindManyPaginationAsync(request);
+        var units = await unitsService.FindManyAsync(parameters);
+        var pagination = await unitsService.FindManyPaginationAsync(parameters);
         var data = unitsView.FindMany(units);
 
-        return new FindManyResponse<FindManyUnitsResponse>()
+        return Ok(new
         {
-            Data = data,
-            Pagination = pagination,
-        };
+            Data = data, Pagination = pagination,
+        });
     }
 
     [HttpGet("{id:guid}")]
-    [ProducesResponseType(typeof(FindOneResponse<FindOneUnitsResponse?>), StatusCodes.Status200OK)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<FindOneUnitsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<FindOneUnitsResponse?>> ShowAsync([FromRoute] Guid id)
+    public async Task<IActionResult> ShowAsync(
+        [AsParameters] ShowUnitsParams parameters)
     {
-        var unit = await unitsService.FindOneAsync(new () { Id = id });
+        var unit = await unitsService.FindOneAsync(parameters);
         var data = unitsView.FindOne(unit);
 
-        return new FindOneResponse<FindOneUnitsResponse?>()
+        return Ok(new
         {
             Data = data,
-        };
+        });
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(FindOneResponse<CreateUnitsResponse?>), StatusCodes.Status201Created)]
+    [ProducesResponseType(
+        typeof(FindOneResponse<CreateUnitsResponse?>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task<FindOneResponse<CreateUnitsResponse?>> CreateAsync(
-        [FromBody] CreateUnitsRequest request)
+    public async Task<IActionResult> CreateAsync(
+        [AsParameters] CreateUnitsParams parameters)
     {
-        var unit = await unitsService.CreateAsync(request);
+        var unit = await unitsService.CreateAsync(parameters);
         var data = unitsView.Create(unit);
-        Response.StatusCode = 201;
-        return new FindOneResponse<CreateUnitsResponse?>()
+        var uri = $"/units/{data?.Id}";
+        return Created(uri, new
         {
             Data = data,
-        };
+        });
     }
 
     [HttpPut("{id:guid}")]
@@ -78,12 +79,11 @@ public class UnitsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task UpdateAsync(
-        [FromRoute] Guid id, 
-        [FromBody] UpdateUnitsRequest request)
+    public async Task<IActionResult> UpdateAsync(
+        [AsParameters] UpdateUnitsParams parameters)
     {
-        await unitsService.UpdateAsync(id, request);
-        Response.StatusCode = 204;
+        await unitsService.UpdateAsync(parameters);
+        return NoContent();
     }
 
     [HttpDelete("{id:guid}")]
@@ -92,9 +92,10 @@ public class UnitsController(
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-    public async Task DeleteAsync([FromRoute] Guid id)
+    public async Task<IActionResult> DeleteAsync(
+        [AsParameters] DeleteUnitsParams parameters)
     {
-        await unitsService.DeleteAsync(id);
-        Response.StatusCode = 204;
+        await unitsService.DeleteAsync(parameters);
+        return NoContent();
     }
 }
