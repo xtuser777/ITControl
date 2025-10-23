@@ -4,13 +4,13 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Calls.Requests;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Domain.Users.Params;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Application.Calls.Services;
@@ -81,11 +81,17 @@ public class CallsService(
 
     private async Task CreateNotification(Guid referenceId, string title, string message)
     {
-        var rolesMaster = await unitOfWork.RolesRepository.FindManyAsync(new () { Name = "MASTER" });
+        var rolesMaster = await unitOfWork.RolesRepository
+            .FindManyAsync(new () { Name = "MASTER" });
         var roles = rolesMaster.ToList();
         if (roles.Count == 0)
             throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);
-        var users = await unitOfWork.UsersRepository.FindManyAsync(new () { RoleId = roles.ToList()[0].Id });
+        var findManyParams = new FindManyUsersParams()
+        {
+            RoleId = roles.ToList()[0].Id
+        };
+        var users = await unitOfWork.UsersRepository
+            .FindManyAsync(new () { FindMany = findManyParams});
         foreach (var user in users)
         {
             var notification = new Notification(
@@ -98,7 +104,8 @@ public class CallsService(
                     UserId = user.Id,
                     CallId = referenceId
                 });
-            await unitOfWork.NotificationsRepository.CreateAsync(notification);
+            await unitOfWork.NotificationsRepository
+                .CreateAsync(notification);
         }
     }
 }

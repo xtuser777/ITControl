@@ -1,8 +1,9 @@
-﻿namespace ITControl.Domain.Users.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public class CountUsersRepositoryParams
+namespace ITControl.Domain.Users.Params;
+
+public record FindManyUsersParams : FindManyParams
 {
-    public Guid? Id { get; set; }
     public string? Username { get; set; }
     public string? Name { get; set; }
     public string? Email { get; set; }

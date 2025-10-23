@@ -7,6 +7,7 @@ using ITControl.Communication.Auth.Responses;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Users.Entities;
+using ITControl.Infrastructure.Users.Repositories;
 using Microsoft.Extensions.Configuration;
 
 namespace ITControl.Application.Auth.Services;
@@ -40,7 +41,10 @@ public class AuthService(
             payload
         );
 
-        return new LoginResponse() { AccessToken = token, ExpiresIn = 60 * 24 * 7 };
+        return new LoginResponse()
+        {
+            AccessToken = token, ExpiresIn = 60 * 24 * 7
+        };
     }
 
     private async Task<List<string>> Permissions(Guid roleId)
@@ -59,7 +63,8 @@ public class AuthService(
             throw new UnauthorizedAccessException(Errors.AUTH_ROLE_INACTIVE);
         }
 
-        List<Guid> pagesIds = role.RolesPages != null ? [.. role.RolesPages.Select(x => x.PageId)] : [];
+        List<Guid> pagesIds = role.RolesPages != null ? [
+            .. role.RolesPages.Select(x => x.PageId)] : [];
 
         List<Page?> pages = [];
         foreach (var pageId in pagesIds)
@@ -69,7 +74,8 @@ public class AuthService(
             pages.Add(page);
         }
 
-        List<string> permissions = [.. pages.Where(x => x != null).Select(x => x!.Name)];
+        List<string> permissions = [
+            .. pages.Where(x => x != null).Select(x => x!.Name)];
 
         return permissions;
     }
@@ -77,17 +83,15 @@ public class AuthService(
     [Obsolete("Obsolete")]
     private async Task<User> Validate(string username, string password)
     {
-        var user = await unitOfWork.UsersRepository.FindOneByUsernameAsync(username) 
+        var user = await ((UsersRepository)unitOfWork.UsersRepository)
+                       .FindOneByUsernameAsync(username) 
             ?? throw new UnauthorizedAccessException(Errors.AUTH_INVALID_USER);
         if (!user.Active)
         {
             throw new UnauthorizedAccessException(Errors.AUTH_INACTIVE_USER);
         }
-        if (Crypt.VerifyHashedPassword(user.Password, password) == false)
-        {
-            throw new UnauthorizedAccessException(Errors.AUTH_INVALID_PASSWORD);
-        }
-
-        return user;
+        return !Crypt.VerifyHashedPassword(user.Password, password) 
+            ? throw new UnauthorizedAccessException(Errors.AUTH_INVALID_PASSWORD) 
+            : user;
     }
 }

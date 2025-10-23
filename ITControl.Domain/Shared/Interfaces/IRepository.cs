@@ -10,6 +10,7 @@ public interface IRepository<T>
     Task CreateAsync(T entity);
     public void Update(T entity) { }
     public void Delete(T entity) { }
+    public void SoftDelete(T entity) { }
     Task<int> CountAsync(FindManyParams @params);
     public Task<bool> ExistsAsync(FindManyParams @params)
     {

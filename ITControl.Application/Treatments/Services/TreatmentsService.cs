@@ -5,16 +5,14 @@ using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.Treatments.Requests;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
-using ITControl.Domain.Users.Params;
 using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
 namespace ITControl.Application.Treatments.Services;
@@ -52,7 +50,7 @@ public class TreatmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var treatment = new Treatment((TreatmentParams)parameters.Params);
-        var findOneCallParams = new FindOneRepositoryParams
+        var findOneCallParams = new ITControl.Domain.Shared.Params.FindOneRepositoryParams
         {
             Id = ((TreatmentParams)parameters.Params).CallId
         };
@@ -62,7 +60,7 @@ public class TreatmentsService(
         var callStatus = call.CallStatus!;
         var user = await unitOfWork.UsersRepository
                        .FindOneAsync(
-            new FindOneUsersRepositoryParams
+            new FindOneRepositoryParams
             {
                 Id = ((TreatmentParams)parameters.Params).UserId,
             }) 
@@ -98,36 +96,39 @@ public class TreatmentsService(
                    ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = "";
         var type = NotificationType.Info;
-        if (treatment.Status == TreatmentStatus.Started)
+        switch (treatment.Status)
         {
-            message = string.Format(
-                Messages.TREATMENTS_STARTED, 
-                treatment.Protocol, call.Title, user.Name);
-            callStatus.Update(
-                status: CallStatus.InProgress,
-                description: message);
+            case TreatmentStatus.Started:
+                message = string.Format(
+                    Messages.TREATMENTS_STARTED, 
+                    treatment.Protocol, call.Title, user.Name);
+                callStatus.Update(
+                    status: CallStatus.InProgress,
+                    description: message);
+                break;
+            case TreatmentStatus.PartialFinished:
+                message = string.Format(
+                    Messages.TREATMENTS_PARTIAL_FINISHED, 
+                    treatment.Protocol, 
+                    call.Title, user.Name);
+                callStatus.Update(
+                    status: CallStatus.InProgress,
+                    description: message);
+                break;
+            case TreatmentStatus.Finished:
+                message = string.Format(
+                    Messages.TREATMENTS_FINISHED, call.Title, user.Name);
+                type = NotificationType.Success;
+                callStatus.Update(
+                    status: CallStatus.Closed,
+                    description: message);
+                break;
+            case TreatmentStatus.Scheduled:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
 
-        if (treatment.Status == TreatmentStatus.PartialFinished)
-        {
-            message = string.Format(
-                Messages.TREATMENTS_PARTIAL_FINISHED, 
-                treatment.Protocol, 
-                call.Title, user.Name);
-            callStatus.Update(
-                status: CallStatus.InProgress,
-                description: message);
-        }
-
-        if (treatment.Status == TreatmentStatus.Finished)
-        {
-            message = string.Format(
-                Messages.TREATMENTS_FINISHED, call.Title, user.Name);
-            type = NotificationType.Success;
-            callStatus.Update(
-                status: CallStatus.Closed,
-                description: message);
-        }
         treatment.Update((UpdateTreatmentParams)parameters.Params);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
