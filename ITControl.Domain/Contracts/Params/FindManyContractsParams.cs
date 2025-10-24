@@ -1,8 +1,8 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Contracts.Params;
 
-public record FindManyContractsRepositoryParams : FindManyRepositoryParams
+public record FindManyContractsParams : FindManyParams
 {
     public string? ObjectName { get; set; } = null;
     public DateOnly? StartedAt { get; set; } = null;

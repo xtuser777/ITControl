@@ -48,7 +48,6 @@ namespace ITControl.Presentation.Contracts.Controllers
         {
             var contract = await contractsService.FindOneAsync(show);
             var data = contractsView.FindOne(contract);
-            
             return Ok(new
             {
                 Data = data,

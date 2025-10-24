@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Contracts.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,12 +12,11 @@ public record UpdateContractsParams
     [FromBody]
     public UpdateContractsRequest UpdateRequest { get; set; } = new();
 
-    public static implicit operator UpdateContractsServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdateContractsParams update)
         => new()
         {
             Id = update.Id,
             Params = update.UpdateRequest,
-            ContactsRequest = update.UpdateRequest.Contacts,
         };
 }

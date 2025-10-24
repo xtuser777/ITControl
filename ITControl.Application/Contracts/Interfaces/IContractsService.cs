@@ -1,4 +1,4 @@
-using ITControl.Application.Contracts.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Contracts.Entities;
 
@@ -7,15 +7,15 @@ namespace ITControl.Application.Contracts.Interfaces;
 public interface IContractsService
 {
     Task<Contract> FindOneAsync(
-        FindOneContractsServiceParams findOneParams);
+        FindOneServiceParams findOneParams);
     Task<IEnumerable<Contract>> FindManyAsync(
-        FindManyContractsServiceParams findManyParams);
+        FindManyServiceParams findManyParams);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationContractsServiceParams findManyParams);
+        FindManyPaginationServiceParams findManyParams);
     Task<Contract?> CreateAsync(
-        CreateContractsServiceParams createParams);
+        CreateServiceParams createParams);
     Task UpdateAsync(
-        UpdateContractsServiceParams updateParams);
+        UpdateServiceParams updateParams);
     Task DeleteAsync(
-        DeleteContractsServiceParams deleteParams);
+        DeleteServiceParams deleteParams);
 }

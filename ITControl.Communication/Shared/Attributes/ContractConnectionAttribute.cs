@@ -15,7 +15,7 @@ public class ContractConnectionAttribute : ValidationAttribute
             (IContractsRepository)validationContext
             .GetService(typeof(IContractsRepository))!;
         var exists = contractsRepository
-            .ExistsAsync(new ExistsContractsRepositoryParams { Id = contractId })
+            .ExistsAsync(new ExistsContractsParams { Id = contractId })
             .GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(

@@ -31,7 +31,8 @@ public record CreateContractsContactsRequest
     [Display(Name = nameof(Cellphone), ResourceType = typeof(DisplayNames))]
     public string Cellphone { get; set; } = string.Empty;
 
-    public static implicit operator ContractContactParams(CreateContractsContactsRequest request) =>
+    public static implicit operator ContractContactParams(
+        CreateContractsContactsRequest request) =>
         new()
         {
             Name = request.Name,

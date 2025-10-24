@@ -1,5 +1,5 @@
 using ITControl.Domain.Contracts.Entities;
-using ITControl.Domain.Shared;
+using ITControl.Domain.Shared.Interfaces;
 
 namespace ITControl.Domain.Contracts.Interfaces;
 

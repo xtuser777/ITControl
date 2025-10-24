@@ -1,6 +1,6 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,23 +12,22 @@ public class ContractsRepository(ApplicationDbContext context) :
 {
     private new IQueryable<Contract> query = null!;
 
-    public async Task<Contract?> FindOneAsync(FindOneRepositoryParams @params)
+    public async Task<Contract?> FindOneAsync(
+        FindOneRepositoryParams parameters)
     {
-        var (id, includes) = @params;
+        var (id, includes) = parameters;
         query = context.Contracts.AsQueryable();
         ApplyIncludes(includes);
         return await query.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.Contracts.AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         return await query.ToListAsync();
     }
 
@@ -47,18 +46,16 @@ public class ContractsRepository(ApplicationDbContext context) :
         context.Contracts.Remove(contract);
     }
 
-    public async Task<int> CountAsync(FindManyRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.Contracts.AsNoTracking();
-        BuildQuery(@params);
-        
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
-        
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 }

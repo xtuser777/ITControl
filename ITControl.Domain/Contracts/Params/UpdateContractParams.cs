@@ -1,8 +1,12 @@
-﻿namespace ITControl.Domain.Contracts.Params;
+﻿using ITControl.Domain.Contracts.Entities;
+using ITControl.Domain.Shared.Params2;
 
-public record UpdateContractParams
+namespace ITControl.Domain.Contracts.Params;
+
+public record UpdateContractParams : UpdateEntityParams
 {
-    public string? ObjectName { get; set; } = null;
-    public DateOnly? StartedAt { get; set; } = null;
-    public DateOnly? EndedAt { get; set; } = null;
+    public string? ObjectName { get; init; }
+    public DateOnly? StartedAt { get; init; }
+    public DateOnly? EndedAt { get; init; }
+    public IEnumerable<ContractContact> ContractContacts { get; set; } = [];
 }

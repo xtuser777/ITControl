@@ -1,8 +1,8 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Contracts.Params;
 
-public record OrderByContractsRepositoryParams : OrderByRepositoryParams
+public record OrderByContractsParams : OrderByParams
 {
     public string? ObjectName { get; set; } = null;
     public string? StartedAt { get; set; } = null; // "asc" | "desc"

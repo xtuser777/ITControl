@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Contracts.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Domain.Contracts.Params;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record ShowContractsParams
     [FromQuery]
     public bool? IncludeContacts { get; set; } = true;
 
-    public static implicit operator FindOneContractsServiceParams(
+    public static implicit operator FindOneServiceParams(
         ShowContractsParams show)
         => new()
         {

@@ -1,6 +1,6 @@
 ﻿namespace ITControl.Domain.Contracts.Params;
 
-public record CountContractsRepositoryParams : FindManyContractsRepositoryParams
+public record CountContractsParams : FindManyContractsParams
 {
     public Guid? Id { get; set; } = null;
 }

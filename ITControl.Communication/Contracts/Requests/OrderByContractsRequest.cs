@@ -14,9 +14,10 @@ public record OrderByContractsRequest
     [FromHeader(Name = "X-Order-By-Ended-At")]
     public string? EndedAt { get; set; } = null;
 
-    public static implicit operator OrderByContractsRepositoryParams(OrderByContractsRequest request)
+    public static implicit operator OrderByContractsParams(
+        OrderByContractsRequest request)
     {
-        return new OrderByContractsRepositoryParams
+        return new OrderByContractsParams
         {
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,

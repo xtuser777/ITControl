@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Params;
 
 namespace ITControl.Communication.Contracts.Requests;
@@ -27,11 +28,15 @@ public record CreateContractsRequest
     [Display(Name = nameof(Contacts), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateContractsContactsRequest> Contacts { get; set; } = [];
 
-    public static implicit operator ContractParams(CreateContractsRequest request) =>
+    public static implicit operator ContractParams(
+        CreateContractsRequest request) =>
         new()
         {
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
-            EndedAt = request.EndedAt
+            EndedAt = request.EndedAt,
+            ContractContacts = request.Contacts
+                .Select(c => new ContractContact(
+                    Guid.Empty, c))
         };
 }

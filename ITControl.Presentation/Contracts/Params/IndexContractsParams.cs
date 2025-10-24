@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Contracts.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Contracts.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record IndexContractsParams
     [FromHeader]
     public OrderByContractsRequest OrderByRequest { get; set; } = new();
 
-    public static implicit operator FindManyContractsServiceParams(
+    public static implicit operator FindManyServiceParams(
         IndexContractsParams index)
         => new()
         {
@@ -21,12 +21,11 @@ public record IndexContractsParams
             PaginationParams = index.FindManyRequest,
         };
 
-    public static implicit operator FindManyPaginationContractsServiceParams(
+    public static implicit operator FindManyPaginationServiceParams(
         IndexContractsParams index)
         => new()
         {
             CountParams = index.FindManyRequest,
-            Page = index.FindManyRequest.Page,
-            Size = index.FindManyRequest.Size,
+            PaginationParams = index.FindManyRequest,
         };
 }
