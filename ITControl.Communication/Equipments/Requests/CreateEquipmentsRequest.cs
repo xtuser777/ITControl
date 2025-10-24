@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
@@ -22,7 +23,7 @@ public record CreateEquipmentsRequest
 
     [RequiredField]
     [StringMaxLength(15)]
-    [UniqueField(
+    [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
@@ -30,7 +31,7 @@ public record CreateEquipmentsRequest
 
     [RequiredField]
     [StringMaxLength(17)]
-    [UniqueField(
+    [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
@@ -38,14 +39,14 @@ public record CreateEquipmentsRequest
 
     [RequiredField]
     [StringMaxLength(50)]
-    [UniqueField(
+    [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsRepositoryParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string Tag { get; set; } = string.Empty;
 
     [RequiredField]
-    [CustomValidation(typeof(CreateEquipmentsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(EquipmentType))]
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string Type { get; set; } = string.Empty;
 
@@ -87,20 +88,8 @@ public record CreateEquipmentsRequest
         return ValidationResult.Success;
     }
 
-    public static ValidationResult? ValidateType(
-        string x, ValidationContext context)
-    {
-        if (!Enum.TryParse(typeof(EquipmentType), x, out var _))
-        {
-            var types = string.Join(", ", Enum.GetNames(typeof(EquipmentType)));
-            return new ValidationResult(
-                string.Format(
-                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
-        }
-        return ValidationResult.Success;
-    }
-
-    public static implicit operator EquipmentParams(CreateEquipmentsRequest request) =>
+    public static implicit operator EquipmentParams(
+        CreateEquipmentsRequest request) =>
         new()
         {
             Name = request.Name,

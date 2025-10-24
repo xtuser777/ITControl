@@ -1,6 +1,6 @@
 ﻿using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -19,17 +19,15 @@ public class CallsRepository(
     }
 
     public async Task<IEnumerable<Call>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.Calls
             .Include(c => c.CallStatus)
             .Include(c => c.User)
             .AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<Call>();
     }
 
@@ -48,16 +46,16 @@ public class CallsRepository(
         context.Calls.Remove(call);
     }
 
-    public Task<int> CountAsync(FindManyRepositoryParams @params)
+    public Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.Calls.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 }

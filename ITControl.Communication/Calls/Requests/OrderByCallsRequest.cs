@@ -16,7 +16,7 @@ public record OrderByCallsRequest
     [FromHeader(Name = "X-Order-By-User")]
     public string? User { get; set; } = null;
 
-    public static implicit operator OrderByCallsRepositoryParams(
+    public static implicit operator OrderByCallsParams(
         OrderByCallsRequest request) =>
         new ()
         {

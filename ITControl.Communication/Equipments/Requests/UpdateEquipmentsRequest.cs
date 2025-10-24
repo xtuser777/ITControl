@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Utils;
+using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
@@ -23,23 +24,29 @@ public record UpdateEquipmentsRequest
 
     [StringMinLength(15)]
     [StringMaxLength(15)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
+    [UniqueField<Equipment>(
+        typeof(IEquipmentsRepository), 
+        typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string? Ip { get; set; }
 
     [StringMinLength(17)]
     [StringMaxLength(17)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
+    [UniqueField<Equipment>(
+        typeof(IEquipmentsRepository), 
+        typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string? Mac { get; set; }
 
     [StringMinLength(3)]
     [StringMaxLength(50)]
-    [UniqueField(typeof(IEquipmentsRepository), typeof(ExclusiveEquipmentsRepositoryParams))]
+    [UniqueField<Equipment>(
+        typeof(IEquipmentsRepository), 
+        typeof(ExclusiveEquipmentsRepositoryParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string? Tag { get; set; }
 
-    [CustomValidation(typeof(UpdateEquipmentsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(EquipmentType))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string? Type { get; set; }
 
@@ -80,21 +87,6 @@ public record UpdateEquipmentsRequest
         if (rentedValue && x == null)
             return new ValidationResult(
                 string.Format(Errors.REQUIRED, context.DisplayName));
-        return ValidationResult.Success;
-    }
-
-    public static ValidationResult? ValidateType(
-        string? x, ValidationContext context)
-    {
-        if (x == null)
-            return ValidationResult.Success;
-        if (!Enum.TryParse(typeof(EquipmentType), x, out var _))
-        {
-            var types = string.Join(", ", Enum.GetNames(typeof(EquipmentType)));
-            return new ValidationResult(
-                string.Format(
-                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types));
-        }
         return ValidationResult.Success;
     }
 

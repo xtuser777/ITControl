@@ -40,7 +40,8 @@ public record CreateAppointmentsRequest
     [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
     public Guid CallId { get; set; }
 
-    public static implicit operator AppointmentParams(CreateAppointmentsRequest request) =>
+    public static implicit operator AppointmentParams(
+        CreateAppointmentsRequest request) =>
         new()
         {
             Description = request.Description,

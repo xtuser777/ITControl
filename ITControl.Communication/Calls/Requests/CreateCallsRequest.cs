@@ -2,10 +2,8 @@
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Communication.Shared.Utils;
-using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Calls.Params;
-using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Communication.Calls.Requests;
 
@@ -22,7 +20,7 @@ public class CreateCallsRequest
     public string Description { get; set; } = string.Empty;
 
     [RequiredField]
-    [CustomValidation(typeof(CreateCallsRequest), nameof(ValidateReason))]
+    [EnumValue(typeof(CallReason))]
     [Display(Name = nameof(Reason), ResourceType = typeof(DisplayNames))]
     public string Reason { get; set; } = string.Empty;
 
@@ -42,7 +40,8 @@ public class CreateCallsRequest
     [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid? SystemId { get; set; }
 
-    public static implicit operator CallParams(CreateCallsRequest request) =>
+    public static implicit operator CallParams(
+        CreateCallsRequest request) =>
         new()
         {
             Title = request.Title,
@@ -52,15 +51,4 @@ public class CreateCallsRequest
             SystemId = request.SystemId,
             UserId = request.UserId,
         };
-
-    public static ValidationResult? ValidateReason(string reason, ValidationContext context)
-    {
-        var validReasons = Enum.GetNames(typeof(CallReason));
-        if (!validReasons.Contains(reason))
-        {
-            var reasons = string.Join(", ", validReasons);
-            return new ValidationResult(string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, reasons));
-        }
-        return ValidationResult.Success;
-    }
 }

@@ -1,7 +1,9 @@
-﻿namespace ITControl.Domain.Departments.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record UpdateDepartmentParams
+namespace ITControl.Domain.Departments.Params;
+
+public record UpdateDepartmentParams : UpdateEntityParams
 {
-    public string? Alias { get; init; } = null;
-    public string? Name { get; init; } = null;
+    public string? Alias { get; init; }
+    public string? Name { get; init; }
 }

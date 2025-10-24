@@ -1,6 +1,8 @@
+using ITControl.Domain.Shared.Params2;
+
 namespace ITControl.Domain.Positions.Params;
 
-public record PositionParams
+public record PositionParams : EntityParams
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; init; } = string.Empty;
 }

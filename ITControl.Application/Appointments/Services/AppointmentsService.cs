@@ -1,16 +1,17 @@
 using ITControl.Application.Appointments.Interfaces;
-using ITControl.Application.Appointments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Appointments.Entities;
+using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Application.Appointments.Services;
 
@@ -18,53 +19,58 @@ public class AppointmentsService(
     IUnitOfWork unitOfWork) : IAppointmentsService
 {
     public async Task<Appointment> FindOneAsync(
-        FindOneAppointmentsServiceParams @params)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
             .AppointmentsRepository
-            .FindOneAsync(@params)
+            .FindOneAsync(parameters)
             ?? throw new NotFoundException(Errors.APPOINTMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Appointment>> FindManyAsync(
-        FindManyAppointmentsServiceParams @params)
+        FindManyServiceParams parameters)
     {
-        return await unitOfWork.AppointmentsRepository.FindManyAsync(
-            @params.FindManyParams,
-            @params.OrderByParams,
-            @params.PaginationParams);
+        return await unitOfWork.AppointmentsRepository
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationAppointmentsServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        if (@params.Page == null || @params.Size == null) return null;
-
         var count = await unitOfWork.AppointmentsRepository
-            .CountAsync(@params.CountParams);
-
-        var pagination = Pagination.Build(@params.Page, @params.Size, count);
+            .CountAsync(parameters.CountParams);
+        var pagination = Pagination.Build(parameters.PaginationParams, count);
 
         return pagination;
     }
 
-    public async Task<Appointment?> CreateAsync(CreateAppointmentsServiceParams @params)
+    public async Task<Appointment?> CreateAsync(
+        CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction; 
-        var appointment = new Appointment(@params.Params);
+        var appointment = new Appointment(
+            (AppointmentParams)parameters.Params);
         await unitOfWork.AppointmentsRepository.CreateAsync(appointment);
         var call = await unitOfWork.CallsRepository.FindOneAsync(
-            new FindOneRepositoryParams { Id = @params.Params.CallId })  
+            new FindOneRepositoryParams
+            {
+                Id = ((AppointmentParams)parameters.Params).CallId
+            })  
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var user = await unitOfWork.UsersRepository.FindOneAsync(
-            new() { Id = @params.Params.UserId }) 
+            new FindOneRepositoryParams
+            {
+                Id = ((AppointmentParams)parameters.Params).UserId
+            }) 
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(
-            Messages.APPOINTMENTS_CREATED, call.Title, user.Name, 
-            @params.Params.ScheduledAt, @params.Params.ScheduledIn);
+            Messages.APPOINTMENTS_CREATED, 
+            call.Title, user.Name, 
+            ((AppointmentParams)parameters.Params).ScheduledAt, 
+            ((AppointmentParams)parameters.Params).ScheduledIn);
         await CreateNotification(
             appointment.Id,
-            @params.Params.UserId,
+            ((AppointmentParams)parameters.Params).UserId,
             Titles.APPOINTMENTS_STARTED,
             message,
             NotificationType.Info);
@@ -73,11 +79,11 @@ public class AppointmentsService(
         return appointment;
     }
 
-    public async Task UpdateAsync(UpdateAppointmentsServiceParams @params)
+    public async Task UpdateAsync(UpdateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var appointment = await FindOneAsync(@params);
-        appointment.Update(@params.Params);
+        var appointment = await FindOneAsync(parameters);
+        appointment.Update((UpdateAppointmentParams)parameters.Params);
         unitOfWork.AppointmentsRepository.Update(appointment);
         var call = appointment.Call
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
@@ -85,7 +91,9 @@ public class AppointmentsService(
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(
             Messages.APPOINTMENTS_UPDATED, 
-            call.Title, user.Name, @params.Params.ScheduledAt, @params.Params.ScheduledIn);
+            call.Title, user.Name, 
+            ((UpdateAppointmentParams)parameters.Params).ScheduledAt, 
+            ((UpdateAppointmentParams)parameters.Params).ScheduledIn);
         await CreateNotification(
             appointment.Id,
             user.Id,
@@ -95,10 +103,10 @@ public class AppointmentsService(
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(DeleteAppointmentsServiceParams @params)
+    public async Task DeleteAsync(DeleteServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var appointment = await FindOneAsync(@params);
+        var appointment = await FindOneAsync(parameters);
         unitOfWork.AppointmentsRepository.Delete(appointment);
         await unitOfWork.Commit(transaction);
     }

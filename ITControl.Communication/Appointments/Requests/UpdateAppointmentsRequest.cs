@@ -36,7 +36,8 @@ public class UpdateAppointmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? CallId { get; set; }
 
-    public static implicit operator UpdateAppointmentParams(UpdateAppointmentsRequest request) =>
+    public static implicit operator UpdateAppointmentParams(
+        UpdateAppointmentsRequest request) =>
         new()
         {
             Description = request.Description,

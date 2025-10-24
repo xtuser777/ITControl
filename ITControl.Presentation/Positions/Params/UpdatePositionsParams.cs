@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Positions.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Positions.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record UpdatePositionsParams
     [FromBody]
     public UpdatePositionsRequest Request { get; set; } = new();
 
-    public static implicit operator UpdatePositionsServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdatePositionsParams paramsModel) =>
         new()
         {

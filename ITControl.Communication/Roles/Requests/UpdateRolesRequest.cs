@@ -11,7 +11,7 @@ public record UpdateRolesRequest
 {
     [StringMinLength(1)]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IRolesRepository), typeof(ExclusiveRolesParams))]
+    [UniqueField<Role>(typeof(IRolesRepository), typeof(ExclusiveRolesParams))]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
 

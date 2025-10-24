@@ -18,7 +18,8 @@ public record OrderByAppointmentsRequest
     [FromHeader(Name = "X-Order-By-Call")]
     public string? Call { get; set; }
 
-    public static implicit operator OrderByAppointmentsRepositoryParams(OrderByAppointmentsRequest request) =>
+    public static implicit operator OrderByAppointmentsParams(
+        OrderByAppointmentsRequest request) =>
         new()
         {
             Description = request.Description,

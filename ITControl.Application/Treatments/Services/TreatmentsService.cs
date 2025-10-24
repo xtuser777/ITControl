@@ -50,7 +50,7 @@ public class TreatmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var treatment = new Treatment((TreatmentParams)parameters.Params);
-        var findOneCallParams = new ITControl.Domain.Shared.Params.FindOneRepositoryParams
+        var findOneCallParams = new FindOneRepositoryParams
         {
             Id = ((TreatmentParams)parameters.Params).CallId
         };

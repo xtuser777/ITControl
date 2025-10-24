@@ -1,5 +1,4 @@
 using ITControl.Application.Appointments.Interfaces;
-using ITControl.Communication.Appointments.Requests;
 using ITControl.Communication.Appointments.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Presentation.Appointments.Params;

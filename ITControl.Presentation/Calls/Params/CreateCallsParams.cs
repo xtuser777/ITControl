@@ -1,4 +1,4 @@
-using ITControl.Application.Calls.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Calls.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +9,9 @@ public record CreateCallsParams
     [FromBody]
     public CreateCallsRequest Request { get; set; } = new();
 
-    public static implicit operator CreateCallsServiceParams(CreateCallsParams param) =>
-        new CreateCallsServiceParams
+    public static implicit operator CreateServiceParams(
+        CreateCallsParams param) =>
+        new()
         {
             Params = param.Request
         };

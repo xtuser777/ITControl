@@ -1,4 +1,4 @@
-using ITControl.Application.Calls.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Calls.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,19 +11,20 @@ public record IndexCallsParams
     [FromHeader]
     public OrderByCallsRequest OrderByRequest { get; set; } = new();
 
-    public static implicit operator FindManyCallsServiceParams(IndexCallsParams indexCallsParams)
-        => new FindManyCallsServiceParams
+    public static implicit operator FindManyServiceParams(
+        IndexCallsParams indexCallsParams)
+        => new ()
         {
             FindManyParams = indexCallsParams.FindManyRequest,
             OrderByParams = indexCallsParams.OrderByRequest,
             PaginationParams = indexCallsParams.FindManyRequest
         };
 
-    public static implicit operator FindManyPaginationCallsServiceParams(IndexCallsParams indexCallsParams)
-        => new FindManyPaginationCallsServiceParams
+    public static implicit operator FindManyPaginationServiceParams(
+        IndexCallsParams indexCallsParams)
+        => new ()
         {
             CountParams = indexCallsParams.FindManyRequest,
-            Page = indexCallsParams.FindManyRequest.Page,
-            Size = indexCallsParams.FindManyRequest.Size
+            PaginationParams = indexCallsParams.FindManyRequest
         };
 }

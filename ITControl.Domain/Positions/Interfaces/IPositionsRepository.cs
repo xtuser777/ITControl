@@ -1,5 +1,5 @@
 using ITControl.Domain.Positions.Entities;
-using ITControl.Domain.Shared;
+using ITControl.Domain.Shared.Interfaces;
 
 namespace ITControl.Domain.Positions.Interfaces;
 

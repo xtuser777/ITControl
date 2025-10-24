@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Departments.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Departments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreateDepartmentsParams
     [FromBody]
     public CreateDepartmentsRequest Request { get; set; } = null!;
 
-    public static implicit operator CreateDepartmentsServiceParams(
+    public static implicit operator CreateServiceParams(
         CreateDepartmentsParams paramsModel) =>
         new()
         {

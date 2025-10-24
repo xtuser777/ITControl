@@ -11,10 +11,10 @@ public record OrderByDepartmentsRequest
     [FromHeader(Name = "X-Order-By-Name")]
     public string? Name { get; set; } = null;
 
-    public static implicit operator OrderByDepartmentsRepositoryParams(
+    public static implicit operator OrderByDepartmentsParams(
         OrderByDepartmentsRequest request)
     {
-        return new OrderByDepartmentsRepositoryParams
+        return new OrderByDepartmentsParams
         {
             Alias = request.Alias,
             Name = request.Name,

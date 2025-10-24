@@ -1,14 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Shared;
-using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Interfaces;
 using ITControl.Domain.Shared.Messages;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
 namespace ITControl.Communication.Shared.Attributes;
 
-public class UniqueFieldAttribute : ValidationAttribute
+public class UniqueFieldAttribute<TEntity> : ValidationAttribute
 {
     private readonly Type _repositoryType;
     private readonly Type _paramsType;
@@ -27,7 +26,7 @@ public class UniqueFieldAttribute : ValidationAttribute
         {
             return ValidationResult.Success;
         }
-        var repository = (IRepository<Entity>)context.GetService(_repositoryType)!;
+        var repository = (IRepository<TEntity>)context.GetService(_repositoryType)!;
         var httpContextAccessor = 
             (IHttpContextAccessor)context.GetService(typeof(IHttpContextAccessor))!;
         var httpContext = httpContextAccessor.HttpContext!;
@@ -36,7 +35,7 @@ public class UniqueFieldAttribute : ValidationAttribute
         if (method == HttpMethods.Post)
         {
             var existsParams = 
-                (FindManyRepositoryParams)_paramsType.GetConstructor(Type.EmptyTypes)!
+                (FindManyParams)_paramsType.GetConstructor(Type.EmptyTypes)!
                 .Invoke(Array.Empty<object?>())!;
             existsParams.GetType().GetProperty(propertyName)!
                 .SetValue(existsParams, value.ToString()!);
@@ -54,7 +53,7 @@ public class UniqueFieldAttribute : ValidationAttribute
             if (Guid.TryParse(idString, out var id))
             {
                 var exclusiveParams =
-                    (FindManyRepositoryParams)_paramsType.GetConstructor(Type.EmptyTypes)!
+                    (FindManyParams)_paramsType.GetConstructor(Type.EmptyTypes)!
                     .Invoke(Array.Empty<object?>())!;
                 exclusiveParams.GetType().GetProperty("ExcludeId")!
                     .SetValue(exclusiveParams, id);

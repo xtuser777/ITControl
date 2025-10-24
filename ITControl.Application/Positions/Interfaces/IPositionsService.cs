@@ -1,4 +1,4 @@
-using ITControl.Application.Positions.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Positions.Entities;
 
@@ -6,12 +6,12 @@ namespace ITControl.Application.Positions.Interfaces;
 
 public interface IPositionsService
 {
-    Task<Position> FindOneAsync(FindOnePositionsServiceParams @params);
+    Task<Position> FindOneAsync(FindOneServiceParams parameters);
     Task<IEnumerable<Position>> FindManyAsync(
-        FindManyPositionsServiceParams @params);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationPositionsServiceParams @params);
-    Task<Position?> CreateAsync(CreatePositionsServiceParams @params);
-    Task UpdateAsync(UpdatePositionsServiceParams @params);
-    Task DeleteAsync(DeletePositionsServiceParams @params);
+        FindManyPaginationServiceParams parameters);
+    Task<Position?> CreateAsync(CreateServiceParams parameters);
+    Task UpdateAsync(UpdateServiceParams parameters);
+    Task DeleteAsync(DeleteServiceParams parameters);
 }

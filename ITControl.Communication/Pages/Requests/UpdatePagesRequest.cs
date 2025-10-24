@@ -1,8 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Interfaces;
 using ITControl.Domain.Pages.Params;
-using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Communication.Pages.Requests;
 
@@ -10,7 +11,7 @@ public record UpdatePagesRequest
 {
     [StringMinLength(1)]
     [StringMaxLength(100)]
-    [UniqueField(
+    [UniqueField<Page>(
         typeof(IPagesRepository), 
         typeof(ExclusivePagesRepositoryParams))]
     [Display(

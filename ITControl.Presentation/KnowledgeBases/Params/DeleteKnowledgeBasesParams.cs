@@ -1,5 +1,4 @@
 ﻿using ITControl.Application.KnowledgeBases.Params;
-using ITControl.Communication.KnowledgeBases.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.KnowledgeBases.Params;

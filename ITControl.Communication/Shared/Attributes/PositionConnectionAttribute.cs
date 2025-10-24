@@ -14,7 +14,7 @@ public class PositionConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var positionRepository = (IPositionsRepository)validationContext.GetService(typeof(IPositionsRepository))!;
-        var exists = positionRepository.ExistsAsync(new ExistsPositionsRepositoryParams { Id = positionId }).GetAwaiter().GetResult();
+        var exists = positionRepository.ExistsAsync(new ExistsPositionsParams { Id = positionId }).GetAwaiter().GetResult();
         return !exists ? new ValidationResult(string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, positionId)) : ValidationResult.Success;
     }
 }

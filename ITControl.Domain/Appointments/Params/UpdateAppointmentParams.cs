@@ -1,11 +1,13 @@
-﻿namespace ITControl.Domain.Appointments.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record UpdateAppointmentParams
+namespace ITControl.Domain.Appointments.Params;
+
+public record UpdateAppointmentParams : UpdateEntityParams
 {
-    public string? Description { get; set; } = null;
-    public DateOnly? ScheduledAt { get; set; } = null;
-    public TimeOnly? ScheduledIn { get; set; } = null;
-    public string? Observation { get; set; } = null;
-    public Guid? UserId { get; set; } = null;
-    public Guid? CallId { get; set; } = null;
+    public string? Description { get; init; }
+    public DateOnly? ScheduledAt { get; init; }
+    public TimeOnly? ScheduledIn { get; init; }
+    public string? Observation { get; init; }
+    public Guid? UserId { get; init; }
+    public Guid? CallId { get; init; }
 }

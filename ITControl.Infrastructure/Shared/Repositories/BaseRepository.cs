@@ -59,10 +59,13 @@ public abstract class BaseRepository
             var value = property.GetValue(@params);
             if (value is null) continue;
             query = property.PropertyType == typeof(string) 
-                ? query.Where(x => EF.Property<string>(x!, property.Name).Contains((string)value)) 
+                ? query.Where(x => 
+                    EF.Property<string>(x!, property.Name).Contains((string)value)) 
                 : property.Name.StartsWith("Exclude") 
-                ? query.Where(x => EF.Property<object>(x!, property.Name) != value)
-                : query.Where(x => EF.Property<object>(x!, property.Name) == value);
+                ? query.Where(x => 
+                    EF.Property<object>(x!, property.Name.Remove(0, 7)) != value)
+                : query.Where(x => 
+                    EF.Property<object>(x!, property.Name) == value);
         }
     }
 

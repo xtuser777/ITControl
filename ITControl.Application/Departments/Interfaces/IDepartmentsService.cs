@@ -1,4 +1,4 @@
-using ITControl.Application.Departments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Departments.Entities;
 
@@ -7,12 +7,12 @@ namespace ITControl.Application.Departments.Interfaces;
 public interface IDepartmentsService
 {
     Task<Department> FindOneAsync(
-        FindOneDepartmentsServiceParams @params);
+        FindOneServiceParams parameters);
     Task<IEnumerable<Department>> FindManyAsync(
-        FindManyDepartmentsServiceParams @params);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPagination(
-        FindManyPaginationDepartmentsServiceParams @params);
-    Task<Department?> CreateAsync(CreateDepartmentsServiceParams @params);
-    Task UpdateAsync(UpdateDepartmentsServiceParams @params);
-    Task DeleteAsync(DeleteDepartmentsServiceParams @params);
+        FindManyPaginationServiceParams parameters);
+    Task<Department?> CreateAsync(CreateServiceParams parameters);
+    Task UpdateAsync(UpdateServiceParams parameters);
+    Task DeleteAsync(DeleteServiceParams parameters);
 }

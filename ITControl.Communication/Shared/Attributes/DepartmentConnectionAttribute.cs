@@ -14,7 +14,7 @@ public class DepartmentConnectionAttribute : ValidationAttribute
         var departmentsRepository = 
             (IDepartmentsRepository)context.GetService(typeof(IDepartmentsRepository))!;
         var exists = departmentsRepository.ExistsAsync(
-            new ExistsDepartmentsRepositoryParams { Id = departmentId }).GetAwaiter().GetResult();
+            new ExistsDepartmentsParams { Id = departmentId }).GetAwaiter().GetResult();
         return !exists ? new ValidationResult(
             string.Format(
                 Errors.ConnectionNotFound, context.DisplayName, departmentId)) 

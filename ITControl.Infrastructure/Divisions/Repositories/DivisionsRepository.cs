@@ -1,6 +1,5 @@
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Interfaces;
-using ITControl.Domain.Divisions.Params;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;

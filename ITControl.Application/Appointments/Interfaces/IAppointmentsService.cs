@@ -1,4 +1,4 @@
-using ITControl.Application.Appointments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Appointments.Entities;
 
@@ -7,12 +7,12 @@ namespace ITControl.Application.Appointments.Interfaces;
 public interface IAppointmentsService
 {
     Task<Appointment> FindOneAsync(
-        FindOneAppointmentsServiceParams @params);
+        FindOneServiceParams @params);
     Task<IEnumerable<Appointment>> FindManyAsync(
-        FindManyAppointmentsServiceParams @params);
+        FindManyServiceParams @params);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationAppointmentsServiceParams @params);
-    Task<Appointment?> CreateAsync(CreateAppointmentsServiceParams @params);
-    Task UpdateAsync(UpdateAppointmentsServiceParams @params);
-    Task DeleteAsync(DeleteAppointmentsServiceParams @params);
+        FindManyPaginationServiceParams @params);
+    Task<Appointment?> CreateAsync(CreateServiceParams @params);
+    Task UpdateAsync(UpdateServiceParams @params);
+    Task DeleteAsync(DeleteServiceParams @params);
 }

@@ -1,8 +1,9 @@
 ﻿using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Calls.Params;
 
-public record CallParams
+public record CallParams : EntityParams
 {
     public string Title { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;

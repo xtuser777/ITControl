@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Departments.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Departments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record IndexDepartmentsParams
     [FromHeader]
     public OrderByDepartmentsRequest OrderByRequest { get; set; } = new();
 
-    public static implicit operator FindManyDepartmentsServiceParams(
+    public static implicit operator FindManyServiceParams(
         IndexDepartmentsParams paramsObj) =>
         new()
         {
@@ -21,12 +21,11 @@ public record IndexDepartmentsParams
             PaginationParams = paramsObj.FindManyRequest
         };
 
-    public static implicit operator FindManyPaginationDepartmentsServiceParams(
+    public static implicit operator FindManyPaginationServiceParams(
         IndexDepartmentsParams paramsObj) =>
         new()
         {
             CountParams = paramsObj.FindManyRequest,
-            Page = paramsObj.FindManyRequest.Page,
-            Size = paramsObj.FindManyRequest.Size
+            PaginationParams = paramsObj.FindManyRequest
         };
 }

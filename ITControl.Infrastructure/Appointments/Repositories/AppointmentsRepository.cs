@@ -1,6 +1,6 @@
 using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Appointments.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,8 @@ namespace ITControl.Infrastructure.Appointments.Repositories;
 public class AppointmentsRepository(ApplicationDbContext context) : 
     BaseRepository, IAppointmentsRepository
 {
-    public async Task<Appointment?> FindOneAsync(FindOneRepositoryParams @params)
+    public async Task<Appointment?> FindOneAsync(
+        FindOneRepositoryParams @params)
     {
         query = context.Appointments.AsQueryable();
         ApplyIncludes(@params.Includes);
@@ -19,18 +20,16 @@ public class AppointmentsRepository(ApplicationDbContext context) :
     }
 
     public async Task<IEnumerable<Appointment>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context
             .Appointments
             .Include(x => x.User)
             .Include(x => x.Call)
             .AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<Appointment>();
     }
 
@@ -49,16 +48,16 @@ public class AppointmentsRepository(ApplicationDbContext context) :
         context.Appointments.Remove(appointment);
     }
 
-    public async Task<int> CountAsync(FindManyRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.Appointments.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 }

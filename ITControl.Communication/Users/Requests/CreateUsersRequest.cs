@@ -13,7 +13,7 @@ public class CreateUsersRequest
     [RequiredField]
     [StringMinLength(3)]
     [StringMaxLength(20)]
-    [UniqueField(typeof(IUsersRepository), typeof(ExistsUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExistsUsersParams))]
     [Display(Name = nameof(Username), ResourceType = typeof(DisplayNames))]
     public string Username { get; set; } = string.Empty;
 
@@ -34,14 +34,14 @@ public class CreateUsersRequest
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = nameof(Errors.VALID_EMAIL))]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IUsersRepository), typeof(ExistsUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExistsUsersParams))]
     [Display(Name = nameof(Email), ResourceType = typeof(DisplayNames))]
     public string Email { get; set; } = string.Empty;
 
     [RequiredField]
     [StringLength(11)]
     [DocumentValue]
-    [UniqueField(typeof(IUsersRepository), typeof(ExistsUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExistsUsersParams))]
     [Display(Name = nameof(Document), ResourceType = typeof(DisplayNames))]
     public string Document { get; set; } = string.Empty;
 

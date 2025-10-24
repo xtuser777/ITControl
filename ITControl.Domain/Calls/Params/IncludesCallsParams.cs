@@ -1,4 +1,4 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Calls.Params;
 

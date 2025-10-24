@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
+using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Divisions.Params;
 
@@ -10,7 +11,7 @@ public record UpdateDivisionsRequest
 {
     [StringMinLength(1)]
     [StringMaxLength(100)]
-    [UniqueField(
+    [UniqueField<Division>(
         typeof(IDivisionsRepository), 
         typeof(ExclusiveDivisionsRepositoryParams))]
     [Display(

@@ -1,37 +1,30 @@
 using ITControl.Communication.Shared.Requests;
-using ITControl.Communication.Shared.Utils;
 using ITControl.Domain.Departments.Params;
-using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Communication.Departments.Requests;
 
-public record FindManyDepartmentsRequest : PageableRequest
+public record FindManyDepartmentsRequest : FindManyRequest
 {
     public string? Alias { get; set; } = null;
     public string? Name { get; set; } = null;
 
-    public static implicit operator FindManyDepartmentsRepositoryParams(FindManyDepartmentsRequest request)
+    public static implicit operator FindManyDepartmentsParams(
+        FindManyDepartmentsRequest request)
     {
-        return new FindManyDepartmentsRepositoryParams
+        return new FindManyDepartmentsParams
         {
             Alias = request.Alias,
             Name = request.Name,
         };
     }
 
-    public static implicit operator CountDepartmentsRepositoryParams(FindManyDepartmentsRequest request)
+    public static implicit operator CountDepartmentsParams(
+        FindManyDepartmentsRequest request)
     {
-        return new CountDepartmentsRepositoryParams
+        return new CountDepartmentsParams
         {
             Alias = request.Alias,
             Name = request.Name,
         };
     }
-
-    public static implicit operator PaginationParams(FindManyDepartmentsRequest request) =>
-        new PaginationParams()
-        {
-            Page = Parser.ToIntOptional(request.Page),
-            Size = Parser.ToIntOptional(request.Size),
-        };
 }

@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Appointments.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Appointments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,7 @@ public record UpdateAppointmentsParams
     [FromBody]
     public UpdateAppointmentsRequest Request { get; set; } = new();
 
-    public static implicit operator UpdateAppointmentsServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdateAppointmentsParams presentationParams) =>
         new()
         {

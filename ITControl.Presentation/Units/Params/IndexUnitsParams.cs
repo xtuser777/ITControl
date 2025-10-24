@@ -1,28 +1,50 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Units.Requests;
+using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Units.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Units.Params;
 
-public record IndexUnitsParams
+public record IndexUnitsParams : PaginationParams
 {
-    [FromQuery] public FindManyUnitsRequest FindManyUnitsRequest { get; set; } = new();
-    [FromHeader] public OrderByUnitsRequest OrderByUnitsRequest { get; set; }  = new();
+    public string? Name { get; set; }
+    
+    
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? OrderByName { get; init; }
+
+    public static implicit operator OrderByUnitsParams(
+        IndexUnitsParams request) => new()
+    {
+        Name = request.OrderByName
+    };
+
+    public static implicit operator FindManyUnitsParams(
+        IndexUnitsParams request) => new()
+    {
+        Name = request.Name
+    };
+
+    public static implicit operator CountUnitsParams(
+        IndexUnitsParams request) => new()
+    {
+        Name = request.Name
+    };
 
     public static implicit operator FindManyServiceParams(
         IndexUnitsParams parameters)
         => new()
         {
-            FindManyParams = parameters.FindManyUnitsRequest,
-            OrderByParams = parameters.OrderByUnitsRequest,
-            PaginationParams = parameters.FindManyUnitsRequest,
+            FindManyParams = parameters,
+            OrderByParams = parameters,
+            PaginationParams = parameters,
         };
 
     public static implicit operator FindManyPaginationServiceParams(
         IndexUnitsParams parameters)
         => new()
         {
-            CountParams = parameters.FindManyUnitsRequest,
-            PaginationParams = parameters.FindManyUnitsRequest,
+            CountParams = parameters,
+            PaginationParams = parameters,
         };
 }

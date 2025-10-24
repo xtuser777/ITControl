@@ -1,4 +1,4 @@
-using ITControl.Application.Calls.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Domain.Calls.Params;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,8 +15,9 @@ public record ShowCallsParams
     [FromQuery]
     public bool? IncludeSystem { get; set; } = true;
 
-    public static implicit operator FindOneCallsServiceParams(ShowCallsParams param)
-        => new FindOneCallsServiceParams
+    public static implicit operator FindOneServiceParams(
+        ShowCallsParams param)
+        => new ()
         {
             Id = param.Id,
             Includes = new IncludesCallsParams()

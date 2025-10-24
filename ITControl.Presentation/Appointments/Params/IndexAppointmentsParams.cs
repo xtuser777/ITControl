@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Appointments.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Appointments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +11,7 @@ public record IndexAppointmentsParams
     [FromHeader]
     public OrderByAppointmentsRequest OrderByRequest { get; set; } = new();
 
-    public static implicit operator FindManyAppointmentsServiceParams(
+    public static implicit operator FindManyServiceParams(
         IndexAppointmentsParams indexParams) =>
         new()
         {
@@ -20,12 +20,11 @@ public record IndexAppointmentsParams
             PaginationParams = indexParams.FindManyRequest
         };
 
-    public static implicit operator FindManyPaginationAppointmentsServiceParams(
+    public static implicit operator FindManyPaginationServiceParams(
         IndexAppointmentsParams indexParams) =>
         new()
         {
             CountParams = indexParams.FindManyRequest,
-            Page = indexParams.FindManyRequest.Page,
-            Size = indexParams.FindManyRequest.Size
+            PaginationParams = indexParams.FindManyRequest
         };
 }

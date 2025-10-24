@@ -7,7 +7,8 @@ namespace ITControl.Communication.Shared.Attributes;
 
 public class CallConnectionAttribute : ValidationAttribute
 {
-    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    protected override ValidationResult? IsValid(
+        object? value, ValidationContext validationContext)
     {
         if (value is not Guid callId || callId == Guid.Empty)
         {
@@ -17,7 +18,7 @@ public class CallConnectionAttribute : ValidationAttribute
             (ICallsRepository)validationContext
                 .GetService(typeof(ICallsRepository))!;
         bool callExists = callsRepository
-            .ExistsAsync(new ExistsCallsRepositoryParams { Id = callId })
+            .ExistsAsync(new ExistsCallsParams { Id = callId })
             .GetAwaiter().GetResult();
         if (!callExists)
         {

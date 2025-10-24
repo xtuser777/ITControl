@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Departments.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Departments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +12,11 @@ public record UpdateDepartmentsParams
     [FromBody]
     public UpdateDepartmentsRequest Request { get; set; } = null!;
 
-    public static implicit operator UpdateDepartmentsServiceParams(
-        UpdateDepartmentsParams params_) =>
+    public static implicit operator UpdateServiceParams(
+        UpdateDepartmentsParams parameters) =>
         new()
         {
-            Id = params_.Id,
-            Params = params_.Request
+            Id = parameters.Id,
+            Params = parameters.Request
         };
 }

@@ -11,7 +11,7 @@ public record CreateRolesRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IRolesRepository), typeof(ExistsRolesParams))]
+    [UniqueField<Role>(typeof(IRolesRepository), typeof(ExistsRolesParams))]
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
 

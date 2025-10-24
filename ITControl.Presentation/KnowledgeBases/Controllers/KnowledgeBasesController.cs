@@ -1,5 +1,4 @@
 ﻿using ITControl.Application.KnowledgeBases.Interfaces;
-using ITControl.Communication.Equipments.Responses;
 using ITControl.Communication.KnowledgeBases.Responses;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Presentation.KnowledgeBases.Params;

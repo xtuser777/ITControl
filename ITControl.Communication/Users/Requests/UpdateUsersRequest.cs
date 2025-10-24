@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Communication.Shared.Attributes;
 using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Domain.Users.Params;
 
@@ -11,7 +12,7 @@ public class UpdateUsersRequest
 {
     [StringMinLength(3)]
     [StringMaxLength(20)]
-    [UniqueField(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
     [Display(Name = nameof(Username), ResourceType = typeof(DisplayNames))]
     public string? Username { get; set; }
 
@@ -29,13 +30,13 @@ public class UpdateUsersRequest
         ErrorMessageResourceType = typeof(Errors), 
         ErrorMessageResourceName = nameof(Errors.VALID_EMAIL))]
     [StringMaxLength(100)]
-    [UniqueField(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
     [Display(Name = nameof(Email), ResourceType = typeof(DisplayNames))]
     public string? Email { get; set; }
 
     [StringLength(11)]
     [DocumentValue]
-    [UniqueField(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
+    [UniqueField<User>(typeof(IUsersRepository), typeof(ExclusiveUsersParams))]
     [Display(Name = nameof(Document), ResourceType = typeof(DisplayNames))]
     public string? Document { get; set; } 
 

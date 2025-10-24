@@ -1,31 +1,52 @@
-﻿using ITControl.Application.Positions.Params;
-using ITControl.Communication.Positions.Requests;
+﻿using ITControl.Application.Shared.Params;
+using ITControl.Domain.Positions.Params;
+using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Positions.Params;
 
-public record IndexPositionsParams
+public record IndexPositionsParams : PaginationParams
 {
-    [FromQuery]
-    public FindManyPositionsRequest FindManyRequest { get; set; } = new();
-    [FromHeader]
-    public OrderByPositionsRequest OrderByRequest { get; set; } = new();
+    public string? Name { get; set; } = null;
+    
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? OrderByName { get; set; } = null;
 
-    public static implicit operator FindManyPositionsServiceParams(
-        IndexPositionsParams indexParams) =>
-        new()
+    public static implicit operator FindManyPositionsParams(
+        IndexPositionsParams indexParams)
+        => new ()
         {
-            FindManyParams = indexParams.FindManyRequest,
-            OrderByParams = indexParams.OrderByRequest,
-            PaginationParams = indexParams.FindManyRequest
+            Name = indexParams.Name,
         };
 
-    public static implicit operator FindManyPaginationPositionsServiceParams(
+    public static implicit operator CountPositionsParams(
+        IndexPositionsParams indexParams)
+        => new ()
+        {
+            Name = indexParams.Name,
+        };
+
+    public static implicit operator OrderByPositionsParams(
+        IndexPositionsParams indexParams)
+        => new ()
+        {
+            Name = indexParams.OrderByName,
+        };
+
+    public static implicit operator FindManyServiceParams(
         IndexPositionsParams indexParams) =>
         new()
         {
-            CountParams = indexParams.FindManyRequest,
-            Page = indexParams.FindManyRequest.Page,
-            Size = indexParams.FindManyRequest.Size
+            FindManyParams = indexParams,
+            OrderByParams = indexParams,
+            PaginationParams = indexParams
+        };
+
+    public static implicit operator FindManyPaginationServiceParams(
+        IndexPositionsParams indexParams) =>
+        new()
+        {
+            CountParams = (CountPositionsParams)indexParams,
+            PaginationParams = indexParams
         };
 }
