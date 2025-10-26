@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Divisions.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record UpdateDivisionParams
+namespace ITControl.Domain.Divisions.Params;
+
+public record UpdateDivisionParams : UpdateEntityParams
 {
     public string? Name { get; init; } = null;
     public Guid? DepartmentId { get; init; } = null;

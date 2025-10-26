@@ -1,7 +1,7 @@
 ﻿namespace ITControl.Domain.Divisions.Params;
 
-public record ExclusiveDivisionsRepositoryParams :
-    FindManyDivisionsRepositoryParams
+public record ExclusiveDivisionsParams :
+    FindManyDivisionsParams
 {
     public Guid ExcludeId { get; set; }
 }

@@ -11,7 +11,7 @@ public record OrderByDivisionsRequest
     [FromHeader(Name = "X-Order-By-Department")]
     public string? Department { get; init; } = null;
 
-    public static implicit operator OrderByDivisionsRepositoryParams(
+    public static implicit operator OrderByDivisionsParams(
         OrderByDivisionsRequest request)
         => new()
         {

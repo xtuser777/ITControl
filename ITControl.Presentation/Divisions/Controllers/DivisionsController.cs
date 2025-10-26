@@ -25,7 +25,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> IndexAsync(
-        [AsParameters] IndexDivisionsControllerParams @params)
+        [AsParameters] IndexDivisionsParams @params)
     {
         var divisions = await divisionsService.FindManyAsync(@params);
         var pagination = await divisionsService.FindManyPaginatedAsync(@params);
@@ -50,7 +50,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> ShowAsync(
-        [AsParameters] ShowDivisionsControllerParams @params)
+        [AsParameters] ShowDivisionsParams @params)
     {
         var division = await divisionsService.FindOneAsync(@params); 
         var data = divisionsView.FindOne(division);
@@ -69,7 +69,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CreateAsync(
-        [AsParameters] CreateDivisionsControllerParams @params)
+        [AsParameters] CreateDivisionsParams @params)
     {
         var division = await divisionsService.CreateAsync(@params);
         var data = divisionsView.Create(division);
@@ -89,7 +89,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> UpdateAsync(
-        [AsParameters] UpdateDivisionsControllerParams @params)
+        [AsParameters] UpdateDivisionsParams @params)
     {
         await divisionsService.UpdateAsync(@params);
         return NoContent();
@@ -107,7 +107,7 @@ public class DivisionsController(
     [ProducesResponseType(typeof(void), 
         StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteAsync(
-        [AsParameters] DeleteDivisionsControllerParams @params)
+        [AsParameters] DeleteDivisionsParams @params)
     {
         await divisionsService.DeleteAsync(@params);
         return NoContent();

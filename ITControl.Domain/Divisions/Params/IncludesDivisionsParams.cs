@@ -1,8 +1,8 @@
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Divisions.Params;
 
 public record IncludesDivisionsParams : IncludesParams
 {
-    public bool? Department { get; set; } = null;
+    public bool? Department { get; set; }
 }

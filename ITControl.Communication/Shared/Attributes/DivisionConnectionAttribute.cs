@@ -14,7 +14,7 @@ public class DivisionConnectionAttribute : ValidationAttribute
         var divisionsRepository = 
             (IDivisionsRepository)validationContext.GetService(typeof(IDivisionsRepository))!;
         var exists = divisionsRepository
-            .ExistsAsync(new ExistsDivisionsRepositoryParams { Id = divisionId })
+            .ExistsAsync(new ExistsDivisionsParams { Id = divisionId })
             .GetAwaiter().GetResult();
         if (!exists)
             return new ValidationResult(

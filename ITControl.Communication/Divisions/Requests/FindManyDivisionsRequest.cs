@@ -10,7 +10,7 @@ public record FindManyDivisionsRequest : PageableRequest
     public string? Name { get; init; } = null;
     public Guid? DepartmentId { get; init; } = null;
 
-    public static implicit operator FindManyDivisionsRepositoryParams(
+    public static implicit operator FindManyDivisionsParams(
         FindManyDivisionsRequest request)
         => new()
         {
@@ -18,7 +18,7 @@ public record FindManyDivisionsRequest : PageableRequest
             DepartmentId = request.DepartmentId,
         };
 
-    public static implicit operator CountDivisionsRepositoryParams(
+    public static implicit operator CountDivisionsParams(
         FindManyDivisionsRequest request)
         => new()
         {

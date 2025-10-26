@@ -1,16 +1,16 @@
-using ITControl.Application.Divisions.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Divisions.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Divisions.Params;
 
-public record CreateDivisionsControllerParams
+public record CreateDivisionsParams
 {
     [FromBody]
     public CreateDivisionsRequest Request { get; set; } = null!;
 
-    public static implicit operator CreateDivisionsServiceParams(
-        CreateDivisionsControllerParams param)
+    public static implicit operator CreateServiceParams(
+        CreateDivisionsParams param)
         => new ()
         {
             Params = param.Request,

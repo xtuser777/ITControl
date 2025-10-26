@@ -13,7 +13,7 @@ public record UpdateDivisionsRequest
     [StringMaxLength(100)]
     [UniqueField<Division>(
         typeof(IDivisionsRepository), 
-        typeof(ExclusiveDivisionsRepositoryParams))]
+        typeof(ExclusiveDivisionsParams))]
     [Display(
         Name = nameof(Name), 
         ResourceType = typeof(DisplayNames))]

@@ -13,7 +13,7 @@ public record CreateDivisionsRequest
     [StringMaxLength(100)]
     [UniqueField<Division>(
         typeof(IDivisionsRepository), 
-        typeof(ExistsDivisionsRepositoryParams))]
+        typeof(ExistsDivisionsParams))]
     [Display(
         Name = nameof(Name), 
         ResourceType = typeof(DisplayNames))]

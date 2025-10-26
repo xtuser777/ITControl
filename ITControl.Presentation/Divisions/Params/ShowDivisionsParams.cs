@@ -1,10 +1,10 @@
-using ITControl.Application.Divisions.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Domain.Divisions.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Divisions.Params;
 
-public record ShowDivisionsControllerParams
+public record ShowDivisionsParams
 {
     [FromRoute(Name = "id")]
     public Guid Id { get; set; }
@@ -12,8 +12,8 @@ public record ShowDivisionsControllerParams
     [FromQuery]
     public bool? IncludeDepartment { get; set; } = true;
 
-    public static implicit operator FindOneDivisionsServiceParams(
-        ShowDivisionsControllerParams param)
+    public static implicit operator FindOneServiceParams(
+        ShowDivisionsParams param)
         => new()
         {
             Id = param.Id,
