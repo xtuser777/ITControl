@@ -1,15 +1,15 @@
-using ITControl.Application.Equipments.Params;
+using ITControl.Application.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Params;
 
-public record DeleteEquipmentsControllerParams
+public record DeleteEquipmentsParams
 {
     [FromRoute(Name = "id")]
     public Guid Id { get; init; }
 
-    public static implicit operator DeleteEquipmentsServiceParams(
-        DeleteEquipmentsControllerParams @params)
+    public static implicit operator DeleteServiceParams(
+        DeleteEquipmentsParams @params)
         => new()
         {
             Id = @params.Id,

@@ -26,7 +26,7 @@ public record UpdateEquipmentsRequest
     [StringMaxLength(15)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExclusiveEquipmentsRepositoryParams))]
+        typeof(ExclusiveEquipmentsParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string? Ip { get; set; }
 
@@ -34,7 +34,7 @@ public record UpdateEquipmentsRequest
     [StringMaxLength(17)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExclusiveEquipmentsRepositoryParams))]
+        typeof(ExclusiveEquipmentsParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string? Mac { get; set; }
 
@@ -42,7 +42,7 @@ public record UpdateEquipmentsRequest
     [StringMaxLength(50)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExclusiveEquipmentsRepositoryParams))]
+        typeof(ExclusiveEquipmentsParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string? Tag { get; set; }
 

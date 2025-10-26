@@ -1,10 +1,10 @@
-using ITControl.Application.Equipments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Domain.Equipments.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Params;
 
-public record ShowEquipmentsControllerParams
+public record ShowEquipmentsParams
 {
     [FromRoute(Name = "id")]
     public Guid Id { get; init; }
@@ -12,8 +12,8 @@ public record ShowEquipmentsControllerParams
     [FromQuery]
     public bool? IncludeContract { get; init; } = true;
 
-    public static implicit operator FindOneEquipmentsServiceParams(
-        ShowEquipmentsControllerParams @params)
+    public static implicit operator FindOneServiceParams(
+        ShowEquipmentsParams @params)
         => new()
         {
             Id = @params.Id,

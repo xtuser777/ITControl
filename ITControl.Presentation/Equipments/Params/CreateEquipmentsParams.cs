@@ -1,16 +1,16 @@
-using ITControl.Application.Equipments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Equipments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Params;
 
-public record CreateEquipmentsControllerParams
+public record CreateEquipmentsParams
 {
     [FromBody]
     public CreateEquipmentsRequest Request { get; init; } = new();
 
-    public static implicit operator CreateEquipmentsServiceParams(
-        CreateEquipmentsControllerParams @params)
+    public static implicit operator CreateServiceParams(
+        CreateEquipmentsParams @params)
         => new()
         {
             Params = @params.Request

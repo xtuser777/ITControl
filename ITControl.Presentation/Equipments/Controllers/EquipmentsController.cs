@@ -25,7 +25,7 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> IndexAsync(
-            [AsParameters] IndexEquipmentsControllerParams @params)
+            [AsParameters] IndexEquipmentsParams @params)
         {
             var equipments = await equipmentsService
                 .FindManyAsync(@params);
@@ -49,7 +49,7 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> ShowAsync(
-            [AsParameters] ShowEquipmentsControllerParams @params)
+            [AsParameters] ShowEquipmentsParams @params)
         {
             var equipment = await equipmentsService.FindOneAsync(@params);
             var data = equipmentsView.FindOne(equipment);
@@ -64,7 +64,7 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> CreateAsync(
-            [AsParameters] CreateEquipmentsControllerParams @params)
+            [AsParameters] CreateEquipmentsParams @params)
         {
             var equipment = await equipmentsService.CreateAsync(@params);
             var data = equipmentsView.Create(equipment);
@@ -79,7 +79,7 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> UpdateAsync(
-            [AsParameters] UpdateEquipmentsControllerParams @params)
+            [AsParameters] UpdateEquipmentsParams @params)
         {
             await equipmentsService.UpdateAsync(@params);
             return NoContent();
@@ -94,7 +94,7 @@ namespace ITControl.Presentation.Equipments.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
         public async Task<IActionResult> DeleteAsync(
-            [AsParameters] DeleteEquipmentsControllerParams @params)
+            [AsParameters] DeleteEquipmentsParams @params)
         {
             await equipmentsService.DeleteAsync(@params);
             return NoContent();

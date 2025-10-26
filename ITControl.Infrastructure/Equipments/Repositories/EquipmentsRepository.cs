@@ -1,6 +1,6 @@
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -11,29 +11,22 @@ public class EquipmentsRepository(ApplicationDbContext context) :
     BaseRepository, IEquipmentsRepository
 {
     public async Task<Equipment?> FindOneAsync(
-        FindOneRepositoryParams @params)
+        FindOneRepositoryParams parameters)
     {
-        var (id, includes) = @params;
+        var (id, includes) = parameters;
         query = context.Equipments.AsQueryable();
         ApplyIncludes(includes);
         return (Equipment?)await query
             .FirstOrDefaultAsync(x => x.Id == id);
     }
-    
-    public async Task<Equipment?> FindOneAsync(Guid id)
-    {
-        return await context.Equipments.FindAsync(id);
-    }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.Equipments.AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         var entities = await query.ToListAsync();
         return entities.Cast<Equipment>();
     }
@@ -54,25 +47,25 @@ public class EquipmentsRepository(ApplicationDbContext context) :
     }
 
     public async Task<int> CountAsync(
-        FindManyRepositoryParams @params)
+        FindManyParams parameters)
     {
         query = context.Equipments.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
     public async Task<bool> ExistsAsync(
-        FindManyRepositoryParams @params)
+        FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 
     public async Task<bool> ExclusiveAsync(
-        FindManyRepositoryParams @params)
+        FindManyParams parameters)
     {
         query = context.Equipments.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         var count = await query.CountAsync();
         return count > 0;
     }

@@ -1,10 +1,11 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Application.Equipments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Equipments.Services;
@@ -12,40 +13,35 @@ namespace ITControl.Application.Equipments.Services;
 public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
 {
     public async Task<Equipment> FindOneAsync(
-        FindOneEquipmentsServiceParams @params)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
             .EquipmentsRepository
-            .FindOneAsync(@params) 
+            .FindOneAsync(parameters) 
                ?? throw new NotFoundException(Errors.EQUIPMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Equipment>> FindManyAsync(
-        FindManyEquipmentsServiceParams @params)
+        FindManyServiceParams parameters)
     {
-        return await unitOfWork.EquipmentsRepository.FindManyAsync(
-            @params.FindManyParams, 
-            @params.OrderByParams, 
-            @params.PaginationParams);
+        return await unitOfWork.EquipmentsRepository
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationEquipmentsServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        if (@params.Page == null || @params.Size == null) return null;
-        
         var count = await unitOfWork.EquipmentsRepository
-            .CountAsync(@params.CountParams);
-        
-        var pagination = Pagination.Build(@params.Page, @params.Size, count);
-        
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
     public async Task<Equipment?> CreateAsync(
-        CreateEquipmentsServiceParams @params)
+        CreateServiceParams parameters)
     {
-        var equipment = new Equipment(@params.Params);
+        var equipment = new Equipment((EquipmentParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.EquipmentsRepository.CreateAsync(equipment);
         await unitOfWork.Commit(transaction);
@@ -54,19 +50,19 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
     }
 
     public async Task UpdateAsync(
-        UpdateEquipmentsServiceParams @params)
+        UpdateServiceParams parameters)
     {
-        var equipment = await FindOneAsync(@params);
-        equipment.Update(@params.Params);
+        var equipment = await FindOneAsync(parameters);
+        equipment.Update((UpdateEquipmentParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Update(equipment);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(
-        DeleteEquipmentsServiceParams @params)
+        DeleteServiceParams parameters)
     {
-        var equipment = await FindOneAsync(@params);
+        var equipment = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);

@@ -1,8 +1,9 @@
 ﻿using ITControl.Domain.Equipments.Enums;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Equipments.Params;
 
-public record EquipmentParams
+public record EquipmentParams : EntityParams
 {
     public string Name { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;

@@ -1,10 +1,10 @@
-using ITControl.Application.Equipments.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Equipments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Params;
 
-public record UpdateEquipmentsControllerParams
+public record UpdateEquipmentsParams
 {
     [FromRoute(Name = "id")] 
     public Guid Id { get; set; }
@@ -12,8 +12,8 @@ public record UpdateEquipmentsControllerParams
     [FromBody] 
     public UpdateEquipmentsRequest Request { get; set; } = new();
 
-    public static implicit operator UpdateEquipmentsServiceParams(
-        UpdateEquipmentsControllerParams @params)
+    public static implicit operator UpdateServiceParams(
+        UpdateEquipmentsParams @params)
         => new()
         {
             Id = @params.Id,

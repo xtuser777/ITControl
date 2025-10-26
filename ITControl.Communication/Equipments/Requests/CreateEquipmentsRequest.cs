@@ -25,7 +25,7 @@ public record CreateEquipmentsRequest
     [StringMaxLength(15)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExistsEquipmentsRepositoryParams))]
+        typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string Ip { get; set; } = string.Empty;
 
@@ -33,7 +33,7 @@ public record CreateEquipmentsRequest
     [StringMaxLength(17)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExistsEquipmentsRepositoryParams))]
+        typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
     public string Mac { get; set; } = string.Empty;
 
@@ -41,7 +41,7 @@ public record CreateEquipmentsRequest
     [StringMaxLength(50)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
-        typeof(ExistsEquipmentsRepositoryParams))]
+        typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
     public string Tag { get; set; } = string.Empty;
 
