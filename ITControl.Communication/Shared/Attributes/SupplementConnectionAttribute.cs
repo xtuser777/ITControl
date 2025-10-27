@@ -18,7 +18,7 @@ public class SupplementConnectionAttribute : ValidationAttribute
             (ISupplementsRepository)validationContext
                 .GetService(typeof(ISupplementsRepository))!;
         var existsParams = 
-            new ExistsSupplementsRepositoryParams { Id = supplementId };
+            new ExistsSupplementsParams { Id = supplementId };
         var exists = supplementRepository
             .ExistsAsync(existsParams).GetAwaiter().GetResult();
         if (exists == false)

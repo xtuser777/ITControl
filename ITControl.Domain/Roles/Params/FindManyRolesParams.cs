@@ -4,6 +4,6 @@ namespace ITControl.Domain.Roles.Params;
 
 public record FindManyRolesParams : FindManyParams
 {
-    public string? Name { get; set; } = null;
-    public bool? Active { get; set; } = null;
+    public string? Name { get; set; }
+    public bool? Active { get; set; }
 }

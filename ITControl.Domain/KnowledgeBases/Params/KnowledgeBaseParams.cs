@@ -1,12 +1,13 @@
 ﻿using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.KnowledgeBases.Params;
 
-public record KnowledgeBaseParams
+public record KnowledgeBaseParams : EntityParams
 {
-    public string Title { get; set; } = string.Empty;
-    public string Content { get; set; } = string.Empty;
-    public TimeOnly EstimatedTime { get; set; }
-    public CallReason Reason { get; set; }
-    public Guid UserId { get; set; }
+    public string Title { get; init; } = string.Empty;
+    public string Content { get; init; } = string.Empty;
+    public TimeOnly EstimatedTime { get; init; }
+    public CallReason Reason { get; init; }
+    public Guid UserId { get; init; }
 }

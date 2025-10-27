@@ -1,63 +1,67 @@
 using ITControl.Application.Pages.Interfaces;
-using ITControl.Application.Pages.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Pages.Entities;
+using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Pages.Services;
 
 public class PagesService(IUnitOfWork unitOfWork) : IPagesService
 {
-    public async Task<Page> FindOneAsync(FindOnePagesServiceParams @params)
+    public async Task<Page> FindOneAsync(
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
             .PagesRepository
-            .FindOneAsync(@params)
+            .FindOneAsync(parameters)
                ?? throw new NotFoundException(Errors.PAGE_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Page>> FindManyAsync(
-        FindManyPagesServiceParams @params)
+        FindManyServiceParams parameters)
     {
-        return await unitOfWork.PagesRepository.FindManyAsync(@params);
+        return await unitOfWork.PagesRepository.FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationPagesServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        var (page, size) = @params;
-        if (page == null || size == null) return null;
         var count = await unitOfWork.PagesRepository
-            .CountAsync(@params);
-        var pagination = Pagination.Build(page, size, count);
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
-    public async Task<Page?> CreateAsync(CreatePagesServiceParams @params)
+    public async Task<Page?> CreateAsync(
+        CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var page = new Page(@params.Params);
+        var page = new Page((PageParams)parameters.Params);
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
         
         return page;
     }
 
-    public async Task UpdateAsync(UpdatePagesServiceParams @params)
+    public async Task UpdateAsync(
+        UpdateServiceParams parameters)
     {
-        var page = await FindOneAsync(@params);
-        page.Update(@params.Params);
+        var page = await FindOneAsync(parameters);
+        page.Update((UpdatePageParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task DeleteAsync(DeletePagesServiceParams @params)
+    public async Task DeleteAsync(
+        DeleteServiceParams parameters)
     {
-        var page = await FindOneAsync(@params);
+        var page = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);

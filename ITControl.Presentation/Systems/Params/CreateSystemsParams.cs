@@ -1,4 +1,4 @@
-using ITControl.Application.Systems.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Systems.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreateSystemsParams
     [FromBody] public CreateSystemsRequest 
         CreateSystemsRequest { get; set; } = new();
 
-    public static implicit operator CreateSystemsServiceParams(
+    public static implicit operator CreateServiceParams(
         CreateSystemsParams parameters)
         => new()
         {

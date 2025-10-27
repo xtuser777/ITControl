@@ -21,26 +21,12 @@ public class UpdateSupplementsRequest
     public string? Model { get; set; } = null!;
 
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
-    [CustomValidation(typeof(UpdateSupplementsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(SupplementType))]
     public string? Type { get; set; } = null!;
 
     [IntegerPositiveValue]
     [Display(Name = nameof(Stock), ResourceType = typeof(DisplayNames))]
     public int? Stock { get; set; }
-
-    public static ValidationResult? ValidateType(
-        string? x, ValidationContext context)
-    {
-        if (x == null)
-            return ValidationResult.Success;
-        var validTypes = Enum.GetNames(typeof(SupplementType));
-        var types = string.Join(", ", validTypes);
-        return !validTypes.Contains(x) 
-            ? new ValidationResult(
-                string.Format(
-                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types)) 
-            : ValidationResult.Success;
-    }
 
     public static implicit operator UpdateSupplementParams(
         UpdateSupplementsRequest request)

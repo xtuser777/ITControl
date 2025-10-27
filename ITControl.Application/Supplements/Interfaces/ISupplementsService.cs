@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Supplements.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Supplements.Entities;
 
@@ -7,13 +7,15 @@ namespace ITControl.Application.Supplements.Interfaces;
 public interface ISupplementsService
 {
     Task<Supplement> FindOneAsync(
-        FindOneSupplementsServiceParams @params);
+        FindOneServiceParams parameters);
     Task<IEnumerable<Supplement>> FindManyAsync(
-        FindManySupplementsServiceParams @params);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPagination(
-        FindManyPaginationSupplementsServiceParams @params);
+        FindManyPaginationServiceParams parameters);
     Task<Supplement?> CreateAsync(
-        CreateSupplementsServiceParams @params);
-    Task UpdateAsync(UpdateSupplementsServiceParams @params);
-    Task DeleteAsync(DeleteSupplementsServiceParams @params);
+        CreateServiceParams parameters);
+    Task UpdateAsync(
+        UpdateServiceParams parameters);
+    Task DeleteAsync(
+        DeleteServiceParams parameters);
 }

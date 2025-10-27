@@ -30,7 +30,7 @@ public record FindManySupplementsMovementsRequest : PageableRequest
             DivisionId = request.DivisionId,
         };
 
-    public static implicit operator CountSupplementsMovementsRepositoryParams(
+    public static implicit operator CountSupplementsMovementsParams(
         FindManySupplementsMovementsRequest request)
         => new()
         {

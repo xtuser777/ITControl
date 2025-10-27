@@ -1,4 +1,4 @@
-using ITControl.Application.Systems.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 
 namespace ITControl.Application.Systems.Interfaces;
@@ -6,13 +6,15 @@ namespace ITControl.Application.Systems.Interfaces;
 public interface ISystemsService
 {
     Task<Domain.Systems.Entities.System> FindOneAsync(
-        FindOneSystemsServiceParams parameters);
+        FindOneServiceParams parameters);
     Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(
-        FindManySystemsServiceParams parameters);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationSystemsServiceParams parameters);
+        FindManyPaginationServiceParams parameters);
     Task<Domain.Systems.Entities.System?> CreateAsync(
-        CreateSystemsServiceParams parameters);
-    Task UpdateAsync(UpdateSystemsServiceParams parameters);
-    Task DeleteAsync(DeleteSystemsServiceParams parameters);
+        CreateServiceParams parameters);
+    Task UpdateAsync(
+        UpdateServiceParams parameters);
+    Task DeleteAsync(
+        DeleteServiceParams parameters);
 }

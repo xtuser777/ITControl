@@ -21,7 +21,7 @@ public class CreateSupplementsRequest
     public string Model { get; set; } = null!;
 
     [RequiredField]
-    [CustomValidation(typeof(CreateSupplementsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(SupplementType))]
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string Type { get; set; } = null!;
 
@@ -29,17 +29,6 @@ public class CreateSupplementsRequest
     [IntegerPositiveValue]
     [Display(Name = nameof(Stock), ResourceType = typeof(DisplayNames))]
     public int Stock { get; set; }
-
-    public static ValidationResult? ValidateType(string x, ValidationContext context)
-    {
-        var validTypes = Enum.GetNames(typeof(SupplementType));
-        var types = string.Join(", ", validTypes);
-        return !validTypes.Contains(x) 
-            ? new ValidationResult(
-                string.Format(
-                    Errors.MustBeAOneOfTheseValues, context.DisplayName, types)) 
-            : ValidationResult.Success;
-    }
 
     public static implicit operator SupplementParams(
         CreateSupplementsRequest request)

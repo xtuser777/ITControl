@@ -1,6 +1,6 @@
 ﻿using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +12,9 @@ public class NotificationsRepository(
     BaseRepository, INotificationsRepository
 {
     public async Task<Notification?> FindOneAsync(
-        FindOneRepositoryParams @params)
+        FindOneRepositoryParams parameters)
     {
-        var (id, includes) = @params;
+        var (id, includes) = parameters;
         query = context.Notifications.AsQueryable();
         ApplyIncludes(includes);
 
@@ -23,14 +23,12 @@ public class NotificationsRepository(
     }
 
     public async Task<IEnumerable<Notification>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.Notifications.AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<Notification>();
     }
 
@@ -44,10 +42,10 @@ public class NotificationsRepository(
         context.Notifications.Update(notification);
     }
 
-    public Task<int> CountAsync(FindManyRepositoryParams @params)
+    public Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.Notifications.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return query.CountAsync();
     }
 }

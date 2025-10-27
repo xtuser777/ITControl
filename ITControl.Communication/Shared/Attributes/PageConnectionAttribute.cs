@@ -14,7 +14,7 @@ public class PageConnectionAttribute : ValidationAttribute
             return ValidationResult.Success;
         }
         var pagesRepository = (IPagesRepository)validationContext.GetService(typeof(IPagesRepository))!;
-        bool pageExists = pagesRepository.ExistsAsync(new ExistsPagesRepositoryParams() 
+        bool pageExists = pagesRepository.ExistsAsync(new ExistsPagesParams() 
         { 
             Id = pageId 
         }).GetAwaiter().GetResult();

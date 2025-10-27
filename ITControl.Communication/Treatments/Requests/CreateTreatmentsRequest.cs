@@ -36,12 +36,12 @@ public class CreateTreatmentsRequest
     public TimeOnly? EndedIn { get; set; }
 
     [RequiredField]
-    [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateStatus))]
+    [EnumValue(typeof(TreatmentStatus))]
     [Display(Name = nameof(Status), ResourceType = typeof(DisplayNames))]
     public string Status { get; set; } = string.Empty;
 
     [RequiredField]
-    [CustomValidation(typeof(CreateTreatmentsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(TreatmentType))]
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string Type { get; set; } = string.Empty;
 
@@ -67,7 +67,8 @@ public class CreateTreatmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    public static implicit operator TreatmentParams(CreateTreatmentsRequest request) =>
+    public static implicit operator TreatmentParams(
+        CreateTreatmentsRequest request) =>
         new()
         {
             Description = request.Description,
@@ -83,28 +84,4 @@ public class CreateTreatmentsRequest
             CallId = request.CallId,
             UserId = request.UserId
         };
-
-    public static ValidationResult? ValidateStatus(string status, ValidationContext context)
-    {
-        var allowedStatuses = Enum.GetNames(typeof(TreatmentStatus));
-        if (!allowedStatuses.Contains(status))
-        { 
-            var statuses = string.Join(", ", allowedStatuses);
-            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, statuses);
-            return new ValidationResult(errorMessage);
-        }
-        return ValidationResult.Success;
-    }
-
-    public static ValidationResult? ValidateType(string type, ValidationContext context)
-    {
-        var allowedTypes = Enum.GetNames(typeof(TreatmentType));
-        if (!allowedTypes.Contains(type))
-        {
-            var types = string.Join(", ", allowedTypes);
-            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types);
-            return new ValidationResult(errorMessage);
-        }
-        return ValidationResult.Success;
-    }
 }

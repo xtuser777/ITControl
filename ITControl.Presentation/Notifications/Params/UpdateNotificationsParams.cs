@@ -1,4 +1,4 @@
-using ITControl.Application.Notifications.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Notifications.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record UpdateNotificationsParams
     [FromBody] 
     public UpdateNotificationsRequest Request { get; set; } = new();
 
-    public static implicit operator UpdateNotificationsServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdateNotificationsParams param)
         => new()
         {

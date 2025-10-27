@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Application.Notifications.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
@@ -14,7 +14,7 @@ public class NotificationsService(
     IUnitOfWork unitOfWork) : INotificationsService
 {
     public async Task<Notification> FindOneAsync(
-        FindOneNotificationsServiceParams @params)
+        FindOneServiceParams @params)
     {
         return await unitOfWork
                    .NotificationsRepository
@@ -23,38 +23,35 @@ public class NotificationsService(
     }
 
     public async Task<IEnumerable<Notification>> FindManyAsync(
-        FindManyNotificationsServiceParams @params)
+        FindManyServiceParams @params)
     {
-        return await unitOfWork.NotificationsRepository.FindManyAsync(
-            @params.FindManyParams,
-            @params.OrderByParams,
-            @params.PaginationParams);
+        return await unitOfWork.NotificationsRepository
+            .FindManyAsync(@params);
     }
 
-    public async Task UpdateAsync(UpdateNotificationsServiceParams @params)
+    public async Task UpdateAsync(
+        UpdateServiceParams @params)
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var notification = await FindOneAsync(@params);
-        notification.Update(@params.Params);
+        notification.Update((UpdateNotificationParams)@params.Params);
         unitOfWork.NotificationsRepository.Update(notification);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationNotificationsServiceParams @params)
+        FindManyPaginationServiceParams @params)
     {
-        var (page, size) = @params;
-        if (page == null || size == null) return null;
         var count = await unitOfWork
             .NotificationsRepository.CountAsync(@params.CountParams);
-        var pagination = Pagination.Build(page, size, count);
+        var pagination = Pagination.Build(@params.PaginationParams, count);
         return pagination;
     }
 
     public async Task<int> CountUnreadAsync(Guid userId)
     {
         return await unitOfWork.NotificationsRepository.CountAsync(
-            new FindManyNotificationsRepositoryParams
+            new FindManyNotificationsParams
             { 
                 IsRead = false, 
                 UserId = userId 

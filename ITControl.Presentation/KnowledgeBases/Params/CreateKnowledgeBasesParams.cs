@@ -1,4 +1,4 @@
-﻿using ITControl.Application.KnowledgeBases.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.KnowledgeBases.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreateKnowledgeBasesParams
     [FromBody]
     public CreateKnowledgeBasesRequest Request { get; set; } = new();
 
-    public static implicit operator CreateKnowledgeBasesServiceParams(
+    public static implicit operator CreateServiceParams(
         CreateKnowledgeBasesParams request)
         => new()
         {

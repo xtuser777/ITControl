@@ -14,6 +14,7 @@ public record UpdatePositionsRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
     
-    public static implicit operator UpdatePositionParams(UpdatePositionsRequest request) => 
+    public static implicit operator UpdatePositionParams(
+        UpdatePositionsRequest request) => 
         new() { Name = request.Name };
 }

@@ -1,31 +1,84 @@
-using ITControl.Application.Systems.Params;
-using ITControl.Communication.Systems.Requests;
+using ITControl.Application.Shared.Params;
+using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Utils;
+using ITControl.Domain.Systems.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Systems.Params;
 
-public record IndexSystemsParams
+public record IndexSystemsParams : PaginationParams
 {
-    [FromQuery] public FindManySystemsRequest 
-        FindManySystemsRequest { get; set; } = new();
-    [FromHeader] public OrderBySystemsRequest 
-        OrderBySystemsRequest { get; set; } = new();
+    public string? Name { get; set; }
+    public string? Version { get; set; }
+    public DateOnly? ImplementedAt { get; set; }
+    public DateOnly? EndedAt { get; set; }
+    public string? Own { get; set; }
+    public Guid? ContractId { get; set; }
+    
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? OrderByName { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Version")]
+    public string? OrderByVersion { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Implemented-At")]
+    public string? OrderByImplementedAt { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Ended-At")]
+    public string? OrderByEndedAt { get; init; }
+    
+    [FromHeader(Name = "X-Order-By-Own")]
+    public string? OrderByOwn { get; init; }
 
-    public static implicit operator FindManySystemsServiceParams(
-        IndexSystemsParams parameters)
-        => new()
+    public static implicit operator OrderBySystemsParams(
+        IndexSystemsParams request) =>
+        new()
         {
-            FindManySystemsParams = parameters.FindManySystemsRequest,
-            OrderBySystemsParams = parameters.OrderBySystemsRequest,
-            PaginationParams = parameters.FindManySystemsRequest
+            Name = request.OrderByName,
+            Version = request.OrderByVersion,
+            ImplementedAt = request.OrderByImplementedAt,
+            EndedAt = request.OrderByEndedAt,
+            Own = request.OrderByOwn
         };
 
-    public static implicit operator FindManyPaginationSystemsServiceParams(
+    public static implicit operator FindManySystemsParams(
+        IndexSystemsParams request) =>
+        new()
+        {
+            Name = request.Name,
+            Version = request.Version,
+            ImplementedAt = request.ImplementedAt,
+            EndedAt = request.EndedAt,
+            Own = Parser.ToBoolOptional(request.Own),
+            ContractId = request.ContractId
+        };
+
+    public static implicit operator CountSystemsParams(
+        IndexSystemsParams request) =>
+        new()
+        {
+            Name = request.Name,
+            Version = request.Version,
+            ImplementedAt = request.ImplementedAt,
+            EndedAt = request.EndedAt,
+            Own = Parser.ToBoolOptional(request.Own),
+            ContractId = request.ContractId
+        };
+
+    public static implicit operator FindManyServiceParams(
         IndexSystemsParams parameters)
         => new()
         {
-            CountSystemsRepositoryParams = parameters.FindManySystemsRequest,
-            Page = parameters.FindManySystemsRequest.Page,
-            Size = parameters.FindManySystemsRequest.Size,
+            FindManyParams = parameters,
+            OrderByParams = parameters,
+            PaginationParams = parameters
+        };
+
+    public static implicit operator FindManyPaginationServiceParams(
+        IndexSystemsParams parameters)
+        => new()
+        {
+            CountParams = parameters,
+            PaginationParams = parameters
         };
 }

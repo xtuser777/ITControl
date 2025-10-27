@@ -2,11 +2,12 @@
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.SupplementsMovements.Interfaces;
-using ITControl.Application.SupplementsMovements.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.SupplementsMovements.Entities;
+using ITControl.Domain.SupplementsMovements.Params;
 
 namespace ITControl.Application.SupplementsMovements.Services;
 
@@ -14,51 +15,52 @@ public class SupplementsMovementsService(
     IUnitOfWork unitOfWork) : ISupplementsMovementsService
 {
     public async Task<SupplementMovement> FindOneAsync(
-        FindOneSupplementsMovementsServiceParams @params)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork.SupplementsMovementsRepository
-            .FindOneAsync(@params)
+            .FindOneAsync(parameters)
             ?? throw new NotFoundException(Errors.SupplementMovimentNotFound);
     }
 
     public async Task<IEnumerable<SupplementMovement>> FindManyAsync(
-        FindManySupplementsMovementsServiceParams @params)
+        FindManyServiceParams parameters)
     {
         return await unitOfWork
             .SupplementsMovementsRepository
-            .FindManyAsync(@params);
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationSupplementsMovementsServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        var (page, size) = @params;
-        if (page == null || size == null) return null;
         var count = await unitOfWork
             .SupplementsMovementsRepository
-            .CountAsync(@params);
-        var pagination = Pagination.Build(page, size, count);
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
     public async Task<SupplementMovement> CreateAsync(
-        CreateSupplementsMovementsServiceParams @params)
+        CreateServiceParams parameters)
     {
-        var supplementMovement = new SupplementMovement(@params.Params);
+        var supplementMovement = 
+            new SupplementMovement((SupplementMovementParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
-        await unitOfWork.SupplementsMovementsRepository.CreateAsync(supplementMovement);
+        await unitOfWork.SupplementsMovementsRepository
+            .CreateAsync(supplementMovement);
         await DecrementSupplementStock(
-            @params.Params.SupplementId, 
-            @params.Params.Quantity);
+            ((SupplementMovementParams)parameters.Params).SupplementId, 
+            ((SupplementMovementParams)parameters.Params).Quantity);
         await unitOfWork.Commit(transaction);
 
         return supplementMovement;
     }
 
     public async Task DeleteAsync(
-        DeleteSupplementsMovementsServiceParams @params)
+        DeleteServiceParams parameters)
     {
-        var supplementMovement = await FindOneAsync(@params);
+        var supplementMovement = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         await AddSupplementStock(
             supplementMovement.SupplementId, 

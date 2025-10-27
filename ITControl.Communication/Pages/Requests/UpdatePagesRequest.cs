@@ -13,7 +13,7 @@ public record UpdatePagesRequest
     [StringMaxLength(100)]
     [UniqueField<Page>(
         typeof(IPagesRepository), 
-        typeof(ExclusivePagesRepositoryParams))]
+        typeof(ExclusivePagesParams))]
     [Display(
         Name = nameof(Name), 
         ResourceType = typeof(DisplayNames))]

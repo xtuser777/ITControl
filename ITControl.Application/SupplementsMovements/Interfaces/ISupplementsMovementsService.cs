@@ -1,4 +1,4 @@
-﻿using ITControl.Application.SupplementsMovements.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.SupplementsMovements.Entities;
 
@@ -7,12 +7,13 @@ namespace ITControl.Application.SupplementsMovements.Interfaces;
 public interface ISupplementsMovementsService
 {
     Task<SupplementMovement> FindOneAsync(
-        FindOneSupplementsMovementsServiceParams @params);
+        FindOneServiceParams parameters);
     Task<IEnumerable<SupplementMovement>> FindManyAsync(
-        FindManySupplementsMovementsServiceParams @params);
+        FindManyServiceParams parameters);
     Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationSupplementsMovementsServiceParams @params);
+        FindManyPaginationServiceParams parameters);
     Task<SupplementMovement> CreateAsync(
-        CreateSupplementsMovementsServiceParams @params);
-    Task DeleteAsync(DeleteSupplementsMovementsServiceParams @params);
+        CreateServiceParams parameters);
+    Task DeleteAsync(
+        DeleteServiceParams parameters);
 }

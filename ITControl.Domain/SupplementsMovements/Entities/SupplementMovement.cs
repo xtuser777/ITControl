@@ -19,11 +19,11 @@ public sealed class SupplementMovement : Entity
     public Guid DepartmentId { get; private set; }
     public Guid? DivisionId { get; private set; }
     // Navigation properties
-    public Supplement? Supplement { get; set; } = null!;
-    public User? User { get; set; } = null!;
-    public Unit? Unit { get; set; } = null!;
-    public Department? Department { get; set; } = null!;
-    public Division? Division { get; set; } = null!;
+    public Supplement? Supplement { get; set; }
+    public User? User { get; set; }
+    public Unit? Unit { get; set; }
+    public Department? Department { get; set; }
+    public Division? Division { get; set; }
 
     public SupplementMovement() { }
     

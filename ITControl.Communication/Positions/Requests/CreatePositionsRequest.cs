@@ -15,6 +15,7 @@ public record CreatePositionsRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string Name { get; set; } = string.Empty;
     
-    public static implicit operator PositionParams(CreatePositionsRequest request) =>
+    public static implicit operator PositionParams(
+        CreatePositionsRequest request) =>
         new() { Name = request.Name };
 }

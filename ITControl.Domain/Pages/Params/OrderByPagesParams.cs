@@ -4,5 +4,5 @@ namespace ITControl.Domain.Pages.Params;
 
 public record OrderByPagesParams : OrderByParams
 {
-    public string? Name { get; set; } = null;
+    public string? Name { get; set; }
 }

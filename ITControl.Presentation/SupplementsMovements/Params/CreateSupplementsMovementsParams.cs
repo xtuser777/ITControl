@@ -1,4 +1,4 @@
-using ITControl.Application.SupplementsMovements.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.SupplementsMovements.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreateSupplementsMovementsParams
     [FromBody]
     public CreateSupplementsMovementsRequest Request { get; set; } = new();
     
-    public static implicit operator CreateSupplementsMovementsServiceParams(
+    public static implicit operator CreateServiceParams(
         CreateSupplementsMovementsParams param)
         => new() { Params = param.Request };
 }

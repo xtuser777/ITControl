@@ -24,7 +24,7 @@ public record UpdateKnowledgeBasesRequest
     public TimeOnly? EstimatedTime { get; set; }
 
     [StringMaxLength(50)]
-    [CustomValidation(typeof(UpdateKnowledgeBasesRequest), nameof(ValidateReason))]
+    [EnumValue(typeof(CallReason))]
     [Display(Name = nameof(Reason), ResourceType = typeof(DisplayNames))]
     public string? Reason { get; set; } = string.Empty;
 
@@ -43,18 +43,4 @@ public record UpdateKnowledgeBasesRequest
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
             UserId = request.UserId
         };
-
-    public static ValidationResult? ValidateReason(
-        string? reason, ValidationContext context)
-    {
-        if (reason == null) return ValidationResult.Success;
-        if (Enum.TryParse<CallReason>(reason, true, out _))
-        {
-            return ValidationResult.Success;
-        }
-        var enumValues = string.Join(", ", Enum.GetNames(typeof(CallReason)));
-        return new ValidationResult(
-            string.Format(
-                Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
-    }
 }

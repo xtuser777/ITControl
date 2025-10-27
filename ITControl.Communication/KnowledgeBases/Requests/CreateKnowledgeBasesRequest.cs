@@ -4,6 +4,7 @@ using ITControl.Communication.Shared.Resources;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Messages;
+using Microsoft.VisualBasic;
 
 namespace ITControl.Communication.KnowledgeBases.Requests;
 
@@ -25,7 +26,7 @@ public record CreateKnowledgeBasesRequest
 
     [RequiredField]
     [StringMaxLength(50)]
-    [CustomValidation(typeof(CreateKnowledgeBasesRequest), nameof(ValidateReason))]
+    [EnumValue(typeof(CallReason))]
     [Display(Name = nameof(Reason), ResourceType = typeof(DisplayNames))]
     public string Reason { get; set; } = string.Empty;
 
@@ -45,17 +46,4 @@ public record CreateKnowledgeBasesRequest
             Reason = Enum.Parse<CallReason>(request.Reason, true),
             UserId = request.UserId
         };
-
-    public static ValidationResult? ValidateReason(
-        string reason, ValidationContext context)
-    {
-        if (Enum.TryParse<CallReason>(reason, true, out _))
-        {
-            return ValidationResult.Success;
-        }
-        var enumValues = string.Join(", ", Enum.GetNames(typeof(CallReason)));
-        return new ValidationResult(
-            string.Format(
-                Errors.MustBeAOneOfTheseValues, context.DisplayName, enumValues));
-    }
 }

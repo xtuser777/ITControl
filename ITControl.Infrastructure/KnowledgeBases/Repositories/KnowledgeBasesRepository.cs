@@ -1,6 +1,6 @@
 ﻿using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.KnowledgeBases.Interfaces;
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -12,9 +12,9 @@ public class KnowledgeBasesRepository(
     BaseRepository, IKnowledgeBasesRepository
 {
     public async Task<KnowledgeBase?> FindOneAsync(
-        FindOneRepositoryParams @params)
+        FindOneRepositoryParams parameters)
     {
-        var (id, includes) = @params;
+        var (id, includes) = parameters;
         query = context.KnowledgeBases.AsQueryable();
         ApplyIncludes(includes);
 
@@ -23,16 +23,14 @@ public class KnowledgeBasesRepository(
     }
 
     public async Task<IEnumerable<KnowledgeBase>> FindManyAsync(
-        FindManyRepositoryParams findManyParams,
-        OrderByRepositoryParams? orderByParams = null,
-        PaginationParams? paginationParams = null)
+        FindManyRepositoryParams parameters)
     {
         query = context.KnowledgeBases
             .Include(kb => kb.User)
             .AsNoTracking();
-        BuildQuery(findManyParams);
-        BuildOrderBy(orderByParams);
-        ApplyPagination(paginationParams);
+        BuildQuery(parameters.FindMany);
+        BuildOrderBy(parameters.OrderBy);
+        ApplyPagination(parameters.Pagination);
         var entities = await query.ToListAsync();
         return entities.Cast<KnowledgeBase>();
     }
@@ -52,16 +50,16 @@ public class KnowledgeBasesRepository(
         context.KnowledgeBases.Remove(knowledgeBase);
     }
 
-    public async Task<int> CountAsync(FindManyRepositoryParams @params)
+    public async Task<int> CountAsync(FindManyParams parameters)
     {
         query = context.KnowledgeBases.AsNoTracking();
-        BuildQuery(@params);
+        BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyRepositoryParams @params)
+    public async Task<bool> ExistsAsync(FindManyParams parameters)
     {
-        var count = await CountAsync(@params);
+        var count = await CountAsync(parameters);
         return count > 0;
     }
 }

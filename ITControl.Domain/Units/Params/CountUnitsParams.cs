@@ -2,5 +2,5 @@
 
 public record CountUnitsParams : FindManyUnitsParams
 {
-    public Guid? Id { get; set; } = null;
+    public Guid? Id { get; set; }
 }

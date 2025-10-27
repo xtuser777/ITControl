@@ -1,10 +1,11 @@
 ﻿using ITControl.Application.KnowledgeBases.Interfaces;
-using ITControl.Application.KnowledgeBases.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.KnowledgeBases.Entities;
+using ITControl.Domain.KnowledgeBases.Params;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.KnowledgeBases.Services;
@@ -13,45 +14,40 @@ public class KnowledgeBasesService(
     IUnitOfWork unitOfWork) : IKnowledgeBasesService
 {
     public async Task<KnowledgeBase> FindOneAsync(
-        FindOneKnowledgeBasesServiceParams @params)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
             .KnowledgeBasesRepository
-            .FindOneAsync(@params) 
+            .FindOneAsync(parameters) 
                ?? throw new NotFoundException(
                    Errors.KnowledgeBaseNotFound);
     }
 
     public async Task<IEnumerable<KnowledgeBase>> FindManyAsync(
-        FindManyKnowledgeBasesServiceParams @params)
+        FindManyServiceParams parameters)
     {
         return await unitOfWork
             .KnowledgeBasesRepository
-            .FindManyAsync(
-            @params.FindManyParams, 
-            @params.OrderByParams, 
-            @params.PaginationParams);
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPaginationAsync(
-        FindManyPaginationKnowledgeBasesServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        var (page, size) = @params;
-        if (page == null || size == null) 
-            return null;
         var count = await unitOfWork
             .KnowledgeBasesRepository
-            .CountAsync(@params.CountParams);
-        var pagination = Pagination.Build(page, size, count);
-
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
     public async Task<KnowledgeBase> CreateAsync(
-        CreateKnowledgeBasesServiceParams @params)
+        CreateServiceParams parameters)
     {
-        using var transaction = unitOfWork.BeginTransaction;
-        var knowledgeBase = new KnowledgeBase(@params.Params);
+        await using var transaction = unitOfWork.BeginTransaction;
+        var knowledgeBase = 
+            new KnowledgeBase((KnowledgeBaseParams)parameters.Params);
         await unitOfWork.KnowledgeBasesRepository
             .CreateAsync(knowledgeBase);
         await unitOfWork.Commit(transaction);
@@ -60,20 +56,21 @@ public class KnowledgeBasesService(
     }
 
     public async Task UpdateAsync(
-        UpdateKnowledgeBasesServiceParams @params)
+        UpdateServiceParams parameters)
     {
-        var knowledgeBase = await FindOneAsync(@params);
-        knowledgeBase.Update(@params.Params);
-        using var transaction = unitOfWork.BeginTransaction;
+        var knowledgeBase = await FindOneAsync(parameters);
+        knowledgeBase.Update(
+            (UpdateKnowledgeBaseParams)parameters.Params);
+        await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.KnowledgeBasesRepository.Update(knowledgeBase);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(
-        DeleteKnowledgeBasesServiceParams @params)
+        DeleteServiceParams parameters)
     {
-        var knowledgeBase = await FindOneAsync(@params);
-        using var transaction = unitOfWork.BeginTransaction;
+        var knowledgeBase = await FindOneAsync(parameters);
+        await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.KnowledgeBasesRepository.Delete(knowledgeBase);
         await unitOfWork.Commit(transaction);
     }

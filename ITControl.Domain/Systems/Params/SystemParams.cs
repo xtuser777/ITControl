@@ -1,6 +1,8 @@
-﻿namespace ITControl.Domain.Systems.Params;
+﻿using ITControl.Domain.Shared.Params2;
 
-public record SystemParams
+namespace ITControl.Domain.Systems.Params;
+
+public record SystemParams : EntityParams
 {
     public string Name { get; init; } = string.Empty;
     public string Version { get; init; } = string.Empty;

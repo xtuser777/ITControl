@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Pages.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Pages.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreatePagesParams
     [FromBody]
     public CreatePagesRequest Request { get; init; } = new();
 
-    public static implicit operator CreatePagesServiceParams
+    public static implicit operator CreateServiceParams
         (CreatePagesParams paramsModel) =>
         new()
         {

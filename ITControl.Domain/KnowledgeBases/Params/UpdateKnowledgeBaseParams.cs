@@ -1,14 +1,15 @@
 ﻿using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.KnowledgeBases.Params;
 
-public record UpdateKnowledgeBaseParams
+public record UpdateKnowledgeBaseParams : UpdateEntityParams
 {
-    public string? Title { get; set; } = null;
-    public string? Content { get; set; } = null;
-    public TimeOnly? EstimatedTime { get; set; } = null;
-    public CallReason? Reason { get; set; } = null;
-    public Guid? UserId { get; set; } = null;
+    public string? Title { get; init; }
+    public string? Content { get; init; }
+    public TimeOnly? EstimatedTime { get; init; }
+    public CallReason? Reason { get; init; }
+    public Guid? UserId { get; init; }
 
     internal void Deconstruct(
         out string? title,

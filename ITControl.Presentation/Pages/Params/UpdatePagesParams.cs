@@ -1,4 +1,4 @@
-﻿using ITControl.Application.Pages.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Pages.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record UpdatePagesParams
     [FromBody]
     public UpdatePagesRequest Request { get; set; } = new();
 
-    public static implicit operator UpdatePagesServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdatePagesParams paramsModel) =>
         new()
         {

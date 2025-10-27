@@ -38,7 +38,8 @@ public record CreateSystemsRequest
     [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
 
-    public static implicit operator SystemParams(CreateSystemsRequest request) =>
+    public static implicit operator SystemParams(
+        CreateSystemsRequest request) =>
         new()
         {
             Name = request.Name,

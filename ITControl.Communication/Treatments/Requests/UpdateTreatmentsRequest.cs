@@ -34,11 +34,11 @@ public class UpdateTreatmentsRequest
     [Display(Name = nameof(EndedIn), ResourceType = typeof(DisplayNames))]
     public TimeOnly? EndedIn { get; set; }
 
-    [CustomValidation(typeof(UpdateTreatmentsRequest), nameof(ValidateStatus))]
+    [EnumValue(typeof(TreatmentStatus))]
     [Display(Name = nameof(Status), ResourceType = typeof(DisplayNames))]
     public string? Status { get; set; }
 
-    [CustomValidation(typeof(UpdateTreatmentsRequest), nameof(ValidateType))]
+    [EnumValue(typeof(TreatmentType))]
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string? Type { get; set; }
     
@@ -77,30 +77,4 @@ public class UpdateTreatmentsRequest
             CallId = request.CallId,
             UserId = request.UserId
         };
-
-    public static ValidationResult? ValidateStatus(string? status, ValidationContext context)
-    {
-        if (status == null) return ValidationResult.Success;
-        var allowedStatuses = Enum.GetNames(typeof(TreatmentStatus));
-        if (!allowedStatuses.Contains(status))
-        {
-            var statuses = string.Join(", ", allowedStatuses);
-            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, statuses);
-            return new ValidationResult(errorMessage);
-        }
-        return ValidationResult.Success;
-    }
-
-    public static ValidationResult? ValidateType(string? type, ValidationContext context)
-    {
-        if (type == null) return ValidationResult.Success;
-        var allowedTypes = Enum.GetNames(typeof(TreatmentType));
-        if (!allowedTypes.Contains(type))
-        {
-            var types = string.Join(", ", allowedTypes);
-            var errorMessage = string.Format(Errors.MustBeAOneOfTheseValues, context.DisplayName, types);
-            return new ValidationResult(errorMessage);
-        }
-        return ValidationResult.Success;
-    }
 }

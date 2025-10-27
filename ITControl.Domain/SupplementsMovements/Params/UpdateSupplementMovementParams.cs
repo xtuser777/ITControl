@@ -1,6 +1,8 @@
+using ITControl.Domain.Shared.Params2;
+
 namespace ITControl.Domain.SupplementsMovements.Params;
 
-public record UpdateSupplementMovementParams
+public record UpdateSupplementMovementParams : UpdateEntityParams
 {
     public int? Quantity { get; init; }
     public DateOnly? MovementDate { get; init; }

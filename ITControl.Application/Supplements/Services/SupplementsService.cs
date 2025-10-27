@@ -2,10 +2,11 @@
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.Supplements.Interfaces;
-using ITControl.Application.Supplements.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Supplements.Entities;
+using ITControl.Domain.Supplements.Params;
 
 namespace ITControl.Application.Supplements.Services;
 
@@ -13,38 +14,38 @@ public class SupplementsService(
     IUnitOfWork unitOfWork) : ISupplementsService
 {
     public async Task<Supplement> FindOneAsync(
-        FindOneSupplementsServiceParams @params)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
                    .SupplementsRepository
-                   .FindOneAsync(@params) 
+                   .FindOneAsync(parameters) 
             ?? throw new NotFoundException(Errors.SUPPLEMENT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Supplement>> FindManyAsync(
-        FindManySupplementsServiceParams @params)
+        FindManyServiceParams parameters)
     {
         return await unitOfWork
             .SupplementsRepository
-            .FindManyAsync(@params);
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationResponse?> FindManyPagination(
-        FindManyPaginationSupplementsServiceParams @params)
+        FindManyPaginationServiceParams parameters)
     {
-        var (page, size) = @params;
-        if (page == null || size == null) return null;
         var count = await unitOfWork
             .SupplementsRepository
-            .CountAsync(@params);
-        var pagination = Pagination.Build(page, size, count);
+            .CountAsync(parameters.CountParams);
+        var pagination = 
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
     public async Task<Supplement?> CreateAsync(
-        CreateSupplementsServiceParams @params)
+        CreateServiceParams parameters)
     {
-        var supplement = new Supplement(@params.Params);
+        var supplement = 
+            new Supplement((SupplementParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SupplementsRepository.CreateAsync(supplement);
         await unitOfWork.Commit(transaction);
@@ -53,19 +54,19 @@ public class SupplementsService(
     }
 
     public async Task UpdateAsync(
-        UpdateSupplementsServiceParams @params)
+        UpdateServiceParams parameters)
     {
-        var supplement = await FindOneAsync(@params);
-        supplement.Update(@params.Params);
+        var supplement = await FindOneAsync(parameters);
+        supplement.Update((UpdateSupplementParams)parameters.Params);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.SupplementsRepository.Update(supplement);
         await unitOfWork.Commit(transaction);
     }
 
     public async Task DeleteAsync(
-        DeleteSupplementsServiceParams @params)
+        DeleteServiceParams parameters)
     {
-        var supplement = await FindOneAsync(@params);
+        var supplement = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.SupplementsRepository.Delete(supplement);
         await unitOfWork.Commit(transaction);

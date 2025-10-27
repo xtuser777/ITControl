@@ -1,5 +1,6 @@
 ﻿namespace ITControl.Domain.Roles.Params;
 
-public record ExclusiveRolesParams : CountRolesParams
+public record ExclusiveRolesParams : FindManyRolesParams
 {
+    public Guid ExcludeId { get; set; }
 }

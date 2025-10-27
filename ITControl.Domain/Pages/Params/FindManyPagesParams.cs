@@ -4,5 +4,5 @@ namespace ITControl.Domain.Pages.Params;
 
 public record FindManyPagesParams : FindManyParams
 {
-    public string? Name { get; set; } = null;
+    public string? Name { get; set; } 
 }

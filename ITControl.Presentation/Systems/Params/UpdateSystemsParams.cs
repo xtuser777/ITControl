@@ -1,4 +1,4 @@
-using ITControl.Application.Systems.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Systems.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,7 +10,7 @@ public record UpdateSystemsParams
     [FromBody] public UpdateSystemsRequest 
         UpdateSystemsRequest { get; set; } = new();
 
-    public static implicit operator UpdateSystemsServiceParams(
+    public static implicit operator UpdateServiceParams(
         UpdateSystemsParams parameters)
         => new()
         {

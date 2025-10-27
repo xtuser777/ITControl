@@ -1,4 +1,4 @@
-using ITControl.Application.Notifications.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Domain.Notifications.Params;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +16,7 @@ public record ShowNotificationsParams
     [FromQuery]
     public bool? IncludeTreatment { get; init; } = true;
 
-    public static implicit operator FindOneNotificationsServiceParams(
+    public static implicit operator FindOneServiceParams(
         ShowNotificationsParams param)
         => new()
         {

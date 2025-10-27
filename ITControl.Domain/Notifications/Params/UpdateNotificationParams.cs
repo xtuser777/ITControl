@@ -1,16 +1,17 @@
 ﻿using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Shared.Params2;
 
 namespace ITControl.Domain.Notifications.Params;
 
-public record UpdateNotificationParams
+public record UpdateNotificationParams : UpdateEntityParams
 {
-    public string? Title { get; set; } = null;
-    public string? Message { get; set; } = null;
-    public NotificationType? Type { get; set; } = null;
-    public NotificationReference? Reference { get; set; } = null;
-    public bool? IsRead { get; set; } = null;
-    public Guid? UserId { get; set; } = null;
-    public Guid? CallId { get; set; } = null;
-    public Guid? AppointmentId { get; set; } = null;
-    public Guid? TreatmentId { get; set; } = null;
+    public string? Title { get; init; }
+    public string? Message { get; init; }
+    public NotificationType? Type { get; init; }
+    public NotificationReference? Reference { get; init; }
+    public bool? IsRead { get; init; }
+    public Guid? UserId { get; init; }
+    public Guid? CallId { get; init; }
+    public Guid? AppointmentId { get; init; }
+    public Guid? TreatmentId { get; init; }
 }

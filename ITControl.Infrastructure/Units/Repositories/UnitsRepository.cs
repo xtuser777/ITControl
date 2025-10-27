@@ -23,7 +23,7 @@ public class UnitsRepository(ApplicationDbContext context) :
         BuildQuery(findManyParams.FindMany);
         BuildOrderBy(findManyParams.OrderBy);
         ApplyPagination(findManyParams.Pagination);
-        return (await query.ToListAsync()).Cast<Unit>();;
+        return (await query.ToListAsync()).Cast<Unit>();
     }
 
     public async Task CreateAsync(Unit unit)

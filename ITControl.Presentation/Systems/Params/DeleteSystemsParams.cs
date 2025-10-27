@@ -1,4 +1,4 @@
-using ITControl.Application.Systems.Params;
+using ITControl.Application.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Systems.Params;
@@ -7,7 +7,7 @@ public record DeleteSystemsParams
 {
     [FromRoute] public Guid Id { get; set; }
 
-    public static implicit operator DeleteSystemsServiceParams(
+    public static implicit operator DeleteServiceParams(
         DeleteSystemsParams parameters)
         => new()
         {

@@ -1,4 +1,4 @@
-﻿using ITControl.Application.KnowledgeBases.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Domain.KnowledgeBases.Params;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,7 +12,7 @@ public record ShowKnowledgeBasesParams
     [FromQuery]
     public bool? IncludeUser { get; set; } = true;
 
-    public static implicit operator FindOneKnowledgeBasesServiceParams(
+    public static implicit operator FindOneServiceParams(
         ShowKnowledgeBasesParams show)
         => new()
         {

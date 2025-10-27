@@ -14,7 +14,7 @@ public record CreatePagesRequest
     [StringMaxLength(100)]
     [UniqueField<Page>(
         typeof(IPagesRepository), 
-        typeof(ExistsPagesRepositoryParams))]
+        typeof(ExistsPagesParams))]
     [Display(
         Name = nameof(Name), 
         ResourceType = typeof(DisplayNames))]

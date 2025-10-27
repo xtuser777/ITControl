@@ -17,7 +17,7 @@ public class SystemConnectionAttribute : ValidationAttribute
         var systemsRepository = 
             (ISystemsRepository)validationContext
                 .GetService(typeof(ISystemsRepository))!;
-        var existsParams = new ExistsSystemsRepositoryParams { Id = systemId };
+        var existsParams = new ExistsSystemsParams { Id = systemId };
         var systemExists = systemsRepository
             .ExistsAsync(existsParams).GetAwaiter().GetResult();
         return !systemExists 

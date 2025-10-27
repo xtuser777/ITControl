@@ -1,11 +1,12 @@
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.Supplements.Enums;
 
 namespace ITControl.Domain.Supplements.Params;
 
-public record UpdateSupplementParams
+public record UpdateSupplementParams : UpdateEntityParams
 {
-    public string? Brand { get; set; } = null;
-    public string? Model { get; set; } = null;
-    public SupplementType? Type { get; set; } = null;
-    public int? QuantityInStock { get; set; } = null;
+    public string? Brand { get; init; }
+    public string? Model { get; init; }
+    public SupplementType? Type { get; init; }
+    public int? QuantityInStock { get; init; }
 }

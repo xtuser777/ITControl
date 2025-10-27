@@ -1,5 +1,3 @@
 ﻿namespace ITControl.Domain.Roles.Params;
 
-public record ExistsRolesParams : CountRolesParams
-{
-}
+public record ExistsRolesParams : CountRolesParams;

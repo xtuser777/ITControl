@@ -1,32 +1,82 @@
-﻿using ITControl.Application.KnowledgeBases.Params;
-using ITControl.Communication.KnowledgeBases.Requests;
+﻿using ITControl.Application.Shared.Params;
+using ITControl.Domain.Calls.Enums;
+using ITControl.Domain.KnowledgeBases.Params;
+using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Shared.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.KnowledgeBases.Params;
 
-public record IndexKnowledgeBasesParams
+public record IndexKnowledgeBasesParams : PaginationParams
 {
-    [FromQuery]
-    public FindManyKnowledgeBasesRequest FindManyRequest { get; set; } = new();
+    public string? Title { get; set; }
+    public string? Content { get; set; }
+    public TimeOnly? EstimatedTime { get; set; }
+    public string? Reason { get; set; }
+    public Guid? UserId { get; set; }
+    
+    [FromHeader(Name = "X-Order-By-Title")]
+    public string? OrderByTitle { get; set; }
 
-    [FromHeader]
-    public OrderByKnowledgeBasesRequest OrderByRequest { get; set; } = new();
+    [FromHeader(Name = "X-Order-By-Content")]
+    public string? OrderByContent { get; set; }
+    
+    [FromHeader(Name = "X-Order-By-Estimated-Time")]
+    public string? OrderByEstimatedTime { get; set; }
+    
+    [FromHeader(Name = "X-Order-By-Reason")]
+    public string? OrderByReason { get; set; }
+    
+    [FromHeader(Name = "X-Order-By-User")]
+    public string? OrderByUser { get; set; }
 
-    public static implicit operator FindManyKnowledgeBasesServiceParams(
-        IndexKnowledgeBasesParams index)
-        => new()
+    public static implicit operator OrderByKnowledgeBasesParams(
+        IndexKnowledgeBasesParams request) =>
+        new()
         {
-            FindManyParams = index.FindManyRequest,
-            OrderByParams = index.OrderByRequest,
-            PaginationParams = index.FindManyRequest,
+            Title = request.OrderByTitle,
+            Content = request.OrderByContent,
+            EstimatedTime = request.OrderByEstimatedTime,
+            Reason = request.OrderByReason,
+            User = request.OrderByUser,
         };
 
-    public static implicit operator FindManyPaginationKnowledgeBasesServiceParams(
+    public static implicit operator FindManyKnowledgeBasesParams(
+        IndexKnowledgeBasesParams request) =>
+        new()
+        {
+            Title = request.Title,
+            Content = request.Content,
+            EstimatedTime = request.EstimatedTime,
+            Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
+            UserId = request.UserId,
+        };
+
+    public static implicit operator CountKnowledgeBasesParams(
+        IndexKnowledgeBasesParams request) =>
+        new()
+        {
+            Title = request.Title,
+            Content = request.Content,
+            EstimatedTime = request.EstimatedTime,
+            Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
+            UserId = request.UserId
+        };
+
+    public static implicit operator FindManyServiceParams(
         IndexKnowledgeBasesParams index)
         => new()
         {
-            CountParams = index.FindManyRequest,
-            Page = index.FindManyRequest.Page,
-            Size = index.FindManyRequest.Size,
+            FindManyParams = index,
+            OrderByParams = index,
+            PaginationParams = index,
+        };
+
+    public static implicit operator FindManyPaginationServiceParams(
+        IndexKnowledgeBasesParams index)
+        => new()
+        {
+            CountParams = index,
+            PaginationParams = index,
         };
 }

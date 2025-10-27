@@ -1,6 +1,8 @@
+using ITControl.Domain.Shared.Params2;
+
 namespace ITControl.Domain.SupplementsMovements.Params;
 
-public record SupplementMovementParams
+public record SupplementMovementParams : EntityParams
 {
     public int Quantity { get; init; }
     public DateOnly MovementDate { get; init; }

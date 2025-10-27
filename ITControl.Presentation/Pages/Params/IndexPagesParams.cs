@@ -1,32 +1,53 @@
-﻿using ITControl.Application.Pages.Params;
+﻿using ITControl.Application.Shared.Params;
 using ITControl.Communication.Pages.Requests;
+using ITControl.Domain.Pages.Params;
+using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Pages.Params;
 
-public record IndexPagesParams
+public record IndexPagesParams : PaginationParams
 {
-    [FromQuery]
-    public FindManyPagesRequest FindManyRequest { get; set; } = new();
+    public string? Name { get; set; }
     
-    [FromHeader]
-    public OrderByPagesRequest OrderByRequest { get; set; } = new();
+    [FromHeader(Name = "X-Order-By-Name")]
+    public string? OrderByName { get; set; }
 
-    public static implicit operator FindManyPaginationPagesServiceParams(
+    public static implicit operator OrderByPagesParams(
+        IndexPagesParams request) => 
+        new() 
+        { 
+            Name = request.OrderByName, 
+        };
+
+    public static implicit operator FindManyPagesParams(
+        IndexPagesParams request) => 
+        new() 
+        { 
+            Name = request.Name, 
+        };
+
+    public static implicit operator CountPagesParams(
+        IndexPagesParams request) =>
+        new()
+        {
+            Name = request.Name,
+        };
+
+    public static implicit operator FindManyPaginationServiceParams(
         IndexPagesParams paramsModel) =>
         new()
         {
-            CountParams = paramsModel.FindManyRequest,
-            Page = paramsModel.FindManyRequest.Page,
-            Size = paramsModel.FindManyRequest.Size,
+            CountParams = paramsModel,
+            PaginationParams = paramsModel,
         };
 
-    public static implicit operator FindManyPagesServiceParams(
+    public static implicit operator FindManyServiceParams(
         IndexPagesParams paramsModel)
         => new()
         {
-            FindManyParams = paramsModel.FindManyRequest,
-            OrderByParams = paramsModel.OrderByRequest,
-            PaginationParams = paramsModel.FindManyRequest,
+            FindManyParams = paramsModel,
+            OrderByParams = paramsModel,
+            PaginationParams = paramsModel,
         };
 }

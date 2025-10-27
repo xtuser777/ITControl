@@ -5,8 +5,8 @@ using ITControl.Application.Shared.Utils;
 using ITControl.Communication.Auth.Requests;
 using ITControl.Communication.Auth.Responses;
 using ITControl.Domain.Pages.Entities;
-using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Roles.Params;
+using ITControl.Domain.Shared.Params2;
 using ITControl.Domain.Users.Entities;
 using ITControl.Infrastructure.Users.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -71,7 +71,7 @@ public class AuthService(
         foreach (var pageId in pagesIds)
         {
             var page = await unitOfWork.PagesRepository.FindOneAsync(
-                new FindOnePagesRepositoryParams() { Id = pageId });
+                new FindOneRepositoryParams() { Id = pageId });
             pages.Add(page);
         }
 

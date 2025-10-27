@@ -1,4 +1,4 @@
-using ITControl.Application.Supplements.Params;
+using ITControl.Application.Shared.Params;
 using ITControl.Communication.Supplements.Requests;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +9,7 @@ public record CreateSupplementsParams
     [FromBody]
     public CreateSupplementsRequest Request { get; set; } = new();
 
-    public static implicit operator CreateSupplementsServiceParams(
+    public static implicit operator CreateServiceParams(
         CreateSupplementsParams param)
         => new()
         {
