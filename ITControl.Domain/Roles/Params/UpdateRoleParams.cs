@@ -1,5 +1,5 @@
 ﻿using ITControl.Domain.Roles.Entities;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Roles.Params;
 

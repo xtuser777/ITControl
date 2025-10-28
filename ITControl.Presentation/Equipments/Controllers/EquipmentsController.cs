@@ -1,11 +1,12 @@
 using ITControl.Application.Equipments.Interfaces;
-using ITControl.Communication.Equipments.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Equipments.Interfaces;
+using ITControl.Presentation.Equipments.Responses;
 using ITControl.Presentation.Equipments.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Equipments.Controllers
 {
@@ -19,7 +20,7 @@ namespace ITControl.Presentation.Equipments.Controllers
     {
         [HttpGet]
         [ProducesResponseType(
-            typeof(FindManyResponse<FindManyEquipmentsResponse>), StatusCodes.Status200OK)]
+            typeof(Shared.Responses.FindManyResponse<FindManyEquipmentsResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -41,7 +42,7 @@ namespace ITControl.Presentation.Equipments.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(
-            typeof(FindOneResponse<FindOneEquipmentsResponse?>), StatusCodes.Status200OK)]
+            typeof(Shared.Responses.FindOneResponse<FindOneEquipmentsResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(
@@ -58,7 +59,7 @@ namespace ITControl.Presentation.Equipments.Controllers
 
         [HttpPost]
         [ProducesResponseType(
-            typeof(FindOneResponse<CreateEquipmentsResponse?>), StatusCodes.Status201Created)]
+            typeof(Shared.Responses.FindOneResponse<CreateEquipmentsResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

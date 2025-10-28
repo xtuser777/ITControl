@@ -12,14 +12,19 @@ public class PermissionsFilter : Attribute, IResourceFilter
     {
         try
         {
-            var path = context.HttpContext.Request.Path.Value ?? throw new UnauthorizedAccessException();
+            var path = context.HttpContext.Request.Path.Value 
+                ?? throw new UnauthorizedAccessException();
             var controller = path.Split('/')[1];
-            context.HttpContext.Request.Headers.TryGetValue("Authorization", out var authorization);
+            context.HttpContext.Request.Headers
+                .TryGetValue("Authorization", out var authorization);
             var tokenString = authorization.ToString().Split(' ')[1];
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.ReadJwtToken(tokenString);
-            var permissionsRaw = token.Payload["permissions"] ?? throw new UnauthorizedAccessException();
-            var permissionsJson = Newtonsoft.Json.JsonConvert.DeserializeObject<List<string>>((string)permissionsRaw) ?? throw new InvalidOperationException();
+            var permissionsRaw = token.Payload["permissions"] 
+                ?? throw new UnauthorizedAccessException();
+            var permissionsJson = Newtonsoft.Json.JsonConvert
+                .DeserializeObject<List<string>>((string)permissionsRaw) 
+                                ?? throw new InvalidOperationException();
             var pass = permissionsJson.Contains(controller.ToLower());
             if (!pass)
                 throw new UnauthorizedAccessException();

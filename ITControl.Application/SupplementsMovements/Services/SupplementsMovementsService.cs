@@ -3,9 +3,9 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.SupplementsMovements.Interfaces;
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.SupplementsMovements.Entities;
 using ITControl.Domain.SupplementsMovements.Params;
 
@@ -30,7 +30,7 @@ public class SupplementsMovementsService(
             .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork

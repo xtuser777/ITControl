@@ -1,5 +1,4 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Communication.Pages.Requests;
 using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Shared.Params;
 using Microsoft.AspNetCore.Mvc;

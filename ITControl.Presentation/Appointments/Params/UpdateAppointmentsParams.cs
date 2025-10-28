@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Communication.Appointments.Requests;
+using ITControl.Presentation.Appointments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Appointments.Params;

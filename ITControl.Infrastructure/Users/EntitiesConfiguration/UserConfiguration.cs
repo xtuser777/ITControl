@@ -1,4 +1,9 @@
 using ITControl.Domain.Users.Entities;
+using ITControl.Infrastructure.Departments.EntitiesConfiguration;
+using ITControl.Infrastructure.Divisions.EntitiesConfiguration;
+using ITControl.Infrastructure.Positions.EntitiesConfiguration;
+using ITControl.Infrastructure.Roles.EntitiesConfiguration;
+using ITControl.Infrastructure.Units.EntitiesConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -6,6 +11,26 @@ namespace ITControl.Infrastructure.Users.EntitiesConfiguration;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
+    [Obsolete("Obsolete")] internal static readonly List<User> UsersSeed = [
+        new(new ()
+        {
+            Name = "Administrador",
+            Username = "admin",
+            Password = "1nf0.pmr",
+            Document = "02912383005",
+            Email = "contato@rancharia.sp.gov.br",
+            Enrollment = 9999,
+            RoleId = RoleConfiguration.RolesSeed[0].Id,
+            PositionId = PositionConfiguration.PositionsSeed[0].Id,
+            UnitId = UnitConfiguration.UnitsSeed[0].Id,
+            DepartmentId = DepartmentConfiguration
+                               .DepartmentsSeed
+                               .Find(x => x.Alias == "SEMAD")?.Id
+                           ?? Guid.Empty,
+            DivisionId = DivisionConfiguration.DivisionsSeed[0].Id,
+        })
+    ];
+    
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.HasKey(u => u.Id);
@@ -54,5 +79,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .HasForeignKey(u => u.DivisionId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        builder.HasData(UsersSeed);
     }
 }

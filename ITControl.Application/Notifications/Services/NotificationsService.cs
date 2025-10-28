@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
@@ -39,7 +39,7 @@ public class NotificationsService(
         await unitOfWork.Commit(transaction);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams @params)
     {
         var count = await unitOfWork

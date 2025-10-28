@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
 
 namespace ITControl.Application.Notifications.Interfaces;
@@ -10,7 +10,7 @@ public interface INotificationsService
         FindOneServiceParams parameters);
     Task<IEnumerable<Notification>> FindManyAsync(
         FindManyServiceParams parameters);
-    Task<PaginationResponse?> FindManyPaginationAsync(
+    Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters);
     Task<int> CountUnreadAsync(Guid userId);
     Task UpdateAsync(

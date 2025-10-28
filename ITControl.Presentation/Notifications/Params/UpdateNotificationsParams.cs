@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Notifications.Requests;
+using ITControl.Presentation.Notifications.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Notifications.Params;

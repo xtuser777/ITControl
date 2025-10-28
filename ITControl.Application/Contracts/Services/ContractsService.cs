@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Params;
 using ITControl.Domain.Shared.Exceptions;
@@ -28,7 +28,7 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
             .FindManyAsync(findManyParams);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams paginationParams)
     {
         var count = await unitOfWork.ContractsRepository

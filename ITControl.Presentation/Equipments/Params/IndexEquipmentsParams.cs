@@ -1,5 +1,4 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Equipments.Requests;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Shared.Params;

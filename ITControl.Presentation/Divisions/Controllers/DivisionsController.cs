@@ -1,11 +1,12 @@
 using ITControl.Application.Divisions.Interfaces;
-using ITControl.Communication.Divisions.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Divisions.Interfaces;
+using ITControl.Presentation.Divisions.Responses;
 using ITControl.Presentation.Divisions.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Divisions.Controllers;
 
@@ -19,7 +20,7 @@ public class DivisionsController(
 {
     [HttpGet]
     [ProducesResponseType(
-        typeof(FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
+        typeof(Shared.Responses.FindManyResponse<FindManyDivisionsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(
         typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -39,7 +40,7 @@ public class DivisionsController(
 
     [HttpGet("{id}")]
     [ProducesResponseType(
-        typeof(FindOneResponse<FindOneDivisionsResponse?>), 
+        typeof(Shared.Responses.FindOneResponse<FindOneDivisionsResponse?>), 
         StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), 
         StatusCodes.Status400BadRequest)]
@@ -59,7 +60,7 @@ public class DivisionsController(
 
     [HttpPost]
     [ProducesResponseType(
-        typeof(FindOneResponse<CreateDivisionsResponse?>), 
+        typeof(Shared.Responses.FindOneResponse<CreateDivisionsResponse?>), 
         StatusCodes.Status201Created)]
     [ProducesResponseType(
         typeof(ErrorJsonResponse), 

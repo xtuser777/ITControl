@@ -1,6 +1,6 @@
 using System.Net;
-using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -19,8 +19,10 @@ public class ExceptionFilter : IExceptionFilter
         {
             if (context.Exception is UnauthorizedAccessException)
             {
-                context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                context.Result = new UnauthorizedObjectResult(new ErrorJsonResponse([context.Exception.Message]));
+                context.HttpContext.Response.StatusCode = 
+                    (int)HttpStatusCode.Unauthorized;
+                context.Result = new UnauthorizedObjectResult(
+                    new ErrorJsonResponse([context.Exception.Message]));
             }
             else
                 ThrowUnknowError(context);
@@ -34,29 +36,37 @@ public class ExceptionFilter : IExceptionFilter
             case DomainException:
             case BadRequestException:
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Result = new BadRequestObjectResult(new ErrorJsonResponse([context.Exception.Message]));
+                context.Result = new BadRequestObjectResult(
+                    new ErrorJsonResponse([context.Exception.Message]));
                 break;
             case NotFoundException:
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Result = new NotFoundObjectResult(new ErrorJsonResponse([context.Exception.Message]));
+                context.Result = new NotFoundObjectResult(
+                    new ErrorJsonResponse([context.Exception.Message]));
                 break;
             case ConflictException:
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.Conflict;
-                context.Result = new ConflictObjectResult(new ErrorJsonResponse([context.Exception.Message]));
+                context.Result = new ConflictObjectResult(
+                    new ErrorJsonResponse([context.Exception.Message]));
                 break;
             case ExistenceException:
                 context.HttpContext.Response.StatusCode = (int)HttpStatusCode.NotFound;
-                context.Result = new NotFoundObjectResult(new ErrorJsonResponse([context.Exception.Message]));
+                context.Result = new NotFoundObjectResult(
+                    new ErrorJsonResponse([context.Exception.Message]));
                 break;
             case ConverterException:
-                context.ModelState.AddModelError((context.Exception as ConverterException)!.PropertyName, context.Exception.Message);
+                context.ModelState.AddModelError(
+                    (context.Exception as ConverterException)!.PropertyName, 
+                    context.Exception.Message);
                 break;
         }
     }
 
     private static void ThrowUnknowError(ExceptionContext context)
     {
-        context.HttpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-        context.Result = new ObjectResult(new ErrorJsonResponse(["Unknown Error"]));
+        context.HttpContext.Response.StatusCode = 
+            (int)HttpStatusCode.InternalServerError;
+        context.Result = new ObjectResult(
+            new ErrorJsonResponse(["Unknown Error"]));
     }
 }

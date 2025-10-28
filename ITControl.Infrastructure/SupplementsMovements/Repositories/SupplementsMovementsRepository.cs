@@ -1,4 +1,4 @@
-﻿using ITControl.Domain.Shared.Params2;
+﻿using ITControl.Domain.Shared.Params;
 using ITControl.Domain.SupplementsMovements.Entities;
 using ITControl.Domain.SupplementsMovements.Interfaces;
 using ITControl.Infrastructure.Contexts;

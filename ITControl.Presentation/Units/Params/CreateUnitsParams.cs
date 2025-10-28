@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Units.Requests;
+using ITControl.Presentation.Units.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Units.Params;

@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Communication.Positions.Requests;
+using ITControl.Presentation.Positions.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Positions.Params;

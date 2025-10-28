@@ -22,4 +22,24 @@
       <ProjectReference Include="..\ITControl.CrossCutting\ITControl.CrossCutting.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Shared\Resources\DisplayNames.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DisplayNames.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Shared\Resources\DisplayNames.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>DisplayNames.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Shared\Resources\DisplayNames.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>DisplayNames.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
 </Project>

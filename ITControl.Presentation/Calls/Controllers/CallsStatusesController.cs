@@ -1,5 +1,5 @@
-using ITControl.Application.Calls.Interfaces;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Calls.Interfaces;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Calls.Controllers
@@ -10,10 +10,10 @@ namespace ITControl.Presentation.Calls.Controllers
         ICallsStatusesView callsStatusesView) : ControllerBase
     {
         [HttpGet]
-        public FindManyResponse<TranslatableField> Index()
+        public Shared.Responses.FindManyResponse<TranslatableField> Index()
         {
             var data = callsStatusesView.FindMany();
-            return new FindManyResponse<TranslatableField>()
+            return new Shared.Responses.FindManyResponse<TranslatableField>()
             {
                 Data = data,
             };

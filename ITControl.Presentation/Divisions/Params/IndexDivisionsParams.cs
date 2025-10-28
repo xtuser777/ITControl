@@ -1,8 +1,6 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Divisions.Requests;
 using ITControl.Domain.Divisions.Params;
 using ITControl.Domain.Shared.Params;
-using ITControl.Domain.Shared.Utils;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Divisions.Params;

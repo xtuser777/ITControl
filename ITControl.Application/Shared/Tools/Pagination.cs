@@ -1,18 +1,18 @@
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Application.Shared.Tools;
 
 public abstract class Pagination
 {
-    public static PaginationResponse Build(string page, string size, int count)
+    public static PaginationModel Build(string page, string size, int count)
     {
         var pageInt = int.Parse(page);
         var sizeInt = int.Parse(size);
         var pages = (decimal)count / (decimal)sizeInt;
         var totalPages = Math.Ceiling(pages);
 
-        var pagination = new PaginationResponse()
+        var pagination = new PaginationModel()
         {
             Page = pageInt,
             RecordsPerPage = sizeInt,
@@ -23,7 +23,7 @@ public abstract class Pagination
         return pagination;
     }
     
-    public static PaginationResponse? Build(int? page, int? size, int count)
+    public static PaginationModel? Build(int? page, int? size, int count)
     {
         if (!page.HasValue || !size.HasValue)
             return null;
@@ -32,7 +32,7 @@ public abstract class Pagination
         if (page < 1 || page > totalPages || size == 0)
             return null;
 
-        var pagination = new PaginationResponse()
+        var pagination = new PaginationModel()
         {
             Page = page ?? 0,
             RecordsPerPage = size ?? 0,
@@ -43,7 +43,7 @@ public abstract class Pagination
         return pagination;
     }
     
-    public static PaginationResponse? Build(PaginationParams parameters, int count)
+    public static PaginationModel? Build(PaginationParams parameters, int count)
     {
         var (page, size) = parameters;
         if (!page.HasValue || !size.HasValue)
@@ -53,7 +53,7 @@ public abstract class Pagination
         if (page < 1 || page > totalPages || size == 0)
             return null;
 
-        var pagination = new PaginationResponse()
+        var pagination = new PaginationModel()
         {
             Page = page ?? 0,
             RecordsPerPage = size ?? 0,

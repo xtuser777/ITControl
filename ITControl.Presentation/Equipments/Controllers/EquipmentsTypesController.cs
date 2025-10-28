@@ -1,6 +1,6 @@
-using ITControl.Application.Equipments.Interfaces;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Equipments.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Equipments.Controllers
 {
@@ -10,10 +10,10 @@ namespace ITControl.Presentation.Equipments.Controllers
         IEquipmentsTypesView equipmentsTypesView) : ControllerBase
     {
         [HttpGet]
-        public FindManyResponse<TranslatableField> Index()
+        public Shared.Responses.FindManyResponse<TranslatableField> Index()
         {
             var data = equipmentsTypesView.FindMany();
-            return new FindManyResponse<TranslatableField>()
+            return new Shared.Responses.FindManyResponse<TranslatableField>()
             {
                 Data = data,
             };

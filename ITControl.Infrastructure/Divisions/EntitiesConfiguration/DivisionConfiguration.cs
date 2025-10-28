@@ -1,4 +1,5 @@
 using ITControl.Domain.Divisions.Entities;
+using ITControl.Infrastructure.Departments.EntitiesConfiguration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -6,6 +7,16 @@ namespace ITControl.Infrastructure.Divisions.EntitiesConfiguration;
 
 public class DivisionConfiguration : IEntityTypeConfiguration<Division>
 {
+    internal static readonly List<Division> DivisionsSeed = [
+        new(new()
+        {
+            Name = "Divisão Municipal de Informática",
+            DepartmentId = DepartmentConfiguration
+                .DepartmentsSeed
+                .Find(x => x.Alias == "SEMAD")?.Id
+                           ?? Guid.Empty
+        })
+    ];
     public void Configure(EntityTypeBuilder<Division> builder)
     {
         builder.HasKey(x => x.Id);
@@ -14,6 +25,10 @@ public class DivisionConfiguration : IEntityTypeConfiguration<Division>
         builder.Property(x => x.UpdatedAt).IsRequired();
         builder.HasIndex(x => x.Name).IsUnique();
 
-        builder.HasOne(x => x.Department).WithMany().HasForeignKey(x => x.DepartmentId).OnDelete(DeleteBehavior.Restrict);
+        builder.HasOne(x => x.Department)
+            .WithMany().HasForeignKey(x => x.DepartmentId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasData(DivisionsSeed);
     }
 }

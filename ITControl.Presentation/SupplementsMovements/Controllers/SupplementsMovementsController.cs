@@ -1,8 +1,9 @@
 ﻿using ITControl.Application.SupplementsMovements.Interfaces;
-using ITControl.Communication.Shared.Responses;
-using ITControl.Communication.SupplementsMovements.Responses;
+using ITControl.Presentation.SupplementsMovements.Responses;
 using ITControl.Presentation.SupplementsMovements.Params;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
+using ITControl.Presentation.SupplementsMovements.Interfaces;
 
 namespace ITControl.Presentation.SupplementsMovements.Controllers;
 

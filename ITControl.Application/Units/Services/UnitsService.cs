@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.Units.Interfaces;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Units.Params;
@@ -26,7 +26,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
             .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.UnitsRepository

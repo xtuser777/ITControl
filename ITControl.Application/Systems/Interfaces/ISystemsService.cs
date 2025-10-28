@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Application.Systems.Interfaces;
 
@@ -9,7 +9,7 @@ public interface ISystemsService
         FindOneServiceParams parameters);
     Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(
         FindManyServiceParams parameters);
-    Task<PaginationResponse?> FindManyPaginationAsync(
+    Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters);
     Task<Domain.Systems.Entities.System?> CreateAsync(
         CreateServiceParams parameters);

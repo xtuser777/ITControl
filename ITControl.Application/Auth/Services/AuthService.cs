@@ -2,11 +2,9 @@
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Utils;
-using ITControl.Communication.Auth.Requests;
-using ITControl.Communication.Auth.Responses;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Roles.Params;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Users.Entities;
 using ITControl.Infrastructure.Users.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -19,9 +17,9 @@ public class AuthService(
     IConfiguration configuration) : IAuthService
 {
     [Obsolete("Obsolete")]
-    public async Task<LoginResponse> Login(LoginRequest request)
+    public async Task<string> Login(string username, string password)
     {
-        var user = await Validate(request.Username, request.Password);
+        var user = await Validate(username, password);
         var permissions = await Permissions(user.RoleId);
 
         var payload = new LoginPayload()
@@ -42,10 +40,7 @@ public class AuthService(
             payload
         );
 
-        return new LoginResponse()
-        {
-            AccessToken = token, ExpiresIn = 60 * 24 * 7
-        };
+        return token;
     }
 
     private async Task<List<string>> Permissions(Guid roleId)

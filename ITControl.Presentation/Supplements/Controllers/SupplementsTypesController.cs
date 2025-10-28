@@ -1,8 +1,8 @@
-﻿using ITControl.Application.Supplements.Interfaces;
-using ITControl.Communication.Shared.Responses;
+﻿using ITControl.Presentation.Supplements.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
-namespace ITControl.Presentation.Supplements;
+namespace ITControl.Presentation.Supplements.Controllers;
 
 [Route("supplements-types")]
 [ApiController]

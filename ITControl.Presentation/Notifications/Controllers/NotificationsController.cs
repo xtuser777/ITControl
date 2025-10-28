@@ -1,11 +1,12 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Communication.Notifications.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Notifications.Interfaces;
+using ITControl.Presentation.Notifications.Responses;
 using ITControl.Presentation.Notifications.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Notifications.Controllers;
 
@@ -19,7 +20,7 @@ public class NotificationsController(
 {
     [HttpGet]
     [ProducesResponseType(
-        typeof(FindManyResponse<FindManyNotificationsResponse>), StatusCodes.Status200OK)]
+        typeof(Shared.Responses.FindManyResponse<FindManyNotificationsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -40,7 +41,7 @@ public class NotificationsController(
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(
-        typeof(FindOneResponse<FindOneNotificationsResponse?>), StatusCodes.Status200OK)]
+        typeof(Shared.Responses.FindOneResponse<FindOneNotificationsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -49,7 +50,7 @@ public class NotificationsController(
         [AsParameters] ShowNotificationsParams @params)
     {
         var notification = await notificationsService.FindOneAsync(@params);
-        var response = new FindOneResponse<FindOneNotificationsResponse?>
+        var response = new Shared.Responses.FindOneResponse<FindOneNotificationsResponse?>
         {
             Data = notificationsView.FindOne(notification)
         };
@@ -58,14 +59,14 @@ public class NotificationsController(
 
     [HttpGet("count-unread/{userId:guid}")]
     [ProducesResponseType(
-        typeof(FindOneResponse<CountUnreadNotificationsResponse>), StatusCodes.Status200OK)]
+        typeof(Shared.Responses.FindOneResponse<CountUnreadNotificationsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> CountUnreadAsync([FromRoute] Guid userId)
     {
         var count = await notificationsService.CountUnreadAsync(userId);
-        var response = new FindOneResponse<CountUnreadNotificationsResponse>
+        var response = new Shared.Responses.FindOneResponse<CountUnreadNotificationsResponse>
         {
             Data = notificationsView.CountUnread(count)
         };

@@ -6,8 +6,8 @@ namespace ITControl.Infrastructure.Pages.EntitiesConfiguration;
 
 public class PageConfiguration : IEntityTypeConfiguration<Page>
 {
-    internal static readonly IEnumerable<Page> PagesSeed = new List<Page>([
-        new Page(new () { Name = "users" }),
+    internal static readonly List<Page> PagesSeed = [
+        new(new () { Name = "users" }),
         new Page(new () { Name = "roles" }),
         new Page(new () { Name = "pages" }),
         new Page(new () { Name = "positions" }),
@@ -24,7 +24,7 @@ public class PageConfiguration : IEntityTypeConfiguration<Page>
         new Page(new () { Name = "profile" }),
         new Page(new () { Name = "supplements" }),
         new Page(new () { Name = "supplements-movements" }),
-    ]);
+    ];
     public void Configure(EntityTypeBuilder<Page> builder)
     {
         builder.HasKey(t => t.Id);

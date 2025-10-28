@@ -1,11 +1,12 @@
 using ITControl.Application.Roles.Interfaces;
-using ITControl.Communication.Roles.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Roles.Interfaces;
+using ITControl.Presentation.Roles.Responses;
 using ITControl.Presentation.Roles.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Roles.Controllers
 {
@@ -19,7 +20,7 @@ namespace ITControl.Presentation.Roles.Controllers
     {
         [HttpGet]
         [ProducesResponseType(
-            typeof(FindManyResponse<FindManyRolesResponse>), StatusCodes.Status200OK)]
+            typeof(Shared.Responses.FindManyResponse<FindManyRolesResponse>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -38,7 +39,7 @@ namespace ITControl.Presentation.Roles.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(
-            typeof(FindOneResponse<FindOneRolesResponse?>), StatusCodes.Status200OK)]
+            typeof(Shared.Responses.FindOneResponse<FindOneRolesResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -57,7 +58,7 @@ namespace ITControl.Presentation.Roles.Controllers
 
         [HttpPost]
         [ProducesResponseType(
-            typeof(FindOneResponse<CreateRolesResponse?>), StatusCodes.Status201Created)]
+            typeof(Shared.Responses.FindOneResponse<CreateRolesResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]

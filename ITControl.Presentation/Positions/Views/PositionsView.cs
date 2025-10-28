@@ -1,0 +1,46 @@
+using ITControl.Domain.Positions.Entities;
+using ITControl.Domain.Shared.Exceptions;
+using ITControl.Presentation.Positions.Interfaces;
+using ITControl.Presentation.Positions.Responses;
+
+namespace ITControl.Presentation.Positions.Views;
+
+public class PositionsView : IPositionsView
+{
+    public FindOnePositionsResponse? FindOne(Position? position)
+    {
+        if (position == null) throw new NotFoundException("Position not found");
+
+        var response = new FindOnePositionsResponse()
+        {
+            Id = position.Id,
+            Name = position.Name
+        };
+        
+        return response;
+    }
+
+    public IEnumerable<FindManyPositionsResponse> FindMany(IEnumerable<Position>? positions)
+    {
+        if (positions == null) return [];
+        
+        return from position in positions
+            select new FindManyPositionsResponse()
+            {
+                Id = position.Id,
+                Name = position.Name,
+            }; 
+    }
+
+    public CreatePositionsResponse? Create(Position? position)
+    {
+        if (position == null) return null;
+
+        var response = new CreatePositionsResponse()
+        {
+            Id = position.Id,
+        };
+        
+        return response;
+    }
+}

@@ -1,4 +1,4 @@
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Supplements.Enums;
 
 namespace ITControl.Domain.Supplements.Params;

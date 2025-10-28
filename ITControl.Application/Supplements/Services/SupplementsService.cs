@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.Supplements.Interfaces;
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Supplements.Entities;
 using ITControl.Domain.Supplements.Params;
@@ -30,7 +30,7 @@ public class SupplementsService(
             .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPagination(
+    public async Task<PaginationModel?> FindManyPagination(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork

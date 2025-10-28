@@ -1,11 +1,12 @@
 using ITControl.Application.Pages.Interfaces;
-using ITControl.Communication.Pages.Response;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Pages.Interfaces;
+using ITControl.Presentation.Pages.Response;
 using ITControl.Presentation.Pages.Params;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Pages.Controllers
 {
@@ -20,7 +21,7 @@ namespace ITControl.Presentation.Pages.Controllers
     {
         [HttpGet]
         [ProducesResponseType(
-            typeof(FindManyResponse<FindManyPagesResponse>), 
+            typeof(Shared.Responses.FindManyResponse<FindManyPagesResponse>), 
             StatusCodes.Status200OK)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), 
@@ -40,7 +41,7 @@ namespace ITControl.Presentation.Pages.Controllers
 
         [HttpGet("{id:guid}")]
         [ProducesResponseType(
-            typeof(FindOneResponse<FindOnePagesResponse?>), 
+            typeof(Shared.Responses.FindOneResponse<FindOnePagesResponse?>), 
             StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), 
             StatusCodes.Status400BadRequest)]
@@ -61,7 +62,7 @@ namespace ITControl.Presentation.Pages.Controllers
 
         [HttpPost]
         [ProducesResponseType(
-            typeof(FindOneResponse<CreatePagesResponse?>), 
+            typeof(Shared.Responses.FindOneResponse<CreatePagesResponse?>), 
             StatusCodes.Status201Created)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), 

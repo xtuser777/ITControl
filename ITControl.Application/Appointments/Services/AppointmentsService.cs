@@ -4,14 +4,14 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Shared.Responses;
 using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Application.Appointments.Services;
 
@@ -34,7 +34,7 @@ public class AppointmentsService(
             .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.AppointmentsRepository

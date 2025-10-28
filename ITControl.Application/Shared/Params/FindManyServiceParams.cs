@@ -1,6 +1,5 @@
 using ITControl.Domain.Shared.Params;
-using ITControl.Domain.Shared.Params2;
-using FindManyRepositoryParams = ITControl.Domain.Shared.Params2.FindManyRepositoryParams;
+using FindManyRepositoryParams = ITControl.Domain.Shared.Params.FindManyRepositoryParams;
 
 namespace ITControl.Application.Shared.Params;
 

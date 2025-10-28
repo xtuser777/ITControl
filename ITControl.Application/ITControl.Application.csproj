@@ -7,7 +7,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ITControl.Communication\ITControl.Communication.csproj" />
       <ProjectReference Include="..\ITControl.Domain\ITControl.Domain.csproj" />
       <ProjectReference Include="..\ITControl.Infrastructure\ITControl.Infrastructure.csproj" />
     </ItemGroup>

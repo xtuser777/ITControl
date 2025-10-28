@@ -1,7 +1,8 @@
 using ITControl.Application.Departments.Interfaces;
-using ITControl.Communication.Departments.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Shared.Responses;
+using ITControl.Presentation.Departments.Interfaces;
 using ITControl.Presentation.Departments.Params;
+using ITControl.Presentation.Departments.Responses;
 using ITControl.Presentation.Shared.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -19,7 +20,7 @@ namespace ITControl.Presentation.Departments.Controllers
     {
         [HttpGet]
         [ProducesResponseType(
-            typeof(FindManyResponse<FindManyDepartmentsResponse>), 
+            typeof(Shared.Responses.FindManyResponse<FindManyDepartmentsResponse>), 
             StatusCodes.Status200OK)]
         [ProducesResponseType(
             typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
@@ -41,7 +42,7 @@ namespace ITControl.Presentation.Departments.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(
-            typeof(FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
+            typeof(Shared.Responses.FindOneResponse<FindOneDepartmentsResponse?>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -57,7 +58,7 @@ namespace ITControl.Presentation.Departments.Controllers
 
         [HttpPost]
         [ProducesResponseType(
-            typeof(FindOneResponse<CreateDepartmentsResponse?>), StatusCodes.Status201Created)]
+            typeof(Shared.Responses.FindOneResponse<CreateDepartmentsResponse?>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]

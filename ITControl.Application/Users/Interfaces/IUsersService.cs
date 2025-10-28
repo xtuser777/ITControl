@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Users.Entities;
 
 namespace ITControl.Application.Users.Interfaces;
@@ -10,7 +10,7 @@ public interface IUsersService
         FindOneServiceParams parameters);
     Task<IEnumerable<User>> FindManyAsync(
         FindManyServiceParams parameters);
-    Task<PaginationResponse?> FindManyPaginationAsync(
+    Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters);
     Task<User?> CreateAsync(
         CreateServiceParams parameters);

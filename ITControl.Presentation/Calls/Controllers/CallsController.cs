@@ -1,10 +1,11 @@
 ﻿using ITControl.Application.Calls.Interfaces;
 using ITControl.Application.Notifications.Interfaces;
 using ITControl.Application.Shared.Interfaces;
-using ITControl.Communication.Calls.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Calls.Interfaces;
 using ITControl.Presentation.Calls.Params;
+using ITControl.Presentation.Calls.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,7 +38,7 @@ public class CallsController(
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(
-        typeof(FindOneResponse<FindOneCallsResponse?>), StatusCodes.Status200OK)]
+        typeof(Shared.Responses.FindOneResponse<FindOneCallsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]

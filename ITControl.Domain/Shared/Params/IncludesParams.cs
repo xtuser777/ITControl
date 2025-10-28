@@ -1,5 +1,3 @@
 namespace ITControl.Domain.Shared.Params;
 
-public record IncludesParams
-{
-}
+public record IncludesParams();

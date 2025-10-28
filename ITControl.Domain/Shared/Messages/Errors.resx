@@ -200,4 +200,7 @@
   <data name="DontRemoveYourself" xml:space="preserve">
     <value>Não é permitido o usuário remover a si próprio.</value>
   </data>
+  <data name="QuantityOverStock" xml:space="preserve">
+    <value>O campo {0} tem o valor {1} e é maior que o estoque atual do suplemento '{3}'.</value>
+  </data>
 </root>

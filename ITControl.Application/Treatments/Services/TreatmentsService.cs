@@ -4,12 +4,12 @@ using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Application.Treatments.Interfaces;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Shared.Exceptions;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
@@ -35,7 +35,7 @@ public class TreatmentsService(
         return await unitOfWork.TreatmentsRepository.FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginationAsync(
+    public async Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.TreatmentsRepository

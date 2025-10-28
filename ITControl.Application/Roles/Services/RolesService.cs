@@ -3,7 +3,7 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Exceptions;
@@ -27,7 +27,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
             .FindManyAsync(parameters);
     }
 
-    public async Task<PaginationResponse?> FindManyPaginatedAsync(
+    public async Task<PaginationModel?> FindManyPaginatedAsync(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.RolesRepository

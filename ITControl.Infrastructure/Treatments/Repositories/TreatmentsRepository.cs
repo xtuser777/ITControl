@@ -1,4 +1,4 @@
-﻿using ITControl.Domain.Shared.Params2;
+﻿using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Interfaces;
 using ITControl.Infrastructure.Contexts;

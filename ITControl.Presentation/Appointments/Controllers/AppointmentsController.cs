@@ -1,11 +1,12 @@
 using ITControl.Application.Appointments.Interfaces;
-using ITControl.Communication.Appointments.Responses;
-using ITControl.Communication.Shared.Responses;
 using ITControl.Presentation.Appointments.Params;
+using ITControl.Presentation.Appointments.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Appointments.Interfaces;
 
 namespace ITControl.Presentation.Appointments.Controllers
 {
@@ -58,9 +59,7 @@ namespace ITControl.Presentation.Appointments.Controllers
         {
             var appointment = await appointmentsService.CreateAsync(@params);
             var data = appointmentsView.Create(appointment);
-            var uri = Url.Action(
-                nameof(FindOneAsync),
-                values: new { id = data?.Id }) ?? string.Empty;
+            var uri = $"/appointments/{appointment?.Id}";
             return Created(uri, new { Data = data });
         }
 

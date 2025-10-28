@@ -1,0 +1,25 @@
+﻿using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Divisions.Interfaces;
+using ITControl.Domain.Divisions.Params;
+using ITControl.Domain.Shared.Messages;
+
+namespace ITControl.Presentation.Shared.Attributes;
+
+public class DivisionConnectionAttribute : ValidationAttribute
+{
+    protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
+    {
+        if (value is not Guid divisionId || divisionId == Guid.Empty)
+            return ValidationResult.Success;
+        var divisionsRepository = 
+            (IDivisionsRepository)validationContext.GetService(typeof(IDivisionsRepository))!;
+        var exists = divisionsRepository
+            .ExistsAsync(new ExistsDivisionsParams { Id = divisionId })
+            .GetAwaiter().GetResult();
+        if (!exists)
+            return new ValidationResult(
+                string.Format(Errors.ConnectionNotFound, validationContext.DisplayName, divisionId));
+
+        return ValidationResult.Success;
+    }
+}

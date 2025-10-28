@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Roles.Requests;
+using ITControl.Presentation.Roles.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Roles.Params;

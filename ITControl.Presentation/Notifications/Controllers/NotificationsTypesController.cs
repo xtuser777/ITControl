@@ -1,6 +1,6 @@
-﻿using ITControl.Application.Notifications.Interfaces;
-using ITControl.Communication.Shared.Responses;
+﻿using ITControl.Presentation.Notifications.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Notifications.Controllers;
 [Route("notifications-types")]
@@ -9,10 +9,10 @@ public class NotificationsTypesController(
     INotificationsTypesView notificationsTypesView) : ControllerBase
 {
     [HttpGet]
-    public FindManyResponse<TranslatableField> Index()
+    public Shared.Responses.FindManyResponse<TranslatableField> Index()
     {
         var data = notificationsTypesView.FindMany();
-        return new FindManyResponse<TranslatableField>()
+        return new Shared.Responses.FindManyResponse<TranslatableField>()
         {
             Data = data
         };

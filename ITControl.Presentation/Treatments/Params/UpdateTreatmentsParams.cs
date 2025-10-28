@@ -1,5 +1,5 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Communication.Treatments.Requests;
+using ITControl.Presentation.Treatments.Requests;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Treatments.Params;

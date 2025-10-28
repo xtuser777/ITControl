@@ -1,7 +1,7 @@
 ﻿using ITControl.Application.Auth.Interfaces;
-using ITControl.Communication.Auth.Requests;
-using ITControl.Communication.Auth.Responses;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Presentation.Auth.Interfaces;
+using ITControl.Presentation.Auth.Requests;
+using ITControl.Presentation.Auth.Responses;
 using ITControl.Domain.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +9,12 @@ namespace ITControl.Presentation.Auth.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController(IAuthService authService) : ControllerBase
+    public class AuthController(
+        IAuthService authService,
+        IAuthView authView) : ControllerBase
     {
         [HttpPost]
-        public async Task<FindOneResponse<LoginResponse>> LoginAsync(
+        public async Task<Shared.Responses.FindOneResponse<LoginResponse>> LoginAsync(
             [FromBody] LoginRequest request)
         {
             if (request == null)
@@ -20,9 +22,11 @@ namespace ITControl.Presentation.Auth.Controllers
                 throw new BadRequestException("Request cannot be null.");
             }
 
-            var data = await authService.Login(request);
+            var token = await authService.Login(
+                request.Username, request.Password);
+            var data = authView.Login(token);
 
-            return new FindOneResponse<LoginResponse>()
+            return new Shared.Responses.FindOneResponse<LoginResponse>()
             {
                 Data = data
             };

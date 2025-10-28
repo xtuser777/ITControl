@@ -1,5 +1,5 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Communication.Shared.Responses;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.KnowledgeBases.Entities;
 
 namespace ITControl.Application.KnowledgeBases.Interfaces;
@@ -10,7 +10,7 @@ public interface IKnowledgeBasesService
         FindOneServiceParams parameters);
     Task<IEnumerable<KnowledgeBase>> FindManyAsync(
         FindManyServiceParams parameters);
-    Task<PaginationResponse?> FindManyPaginationAsync(
+    Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters);
     Task<KnowledgeBase> CreateAsync(
         CreateServiceParams parameters);

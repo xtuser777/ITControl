@@ -1,5 +1,5 @@
 ﻿using ITControl.Domain.Calls.Enums;
-using ITControl.Domain.Shared.Params2;
+using ITControl.Domain.Shared.Params;
 
 namespace ITControl.Domain.Calls.Params;
 

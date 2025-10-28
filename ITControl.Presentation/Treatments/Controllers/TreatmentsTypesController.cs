@@ -1,6 +1,6 @@
-using ITControl.Application.Treatments.Interfaces;
-using ITControl.Communication.Shared.Responses;
 using Microsoft.AspNetCore.Mvc;
+using ITControl.Presentation.Shared.Responses;
+using ITControl.Presentation.Treatments.Interfaces;
 
 namespace ITControl.Presentation.Treatments.Controllers
 {
@@ -10,10 +10,10 @@ namespace ITControl.Presentation.Treatments.Controllers
         ITreatmentsTypesView treatmentsTypesView) : ControllerBase
     {
         [HttpGet]
-        public FindManyResponse<TranslatableField> Index()
+        public Shared.Responses.FindManyResponse<TranslatableField> Index()
         {
             var data = treatmentsTypesView.FindMany();
-            return new FindManyResponse<TranslatableField>()
+            return new Shared.Responses.FindManyResponse<TranslatableField>()
             {
                 Data = data,
             };
