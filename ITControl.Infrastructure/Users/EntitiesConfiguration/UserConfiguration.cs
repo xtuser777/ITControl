@@ -16,7 +16,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             Name = "Administrador",
             Username = "admin",
-            Password = "1nf0.pmr",
+            Password = "",
             Document = "02912383005",
             Email = "contato@rancharia.sp.gov.br",
             Enrollment = 9999,
