@@ -245,131 +245,131 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("3a5ea193-864c-41f6-9d55-89a986f39077"),
+                            Id = new Guid("554afc25-f71c-4532-99d9-11c93d2fe757"),
                             Alias = "SEMAD",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 174, DateTimeKind.Local).AddTicks(9068),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 267, DateTimeKind.Local).AddTicks(1639),
                             Name = "Secretaria Municipal de Administração",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4267)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(5808)
                         },
                         new
                         {
-                            Id = new Guid("ed13988f-84a9-408d-bb72-632d50d34712"),
+                            Id = new Guid("e8941d5a-86b1-4ffa-b588-e75435ef18d6"),
                             Alias = "SEGOV",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4799),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6056),
                             Name = "Secretaria Municipal de Governo",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4978)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6057)
                         },
                         new
                         {
-                            Id = new Guid("78c3284f-5225-4cd1-b680-7ae12c6afa0a"),
+                            Id = new Guid("282f17a5-3b9d-4d48-a33e-bbe9d6e9aea8"),
                             Alias = "SEPLAD",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4981),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6059),
                             Name = "Secretaria Municipal de Planejamento e Desenvolvimento Econômico",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4981)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6060)
                         },
                         new
                         {
-                            Id = new Guid("05fe343e-1475-4674-a12e-ea4a74043d16"),
+                            Id = new Guid("f58b2e4d-074d-4194-9c28-30f585dcbd03"),
                             Alias = "SEDUC",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4983),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6061),
                             Name = "Secretaria Municipal de Educação",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4984)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6062)
                         },
                         new
                         {
-                            Id = new Guid("eed33f37-4e6f-4f96-9a11-9f64144560c2"),
+                            Id = new Guid("37128323-75d9-4e05-a8b4-a782798afe1b"),
                             Alias = "SEMSA",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4986),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6063),
                             Name = "Secretaria Municipal de Saúde",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4987)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6063)
                         },
                         new
                         {
-                            Id = new Guid("579cddb0-6d44-48ee-b54a-363a08ab674d"),
+                            Id = new Guid("328b1cce-b060-4da9-9add-a8ddd5ade8d2"),
                             Alias = "SEMAG",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4988),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6065),
                             Name = "Secretaria Municipal de Serviços Gerais",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4988)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6065)
                         },
                         new
                         {
-                            Id = new Guid("3cd11a67-ff2d-424a-966c-29c855a5d863"),
+                            Id = new Guid("66fa52c4-9b1a-40d4-9773-9e6e7f8ff0e2"),
                             Alias = "SECULT",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4990),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6067),
                             Name = "Secretaria Municipal de Cultura e Turismo",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(4991)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6067)
                         },
                         new
                         {
-                            Id = new Guid("da75ac7f-8d7f-4147-9e97-9f910005650f"),
+                            Id = new Guid("31e3a28d-15fa-4ef2-8f78-e5a454995eb7"),
                             Alias = "SEACT",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5008),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6069),
                             Name = "Secretaria Municipal de Assistência Social e Cidadania",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5008)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6069)
                         },
                         new
                         {
-                            Id = new Guid("2571abe5-8488-422d-aad3-c7f20b7db357"),
+                            Id = new Guid("8f9b94eb-2814-4e87-b310-680f140b54bf"),
                             Alias = "SEMEL",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5010),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6076),
                             Name = "Secretaria Municipal de Esporte e Lazer",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5010)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6077)
                         },
                         new
                         {
-                            Id = new Guid("fd4d458e-760a-4d9a-ae12-bfc255b22118"),
+                            Id = new Guid("5a2f4d73-1685-4de2-94a2-612a816d38df"),
                             Alias = "SEFAZ",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5012),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6078),
                             Name = "Secretaria Municipal de Finanças",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5012)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6079)
                         },
                         new
                         {
-                            Id = new Guid("7ca649f7-fccc-4ba4-90db-f7b49eaac988"),
+                            Id = new Guid("1ad53241-877f-4fc6-86a8-91f227edf59b"),
                             Alias = "SEMAJ",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5014),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6080),
                             Name = "Secretaria Municipal de Assuntos Jurídicos",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5015)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6080)
                         },
                         new
                         {
-                            Id = new Guid("20fe6fd4-05a1-44fb-9a94-367550c964e1"),
+                            Id = new Guid("dac99613-4007-4234-8ac9-99cab27dd860"),
                             Alias = "SEMAM",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5017),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6082),
                             Name = "Secretaria Municipal de Agricultura e Meio ambiente",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5017)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6082)
                         },
                         new
                         {
-                            Id = new Guid("e8b4c5d7-0fd2-4f8c-a24f-f20979cedc45"),
+                            Id = new Guid("3d1aa0d9-e7b4-4de8-aed4-67c68e8c5659"),
                             Alias = "SMSP",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5019),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6083),
                             Name = "Secretaria Municipal de Segurança Pública",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5019)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6084)
                         },
                         new
                         {
-                            Id = new Guid("fb917715-8d22-4fb4-b6d8-171538618d3d"),
+                            Id = new Guid("0aad8c00-ddcc-475e-8868-028b6a206261"),
                             Alias = "SOURB",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5021),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6085),
                             Name = "Secretaria Municipal de Infraestrutura",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5021)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6085)
                         },
                         new
                         {
-                            Id = new Guid("30bb193f-66e2-4c45-85ed-5db46b763f39"),
+                            Id = new Guid("760ba9ca-b0ec-46e9-8c98-7defe2a0ce27"),
                             Alias = "COINTER",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5023),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6087),
                             Name = "Controladoria Interna",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5024)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6087)
                         },
                         new
                         {
-                            Id = new Guid("10a50965-0a61-4ba7-b3a2-be1919009acf"),
+                            Id = new Guid("57031570-2514-41fc-8e8b-ec2bb0d9857a"),
                             Alias = "GABINETE",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5028),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6089),
                             Name = "Gabinete do Prefeito",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 176, DateTimeKind.Local).AddTicks(5028)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 268, DateTimeKind.Local).AddTicks(6089)
                         });
                 });
 
@@ -405,11 +405,11 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("448ad46d-68b4-429e-a644-cc3065ee3d5a"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 179, DateTimeKind.Local).AddTicks(466),
-                            DepartmentId = new Guid("3a5ea193-864c-41f6-9d55-89a986f39077"),
+                            Id = new Guid("25c13956-4296-46c6-bfce-4e8f28481e23"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 270, DateTimeKind.Local).AddTicks(9727),
+                            DepartmentId = new Guid("554afc25-f71c-4532-99d9-11c93d2fe757"),
                             Name = "Divisão Municipal de Informática",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 179, DateTimeKind.Local).AddTicks(475)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 270, DateTimeKind.Local).AddTicks(9733)
                         });
                 });
 
@@ -597,122 +597,129 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0a3997f6-274e-4c49-9ea2-fa598e0fc1c5"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2932),
+                            Id = new Guid("749dce02-ab9d-4610-baff-809eee894042"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4299),
                             Name = "users",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2942)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4308)
                         },
                         new
                         {
-                            Id = new Guid("c3376238-86db-47f5-b09a-1212c0463093"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2950),
+                            Id = new Guid("51a3f4d2-b040-4ca4-9f8d-28c3a7354f98"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4314),
                             Name = "roles",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2950)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4315)
                         },
                         new
                         {
-                            Id = new Guid("411b21d2-3a2f-4a7a-a316-a2313c18e1d5"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2952),
+                            Id = new Guid("60f79dd8-603c-4f9b-83eb-d4118cfea33a"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4316),
                             Name = "pages",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2952)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4316)
                         },
                         new
                         {
-                            Id = new Guid("5b5c4776-429f-4c56-a894-4d408522aa46"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2953),
+                            Id = new Guid("65c29c14-e103-4468-bf5d-940713b7ba2f"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4318),
                             Name = "positions",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2954)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4318)
                         },
                         new
                         {
-                            Id = new Guid("aa41a727-f167-4e12-a38e-3fc9c8c0977a"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2955),
+                            Id = new Guid("d259704f-7392-4262-8890-4c0e43ebf29b"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4319),
                             Name = "departments",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2955)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4320)
                         },
                         new
                         {
-                            Id = new Guid("7d638e9a-8af9-4ff3-9cf6-c66a7d787831"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2956),
+                            Id = new Guid("75afe6a6-ab4c-4f60-8ce1-52482a25cd84"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4321),
                             Name = "divisions",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2957)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4321)
                         },
                         new
                         {
-                            Id = new Guid("84c4c431-0cb8-4b55-bcd2-116a7007b974"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2958),
+                            Id = new Guid("b15822c6-8530-44f4-8d17-724ec6023f54"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4323),
+                            Name = "units",
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4323)
+                        },
+                        new
+                        {
+                            Id = new Guid("073767f6-a715-4397-9512-21a923b7c32f"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4331),
                             Name = "contracts",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2958)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4331)
                         },
                         new
                         {
-                            Id = new Guid("f21af353-d1ba-4aab-a70e-8a353ecf1145"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2959),
+                            Id = new Guid("06272051-eb58-4c68-bd4f-ba269d84b7bf"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4333),
                             Name = "equipments",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2960)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4333)
                         },
                         new
                         {
-                            Id = new Guid("04f3fe39-1598-4e81-8c35-7606daf43530"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2965),
+                            Id = new Guid("e989adab-519e-48e0-a548-b1a7c8fe8c7a"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4334),
                             Name = "systems",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2965)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4334)
                         },
                         new
                         {
-                            Id = new Guid("2bcccadc-c02d-45df-892b-351259968ed2"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2966),
+                            Id = new Guid("982d5605-d806-45b3-806b-d15d23fdc71d"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4336),
                             Name = "calls",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2966)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4336)
                         },
                         new
                         {
-                            Id = new Guid("19268b85-bbf1-47d2-9d72-4bdfc71a89cb"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2967),
+                            Id = new Guid("120b8a7c-25c4-40d6-857e-26c0cfd4ac53"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4337),
                             Name = "appointments",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2968)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4337)
                         },
                         new
                         {
-                            Id = new Guid("65a45d83-fdaf-466d-8bc8-a5b443573dc6"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2969),
+                            Id = new Guid("38735ff2-3f73-4573-a376-18ac71f9f349"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4339),
                             Name = "treatments",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2969)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4339)
                         },
                         new
                         {
-                            Id = new Guid("fb13e4db-ebfc-4e39-b8e2-9e1c97fd81ea"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2970),
+                            Id = new Guid("7c884fe4-1e55-4b10-b178-ce8ce37735f7"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4340),
                             Name = "notifications",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2971)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4340)
                         },
                         new
                         {
-                            Id = new Guid("20f7d0ca-bc5d-423c-a6f4-ab326a5403a5"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2972),
+                            Id = new Guid("6f727abe-6994-4de0-9ef7-d2696d307c42"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4342),
                             Name = "knowledge-bases",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2972)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4342)
                         },
                         new
                         {
-                            Id = new Guid("79d96476-179f-4e45-aab3-a4a9dcfe7bc8"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2973),
+                            Id = new Guid("0b88cd0b-46b0-4246-88f8-02b2fe02f72c"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4345),
                             Name = "profile",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2974)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4345)
                         },
                         new
                         {
-                            Id = new Guid("39f1327e-6e68-4e41-9295-2b45f3334d5c"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2975),
+                            Id = new Guid("e29d55c5-7323-40b1-a200-e0218768aad4"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4346),
                             Name = "supplements",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2975)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4347)
                         },
                         new
                         {
-                            Id = new Guid("5392f4d8-c983-4193-9430-35de843e2deb"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2978),
+                            Id = new Guid("93f99c8e-348d-4d7e-b727-f6d34324aab9"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4348),
                             Name = "supplements-movements",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 189, DateTimeKind.Local).AddTicks(2978)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 281, DateTimeKind.Local).AddTicks(4348)
                         });
                 });
 
@@ -743,10 +750,10 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("b642ff25-2b2c-4a40-a3a2-8e4882593cbb"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 190, DateTimeKind.Local).AddTicks(1594),
+                            Id = new Guid("5ef9f50b-5aaa-4e76-a753-cf5d8a2ae72e"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 282, DateTimeKind.Local).AddTicks(3534),
                             Name = "Analista de Sistemas",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 190, DateTimeKind.Local).AddTicks(1598)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 282, DateTimeKind.Local).AddTicks(3539)
                         });
                 });
 
@@ -780,11 +787,11 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
+                            Id = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
                             Active = true,
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 191, DateTimeKind.Local).AddTicks(1239),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 283, DateTimeKind.Local).AddTicks(4001),
                             Name = "Master",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 191, DateTimeKind.Local).AddTicks(1242)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 283, DateTimeKind.Local).AddTicks(4005)
                         });
                 });
 
@@ -817,139 +824,147 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("f15728d1-41d9-4469-ae7f-c54261baf939"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3317),
-                            PageId = new Guid("0a3997f6-274e-4c49-9ea2-fa598e0fc1c5"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3322)
+                            Id = new Guid("e8ea17cc-81f4-4d35-93ae-ef3c96db7ff7"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7133),
+                            PageId = new Guid("749dce02-ab9d-4610-baff-809eee894042"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7137)
                         },
                         new
                         {
-                            Id = new Guid("15d73062-8880-4904-80e7-f40f110f6018"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3329),
-                            PageId = new Guid("c3376238-86db-47f5-b09a-1212c0463093"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3330)
+                            Id = new Guid("0a0e0236-22db-45a9-af91-49bfabbeffc3"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7143),
+                            PageId = new Guid("51a3f4d2-b040-4ca4-9f8d-28c3a7354f98"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7143)
                         },
                         new
                         {
-                            Id = new Guid("aaa5cf1c-311e-48b1-9be9-5856a116ff0f"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3331),
-                            PageId = new Guid("411b21d2-3a2f-4a7a-a316-a2313c18e1d5"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3331)
+                            Id = new Guid("e6576513-c263-48f4-905d-0e47a152a392"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7144),
+                            PageId = new Guid("60f79dd8-603c-4f9b-83eb-d4118cfea33a"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7145)
                         },
                         new
                         {
-                            Id = new Guid("49fba7de-7f85-47db-8273-0b1a9b589051"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3332),
-                            PageId = new Guid("5b5c4776-429f-4c56-a894-4d408522aa46"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3332)
+                            Id = new Guid("05c5a254-6c36-4531-855f-b9d04cccf026"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7152),
+                            PageId = new Guid("65c29c14-e103-4468-bf5d-940713b7ba2f"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7152)
                         },
                         new
                         {
-                            Id = new Guid("483f5ff1-3079-4b4d-a9ed-9e8beef890a0"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3333),
-                            PageId = new Guid("aa41a727-f167-4e12-a38e-3fc9c8c0977a"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3333)
+                            Id = new Guid("727f36d2-6f55-49ef-90d1-05800c63a444"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7153),
+                            PageId = new Guid("d259704f-7392-4262-8890-4c0e43ebf29b"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7154)
                         },
                         new
                         {
-                            Id = new Guid("e4479df2-5b6d-41d0-8125-e5f599b021d5"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3950),
-                            PageId = new Guid("7d638e9a-8af9-4ff3-9cf6-c66a7d787831"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3951)
+                            Id = new Guid("71776100-afca-4ef8-9119-77e5b72f7599"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7155),
+                            PageId = new Guid("75afe6a6-ab4c-4f60-8ce1-52482a25cd84"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7155)
                         },
                         new
                         {
-                            Id = new Guid("68ce2ef1-e3af-4c4c-9b8a-306a2248671e"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3954),
-                            PageId = new Guid("84c4c431-0cb8-4b55-bcd2-116a7007b974"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3955)
+                            Id = new Guid("922f39f5-8d4d-4c99-96f1-3be47a2cb729"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7156),
+                            PageId = new Guid("b15822c6-8530-44f4-8d17-724ec6023f54"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7156)
                         },
                         new
                         {
-                            Id = new Guid("0189bbf2-4585-42e8-8cd9-aadf9c967707"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3957),
-                            PageId = new Guid("f21af353-d1ba-4aab-a70e-8a353ecf1145"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3958)
+                            Id = new Guid("cf85764c-cfaf-49f0-bb9a-0f3cd304a44d"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7157),
+                            PageId = new Guid("073767f6-a715-4397-9512-21a923b7c32f"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7157)
                         },
                         new
                         {
-                            Id = new Guid("a544666b-8a7e-47b3-bd1d-cf63870641ac"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3959),
-                            PageId = new Guid("04f3fe39-1598-4e81-8c35-7606daf43530"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(3960)
+                            Id = new Guid("e75fdc2b-3f6f-4716-b40a-beef458d01d4"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7158),
+                            PageId = new Guid("06272051-eb58-4c68-bd4f-ba269d84b7bf"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7159)
                         },
                         new
                         {
-                            Id = new Guid("835563b8-1773-4543-84da-6530220fadd6"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4118),
-                            PageId = new Guid("2bcccadc-c02d-45df-892b-351259968ed2"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4119)
+                            Id = new Guid("e2faff93-790c-4204-aea2-f1bf421ed3cc"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7159),
+                            PageId = new Guid("e989adab-519e-48e0-a548-b1a7c8fe8c7a"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7160)
                         },
                         new
                         {
-                            Id = new Guid("07df0fe3-c6ba-49ad-b655-ad1b63b34030"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4120),
-                            PageId = new Guid("19268b85-bbf1-47d2-9d72-4bdfc71a89cb"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4121)
+                            Id = new Guid("b71112db-2956-4762-81c9-ed0e69770fc9"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7161),
+                            PageId = new Guid("982d5605-d806-45b3-806b-d15d23fdc71d"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7162)
                         },
                         new
                         {
-                            Id = new Guid("3bd7d914-5c73-4115-b616-7758cfb70fc7"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4123),
-                            PageId = new Guid("65a45d83-fdaf-466d-8bc8-a5b443573dc6"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4123)
+                            Id = new Guid("e8786ed3-0115-43b0-ba91-a4dbd56591df"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7164),
+                            PageId = new Guid("120b8a7c-25c4-40d6-857e-26c0cfd4ac53"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7164)
                         },
                         new
                         {
-                            Id = new Guid("8801bed9-767b-46f4-9f3a-928ee8d2c2fb"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4125),
-                            PageId = new Guid("fb13e4db-ebfc-4e39-b8e2-9e1c97fd81ea"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4125)
+                            Id = new Guid("c2b96f06-5ffc-4576-ad82-b50bec88a2e7"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7165),
+                            PageId = new Guid("38735ff2-3f73-4573-a376-18ac71f9f349"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7166)
                         },
                         new
                         {
-                            Id = new Guid("1b4410e2-81f3-444f-8fbd-7aa9b2c1c9f7"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4130),
-                            PageId = new Guid("20f7d0ca-bc5d-423c-a6f4-ab326a5403a5"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4130)
+                            Id = new Guid("87467711-097f-4216-8e99-8ad75b7f8792"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7166),
+                            PageId = new Guid("7c884fe4-1e55-4b10-b178-ce8ce37735f7"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7167)
                         },
                         new
                         {
-                            Id = new Guid("2173cabf-446a-4b65-8a3b-401ab8215601"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4131),
-                            PageId = new Guid("79d96476-179f-4e45-aab3-a4a9dcfe7bc8"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4132)
+                            Id = new Guid("fdb668cc-015f-434b-8fb3-915d4ef1a88c"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7168),
+                            PageId = new Guid("6f727abe-6994-4de0-9ef7-d2696d307c42"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7168)
                         },
                         new
                         {
-                            Id = new Guid("c68a8707-f39c-4146-a8db-5212137fe231"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4133),
-                            PageId = new Guid("39f1327e-6e68-4e41-9295-2b45f3334d5c"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4133)
+                            Id = new Guid("b50efb81-b5df-474a-a467-c1b27ec4aab2"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7232),
+                            PageId = new Guid("0b88cd0b-46b0-4246-88f8-02b2fe02f72c"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7232)
                         },
                         new
                         {
-                            Id = new Guid("b672ece3-4aa1-4411-9b3d-135c8508eeb7"),
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4134),
-                            PageId = new Guid("5392f4d8-c983-4193-9430-35de843e2deb"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 192, DateTimeKind.Local).AddTicks(4135)
+                            Id = new Guid("d9e4af95-8e48-44b2-9693-53e2e05b5d01"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7234),
+                            PageId = new Guid("e29d55c5-7323-40b1-a200-e0218768aad4"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7234)
+                        },
+                        new
+                        {
+                            Id = new Guid("e9d10cc1-70e4-47f1-bf44-1f423fd7da45"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7235),
+                            PageId = new Guid("93f99c8e-348d-4d7e-b727-f6d34324aab9"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 284, DateTimeKind.Local).AddTicks(7235)
                         });
                 });
 
@@ -1200,15 +1215,15 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("1243f9e1-9ba4-475b-9028-50d4f341c191"),
+                            Id = new Guid("0ede57dd-949b-4416-b624-d51b1a9c60be"),
                             AddressNumber = "719",
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 199, DateTimeKind.Local).AddTicks(9049),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 292, DateTimeKind.Local).AddTicks(9678),
                             Name = "Paço Municipal",
                             Neighborhood = "Centro",
                             Phone = "1832659200",
                             PostalCode = "19600000",
                             StreetName = "Rua Marcílio Dias",
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 199, DateTimeKind.Local).AddTicks(9059)
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 292, DateTimeKind.Local).AddTicks(9688)
                         });
                 });
 
@@ -1297,20 +1312,20 @@ namespace ITControl.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("26aace9e-4607-4c27-915d-943294083770"),
+                            Id = new Guid("18ecdaa9-87bc-472b-bc20-e3e5544c1a3c"),
                             Active = true,
-                            CreatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 215, DateTimeKind.Local).AddTicks(8236),
-                            DepartmentId = new Guid("3a5ea193-864c-41f6-9d55-89a986f39077"),
-                            DivisionId = new Guid("448ad46d-68b4-429e-a644-cc3065ee3d5a"),
+                            CreatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 302, DateTimeKind.Local).AddTicks(4196),
+                            DepartmentId = new Guid("554afc25-f71c-4532-99d9-11c93d2fe757"),
+                            DivisionId = new Guid("25c13956-4296-46c6-bfce-4e8f28481e23"),
                             Document = "02912383005",
                             Email = "contato@rancharia.sp.gov.br",
                             Enrollment = 9999,
                             Name = "Administrador",
-                            Password = "AIOyVbTxXU3LeyoXU2kd3cEoRe1BlVZota7IFlDfk69D0B1cxNPc4iMq+n6vmZEdJg==",
-                            PositionId = new Guid("b642ff25-2b2c-4a40-a3a2-8e4882593cbb"),
-                            RoleId = new Guid("94d54119-ce7c-42a5-866a-0c9ebe7077fb"),
-                            UnitId = new Guid("1243f9e1-9ba4-475b-9028-50d4f341c191"),
-                            UpdatedAt = new DateTime(2025, 10, 28, 14, 17, 31, 215, DateTimeKind.Local).AddTicks(8255),
+                            Password = "ANT1S9mR6Zl9GrE2couXbZwVBsQMkeInMX+W+DCaOOL2BipsgvmN71Hf13za1Qk1LQ==",
+                            PositionId = new Guid("5ef9f50b-5aaa-4e76-a753-cf5d8a2ae72e"),
+                            RoleId = new Guid("58a70ab0-6853-416c-a7c1-5ba0af5df69f"),
+                            UnitId = new Guid("0ede57dd-949b-4416-b624-d51b1a9c60be"),
+                            UpdatedAt = new DateTime(2025, 10, 29, 13, 57, 45, 302, DateTimeKind.Local).AddTicks(4212),
                             Username = "admin"
                         });
                 });

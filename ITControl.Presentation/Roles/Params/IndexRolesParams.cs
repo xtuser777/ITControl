@@ -11,9 +11,9 @@ public record IndexRolesParams : PaginationParams
     public string? Name { get; set; }
     public string? Active { get; set; }
     
-    [FromRoute(Name = "X-Order-By-Name")]
+    [FromHeader(Name = "X-Order-By-Name")]
     public string? OrderByName { get; init; }
-    [FromRoute(Name = "X-Order-By-Active")]
+    [FromHeader(Name = "X-Order-By-Active")]
     public string? OrderByActive { get; init; }
 
     public static implicit operator OrderByRolesParams(

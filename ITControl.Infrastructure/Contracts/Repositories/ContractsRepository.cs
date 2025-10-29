@@ -10,15 +10,14 @@ namespace ITControl.Infrastructure.Contracts.Repositories;
 public class ContractsRepository(ApplicationDbContext context) : 
     BaseRepository, IContractsRepository
 {
-    private new IQueryable<Contract> query = null!;
-
     public async Task<Contract?> FindOneAsync(
         FindOneRepositoryParams parameters)
     {
         var (id, includes) = parameters;
         query = context.Contracts.AsQueryable();
         ApplyIncludes(includes);
-        return await query.FirstOrDefaultAsync(x => x.Id == id);
+        return (Contract?)await query
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
@@ -28,7 +27,7 @@ public class ContractsRepository(ApplicationDbContext context) :
         BuildQuery(parameters.FindMany);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
-        return await query.ToListAsync();
+        return (await query.ToListAsync()).Cast<Contract>();
     }
 
     public async Task CreateAsync(Contract contract)

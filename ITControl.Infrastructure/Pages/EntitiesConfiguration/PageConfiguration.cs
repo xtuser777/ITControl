@@ -13,6 +13,7 @@ public class PageConfiguration : IEntityTypeConfiguration<Page>
         new Page(new () { Name = "positions" }),
         new Page(new () { Name = "departments" }),
         new Page(new () { Name = "divisions" }),
+        new Page(new () { Name = "units" }),
         new Page(new () { Name = "contracts" }),
         new Page(new () { Name = "equipments" }),
         new Page(new () { Name = "systems" }),
