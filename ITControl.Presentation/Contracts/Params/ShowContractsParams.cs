@@ -19,7 +19,7 @@ public record ShowContractsParams
             Id = show.Id,
             Includes = new IncludesContractsParams
             {
-                Contacts = show.IncludeContacts,
+                ContractContacts = show.IncludeContacts,
             }
         };
 }

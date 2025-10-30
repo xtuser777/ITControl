@@ -19,7 +19,7 @@ public record CreateSystemsRequest
 
     [RequiredField]
     [DateValue]
-    [DateGreaterThanCurrent]
+    [DatePresentPast]
     [Display(Name = nameof(ImplementedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly ImplementedAt { get; set; }
 

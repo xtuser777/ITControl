@@ -18,6 +18,7 @@ public record UpdateSystemsRequest
     public string? Version { get; set; }
 
     [DateValue]
+    [DatePresentPast]
     [Display(Name = nameof(ImplementedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? ImplementedAt { get; set; }
 
