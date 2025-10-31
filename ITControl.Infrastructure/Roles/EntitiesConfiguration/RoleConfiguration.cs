@@ -6,9 +6,6 @@ namespace ITControl.Infrastructure.Roles.EntitiesConfiguration;
 
 public class RoleConfiguration : IEntityTypeConfiguration<Role>
 {
-    internal static readonly List<Role> RolesSeed = [
-        new Role(new () { Name = "Master", Active = true })
-    ];
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.HasKey(r => r.Id);
@@ -17,7 +14,5 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
         builder.Property(x => x.CreatedAt).IsRequired();
         builder.Property(x => x.UpdatedAt).IsRequired();
         builder.HasIndex(r => r.Name).IsUnique();
-        
-        builder.HasData(RolesSeed);
     }
 }

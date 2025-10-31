@@ -1,6 +1,6 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Interfaces;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Contracts.Repositories;

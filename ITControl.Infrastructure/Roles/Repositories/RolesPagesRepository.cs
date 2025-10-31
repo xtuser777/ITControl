@@ -1,6 +1,6 @@
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Interfaces;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Roles.Repositories;

@@ -7,24 +7,29 @@ namespace ITControl.Presentation.Contracts.Params;
 
 public record IndexContractsParams : PaginationParams
 {
+    public string? Enterprise { get; set; }
     public string? ObjectName { get; set; }
     public DateOnly? StartedAt { get; set; }
     public DateOnly? EndedAt { get; set; }
     
+    [FromHeader(Name = "X-Order-By-Enterprise")]
+    public string? OrderByEnterprise { get; set; }
+    
     [FromHeader(Name = "X-Order-By-Object-Name")]
-    public string? OrderByObjectName { get; set; } = null;
+    public string? OrderByObjectName { get; set; }
 
     [FromHeader(Name = "X-Order-By-Started-At")]
-    public string? OrderByStartedAt { get; set; } = null; 
+    public string? OrderByStartedAt { get; set; } 
     
     [FromHeader(Name = "X-Order-By-Ended-At")]
-    public string? OrderByEndedAt { get; set; } = null;
+    public string? OrderByEndedAt { get; set; }
 
     public static implicit operator OrderByContractsParams(
         IndexContractsParams request)
     {
         return new OrderByContractsParams
         {
+            Enterprise = request.OrderByEnterprise,
             ObjectName = request.OrderByObjectName,
             StartedAt = request.OrderByStartedAt,
             EndedAt = request.OrderByEndedAt
@@ -35,6 +40,7 @@ public record IndexContractsParams : PaginationParams
         IndexContractsParams request) =>
         new()
         {
+            Enterprise = request.Enterprise,
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
             EndedAt = request.EndedAt,
@@ -44,6 +50,7 @@ public record IndexContractsParams : PaginationParams
         IndexContractsParams request) =>
         new()
         {
+            Enterprise = request.Enterprise,
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
             EndedAt = request.EndedAt

@@ -1,25 +1,19 @@
-using ITControl.Domain.Pages.Params;
-using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Pages.Props;
 
 namespace ITControl.Domain.Pages.Entities;
 
-public class Page : Entity
+public class Page : PageProps
 {
-    public string Name { get; set; } = string.Empty;
-    
     public Page() {}
 
-    public Page(PageParams @params)
+    public Page(PageProps props)
     {
-        Id = Guid.NewGuid();
-        Name = @params.Name;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        Assign(props);
     }
 
-    public void Update(UpdatePageParams @params)
+    public void Update(PageProps props)
     {
-        Name = @params.Name ?? Name;
+        Name = props.Name;
         UpdatedAt = DateTime.Now;
     }
 }

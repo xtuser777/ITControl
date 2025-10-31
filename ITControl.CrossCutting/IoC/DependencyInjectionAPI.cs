@@ -55,7 +55,6 @@ using ITControl.Domain.Units.Interfaces;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Infrastructure.Appointments.Repositories;
 using ITControl.Infrastructure.Calls.Repositories;
-using ITControl.Infrastructure.Contexts;
 using ITControl.Infrastructure.Contracts.Repositories;
 using ITControl.Infrastructure.Departments.Repositories;
 using ITControl.Infrastructure.Divisions.Repositories;
@@ -65,6 +64,8 @@ using ITControl.Infrastructure.Notifications.Repositories;
 using ITControl.Infrastructure.Pages.Repositories;
 using ITControl.Infrastructure.Positions.Repositories;
 using ITControl.Infrastructure.Roles.Repositories;
+using ITControl.Infrastructure.Shared.Contexts;
+using ITControl.Infrastructure.Shared.Seeds;
 using ITControl.Infrastructure.Supplements.Repositories;
 using ITControl.Infrastructure.SupplementsMovements.Repositories;
 using ITControl.Infrastructure.Systems.Repositories;
@@ -84,12 +85,18 @@ public static class DependencyInjectionApi
         IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<ApplicationDbContext>(
-            options => options.UseSqlServer(connectionString)
+        services.AddDbContext<ApplicationDbContext>((options) => options
+                .UseSqlServer(connectionString)
+                .UseAsyncSeeding(async (context, _, cancellationToken) =>
+                    await new ApplicationSeed(configuration)
+                        .SeedAsync(context, cancellationToken))
+                .UseSeeding((context, _) => 
+                    new ApplicationSeed(configuration).Seed(context))
         );
 
         services.AddSingleton<IWebSocketService, WebSocketService>();
 
+        services.AddSingleton<ICryptService, CryptService>();
         services.AddScoped<IPositionsRepository, PositionsRepository>();
         services.AddScoped<IPositionsService, PositionsService>();
         services.AddScoped<IPagesRepository, PagesRepository>();

@@ -1,7 +1,7 @@
 ﻿using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Interfaces;
 using ITControl.Domain.Shared.Params;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
 using Microsoft.EntityFrameworkCore;
 

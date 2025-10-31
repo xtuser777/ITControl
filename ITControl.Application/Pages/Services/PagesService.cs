@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Params;
+using ITControl.Domain.Pages.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Pages.Services;
@@ -41,7 +42,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var page = new Page((PageParams)parameters.Params);
+        var page = (Page)parameters.Props;
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
         
@@ -52,7 +53,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         UpdateServiceParams parameters)
     {
         var page = await FindOneAsync(parameters);
-        page.Update((UpdatePageParams)parameters.Params);
+        page.Update((PageProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Update(page);
         await unitOfWork.Commit(transaction);

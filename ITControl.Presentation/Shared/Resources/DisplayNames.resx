@@ -297,4 +297,7 @@
   <data name="Version" xml:space="preserve">
     <value>versão</value>
   </data>
+  <data name="Enterprise" xml:space="preserve">
+    <value>Empresa</value>
+  </data>
 </root>

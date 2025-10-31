@@ -4,7 +4,8 @@ namespace ITControl.Domain.Contracts.Params;
 
 public record FindManyContractsParams : FindManyParams
 {
-    public string? ObjectName { get; set; } = null;
-    public DateOnly? StartedAt { get; set; } = null;
-    public DateOnly? EndedAt { get; set; } = null;
+    public string? Enterprise { get; init; }
+    public string? ObjectName { get; set; }
+    public DateOnly? StartedAt { get; set; }
+    public DateOnly? EndedAt { get; set; }
 }

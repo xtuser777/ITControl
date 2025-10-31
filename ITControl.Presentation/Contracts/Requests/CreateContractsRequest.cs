@@ -10,6 +10,11 @@ public record CreateContractsRequest
 {
     [RequiredField]
     [StringMaxLength(100)]
+    [Display(Name = nameof(Enterprise), ResourceType = typeof(DisplayNames))]
+    public string Enterprise { get; set; } = string.Empty;
+    
+    [RequiredField]
+    [StringMaxLength(100)]
     [Display(Name = nameof(ObjectName), ResourceType = typeof(DisplayNames))]
     public string ObjectName { get; set; } = string.Empty;
 
@@ -32,6 +37,7 @@ public record CreateContractsRequest
         CreateContractsRequest request) =>
         new()
         {
+            Enterprise = request.Enterprise,
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
             EndedAt = request.EndedAt,

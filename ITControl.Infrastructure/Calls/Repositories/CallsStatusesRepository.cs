@@ -1,6 +1,6 @@
 ﻿using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Interfaces;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 
 namespace ITControl.Infrastructure.Calls.Repositories;
 

@@ -13,6 +13,6 @@ public record CreatePagesParams
         (CreatePagesParams paramsModel) =>
         new()
         {
-            Params = paramsModel.Request
+            Props = paramsModel.Request
         };
 }

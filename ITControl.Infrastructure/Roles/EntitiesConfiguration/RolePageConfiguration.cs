@@ -7,10 +7,6 @@ namespace ITControl.Infrastructure.Roles.EntitiesConfiguration;
 
 public class RolePageConfiguration : IEntityTypeConfiguration<RolePage>
 {
-    internal static readonly List<RolePage> RolesPagesSeed =
-        PageConfiguration.PagesSeed.Select(p => new RolePage(
-            RoleConfiguration.RolesSeed[0].Id, p.Id)).ToList();
-    
     public void Configure(EntityTypeBuilder<RolePage> builder)
     {
         builder.HasKey(t => t.Id);
@@ -23,7 +19,5 @@ public class RolePageConfiguration : IEntityTypeConfiguration<RolePage>
         builder
             .HasOne(r => r.Page).WithMany()
             .HasForeignKey(r => r.PageId).IsRequired();
-
-        builder.HasData(RolesPagesSeed);
     }
 }

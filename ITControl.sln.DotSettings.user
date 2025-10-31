@@ -42,5 +42,5 @@
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FTreatmentsStatuses/@EntryIndexedValue">False</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FDisplayValues_002FTreatmentsTypes/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EDomain_002FShared_002FMessages_002FErrors/@EntryIndexedValue">False</s:Boolean>
-	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EPresentation_002FShared_002FResources_002FDisplayNames/@EntryIndexedValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/ResxEditorPersonal/CheckedGroups/=ITControl_002EPresentation_002FShared_002FResources_002FDisplayNames/@EntryIndexedValue">True</s:Boolean>
 	<s:Boolean x:Key="/Default/ResxEditorPersonal/Initialized/@EntryValue">True</s:Boolean></wpf:ResourceDictionary>

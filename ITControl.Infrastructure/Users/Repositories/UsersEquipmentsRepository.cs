@@ -1,6 +1,6 @@
 using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 using Microsoft.EntityFrameworkCore;
 
 namespace ITControl.Infrastructure.Users.Repositories;

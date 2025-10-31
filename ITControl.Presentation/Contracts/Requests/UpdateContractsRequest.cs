@@ -10,6 +10,11 @@ public record UpdateContractsRequest
 {
     [StringMinLength(1)]
     [StringMaxLength(100)]
+    [Display(Name = nameof(Enterprise), ResourceType = typeof(DisplayNames))]
+    public string? Enterprise { get; set; }
+    
+    [StringMinLength(1)]
+    [StringMaxLength(100)]
     [Display(Name = nameof(ObjectName), ResourceType = typeof(DisplayNames))]
     public string? ObjectName { get; set; }
 
@@ -31,6 +36,7 @@ public record UpdateContractsRequest
         UpdateContractsRequest request) =>
         new()
         {
+            Enterprise = request.Enterprise,
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
             EndedAt = request.EndedAt,

@@ -15,7 +15,7 @@ using ITControl.Domain.Systems.Interfaces;
 using ITControl.Domain.Treatments.Interfaces;
 using ITControl.Domain.Units.Interfaces;
 using ITControl.Domain.Users.Interfaces;
-using ITControl.Infrastructure.Contexts;
+using ITControl.Infrastructure.Shared.Contexts;
 using Microsoft.EntityFrameworkCore.Storage;
 
 namespace ITControl.Application.Shared.Interfaces;

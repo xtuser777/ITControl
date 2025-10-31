@@ -4,13 +4,13 @@ namespace ITControl.Domain.Shared.Utils;
 
 public abstract class Crypt
 {
-    [Obsolete("Obsolete")]
     public static string HashPassword(string password)
     {
         byte[] salt;
         byte[] buffer2;
         ArgumentNullException.ThrowIfNull(password);
-        using (var bytes = new Rfc2898DeriveBytes(password, 0x10, 0x3e8))
+        using (var bytes = new Rfc2898DeriveBytes(
+                   password, 0x10, 0x3e8, HashAlgorithmName.SHA256))
         {
             salt = bytes.Salt;
             buffer2 = bytes.GetBytes(0x20);
@@ -28,7 +28,6 @@ public abstract class Crypt
         return !b1.Where((t, i) => t != b2[i]).Any();
     }
 
-    [Obsolete("Obsolete")]
     public static bool VerifyHashedPassword(string hashedPassword, string password)
     {
         byte[] buffer4;
@@ -43,7 +42,8 @@ public abstract class Crypt
         var buffer3 = new byte[0x20];
         Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
 
-        using (var bytes = new Rfc2898DeriveBytes(password, dst, 0x3e8))
+        using (var bytes = new Rfc2898DeriveBytes(
+                   password, dst, 0x3e8, HashAlgorithmName.SHA256))
         {
             buffer4 = bytes.GetBytes(0x20);
         }
