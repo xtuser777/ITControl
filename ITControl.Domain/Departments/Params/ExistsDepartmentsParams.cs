@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.Departments.Params;
 
-public record ExistsDepartmentsParams :
+public class ExistsDepartmentsParams :
     CountDepartmentsParams;

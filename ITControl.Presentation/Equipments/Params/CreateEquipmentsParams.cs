@@ -13,6 +13,6 @@ public record CreateEquipmentsParams
         CreateEquipmentsParams @params)
         => new()
         {
-            Params = @params.Request
+            Props = @params.Request
         };
 }

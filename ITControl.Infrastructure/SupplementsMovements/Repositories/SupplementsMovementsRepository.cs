@@ -1,4 +1,5 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.SupplementsMovements.Entities;
 using ITControl.Domain.SupplementsMovements.Interfaces;
 using ITControl.Infrastructure.Shared.Contexts;
@@ -31,7 +32,7 @@ public class SupplementsMovementsRepository(
             .Include(sm => sm.Department)
             .Include(sm => sm.Division)
             .AsNoTracking();
-        BuildQuery(findManyParams.FindMany);
+        BuildQuery(findManyParams.FindManyProps);
         BuildOrderBy(findManyParams.OrderBy);
         ApplyPagination(findManyParams.Pagination);
         return (await query.ToListAsync()).Cast<SupplementMovement>();
@@ -53,7 +54,7 @@ public class SupplementsMovementsRepository(
     }
 
     public async Task<int> CountAsync(
-        FindManyParams countParams)
+        Entity countParams)
     {
         query = context.SupplementsMovements.AsNoTracking();
         BuildQuery(countParams);
@@ -61,7 +62,7 @@ public class SupplementsMovementsRepository(
     }
 
     public async Task<bool> ExistsAsync(
-        FindManyParams existsParams)
+        Entity existsParams)
     {
         var count = await CountAsync(existsParams);
         return count > 0;

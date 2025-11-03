@@ -1,34 +1,18 @@
-using ITControl.Domain.Departments.Entities;
-using ITControl.Domain.Divisions.Params;
-using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Divisions.Props;
 
 namespace ITControl.Domain.Divisions.Entities;
 
-public sealed class Division : Entity
+public sealed class Division : DivisionProps
 {
-    public string Name { get; set; } = string.Empty;
-    public Guid DepartmentId { get; set; }
+    public Division() {}
 
-    public Department? Department { get; set; }
-
-    public Division()
+    public Division(DivisionProps props)
     {
+        Assign(props);
     }
 
-    public Division(DivisionParams @params)
+    public void Update(DivisionProps props)
     {
-        Id = Guid.NewGuid();
-        Name = @params.Name;
-        DepartmentId = @params.DepartmentId;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
-    }
-
-    public void Update(UpdateDivisionParams @params)
-    {
-        var (name, departmentId) = @params;
-        Name = name ?? Name;
-        DepartmentId = departmentId ?? DepartmentId;
-        UpdatedAt = DateTime.Now;
+        AssignUpdate(props);
     }
 }

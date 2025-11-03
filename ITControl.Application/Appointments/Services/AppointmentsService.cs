@@ -6,9 +6,11 @@ using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Appointments.Params;
+using ITControl.Domain.Appointments.Props;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
 using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params;
@@ -38,7 +40,7 @@ public class AppointmentsService(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.AppointmentsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
 
         return pagination;
@@ -49,28 +51,28 @@ public class AppointmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction; 
         var appointment = new Appointment(
-            (AppointmentParams)parameters.Params);
+            (AppointmentProps)parameters.Props);
         await unitOfWork.AppointmentsRepository.CreateAsync(appointment);
         var call = await unitOfWork.CallsRepository.FindOneAsync(
             new FindOneRepositoryParams
             {
-                Id = ((AppointmentParams)parameters.Params).CallId
+                Id = ((AppointmentProps)parameters.Props).CallId ?? Guid.Empty
             })  
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var user = await unitOfWork.UsersRepository.FindOneAsync(
             new FindOneRepositoryParams
             {
-                Id = ((AppointmentParams)parameters.Params).UserId
+                Id = ((AppointmentProps)parameters.Props).UserId ?? Guid.Empty
             }) 
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(
             Messages.APPOINTMENTS_CREATED, 
             call.Title, user.Name, 
-            ((AppointmentParams)parameters.Params).ScheduledAt, 
-            ((AppointmentParams)parameters.Params).ScheduledIn);
+            ((AppointmentProps)parameters.Props).ScheduledAt, 
+            ((AppointmentProps)parameters.Props).ScheduledIn);
         await CreateNotification(
             appointment.Id,
-            ((AppointmentParams)parameters.Params).UserId,
+            ((AppointmentProps)parameters.Props).UserId,
             Titles.APPOINTMENTS_STARTED,
             message,
             NotificationType.Info);
@@ -83,7 +85,7 @@ public class AppointmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var appointment = await FindOneAsync(parameters);
-        appointment.Update((UpdateAppointmentParams)parameters.Params);
+        appointment.Update((AppointmentProps)parameters.Props);
         unitOfWork.AppointmentsRepository.Update(appointment);
         var call = appointment.Call
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
@@ -92,8 +94,8 @@ public class AppointmentsService(
         var message = string.Format(
             Messages.APPOINTMENTS_UPDATED, 
             call.Title, user.Name, 
-            ((UpdateAppointmentParams)parameters.Params).ScheduledAt, 
-            ((UpdateAppointmentParams)parameters.Params).ScheduledIn);
+            ((AppointmentProps)parameters.Props).ScheduledAt, 
+            ((AppointmentProps)parameters.Props).ScheduledIn);
         await CreateNotification(
             appointment.Id,
             user.Id,
@@ -112,14 +114,14 @@ public class AppointmentsService(
     }
 
     private async Task CreateNotification(
-        Guid referenceId,
-        Guid userId,
+        Guid? referenceId,
+        Guid? userId,
         string title,
         string message,
         NotificationType type)
     {
         var notification = new Notification(
-            new NotificationParams
+            new NotificationProps
             {
                 Title = title,
                 Message = message,

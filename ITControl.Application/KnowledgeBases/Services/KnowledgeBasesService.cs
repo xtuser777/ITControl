@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.KnowledgeBases.Entities;
-using ITControl.Domain.KnowledgeBases.Params;
+using ITControl.Domain.KnowledgeBases.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.KnowledgeBases.Services;
@@ -36,7 +36,7 @@ public class KnowledgeBasesService(
     {
         var count = await unitOfWork
             .KnowledgeBasesRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -47,7 +47,7 @@ public class KnowledgeBasesService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var knowledgeBase = 
-            new KnowledgeBase((KnowledgeBaseParams)parameters.Params);
+            new KnowledgeBase((KnowledgeBaseProps)parameters.Props);
         await unitOfWork.KnowledgeBasesRepository
             .CreateAsync(knowledgeBase);
         await unitOfWork.Commit(transaction);
@@ -60,7 +60,7 @@ public class KnowledgeBasesService(
     {
         var knowledgeBase = await FindOneAsync(parameters);
         knowledgeBase.Update(
-            (UpdateKnowledgeBaseParams)parameters.Params);
+            (KnowledgeBaseProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.KnowledgeBasesRepository.Update(knowledgeBase);
         await unitOfWork.Commit(transaction);

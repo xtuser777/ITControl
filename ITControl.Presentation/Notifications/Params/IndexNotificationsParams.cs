@@ -87,7 +87,7 @@ public record IndexNotificationsParams : PaginationParams
         IndexNotificationsParams param)
         => new()
         {
-            FindManyParams = param,
+            FindManyProps = param,
             OrderByParams = param,
             PaginationParams = param
         };
@@ -96,7 +96,7 @@ public record IndexNotificationsParams : PaginationParams
         IndexNotificationsParams param)
         => new()
         {
-            CountParams = param,
+            CountProps= param,
             PaginationParams = param
         };
 }

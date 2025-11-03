@@ -56,7 +56,7 @@ public record IndexUsersParams : PaginationParams
         IndexUsersParams param)
         => new()
         {
-            FindManyParams = param,
+            FindManyProps = param,
             OrderByParams = param,
             PaginationParams = param,
         };
@@ -65,7 +65,7 @@ public record IndexUsersParams : PaginationParams
         IndexUsersParams param)
         => new()
         {
-            CountParams = param,
+            CountProps = param,
             PaginationParams = param,
         };
 }

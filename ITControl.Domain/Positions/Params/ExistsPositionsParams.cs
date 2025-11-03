@@ -1,4 +1,4 @@
 namespace ITControl.Domain.Positions.Params;
 
-public record ExistsPositionsParams : 
+public class ExistsPositionsParams : 
     CountPositionsParams;

@@ -1,7 +1,6 @@
 ﻿namespace ITControl.Domain.Departments.Params;
 
-public record CountDepartmentsParams : 
+public class CountDepartmentsParams : 
     FindManyDepartmentsParams
 {
-    public Guid? Id { get; set; }
 }

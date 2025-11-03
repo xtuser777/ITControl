@@ -17,6 +17,6 @@ public record UpdateContractsParams
         => new()
         {
             Id = update.Id,
-            Params = update.UpdateRequest,
+            Props = update.UpdateRequest,
         };
 }

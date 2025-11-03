@@ -1,10 +1,11 @@
 using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Systems.Entities;
 
 namespace ITControl.Domain.Users.Entities;
 
 public sealed class UserSystem : Entity
 {
-    public UserSystem(Guid userId, Guid systemId)
+    public UserSystem(Guid? userId, Guid? systemId)
     {
         Id = Guid.NewGuid();
         UserId = userId;
@@ -13,15 +14,8 @@ public sealed class UserSystem : Entity
         UpdatedAt = DateTime.Now;
     }
 
-    public Guid UserId { get; set; }
-    public Guid SystemId { get; set; }
+    public Guid? UserId { get; set; }
+    public Guid? SystemId { get; set; }
     public User? User { get; set; }
-    public Systems.Entities.System? System { get; set; }
-
-    public void Update(Guid? userId = null, Guid? systemId = null)
-    {
-        UserId = userId ?? UserId;
-        SystemId = systemId ?? SystemId;
-        UpdatedAt = DateTime.Now;
-    }
+    public SystemEntity? System { get; set; }
 }

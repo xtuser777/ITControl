@@ -69,7 +69,7 @@ public record IndexSystemsParams : PaginationParams
         IndexSystemsParams parameters)
         => new()
         {
-            FindManyParams = parameters,
+            FindManyProps = parameters,
             OrderByParams = parameters,
             PaginationParams = parameters
         };
@@ -78,7 +78,7 @@ public record IndexSystemsParams : PaginationParams
         IndexSystemsParams parameters)
         => new()
         {
-            CountParams = parameters,
+            CountProps = parameters,
             PaginationParams = parameters
         };
 }

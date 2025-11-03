@@ -29,8 +29,8 @@ public class KnowledgeBasesView : IKnowledgeBasesView
             EstimatedTime = knowledgeBase.EstimatedTime,
             Reason = new () 
             { 
-                Value = knowledgeBase.Reason.ToString(), 
-                DisplayValue = knowledgeBase.Reason.GetDisplayValue() 
+                Value = knowledgeBase.Reason.ToString()!, 
+                DisplayValue = knowledgeBase.Reason!.GetDisplayValue() 
             },
             UserId = knowledgeBase.UserId,
             User = knowledgeBase.User == null ? null : new FindOneKnowledgeBasesUserResponse
@@ -51,7 +51,7 @@ public class KnowledgeBasesView : IKnowledgeBasesView
             Title = knowledgeBase.Title,
             Content = knowledgeBase.Content,
             EstimatedTime = knowledgeBase.EstimatedTime,
-            Reason = knowledgeBase.Reason.GetDisplayValue(),
+            Reason = knowledgeBase.Reason!.GetDisplayValue(),
             UserId = knowledgeBase.UserId,
         });
     }

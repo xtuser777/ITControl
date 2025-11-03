@@ -10,7 +10,7 @@ public class DepartmentsView : IDepartmentsView
     {
         if (department == null) return null;
 
-        return new CreateDepartmentsResponse()
+        return new CreateDepartmentsResponse
         {
             Id = department.Id,
         };
@@ -20,7 +20,7 @@ public class DepartmentsView : IDepartmentsView
     {
         if (department == null) return null;
 
-        return new FindOneDepartmentsResponse()
+        return new FindOneDepartmentsResponse
         {
             Id = department.Id,
             Alias = department.Alias,
@@ -28,15 +28,18 @@ public class DepartmentsView : IDepartmentsView
         };
     }
 
-    public IEnumerable<FindManyDepartmentsResponse> FindMany(IEnumerable<Department>? departments)
+    public IEnumerable<FindManyDepartmentsResponse> FindMany(
+        IEnumerable<Department>? departments)
     {
         if (departments == null) return [];
 
-        return from department in departments select new FindManyDepartmentsResponse()
-        {
-            Id = department.Id,
-            Alias = department.Alias,
-            Name = department.Name,
-        };
+        return 
+            from department in departments 
+            select new FindManyDepartmentsResponse
+            {
+                Id = department.Id,
+                Alias = department.Alias,
+                Name = department.Name,
+            };
     }
 }

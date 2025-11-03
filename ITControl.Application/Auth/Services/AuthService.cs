@@ -16,16 +16,15 @@ public class AuthService(
     IUnitOfWork unitOfWork, 
     IConfiguration configuration) : IAuthService
 {
-    [Obsolete("Obsolete")]
     public async Task<string> Login(string username, string password)
     {
         var user = await Validate(username, password);
-        var permissions = await Permissions(user.RoleId);
+        var permissions = await Permissions(user.RoleId ?? Guid.Empty);
 
         var payload = new LoginPayload()
         {
-            Sub = user.Id.ToString(),
-            User = user.Name,
+            Sub = user.Id.ToString()!,
+            User = user.Name ?? "",
             Role = user.Role?.Id.ToString() ?? "",
             Permissions = permissions
         };
@@ -54,13 +53,13 @@ public class AuthService(
             } 
         }) 
             ?? throw new UnauthorizedAccessException(Errors.ROLE_NOT_FOUND);
-        if (!role.Active)
+        if ((bool)(!role.Active)!)
         {
             throw new UnauthorizedAccessException(Errors.AUTH_ROLE_INACTIVE);
         }
 
         List<Guid> pagesIds = role.RolesPages != null ? [
-            .. role.RolesPages.Select(x => x.PageId)] : [];
+            .. role.RolesPages.Select(x => x.PageId ?? Guid.Empty)] : [];
 
         List<Page?> pages = [];
         foreach (var pageId in pagesIds)
@@ -76,17 +75,16 @@ public class AuthService(
         return permissions;
     }
 
-    [Obsolete("Obsolete")]
     private async Task<User> Validate(string username, string password)
     {
         var user = await ((UsersRepository)unitOfWork.UsersRepository)
                        .FindOneByUsernameAsync(username) 
             ?? throw new UnauthorizedAccessException(Errors.AUTH_INVALID_USER);
-        if (!user.Active)
+        if ((bool)(!user.Active)!)
         {
             throw new UnauthorizedAccessException(Errors.AUTH_INACTIVE_USER);
         }
-        return !Crypt.VerifyHashedPassword(user.Password, password) 
+        return !Crypt.VerifyHashedPassword(user.Password!, password) 
             ? throw new UnauthorizedAccessException(Errors.AUTH_INVALID_PASSWORD) 
             : user;
     }

@@ -1,5 +1,6 @@
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Pages.Interfaces;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -20,7 +21,7 @@ public class PagesRepository(ApplicationDbContext context):
         FindManyRepositoryParams @params)
     {
         query = context.Pages.AsNoTracking();
-        BuildQuery(@params.FindMany);
+        BuildQuery(@params.FindManyProps);
         BuildOrderBy(@params.OrderBy);
         ApplyPagination(@params.Pagination);
         return (await query.ToListAsync()).Cast<Page>();
@@ -42,7 +43,7 @@ public class PagesRepository(ApplicationDbContext context):
     }
 
     public async Task<int> CountAsync(
-        FindManyParams @params)
+        Entity @params)
     {
         query = context.Pages.AsNoTracking();
         BuildQuery(@params);
@@ -50,14 +51,14 @@ public class PagesRepository(ApplicationDbContext context):
     }
 
     public async Task<bool> ExistsAsync(
-        FindManyParams @params)
+        Entity @params)
     {
         var count = await CountAsync(@params);
         return count > 0;
     }
 
     public async Task<bool> ExclusiveAsync(
-        FindManyParams @params)
+        Entity @params)
     {
         query = context.Pages.AsNoTracking();
         BuildQuery(@params);

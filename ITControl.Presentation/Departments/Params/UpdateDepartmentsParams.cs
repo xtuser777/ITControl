@@ -17,6 +17,6 @@ public record UpdateDepartmentsParams
         new()
         {
             Id = parameters.Id,
-            Params = parameters.Request
+            Props = parameters.Request
         };
 }

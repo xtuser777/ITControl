@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
 using ITControl.Domain.Departments.Params;
+using ITControl.Domain.Departments.Props;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 
@@ -25,7 +26,7 @@ public record UpdateDepartmentsRequest
     [Display(Name = nameof(Name), ResourceType = typeof(DisplayNames))]
     public string? Name { get; set; }
 
-    public static implicit operator UpdateDepartmentParams(
+    public static implicit operator DepartmentProps(
         UpdateDepartmentsRequest request) =>
         new()
         {

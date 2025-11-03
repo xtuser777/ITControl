@@ -1,9 +1,7 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Departments.Props;
 
 namespace ITControl.Domain.Departments.Params;
 
-public record FindManyDepartmentsParams : FindManyParams
+public class FindManyDepartmentsParams : DepartmentProps
 {
-    public string? Alias { get; set; } = null;
-    public string? Name { get; set; } = null;
 }

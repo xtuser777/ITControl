@@ -32,12 +32,13 @@ public class EquipmentsView : IEquipmentsView
             Tag = equipment.Tag,
             Type = new TranslatableField()
             {
-                Value = equipment.Type.ToString(),
-                DisplayValue = equipment.Type.GetDisplayValue(),
+                Value = equipment.Type.ToString()!,
+                DisplayValue = equipment.Type!.GetDisplayValue(),
             },
             Rented = equipment.Rented,
             ContractId = equipment.ContractId,
-            Contract = equipment.Contract != null ? new FindOneEquipmentsContractResponse()
+            Contract = equipment.Contract != null 
+                ? new FindOneEquipmentsContractResponse()
             {
                 Id = equipment.Contract.Id,
                 ObjectName = equipment.Contract.ObjectName
@@ -45,7 +46,8 @@ public class EquipmentsView : IEquipmentsView
         };
     }
 
-    public IEnumerable<FindManyEquipmentsResponse> FindMany(IEnumerable<Equipment>? equipments)
+    public IEnumerable<FindManyEquipmentsResponse> FindMany(
+        IEnumerable<Equipment>? equipments)
     {
         if (equipments == null) return [];
 
@@ -59,8 +61,8 @@ public class EquipmentsView : IEquipmentsView
             Tag = equipment.Tag,
             Type = new TranslatableField()
             {
-                Value = equipment.Type.ToString(),
-                DisplayValue = equipment.Type.GetDisplayValue(),
+                Value = equipment.Type.ToString()!,
+                DisplayValue = equipment.Type!.GetDisplayValue(),
             },
             Rented = equipment.Rented,
             ContractId = equipment.ContractId,

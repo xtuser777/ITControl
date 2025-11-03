@@ -64,8 +64,11 @@ public class CallsController(
         var data = callsView.Create(call);
         if (call != null)
         {
-            var count = await notificationsService.CountUnreadAsync(call.UserId);
-            await webSocketService.EchoAsync(call.UserId.ToString(), count.ToString());
+            var count = await notificationsService
+                .CountUnreadAsync((Guid)call.UserId!);
+            await webSocketService.EchoAsync(
+                call.UserId.ToString()!, 
+                count.ToString());
         }
         var url = $"/calls/{data?.Id}";
         return Created(url, new { Data = data });

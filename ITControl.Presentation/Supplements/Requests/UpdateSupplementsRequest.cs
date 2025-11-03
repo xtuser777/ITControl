@@ -4,6 +4,7 @@ using ITControl.Presentation.Shared.Resources;
 using ITControl.Presentation.Shared.Utils;
 using ITControl.Domain.Supplements.Enums;
 using ITControl.Domain.Supplements.Params;
+using ITControl.Domain.Supplements.Props;
 
 namespace ITControl.Presentation.Supplements.Requests;
 
@@ -27,7 +28,7 @@ public class UpdateSupplementsRequest
     [Display(Name = nameof(Stock), ResourceType = typeof(DisplayNames))]
     public int? Stock { get; set; }
 
-    public static implicit operator UpdateSupplementParams(
+    public static implicit operator SupplementProps(
         UpdateSupplementsRequest request)
         => new()
         {

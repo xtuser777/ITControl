@@ -5,7 +5,6 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Pages.Entities;
-using ITControl.Domain.Pages.Params;
 using ITControl.Domain.Pages.Props;
 using ITControl.Domain.Shared.Exceptions;
 
@@ -32,7 +31,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.PagesRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -42,7 +41,7 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var page = (Page)parameters.Props;
+        var page = new Page((PageProps)parameters.Props);
         await unitOfWork.PagesRepository.CreateAsync(page);
         await unitOfWork.Commit(transaction);
         

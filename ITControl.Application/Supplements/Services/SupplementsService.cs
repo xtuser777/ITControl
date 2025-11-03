@@ -7,6 +7,7 @@ using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Supplements.Entities;
 using ITControl.Domain.Supplements.Params;
+using ITControl.Domain.Supplements.Props;
 
 namespace ITControl.Application.Supplements.Services;
 
@@ -35,7 +36,7 @@ public class SupplementsService(
     {
         var count = await unitOfWork
             .SupplementsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -45,7 +46,7 @@ public class SupplementsService(
         CreateServiceParams parameters)
     {
         var supplement = 
-            new Supplement((SupplementParams)parameters.Params);
+            new Supplement((SupplementProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SupplementsRepository.CreateAsync(supplement);
         await unitOfWork.Commit(transaction);
@@ -57,7 +58,7 @@ public class SupplementsService(
         UpdateServiceParams parameters)
     {
         var supplement = await FindOneAsync(parameters);
-        supplement.Update((UpdateSupplementParams)parameters.Params);
+        supplement.Update((SupplementProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.SupplementsRepository.Update(supplement);
         await unitOfWork.Commit(transaction);

@@ -15,6 +15,6 @@ public record UpdateSystemsParams
         => new()
         {
             Id = parameters.Id,
-            Params = parameters.UpdateSystemsRequest
+            Props = parameters.UpdateSystemsRequest
         };
 }

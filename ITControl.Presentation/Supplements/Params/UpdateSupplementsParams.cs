@@ -17,6 +17,6 @@ public record UpdateSupplementsParams
         => new()
         {
             Id = param.Id,
-            Params = param.Request
+            Props = param.Request
         };
 }

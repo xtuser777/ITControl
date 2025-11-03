@@ -13,6 +13,6 @@ public record CreateAppointmentsParams
         CreateAppointmentsParams paramsWrapper) =>
         new()
         {
-            Params = paramsWrapper.Request
+            Props = paramsWrapper.Request
         };
 }

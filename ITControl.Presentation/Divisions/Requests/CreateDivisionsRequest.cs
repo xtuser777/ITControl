@@ -4,6 +4,7 @@ using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Divisions.Params;
+using ITControl.Domain.Divisions.Props;
 
 namespace ITControl.Presentation.Divisions.Requests;
 
@@ -27,7 +28,7 @@ public record CreateDivisionsRequest
         ResourceType = typeof(DisplayNames))]
     public Guid DepartmentId { get; set; }
 
-    public static implicit operator DivisionParams(
+    public static implicit operator DivisionProps(
         CreateDivisionsRequest request)
         => new()
         {

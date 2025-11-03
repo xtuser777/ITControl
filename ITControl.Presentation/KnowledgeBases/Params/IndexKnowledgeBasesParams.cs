@@ -67,7 +67,7 @@ public record IndexKnowledgeBasesParams : PaginationParams
         IndexKnowledgeBasesParams index)
         => new()
         {
-            FindManyParams = index,
+            FindManyProps = index,
             OrderByParams = index,
             PaginationParams = index,
         };
@@ -76,7 +76,7 @@ public record IndexKnowledgeBasesParams : PaginationParams
         IndexKnowledgeBasesParams index)
         => new()
         {
-            CountParams = index,
+            CountProps = index,
             PaginationParams = index,
         };
 }

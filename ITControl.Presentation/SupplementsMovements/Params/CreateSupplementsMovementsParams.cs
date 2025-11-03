@@ -11,5 +11,5 @@ public record CreateSupplementsMovementsParams
     
     public static implicit operator CreateServiceParams(
         CreateSupplementsMovementsParams param)
-        => new() { Params = param.Request };
+        => new() { Props = param.Request };
 }

@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Units.Params;
+using ITControl.Domain.Units.Props;
 
 namespace ITControl.Presentation.Units.Requests;
 
@@ -37,7 +38,7 @@ public record UpdateUnitsRequest
     [Display(Name = nameof(AddressNumber), ResourceType = typeof(DisplayNames))]
     public string? AddressNumber { get; set; }
 
-    public static implicit operator UpdateUnitParams(
+    public static implicit operator UnitProps(
         UpdateUnitsRequest request) => new()
     {
         Name = request.Name,

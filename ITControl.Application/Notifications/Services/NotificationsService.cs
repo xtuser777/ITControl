@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Notifications.Services;
@@ -34,7 +35,7 @@ public class NotificationsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var notification = await FindOneAsync(@params);
-        notification.Update((UpdateNotificationParams)@params.Params);
+        notification.Update((NotificationProps)@params.Props);
         unitOfWork.NotificationsRepository.Update(notification);
         await unitOfWork.Commit(transaction);
     }
@@ -43,7 +44,7 @@ public class NotificationsService(
         FindManyPaginationServiceParams @params)
     {
         var count = await unitOfWork
-            .NotificationsRepository.CountAsync(@params.CountParams);
+            .NotificationsRepository.CountAsync(@params.CountProps);
         var pagination = Pagination.Build(@params.PaginationParams, count);
         return pagination;
     }

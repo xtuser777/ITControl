@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Params;
+using ITControl.Domain.Contracts.Props;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 
@@ -33,7 +34,7 @@ public record CreateContractsRequest
     [Display(Name = nameof(Contacts), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateContractsContactsRequest> Contacts { get; set; } = [];
 
-    public static implicit operator ContractParams(
+    public static implicit operator ContractProps(
         CreateContractsRequest request) =>
         new()
         {

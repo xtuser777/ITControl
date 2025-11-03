@@ -1,5 +1,6 @@
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Interfaces;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -21,7 +22,7 @@ public class DepartmentsRepository(ApplicationDbContext context) :
         FindManyRepositoryParams parameters)
     {
         query = context.Departments.AsNoTracking();
-        BuildQuery(parameters.FindMany);
+        BuildQuery(parameters.FindManyProps);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
         
@@ -44,7 +45,7 @@ public class DepartmentsRepository(ApplicationDbContext context) :
     }
 
     public async Task<int> CountAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         query = context.Departments.AsNoTracking();
         BuildQuery(parameters);
@@ -52,14 +53,14 @@ public class DepartmentsRepository(ApplicationDbContext context) :
     }
 
     public async Task<bool> ExistsAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         var count = await CountAsync(parameters);
         return count > 0;
     }
 
     public async Task<bool> ExclusiveAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         query = context.Departments.AsNoTracking();
         BuildQuery(parameters);

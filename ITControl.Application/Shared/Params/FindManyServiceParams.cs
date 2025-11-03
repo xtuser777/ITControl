@@ -1,3 +1,4 @@
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using FindManyRepositoryParams = ITControl.Domain.Shared.Params.FindManyRepositoryParams;
 
@@ -5,6 +6,7 @@ namespace ITControl.Application.Shared.Params;
 
 public record FindManyServiceParams
 {
+    public Entity FindManyProps { get; set; } = null!; 
     public FindManyParams FindManyParams { get; set; } = new();
     public OrderByParams OrderByParams { get; set; }  = new();
     public PaginationParams PaginationParams { get; set; }  = new();
@@ -13,6 +15,7 @@ public record FindManyServiceParams
         FindManyServiceParams parameters)
         => new()
         {
+            FindManyProps = parameters.FindManyProps,
             FindMany = parameters.FindManyParams,
             OrderBy = parameters.OrderByParams,
             Pagination = parameters.PaginationParams,

@@ -35,7 +35,7 @@ public record IndexUnitsParams : PaginationParams
         IndexUnitsParams parameters)
         => new()
         {
-            FindManyParams = parameters,
+            FindManyProps = parameters,
             OrderByParams = parameters,
             PaginationParams = parameters,
         };
@@ -44,7 +44,7 @@ public record IndexUnitsParams : PaginationParams
         IndexUnitsParams parameters)
         => new()
         {
-            CountParams = parameters,
+            CountProps = parameters,
             PaginationParams = parameters,
         };
 }

@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Params;
+using ITControl.Domain.Divisions.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Divisions.Services;
@@ -31,7 +32,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.DivisionsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(
             parameters.PaginationParams, count);
         
@@ -42,7 +43,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var division = new Division((DivisionParams)parameters.Params);
+        var division = new Division((DivisionProps)parameters.Props);
         await unitOfWork.DivisionsRepository.CreateAsync(division);
         await unitOfWork.Commit(transaction);
 
@@ -53,7 +54,7 @@ public class DivisionsService(IUnitOfWork unitOfWork) : IDivisionsService
         UpdateServiceParams parameters)
     {
         var division = await FindOneAsync(parameters);
-        division.Update((UpdateDivisionParams)parameters.Params);
+        division.Update((DivisionProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DivisionsRepository.Update(division);
         await unitOfWork.Commit(transaction);

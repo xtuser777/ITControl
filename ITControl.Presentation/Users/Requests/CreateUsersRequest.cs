@@ -5,6 +5,7 @@ using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Domain.Users.Params;
+using ITControl.Domain.Users.Props;
 
 namespace ITControl.Presentation.Users.Requests;
 
@@ -87,7 +88,7 @@ public class CreateUsersRequest
     [Display(Name = nameof(Systems), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateUsersSystemsRequest> Systems { get; set; } = [];
 
-    public static implicit operator UserParams(
+    public static implicit operator UserProps(
         CreateUsersRequest request) =>
         new ()
         {

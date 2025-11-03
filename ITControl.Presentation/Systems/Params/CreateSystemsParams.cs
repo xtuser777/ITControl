@@ -13,6 +13,6 @@ public record CreateSystemsParams
         CreateSystemsParams parameters)
         => new()
         {
-            Params = parameters.CreateSystemsRequest
+            Props = parameters.CreateSystemsRequest
         };
 }

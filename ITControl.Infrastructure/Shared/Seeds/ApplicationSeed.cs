@@ -25,24 +25,24 @@ public class ApplicationSeed
     public ApplicationSeed(IConfiguration configuration)
     {
         _pages = [
-            new () { Name = "users", DisplayName = "Usuários" },
-            new () { Name = "roles", DisplayName = "Perfis" },
-            new () { Name = "pages", DisplayName = "Páginas" },
-            new () { Name = "positions", DisplayName = "Cargos" },
-            new () { Name = "departments", DisplayName = "Secretarias" },
-            new () { Name = "divisions", DisplayName = "Divisões" },
-            new () { Name = "units", DisplayName = "Unidades" },
-            new () { Name = "contracts", DisplayName = "Contratos" },
-            new () { Name = "equipments", DisplayName = "Equipamentos" },
-            new () { Name = "systems", DisplayName = "Systemas" },
-            new () { Name = "calls", DisplayName = "Chamados" },
-            new () { Name = "appointments", DisplayName = "Agendamentos" },
-            new () { Name = "treatments", DisplayName = "Atendimentos" },
-            new () { Name = "notifications", DisplayName = "Notificações" },
-            new () { Name = "knowledge-bases", DisplayName = "Bases de Conhecimento" },
-            new () { Name = "profile", DisplayName = "Perfil do Usuário" },
-            new () { Name = "supplements", DisplayName = "Suplementos" },
-            new () { Name = "supplements-movements", DisplayName = "Movimentos de Suplementos" }
+            new Page { Name = "users", DisplayName = "Usuários" },
+            new Page { Name = "roles", DisplayName = "Perfis" },
+            new Page { Name = "pages", DisplayName = "Páginas" },
+            new Page { Name = "positions", DisplayName = "Cargos" },
+            new Page { Name = "departments", DisplayName = "Secretarias" },
+            new Page { Name = "divisions", DisplayName = "Divisões" },
+            new Page { Name = "units", DisplayName = "Unidades" },
+            new Page { Name = "contracts", DisplayName = "Contratos" },
+            new Page { Name = "equipments", DisplayName = "Equipamentos" },
+            new Page { Name = "systems", DisplayName = "Systemas" },
+            new Page { Name = "calls", DisplayName = "Chamados" },
+            new Page { Name = "appointments", DisplayName = "Agendamentos" },
+            new Page { Name = "treatments", DisplayName = "Atendimentos" },
+            new Page { Name = "notifications", DisplayName = "Notificações" },
+            new Page { Name = "knowledge-bases", DisplayName = "Bases de Conhecimento" },
+            new Page { Name = "profile", DisplayName = "Perfil do Usuário" },
+            new Page { Name = "supplements", DisplayName = "Suplementos" },
+            new Page { Name = "supplements-movements", DisplayName = "Movimentos de Suplementos" }
         ];
         _roles = [
             new Role(new() { Name = "Master", Active = true })
@@ -50,7 +50,7 @@ public class ApplicationSeed
         _rolesPages = _pages.Select(p => new RolePage(
             _roles[0].Id, p.Id)).ToList();
         _positions = [
-            new(new() { Name = "Analista de Sistemas" })
+            new Position { Name = "Analista de Sistemas" }
         ];
         _units = [
             new(new()
@@ -64,86 +64,86 @@ public class ApplicationSeed
             })
         ];
         _departments = [
-            new(new()
+            new Department
             {
                 Alias = "SEMAD",
                 Name = "Secretaria Municipal de Administração",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEGOV",
                 Name = "Secretaria Municipal de Governo",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEPLAD",
                 Name = "Secretaria Municipal de Planejamento e Desenvolvimento Econômico",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEDUC",
                 Name = "Secretaria Municipal de Educação",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEMSA",
                 Name = "Secretaria Municipal de Saúde",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEMAG",
                 Name = "Secretaria Municipal de Serviços Gerais",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SECULT",
                 Name = "Secretaria Municipal de Cultura e Turismo",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEACT",
                 Name = "Secretaria Municipal de Assistência Social e Cidadania",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEMEL",
                 Name = "Secretaria Municipal de Esporte e Lazer",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEFAZ",
                 Name = "Secretaria Municipal de Finanças",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEMAJ",
                 Name = "Secretaria Municipal de Assuntos Jurídicos",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SEMAM",
                 Name = "Secretaria Municipal de Agricultura e Meio ambiente",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SMSP",
                 Name = "Secretaria Municipal de Segurança Pública",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "SOURB",
                 Name = "Secretaria Municipal de Infraestrutura",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "COINTER",
                 Name = "Controladoria Interna",
-            }),
-            new(new()
+            },
+            new Department
             {
                 Alias = "GABINETE",
                 Name = "Gabinete do Prefeito",
-            }),
+            },
         ];
         _divisions = [
             new(new()

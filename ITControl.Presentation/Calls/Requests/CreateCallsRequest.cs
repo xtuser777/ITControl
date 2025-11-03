@@ -4,6 +4,7 @@ using ITControl.Presentation.Shared.Resources;
 using ITControl.Presentation.Shared.Utils;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.Calls.Params;
+using ITControl.Domain.Calls.Props;
 
 namespace ITControl.Presentation.Calls.Requests;
 
@@ -40,7 +41,7 @@ public class CreateCallsRequest
     [Display(Name = nameof(SystemId), ResourceType = typeof(DisplayNames))]
     public Guid? SystemId { get; set; }
 
-    public static implicit operator CallParams(
+    public static implicit operator CallProps(
         CreateCallsRequest request) =>
         new()
         {

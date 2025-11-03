@@ -16,6 +16,6 @@ public record UpdateAppointmentsParams
         new()
         {
             Id = presentationParams.Id,
-            Params = presentationParams.Request
+            Props = presentationParams.Request
         };
 }

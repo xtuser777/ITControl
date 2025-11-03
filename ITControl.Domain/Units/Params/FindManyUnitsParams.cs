@@ -1,13 +1,5 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Units.Props;
 
 namespace ITControl.Domain.Units.Params;
 
-public record FindManyUnitsParams : FindManyParams
-{
-    public string? Name { get; set; }
-    public string? Phone { get; set; }
-    public string? PostalCode { get; set; }
-    public string? StreetName { get; set; }
-    public string? Neighborhood { get; set; }
-    public string? AddressNumber { get; set; }
-}
+public class FindManyUnitsParams : UnitProps;

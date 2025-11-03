@@ -1,37 +1,22 @@
 using ITControl.Domain.Contracts.Params;
+using ITControl.Domain.Contracts.Props;
 using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Domain.Contracts.Entities;
 
-public sealed class Contract : Entity
+public sealed class Contract : ContractProps
 {
-    public string Enterprise { get; set; } = string.Empty;
-    public string ObjectName { get; set; } = string.Empty;
-    public DateOnly StartedAt { get; set; }
-    public DateOnly? EndedAt { get; set; }
-    public IEnumerable<ContractContact>? ContractContacts { get; set; }
-    
     public Contract()
     {
     }
 
-    public Contract(ContractParams @params)
+    public Contract(ContractProps @params)
     {
-        Id = Guid.NewGuid();
-        Enterprise = @params.Enterprise;
-        ObjectName = @params.ObjectName;
-        StartedAt = @params.StartedAt;
-        EndedAt = @params.EndedAt;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        Assign(@params);
     }
 
-    public void Update(UpdateContractParams @params)
+    public void Update(ContractProps @params)
     {
-        Enterprise = @params.Enterprise ?? Enterprise;
-        ObjectName = @params.ObjectName ?? ObjectName;
-        StartedAt = @params.StartedAt ?? StartedAt;
-        EndedAt = @params.EndedAt ?? EndedAt;
-        UpdatedAt = DateTime.Now;
+        AssignUpdate(@params);
     }
 }

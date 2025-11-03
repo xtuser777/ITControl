@@ -4,5 +4,5 @@ namespace ITControl.Domain.KnowledgeBases.Params;
 
 public record IncludesKnowledgeBasesParams : IncludesParams
 {
-    public bool? User { get; set; } = null;
+    public bool? User { get; set; }
 }

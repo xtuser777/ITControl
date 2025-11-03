@@ -4,6 +4,7 @@ using ITControl.Domain.Calls.Params;
 using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Shared.Utils;
 using Microsoft.AspNetCore.Mvc;
+using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
 namespace ITControl.Presentation.Calls.Params;
 
@@ -44,7 +45,10 @@ public record IndexCallsParams : PaginationParams
             Title = request.Title,
             Description = request.Description,
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
-            Status = Parser.ToEnumOptional<CallStatus>(request.Status),
+            CallStatus = new CallStatus
+            {
+                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status)
+            },
             UserId = request.UserId,
         };
 
@@ -55,7 +59,10 @@ public record IndexCallsParams : PaginationParams
             Title = request.Title,
             Description = request.Description,
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
-            Status = Parser.ToEnumOptional<CallStatus>(request.Status),
+            CallStatus = new CallStatus
+            {
+                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status)
+            },
             UserId = request.UserId,
         };
 
@@ -63,7 +70,7 @@ public record IndexCallsParams : PaginationParams
         IndexCallsParams indexCallsParams)
         => new ()
         {
-            FindManyParams = indexCallsParams,
+            FindManyProps = indexCallsParams,
             OrderByParams = indexCallsParams,
             PaginationParams = indexCallsParams
         };
@@ -72,7 +79,7 @@ public record IndexCallsParams : PaginationParams
         IndexCallsParams indexCallsParams)
         => new ()
         {
-            CountParams = indexCallsParams,
+            CountProps = indexCallsParams,
             PaginationParams = indexCallsParams
         };
 }

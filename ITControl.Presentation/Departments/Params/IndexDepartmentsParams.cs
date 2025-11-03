@@ -7,14 +7,14 @@ namespace ITControl.Presentation.Departments.Params;
 
 public record IndexDepartmentsParams : PaginationParams
 {
-    public string? Alias { get; set; } = null;
-    public string? Name { get; set; } = null;
+    public string? Alias { get; set; }
+    public string? Name { get; set; }
     
     [FromHeader(Name = "X-Order-By-Alias")]
-    public string? OrderByAlias { get; set; } = null;
+    public string? OrderByAlias { get; set; }
     
     [FromHeader(Name = "X-Order-By-Name")]
-    public string? OrderByName { get; set; } = null;
+    public string? OrderByName { get; set; }
 
     public static implicit operator OrderByDepartmentsParams(
         IndexDepartmentsParams request)
@@ -50,7 +50,7 @@ public record IndexDepartmentsParams : PaginationParams
         IndexDepartmentsParams paramsObj) =>
         new()
         {
-            FindManyParams = paramsObj,
+            FindManyProps = paramsObj,
             OrderByParams = paramsObj,
             PaginationParams = paramsObj
         };
@@ -59,7 +59,7 @@ public record IndexDepartmentsParams : PaginationParams
         IndexDepartmentsParams paramsObj) =>
         new()
         {
-            CountParams = paramsObj,
+            CountProps = paramsObj,
             PaginationParams = paramsObj
         };
 }

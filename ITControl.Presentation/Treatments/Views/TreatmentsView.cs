@@ -35,13 +35,13 @@ public class TreatmentsView : ITreatmentsView
                    EndedIn = treatment.EndedIn,
                    Status = new TranslatableField()
                    {
-                       Value = treatment.Status.ToString(),
-                       DisplayValue = treatment.Status.GetDisplayValue()
+                       Value = treatment.Status.ToString()!,
+                       DisplayValue = treatment.Status!.GetDisplayValue()
                    },
                    Type = new TranslatableField()
                    {
-                       Value = treatment.Type.ToString(),
-                       DisplayValue = treatment.Type.GetDisplayValue()
+                       Value = treatment.Type.ToString()!,
+                       DisplayValue = treatment.Type!.GetDisplayValue()
                    },
                    Observation = treatment.Observation,
                    ExternalProtocol = treatment.ExternalProtocol,
@@ -65,13 +65,13 @@ public class TreatmentsView : ITreatmentsView
             EndedIn = treatment.EndedIn,
             Status = new TranslatableField()
             {
-                Value = treatment.Status.ToString(),
-                DisplayValue = treatment.Status.GetDisplayValue()
+                Value = treatment.Status.ToString()!,
+                DisplayValue = treatment.Status!.GetDisplayValue()
             },
             Type = new TranslatableField()
             {
-                Value = treatment.Type.ToString(),
-                DisplayValue = treatment.Type.GetDisplayValue()
+                Value = treatment.Type.ToString()!,
+                DisplayValue = treatment.Type!.GetDisplayValue()
             },
             Observation = treatment.Observation,
             ExternalProtocol = treatment.ExternalProtocol,
@@ -83,7 +83,7 @@ public class TreatmentsView : ITreatmentsView
                     Id = treatment.Call.Id,
                     Title = treatment.Call.Title,
                     Description = treatment.Call.Description,
-                    Reason = treatment.Call.Reason.GetDisplayValue(),
+                    Reason = treatment.Call.Reason!.GetDisplayValue(),
                     User = new ()
                     {
                         Id = treatment.Call.User!.Id,

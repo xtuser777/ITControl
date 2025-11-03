@@ -1,5 +1,6 @@
 ﻿using ITControl.Domain.KnowledgeBases.Entities;
 using ITControl.Domain.KnowledgeBases.Interfaces;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -28,7 +29,7 @@ public class KnowledgeBasesRepository(
         query = context.KnowledgeBases
             .Include(kb => kb.User)
             .AsNoTracking();
-        BuildQuery(parameters.FindMany);
+        BuildQuery(parameters.FindManyProps);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
         var entities = await query.ToListAsync();
@@ -50,14 +51,14 @@ public class KnowledgeBasesRepository(
         context.KnowledgeBases.Remove(knowledgeBase);
     }
 
-    public async Task<int> CountAsync(FindManyParams parameters)
+    public async Task<int> CountAsync(Entity parameters)
     {
         query = context.KnowledgeBases.AsNoTracking();
         BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyParams parameters)
+    public async Task<bool> ExistsAsync(Entity parameters)
     {
         var count = await CountAsync(parameters);
         return count > 0;

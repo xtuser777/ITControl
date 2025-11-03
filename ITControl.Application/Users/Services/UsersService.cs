@@ -6,7 +6,7 @@ using ITControl.Application.Users.Interfaces;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Users.Entities;
-using ITControl.Domain.Users.Params;
+using ITControl.Domain.Users.Props;
 
 namespace ITControl.Application.Users.Services;
 
@@ -30,22 +30,21 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
             FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.UsersRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
-    [Obsolete("Obsolete")]
     public async Task<User?> CreateAsync(
         CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var user = new User((UserParams)parameters.Params);
+        var user = new User((UserProps)parameters.Props);
         var usersEquipments = 
-            ((UserParams)parameters.Params).UsersEquipments!.ToList();
+            ((UserProps)parameters.Props).UsersEquipments!.ToList();
         usersEquipments.ForEach(ue => ue.UserId = user.Id);
         var usersSystems = 
-            ((UserParams)parameters.Params).UsersSystems!.ToList();
+            ((UserProps)parameters.Props).UsersSystems!.ToList();
         usersSystems.ForEach(ue => ue.UserId = user.Id);
         await unitOfWork.UsersRepository.CreateAsync(user);
         await unitOfWork.UsersEquipmentsRepository
@@ -64,12 +63,12 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
         
         await using var transaction = unitOfWork.BeginTransaction;
         var user = await FindOneAsync(parameters);
-        user.Update((UpdateUserParams)parameters.Params);
+        user.Update((UserProps)parameters.Props);
         var usersEquipments = 
-            ((UpdateUserParams)parameters.Params).UsersEquipments!.ToList();
+            ((UserProps)parameters.Props).UsersEquipments!.ToList();
         usersEquipments.ForEach(ue => ue.UserId = user.Id);
         var usersSystems = 
-            ((UpdateUserParams)parameters.Params).UsersSystems!.ToList();
+            ((UserProps)parameters.Props).UsersSystems!.ToList();
         usersSystems.ForEach(ue => ue.UserId = user.Id);
         await unitOfWork.UsersEquipmentsRepository
             .DeleteManyByUserAsync(user);

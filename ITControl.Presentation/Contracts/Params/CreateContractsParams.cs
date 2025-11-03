@@ -13,6 +13,6 @@ public record CreateContractsParams
         CreateContractsParams create)
         => new()
         {
-            Params = create.CreateRequest,
+            Props = create.CreateRequest,
         };
 }

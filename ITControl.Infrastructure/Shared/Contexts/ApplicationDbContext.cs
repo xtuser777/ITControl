@@ -32,7 +32,7 @@ public class ApplicationDbContext(
     public DbSet<Unit> Units { get; set; }
     public DbSet<Contract> Contracts { get; set; }
     public DbSet<ContractContact> ContractContacts { get; set; }
-    public DbSet<Domain.Systems.Entities.System> Systems { get; set; }
+    public DbSet<Domain.Systems.Entities.SystemEntity> Systems { get; set; }
     public DbSet<Equipment> Equipments { get; set; }
     public DbSet<UserEquipment> UsersEquipments { get; set; }
     public DbSet<UserSystem> UsersSystems { get; set; }

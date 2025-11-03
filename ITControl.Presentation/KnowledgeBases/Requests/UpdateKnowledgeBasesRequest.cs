@@ -3,6 +3,7 @@ using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Calls.Enums;
 using ITControl.Domain.KnowledgeBases.Params;
+using ITControl.Domain.KnowledgeBases.Props;
 using ITControl.Domain.Shared.Utils;
 
 namespace ITControl.Presentation.KnowledgeBases.Requests;
@@ -32,7 +33,7 @@ public record UpdateKnowledgeBasesRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? UserId { get; set; }
 
-    public static implicit operator UpdateKnowledgeBaseParams(
+    public static implicit operator KnowledgeBaseProps(
         UpdateKnowledgeBasesRequest request) =>
         new()
         {

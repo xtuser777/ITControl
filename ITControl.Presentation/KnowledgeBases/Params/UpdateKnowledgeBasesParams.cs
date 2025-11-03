@@ -17,6 +17,6 @@ public record UpdateKnowledgeBasesParams
         => new()
         {
             Id = request.Id,
-            Params = request.Request
+            Props = request.Request
         };
 }

@@ -1,3 +1,4 @@
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
@@ -31,7 +32,7 @@ public class UsersRepository(ApplicationDbContext context) :
         FindManyRepositoryParams parameters)
     {
         query = context.Users.AsNoTracking();
-        BuildQuery(parameters.FindMany);
+        BuildQuery(parameters.FindManyProps);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<User>();
@@ -60,7 +61,7 @@ public class UsersRepository(ApplicationDbContext context) :
     }
 
     public async Task<int> CountAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         query = context.Users.AsNoTracking();
         BuildQuery(parameters);
@@ -69,14 +70,14 @@ public class UsersRepository(ApplicationDbContext context) :
     }
 
     public async Task<bool> ExistsAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         var count = await CountAsync(parameters);
         return count > 0;
     }
 
     public async Task<bool> ExclusiveAsync(
-        FindManyParams parameters)
+        Entity parameters)
     {
         query = context.Users.AsNoTracking();
         BuildQuery(parameters);

@@ -1,7 +1,6 @@
 namespace ITControl.Domain.Positions.Params;
 
-public record CountPositionsParams : 
+public class CountPositionsParams : 
     FindManyPositionsParams
 {
-    public Guid? Id { get; set; }
 }

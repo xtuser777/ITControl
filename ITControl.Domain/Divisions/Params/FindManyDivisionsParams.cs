@@ -1,9 +1,5 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Divisions.Props;
 
 namespace ITControl.Domain.Divisions.Params;
 
-public record FindManyDivisionsParams : FindManyParams
-{
-    public string? Name { get; set; }
-    public Guid? DepartmentId { get; set; }
-}
+public class FindManyDivisionsParams : DivisionProps;

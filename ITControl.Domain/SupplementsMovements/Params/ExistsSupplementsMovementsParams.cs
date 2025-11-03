@@ -1,4 +1,4 @@
 namespace ITControl.Domain.SupplementsMovements.Params;
 
-public record ExistsSupplementsMovementsParams : 
+public class ExistsSupplementsMovementsParams : 
     CountSupplementsMovementsParams;

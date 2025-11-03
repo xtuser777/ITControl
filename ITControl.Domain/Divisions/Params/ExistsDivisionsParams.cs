@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.Divisions.Params;
 
-public record ExistsDivisionsParams :
+public class ExistsDivisionsParams :
     CountDivisionsParams;

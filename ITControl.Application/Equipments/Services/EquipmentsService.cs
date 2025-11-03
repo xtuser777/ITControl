@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Params;
+using ITControl.Domain.Equipments.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Equipments.Services;
@@ -32,7 +33,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.EquipmentsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -41,7 +42,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
     public async Task<Equipment?> CreateAsync(
         CreateServiceParams parameters)
     {
-        var equipment = new Equipment((EquipmentParams)parameters.Params);
+        var equipment = new Equipment((EquipmentProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.EquipmentsRepository.CreateAsync(equipment);
         await unitOfWork.Commit(transaction);
@@ -53,7 +54,7 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         UpdateServiceParams parameters)
     {
         var equipment = await FindOneAsync(parameters);
-        equipment.Update((UpdateEquipmentParams)parameters.Params);
+        equipment.Update((EquipmentProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Update(equipment);
         await unitOfWork.Commit(transaction);

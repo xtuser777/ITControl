@@ -6,10 +6,10 @@ using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Calls.Entities;
-using ITControl.Domain.Calls.Params;
+using ITControl.Domain.Calls.Props;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
-using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Users.Params;
@@ -39,7 +39,7 @@ public class CallsService(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.CallsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
@@ -50,20 +50,22 @@ public class CallsService(
         await using var transaction = unitOfWork.BeginTransaction;
         var user = await unitOfWork.UsersRepository.FindOneAsync(new()
         {
-            Id = ((CallParams)parameters.Params).UserId,
+            Id = ((CallProps)parameters.Props).UserId ?? Guid.Empty,
         })
             ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(Messages.CALLS_OPENED, user.Name, DateTime.Now);
-        var callStatus = new CallStatus(
-            Domain.Calls.Enums.CallStatus.Open,
-            message);
+        var callStatus = new CallStatus(new ()
+        {
+            Status = Domain.Calls.Enums.CallStatus.Open,
+            Description = message
+        });
         await unitOfWork.CallsStatusesRepository.CreateAsync(callStatus);
-        var call = new Call((CallParams)parameters.Params)
+        var call = new Call((CallProps)parameters.Props)
         {
             CallStatusId = callStatus.Id
         };
         await unitOfWork.CallsRepository.CreateAsync(call);
-        await CreateNotification(call.Id, Titles.CALLS_NEW, message);
+        await CreateNotification(call.Id ?? Guid.Empty, Titles.CALLS_NEW, message);
         await unitOfWork.Commit(transaction);
 
         return call;
@@ -81,9 +83,9 @@ public class CallsService(
     private async Task CreateNotification(
         Guid referenceId, string title, string message)
     {
-        var findManyRolesParams = new FindManyRolesParams() { Name = "MASTER" };
+        var findManyRolesParams = new FindManyRolesParams { Name = "MASTER" };
         var rolesMaster = await unitOfWork.RolesRepository
-            .FindManyAsync(new () { FindMany = findManyRolesParams});
+            .FindManyAsync(new () { FindManyProps = findManyRolesParams});
         var roles = rolesMaster.ToList();
         if (roles.Count == 0)
             throw new NotFoundException(Errors.CALL_ROLE_MASTER_NOT_FOUND);
@@ -92,11 +94,11 @@ public class CallsService(
             RoleId = roles.ToList()[0].Id
         };
         var users = await unitOfWork.UsersRepository
-            .FindManyAsync(new () { FindMany = findManyParams});
+            .FindManyAsync(new () { FindManyProps = findManyParams});
         foreach (var user in users)
         {
             var notification = new Notification(
-                new NotificationParams
+                new NotificationProps
                 {
                     Title = title,
                     Message = message,

@@ -1,4 +1,4 @@
 namespace ITControl.Domain.Supplements.Params;
 
-public record ExistsSupplementsParams() : 
+public class ExistsSupplementsParams : 
     CountSupplementsParams;

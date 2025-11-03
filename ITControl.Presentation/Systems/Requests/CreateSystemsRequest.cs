@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Systems.Params;
+using ITControl.Domain.Systems.Props;
 
 namespace ITControl.Presentation.Systems.Requests;
 
@@ -38,7 +39,7 @@ public record CreateSystemsRequest
     [Display(Name = nameof(ContractId), ResourceType = typeof(DisplayNames))]
     public Guid? ContractId { get; set; }
 
-    public static implicit operator SystemParams(
+    public static implicit operator SystemProps(
         CreateSystemsRequest request) =>
         new()
         {

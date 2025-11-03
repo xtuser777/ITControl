@@ -1,8 +1,7 @@
-using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Positions.Props;
 
 namespace ITControl.Domain.Positions.Params;
 
-public record FindManyPositionsParams : FindManyParams
+public class FindManyPositionsParams : PositionProps
 {
-    public string? Name { get; set; }
 }

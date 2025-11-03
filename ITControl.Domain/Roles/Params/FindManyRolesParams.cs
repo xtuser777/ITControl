@@ -1,9 +1,5 @@
-﻿using ITControl.Domain.Shared.Params;
+﻿using ITControl.Domain.Roles.Props;
 
 namespace ITControl.Domain.Roles.Params;
 
-public record FindManyRolesParams : FindManyParams
-{
-    public string? Name { get; set; }
-    public bool? Active { get; set; }
-}
+public class FindManyRolesParams : RoleProps;

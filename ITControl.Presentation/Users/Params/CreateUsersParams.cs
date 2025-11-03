@@ -13,6 +13,6 @@ public record CreateUsersParams
         CreateUsersParams param)
         => new()
         {
-            Params = param.CreateUsersRequest
+            Props = param.CreateUsersRequest
         };
 }

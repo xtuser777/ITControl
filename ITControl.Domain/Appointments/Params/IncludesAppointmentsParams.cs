@@ -4,6 +4,6 @@ namespace ITControl.Domain.Appointments.Params;
 
 public record IncludesAppointmentsParams : IncludesParams
 {
-    public bool User { get; set; }
-    public bool Call { get; set; }
+    public bool? User { get; set; }
+    public bool? Call { get; set; }
 }

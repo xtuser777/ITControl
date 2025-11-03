@@ -13,6 +13,6 @@ public record CreateDepartmentsParams
         CreateDepartmentsParams paramsModel) =>
         new()
         {
-            Params = paramsModel.Request
+            Props = paramsModel.Request
         };
 }

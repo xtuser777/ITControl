@@ -6,7 +6,7 @@ using ITControl.Application.Units.Interfaces;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Units.Entities;
-using ITControl.Domain.Units.Params;
+using ITControl.Domain.Units.Props;
 
 namespace ITControl.Application.Units.Services;
 
@@ -30,7 +30,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.UnitsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
@@ -38,7 +38,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
     public async Task<Unit?> CreateAsync(
         CreateServiceParams parameters)
     {
-        var unit = new Unit((UnitParams)parameters.Params);
+        var unit = new Unit((UnitProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.UnitsRepository.CreateAsync(unit);
         await unitOfWork.Commit(transaction);
@@ -50,7 +50,7 @@ public class UnitsService(IUnitOfWork unitOfWork) : IUnitsService
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var unit = await FindOneAsync(parameters);
-        unit.Update((UpdateUnitParams)parameters.Params);
+        unit.Update((UnitProps)parameters.Props);
         unitOfWork.UnitsRepository.Update(unit);
         await unitOfWork.Commit(transaction);
     }

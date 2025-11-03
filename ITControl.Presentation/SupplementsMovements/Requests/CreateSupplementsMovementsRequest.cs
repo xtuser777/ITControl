@@ -4,6 +4,7 @@ using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Supplements.Interfaces;
 using ITControl.Domain.SupplementsMovements.Params;
+using ITControl.Domain.SupplementsMovements.Props;
 using Errors = ITControl.Domain.Shared.Messages.Errors;
 
 namespace ITControl.Presentation.SupplementsMovements.Requests;
@@ -79,7 +80,7 @@ public class CreateSupplementsMovementsRequest
         return ValidationResult.Success;
     }
 
-    public static implicit operator SupplementMovementParams(
+    public static implicit operator SupplementMovementProps(
         CreateSupplementsMovementsRequest request)
         => new()
         {

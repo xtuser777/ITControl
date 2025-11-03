@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Appointments.Params;
+using ITControl.Domain.Appointments.Props;
 
 namespace ITControl.Presentation.Appointments.Requests;
 
@@ -40,7 +41,7 @@ public record CreateAppointmentsRequest
     [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
     public Guid CallId { get; set; }
 
-    public static implicit operator AppointmentParams(
+    public static implicit operator AppointmentProps(
         CreateAppointmentsRequest request) =>
         new()
         {

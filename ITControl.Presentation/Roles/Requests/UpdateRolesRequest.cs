@@ -4,6 +4,7 @@ using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Interfaces;
 using ITControl.Domain.Roles.Params;
+using ITControl.Domain.Roles.Props;
 
 namespace ITControl.Presentation.Roles.Requests;
 
@@ -23,13 +24,13 @@ public record UpdateRolesRequest
     [Display(Name = nameof(RolesPages), ResourceType = typeof(DisplayNames))]
     public IEnumerable<CreateRolesPagesRequest>? RolesPages { get; set; }
 
-    public static implicit operator UpdateRoleParams(
+    public static implicit operator RoleProps(
         UpdateRolesRequest request) => new()
     {
         Name = request.Name,
         Active = request.Active,
-        Pages = request.RolesPages!
-            .Select(rp => new RolePage(
-                Guid.Empty, rp.PageId))
+        RolesPages = request.RolesPages!
+            .Select(p => new RolePage(
+                Guid.Empty, p.PageId)) as ICollection<RolePage>
     };
 }

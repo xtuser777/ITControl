@@ -23,6 +23,10 @@ public class ContractsContactsRepository(ApplicationDbContext context) : IContra
 
     public async Task DeleteManyByContractAsync(Contract contract)
     {
-        await context.ContractContacts.Where(x => x.ContractId == contract.Id).ExecuteDeleteAsync();
+        var ccs = 
+            await context.ContractContacts
+                .Where(x => x.ContractId == contract.Id)
+                .ToListAsync();
+        context.ContractContacts.RemoveRange(ccs);
     }
 }

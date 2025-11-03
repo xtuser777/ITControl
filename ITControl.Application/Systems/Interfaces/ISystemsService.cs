@@ -5,13 +5,13 @@ namespace ITControl.Application.Systems.Interfaces;
 
 public interface ISystemsService
 {
-    Task<Domain.Systems.Entities.System> FindOneAsync(
+    Task<Domain.Systems.Entities.SystemEntity> FindOneAsync(
         FindOneServiceParams parameters);
-    Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(
+    Task<IEnumerable<Domain.Systems.Entities.SystemEntity>> FindManyAsync(
         FindManyServiceParams parameters);
     Task<PaginationModel?> FindManyPaginationAsync(
         FindManyPaginationServiceParams parameters);
-    Task<Domain.Systems.Entities.System?> CreateAsync(
+    Task<Domain.Systems.Entities.SystemEntity?> CreateAsync(
         CreateServiceParams parameters);
     Task UpdateAsync(
         UpdateServiceParams parameters);

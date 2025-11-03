@@ -2,5 +2,5 @@
 
 public class CreateSupplementsResponse
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 }

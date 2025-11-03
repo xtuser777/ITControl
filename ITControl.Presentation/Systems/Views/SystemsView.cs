@@ -5,7 +5,7 @@ namespace ITControl.Presentation.Systems.Views;
 
 public class SystemsView : ISystemsView
 {
-    public CreateSystemsResponse? Create(Domain.Systems.Entities.System? system)
+    public CreateSystemsResponse? Create(Domain.Systems.Entities.SystemEntity? system)
     {
         if (system == null) return null;
 
@@ -15,7 +15,7 @@ public class SystemsView : ISystemsView
         };
     }
 
-    public FindOneSystemsResponse? FindOne(Domain.Systems.Entities.System? system)
+    public FindOneSystemsResponse? FindOne(Domain.Systems.Entities.SystemEntity? system)
     {
         if (system == null) return null;
 
@@ -36,7 +36,7 @@ public class SystemsView : ISystemsView
         };
     }
 
-    public IEnumerable<FindManySystemsResponse> FindMany(IEnumerable<Domain.Systems.Entities.System>? systems)
+    public IEnumerable<FindManySystemsResponse> FindMany(IEnumerable<Domain.Systems.Entities.SystemEntity>? systems)
     {
         if (systems == null) return [];
 

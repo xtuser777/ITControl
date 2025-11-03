@@ -13,6 +13,6 @@ public record CreateUnitsParams
         CreateUnitsParams parameters)
         => new()
         {
-            Params = parameters.CreateUnitsRequest
+            Props = parameters.CreateUnitsRequest
         };
 }

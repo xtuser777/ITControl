@@ -3,6 +3,7 @@ using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
+using ITControl.Domain.Treatments.Props;
 
 namespace ITControl.Presentation.Treatments.Requests;
 
@@ -66,7 +67,7 @@ public class CreateTreatmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    public static implicit operator TreatmentParams(
+    public static implicit operator TreatmentProps(
         CreateTreatmentsRequest request) =>
         new()
         {

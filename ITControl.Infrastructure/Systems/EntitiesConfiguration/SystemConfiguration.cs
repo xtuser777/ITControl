@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ITControl.Infrastructure.Systems.EntitiesConfiguration;
 
-public class SystemConfiguration : IEntityTypeConfiguration<Domain.Systems.Entities.System>
+public class SystemConfiguration : IEntityTypeConfiguration<Domain.Systems.Entities.SystemEntity>
 {
-    public void Configure(EntityTypeBuilder<Domain.Systems.Entities.System> builder)
+    public void Configure(EntityTypeBuilder<Domain.Systems.Entities.SystemEntity> builder)
     {
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(100).IsRequired();

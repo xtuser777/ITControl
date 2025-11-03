@@ -11,5 +11,5 @@ public record CreatePositionsParams
 
     public static implicit operator CreateServiceParams(
         CreatePositionsParams paramsModel) =>
-        new() { Params = paramsModel.Request };
+        new() { Props = paramsModel.Request };
 }

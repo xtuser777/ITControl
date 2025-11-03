@@ -1,5 +1,6 @@
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Interfaces;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -24,7 +25,7 @@ public class ContractsRepository(ApplicationDbContext context) :
         FindManyRepositoryParams parameters)
     {
         query = context.Contracts.AsNoTracking();
-        BuildQuery(parameters.FindMany);
+        BuildQuery(parameters.FindManyProps);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<Contract>();
@@ -45,14 +46,14 @@ public class ContractsRepository(ApplicationDbContext context) :
         context.Contracts.Remove(contract);
     }
 
-    public async Task<int> CountAsync(FindManyParams parameters)
+    public async Task<int> CountAsync(Entity parameters)
     {
         query = context.Contracts.AsNoTracking();
         BuildQuery(parameters);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyParams parameters)
+    public async Task<bool> ExistsAsync(Entity parameters)
     {
         var count = await CountAsync(parameters);
         return count > 0;

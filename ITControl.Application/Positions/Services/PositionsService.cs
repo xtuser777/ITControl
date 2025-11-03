@@ -5,7 +5,7 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Positions.Entities;
-using ITControl.Domain.Positions.Params;
+using ITControl.Domain.Positions.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Positions.Services;
@@ -31,7 +31,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.PositionsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -40,7 +40,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     public async Task<Position?> CreateAsync(
         CreateServiceParams parameters)
     {
-        var position = new Position((PositionParams)parameters.Params);
+        var position = new Position((PositionProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.PositionsRepository.CreateAsync(position);
         await unitOfWork.Commit(transaction);
@@ -51,7 +51,7 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     public async Task UpdateAsync(UpdateServiceParams parameters)
     {
         var position = await FindOneAsync(parameters);
-        position.Update((UpdatePositionParams)parameters.Params);
+        position.Update((PositionProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PositionsRepository.Update(position);
         await unitOfWork.Commit(transaction);

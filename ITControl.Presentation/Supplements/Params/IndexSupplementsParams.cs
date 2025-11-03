@@ -43,7 +43,7 @@ public record IndexSupplementsParams : PaginationParams
             Brand = request.Brand,
             Model = request.Model,
             Type = Parser.ToEnumOptional<SupplementType>(request.Type),
-            Stock = request.Stock
+            QuantityInStock = request.Stock
         };
 
     public static implicit operator CountSupplementsParams(
@@ -53,14 +53,14 @@ public record IndexSupplementsParams : PaginationParams
             Brand = request.Brand,
             Model = request.Model,
             Type = Parser.ToEnumOptional<SupplementType>(request.Type),
-            Stock = request.Stock
+            QuantityInStock = request.Stock
         };
 
     public static implicit operator FindManyServiceParams(
         IndexSupplementsParams @params)
         => new()
         {
-            FindManyParams = @params,
+            FindManyProps = @params,
             OrderByParams = @params,
             PaginationParams = @params,
         };
@@ -69,7 +69,7 @@ public record IndexSupplementsParams : PaginationParams
         IndexSupplementsParams @params)
         => new()
         {
-            CountParams = @params,
+            CountProps = @params,
             PaginationParams = @params,
         };
 }

@@ -1,28 +1,18 @@
-using ITControl.Domain.Departments.Params;
-using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Departments.Props;
 
 namespace ITControl.Domain.Departments.Entities;
 
-public class Department : Entity
+public class Department : DepartmentProps
 {
-    public string Alias { get; set; } = string.Empty;
-    public string Name { get; set; } = string.Empty;
-
     public Department() { }
 
-    public Department(DepartmentParams @params)
+    public Department(DepartmentProps @params)
     {
-        Id = Guid.NewGuid();
-        Alias = @params.Alias;
-        Name = @params.Name;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        Assign(@params);
     }
 
-    public void Update(UpdateDepartmentParams @params)
+    public void Update(DepartmentProps @params)
     {
-        Alias = @params.Alias ?? Alias;
-        Name = @params.Name ?? Name;
-        UpdatedAt = DateTime.Now;
+        AssignUpdate(@params);
     }
 }

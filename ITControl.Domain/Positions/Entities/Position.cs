@@ -1,25 +1,19 @@
-using ITControl.Domain.Positions.Params;
-using ITControl.Domain.Shared.Entities;
+using ITControl.Domain.Positions.Props;
 
 namespace ITControl.Domain.Positions.Entities;
 
-public sealed class Position : Entity
+public sealed class Position : PositionProps
 {
     public Position() {}
     
-    public Position(PositionParams @params)
+    public Position(PositionProps props)
     {
-        Id = Guid.NewGuid();
-        Name = @params.Name;
-        CreatedAt = DateTime.Now;
-        UpdatedAt = DateTime.Now;
+        Assign(props);
     }
 
-    public string Name { get; set; } = string.Empty;
-
-    public void Update(UpdatePositionParams @params)
+    public void Update(PositionProps props)
     {
-        Name = @params.Name ?? Name;
+        Name = props.Name;
         UpdatedAt = DateTime.Now;
     }
 }

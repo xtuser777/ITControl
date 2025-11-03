@@ -31,8 +31,8 @@ public class SupplementsView : ISupplementsView
             Model = supplement.Model,
             Type = new TranslatableField()
             {
-                Value = supplement.Type.ToString(),
-                DisplayValue = supplement.Type.GetDisplayValue()
+                Value = supplement.Type.ToString()!,
+                DisplayValue = supplement.Type!.GetDisplayValue()
             },
             Stock = supplement.QuantityInStock
         });
@@ -50,8 +50,8 @@ public class SupplementsView : ISupplementsView
             Model = supplement.Model,
             Type = new TranslatableField()
             {
-                Value = supplement.Type.ToString(),
-                DisplayValue = supplement.Type.GetDisplayValue()
+                Value = supplement.Type.ToString()!,
+                DisplayValue = supplement.Type!.GetDisplayValue()
             },
             Stock = supplement.QuantityInStock
         };

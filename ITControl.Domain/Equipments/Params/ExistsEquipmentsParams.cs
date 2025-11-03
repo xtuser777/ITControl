@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.Equipments.Params;
 
-public record ExistsEquipmentsParams :
+public class ExistsEquipmentsParams :
     CountEquipmentsParams;

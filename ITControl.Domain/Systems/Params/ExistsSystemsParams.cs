@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.Systems.Params;
 
-public record ExistsSystemsParams : 
+public class ExistsSystemsParams : 
     CountSystemsParams;

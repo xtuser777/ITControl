@@ -7,12 +7,12 @@ using ITControl.Application.Treatments.Interfaces;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
-using ITControl.Domain.Notifications.Params;
+using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
-using ITControl.Domain.Treatments.Params;
+using ITControl.Domain.Treatments.Props;
 using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
 namespace ITControl.Application.Treatments.Services;
@@ -39,7 +39,7 @@ public class TreatmentsService(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.TreatmentsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
 
         return pagination;
@@ -49,10 +49,10 @@ public class TreatmentsService(
         CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var treatment = new Treatment((TreatmentParams)parameters.Params);
+        var treatment = new Treatment((TreatmentProps)parameters.Props);
         var findOneCallParams = new FindOneRepositoryParams
         {
-            Id = ((TreatmentParams)parameters.Params).CallId
+            Id = ((TreatmentProps)parameters.Props).CallId ?? Guid.Empty
         };
         var call = await unitOfWork.CallsRepository
                        .FindOneAsync(findOneCallParams) 
@@ -62,20 +62,22 @@ public class TreatmentsService(
                        .FindOneAsync(
             new FindOneRepositoryParams
             {
-                Id = ((TreatmentParams)parameters.Params).UserId,
+                Id = ((TreatmentProps)parameters.Props).UserId ?? Guid.Empty,
             }) 
                    ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = string.Format(
             Messages.TREATMENTS_STARTED, 
             treatment.Protocol, call.Title, user.Name);
-        callStatus.Update(
-            status: CallStatus.InProgress,
-            description: message);
+        callStatus.Update(new ()
+        {
+            Status = CallStatus.InProgress,
+            Description = message
+        });
         await unitOfWork.TreatmentsRepository.CreateAsync(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
         await CreateNotification(
-            treatment.Id, 
-            ((TreatmentParams)parameters.Params).UserId, 
+            treatment.Id ?? Guid.Empty, 
+            ((TreatmentProps)parameters.Props).UserId ?? Guid.Empty, 
             Titles.TREATMENTS_STARTED, 
             message, 
             NotificationType.Info);
@@ -102,26 +104,32 @@ public class TreatmentsService(
                 message = string.Format(
                     Messages.TREATMENTS_STARTED, 
                     treatment.Protocol, call.Title, user.Name);
-                callStatus.Update(
-                    status: CallStatus.InProgress,
-                    description: message);
+                callStatus.Update(new ()
+                {
+                    Status = CallStatus.InProgress,
+                    Description =  message
+                });
                 break;
             case TreatmentStatus.PartialFinished:
                 message = string.Format(
                     Messages.TREATMENTS_PARTIAL_FINISHED, 
                     treatment.Protocol, 
                     call.Title, user.Name);
-                callStatus.Update(
-                    status: CallStatus.InProgress,
-                    description: message);
+                callStatus.Update(new ()
+                {
+                    Status = CallStatus.InProgress,
+                    Description =  message
+                });
                 break;
             case TreatmentStatus.Finished:
                 message = string.Format(
                     Messages.TREATMENTS_FINISHED, call.Title, user.Name);
                 type = NotificationType.Success;
-                callStatus.Update(
-                    status: CallStatus.Closed,
-                    description: message);
+                callStatus.Update(new ()
+                {
+                    Status = CallStatus.Closed,
+                    Description =  message
+                });
                 break;
             case TreatmentStatus.Scheduled:
                 break;
@@ -129,12 +137,12 @@ public class TreatmentsService(
                 throw new ArgumentOutOfRangeException();
         }
 
-        treatment.Update((UpdateTreatmentParams)parameters.Params);
+        treatment.Update((TreatmentProps)parameters.Props);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
         await CreateNotification(
-            treatment.Id, 
-            call.UserId, 
+            treatment.Id  ?? Guid.Empty, 
+            call.UserId  ?? Guid.Empty, 
             Titles.TREATMENTS_UPDATED, message, type);
         await unitOfWork.Commit(transaction);
     }
@@ -156,7 +164,7 @@ public class TreatmentsService(
         NotificationType type)
     {
         var notification = new Notification(
-            new NotificationParams
+            new NotificationProps
             {
                 Title = title,
                 Message = message,

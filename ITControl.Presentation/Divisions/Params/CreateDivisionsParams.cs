@@ -13,6 +13,6 @@ public record CreateDivisionsParams
         CreateDivisionsParams param)
         => new ()
         {
-            Params = param.Request,
+            Props = param.Request,
         };
 }

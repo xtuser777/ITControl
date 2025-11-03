@@ -13,6 +13,6 @@ public record CreateRolesParams
         CreateRolesParams param)
         => new()
         {
-            Params = param.CreateRolesRequest
+            Props = param.CreateRolesRequest
         };
 }

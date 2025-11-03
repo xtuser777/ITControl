@@ -13,6 +13,6 @@ public record CreateKnowledgeBasesParams
         CreateKnowledgeBasesParams request)
         => new()
         {
-            Params = request.Request
+            Props = request.Request
         };
 }

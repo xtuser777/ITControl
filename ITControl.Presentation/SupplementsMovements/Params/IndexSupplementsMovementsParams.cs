@@ -86,7 +86,7 @@ public record IndexSupplementsMovementsParams : PaginationParams
         IndexSupplementsMovementsParams indexParams)
         => new()
         {
-            FindManyParams = indexParams,
+            FindManyProps = indexParams,
             OrderByParams = indexParams,
             PaginationParams = indexParams,
         };
@@ -95,7 +95,7 @@ public record IndexSupplementsMovementsParams : PaginationParams
         IndexSupplementsMovementsParams indexParams)
         => new()
         {
-            CountParams = indexParams,
+            CountProps = indexParams,
             PaginationParams = indexParams,
         };
 }

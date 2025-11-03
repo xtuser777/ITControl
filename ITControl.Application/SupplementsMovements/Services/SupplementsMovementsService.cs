@@ -8,6 +8,7 @@ using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params;
 using ITControl.Domain.SupplementsMovements.Entities;
 using ITControl.Domain.SupplementsMovements.Params;
+using ITControl.Domain.SupplementsMovements.Props;
 
 namespace ITControl.Application.SupplementsMovements.Services;
 
@@ -35,7 +36,7 @@ public class SupplementsMovementsService(
     {
         var count = await unitOfWork
             .SupplementsMovementsRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -45,13 +46,13 @@ public class SupplementsMovementsService(
         CreateServiceParams parameters)
     {
         var supplementMovement = 
-            new SupplementMovement((SupplementMovementParams)parameters.Params);
+            new SupplementMovement((SupplementMovementProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.SupplementsMovementsRepository
             .CreateAsync(supplementMovement);
         await DecrementSupplementStock(
-            ((SupplementMovementParams)parameters.Params).SupplementId, 
-            ((SupplementMovementParams)parameters.Params).Quantity);
+            (Guid)((SupplementMovementProps)parameters.Props).SupplementId!, 
+            (int)((SupplementMovementProps)parameters.Props).Quantity!);
         await unitOfWork.Commit(transaction);
 
         return supplementMovement;
@@ -63,8 +64,8 @@ public class SupplementsMovementsService(
         var supplementMovement = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         await AddSupplementStock(
-            supplementMovement.SupplementId, 
-            supplementMovement.Quantity);
+            (Guid)supplementMovement.SupplementId!, 
+            (int)supplementMovement.Quantity!);
         unitOfWork.SupplementsMovementsRepository
             .Delete(supplementMovement);
         await unitOfWork.Commit(transaction);

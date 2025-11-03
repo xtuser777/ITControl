@@ -1,6 +1,6 @@
 ﻿namespace ITControl.Domain.Departments.Params;
 
-public record ExclusiveDepartmentsParams :
+public class ExclusiveDepartmentsParams :
     FindManyDepartmentsParams
 {
     public Guid ExcludeId { get; set; }

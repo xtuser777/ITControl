@@ -3,9 +3,9 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Roles.Entities;
-using ITControl.Domain.Roles.Params;
+using ITControl.Domain.Roles.Props;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Roles.Services;
@@ -31,7 +31,7 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.RolesRepository
-            .CountAsync(parameters.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
             Pagination.Build(parameters.PaginationParams, count);
         return pagination;
@@ -40,9 +40,9 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     public async Task<Role?> CreateAsync(
         CreateServiceParams parameters)
     {
-        var role = new Role((RoleParams)parameters.Params);
+        var role = new Role((RoleProps)parameters.Props);
         var rolesPages = 
-            ((RoleParams)parameters.Params).Pages.ToList();
+            ((RoleProps)parameters.Props).RolesPages!.ToList();
         rolesPages.ForEach(rp => rp.RoleId = role.Id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.RolesRepository.CreateAsync(role);
@@ -58,9 +58,9 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var role = await FindOneAsync(parameters);
-        role.Update((UpdateRoleParams)parameters.Params);
+        role.Update((RoleProps)parameters.Props);
         var rolesPages = 
-            ((UpdateRoleParams)parameters.Params).Pages.ToList();
+            ((RoleProps)parameters.Props).RolesPages!.ToList();
         rolesPages.ForEach(rp => rp.RoleId = role.Id);
         await unitOfWork.RolesPagesRepository.DeleteManyByRoleAsync(role);
         await unitOfWork.RolesPagesRepository.CreateManyAsync(rolesPages);

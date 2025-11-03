@@ -1,3 +1,3 @@
 ﻿namespace ITControl.Domain.Treatments.Params;
 
-public record ExistsTreatmentsParams : CountTreatmentsParams;
+public class ExistsTreatmentsParams : CountTreatmentsParams;

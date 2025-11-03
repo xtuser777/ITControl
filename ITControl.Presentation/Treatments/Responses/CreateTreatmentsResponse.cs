@@ -2,5 +2,5 @@
 
 public class CreateTreatmentsResponse
 {
-    public Guid Id { get; set; }
+    public Guid? Id { get; set; }
 }

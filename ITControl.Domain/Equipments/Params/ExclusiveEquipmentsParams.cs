@@ -1,6 +1,6 @@
 ﻿namespace ITControl.Domain.Equipments.Params;
 
-public record ExclusiveEquipmentsParams : 
+public class ExclusiveEquipmentsParams : 
     FindManyEquipmentsParams
 {
     public Guid ExcludeId { get; set; }

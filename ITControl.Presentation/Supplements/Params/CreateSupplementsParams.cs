@@ -13,6 +13,6 @@ public record CreateSupplementsParams
         CreateSupplementsParams param)
         => new()
         {
-            Params = param.Request
+            Props = param.Request
         };
 }

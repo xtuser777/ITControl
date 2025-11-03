@@ -1,5 +1,6 @@
 ﻿using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Interfaces;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -26,7 +27,7 @@ public class NotificationsRepository(
         FindManyRepositoryParams parameters)
     {
         query = context.Notifications.AsNoTracking();
-        BuildQuery(parameters.FindMany);
+        BuildQuery(parameters.FindManyProps);
         BuildOrderBy(parameters.OrderBy);
         ApplyPagination(parameters.Pagination);
         return (await query.ToListAsync()).Cast<Notification>();
@@ -42,7 +43,7 @@ public class NotificationsRepository(
         context.Notifications.Update(notification);
     }
 
-    public Task<int> CountAsync(FindManyParams parameters)
+    public Task<int> CountAsync(Entity parameters)
     {
         query = context.Notifications.AsNoTracking();
         BuildQuery(parameters);

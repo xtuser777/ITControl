@@ -6,6 +6,7 @@ using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
+using ITControl.Domain.Equipments.Props;
 using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Presentation.Equipments.Requests;
@@ -90,7 +91,7 @@ public record UpdateEquipmentsRequest
         return ValidationResult.Success;
     }
 
-    public static implicit operator UpdateEquipmentParams(
+    public static implicit operator EquipmentProps(
         UpdateEquipmentsRequest request) => new()
     {
         Name = request.Name,

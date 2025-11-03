@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Domain.Contracts.Params;
+using ITControl.Domain.Contracts.Props;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
@@ -31,7 +32,7 @@ public record CreateContractsContactsRequest
     [Display(Name = nameof(Cellphone), ResourceType = typeof(DisplayNames))]
     public string Cellphone { get; set; } = string.Empty;
 
-    public static implicit operator ContractContactParams(
+    public static implicit operator ContractContactProps(
         CreateContractsContactsRequest request) =>
         new()
         {

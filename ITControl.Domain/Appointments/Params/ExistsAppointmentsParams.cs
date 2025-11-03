@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.Appointments.Params;
 
-public record ExistsAppointmentsParams :
+public class ExistsAppointmentsParams :
     CountAppointmentsParams;

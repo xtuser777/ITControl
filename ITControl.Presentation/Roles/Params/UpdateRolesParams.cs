@@ -15,6 +15,6 @@ public record UpdateRolesParams
         => new()
         {
             Id = param.Id,
-            Params = param.UpdateRolesRequest
+            Props = param.UpdateRolesRequest
         };
 }

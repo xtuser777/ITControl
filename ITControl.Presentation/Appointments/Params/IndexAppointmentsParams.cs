@@ -67,7 +67,7 @@ public record IndexAppointmentsParams : PaginationParams
         IndexAppointmentsParams indexParams) =>
         new()
         {
-            FindManyParams = indexParams,
+            FindManyProps= indexParams,
             OrderByParams = indexParams,
             PaginationParams = indexParams
         };
@@ -76,7 +76,7 @@ public record IndexAppointmentsParams : PaginationParams
         IndexAppointmentsParams indexParams) =>
         new()
         {
-            CountParams = indexParams,
+            CountProps = indexParams,
             PaginationParams = indexParams
         };
 }

@@ -17,6 +17,6 @@ public record UpdateEquipmentsParams
         => new()
         {
             Id = @params.Id,
-            Params = @params.Request
+            Props= @params.Request
         };
 }

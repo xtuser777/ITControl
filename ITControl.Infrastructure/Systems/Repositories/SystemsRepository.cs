@@ -1,4 +1,6 @@
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Systems.Entities;
 using ITControl.Domain.Systems.Interfaces;
 using ITControl.Infrastructure.Shared.Contexts;
 using ITControl.Infrastructure.Shared.Repositories;
@@ -9,51 +11,51 @@ namespace ITControl.Infrastructure.Systems.Repositories;
 public class SystemsRepository(ApplicationDbContext context) 
     : BaseRepository, ISystemsRepository
 {
-    public async Task<Domain.Systems.Entities.System?> FindOneAsync(
+    public async Task<SystemEntity?> FindOneAsync(
         FindOneRepositoryParams @params)
     {
         var (id, includes) = @params;
         query = context.Systems.AsQueryable();
         ApplyIncludes(includes);
         
-        return (Domain.Systems.Entities.System?)await query
+        return (SystemEntity?)await query
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<Domain.Systems.Entities.System>> FindManyAsync(
+    public async Task<IEnumerable<SystemEntity>> FindManyAsync(
         FindManyRepositoryParams findManyParams)
     {
         query = context.Systems.AsNoTracking();
-        BuildQuery(findManyParams.FindMany);
+        BuildQuery(findManyParams.FindManyProps);
         BuildOrderBy(findManyParams.OrderBy);
         ApplyPagination(findManyParams.Pagination);
         var entities = await query.ToListAsync();
-        return entities.Cast<Domain.Systems.Entities.System>();
+        return entities.Cast<SystemEntity>();
     }
 
-    public async Task CreateAsync(Domain.Systems.Entities.System system)
+    public async Task CreateAsync(SystemEntity systemEntity)
     {
-        await context.Systems.AddAsync(system);
+        await context.Systems.AddAsync(systemEntity);
     }
 
-    public void Update(Domain.Systems.Entities.System system)
+    public void Update(SystemEntity systemEntity)
     {
-        context.Systems.Update(system);
+        context.Systems.Update(systemEntity);
     }
 
-    public void Delete(Domain.Systems.Entities.System system)
+    public void Delete(SystemEntity systemEntity)
     {
-        context.Systems.Remove(system);
+        context.Systems.Remove(systemEntity);
     }
 
-    public async Task<int> CountAsync(FindManyParams countParams)
+    public async Task<int> CountAsync(Entity countParams)
     {
         query = context.Systems.AsNoTracking();
         BuildQuery(countParams);
         return await query.CountAsync();
     }
 
-    public async Task<bool> ExistsAsync(FindManyParams existsParams)
+    public async Task<bool> ExistsAsync(Entity existsParams)
     {
         var count = await CountAsync(existsParams);
         return count > 0;

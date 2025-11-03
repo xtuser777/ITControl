@@ -37,7 +37,7 @@ public record IndexPositionsParams : PaginationParams
         IndexPositionsParams indexParams) =>
         new()
         {
-            FindManyParams = indexParams,
+            FindManyProps = indexParams,
             OrderByParams = indexParams,
             PaginationParams = indexParams
         };
@@ -46,7 +46,7 @@ public record IndexPositionsParams : PaginationParams
         IndexPositionsParams indexParams) =>
         new()
         {
-            CountParams = (CountPositionsParams)indexParams,
+            CountProps = (CountPositionsParams)indexParams,
             PaginationParams = indexParams
         };
 }

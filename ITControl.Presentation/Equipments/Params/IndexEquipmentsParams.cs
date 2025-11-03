@@ -78,7 +78,7 @@ public record IndexEquipmentsParams : PaginationParams
     {
         var serviceParams = new FindManyServiceParams()
         {
-            FindManyParams = parameters,
+            FindManyProps = parameters,
             OrderByParams = parameters,
             PaginationParams = parameters,
         };
@@ -90,7 +90,7 @@ public record IndexEquipmentsParams : PaginationParams
         IndexEquipmentsParams parameters)
         => new()
         {
-            CountParams = parameters,
+            CountProps= parameters,
             PaginationParams = parameters,
         };
 }

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
-using ITControl.Domain.Appointments.Params;
+using ITControl.Domain.Appointments.Props;
 
 namespace ITControl.Presentation.Appointments.Requests;
 
@@ -36,7 +36,7 @@ public class UpdateAppointmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid? CallId { get; set; }
 
-    public static implicit operator UpdateAppointmentParams(
+    public static implicit operator AppointmentProps(
         UpdateAppointmentsRequest request) =>
         new()
         {

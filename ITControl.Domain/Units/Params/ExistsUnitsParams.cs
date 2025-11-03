@@ -1,3 +1,3 @@
 ﻿namespace ITControl.Domain.Units.Params;
 
-public record ExistsUnitsParams : CountUnitsParams;
+public class ExistsUnitsParams : CountUnitsParams;

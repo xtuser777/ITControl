@@ -1,6 +1,6 @@
 namespace ITControl.Domain.Positions.Params;
 
-public record ExclusivePositionsParams 
+public class ExclusivePositionsParams 
     : FindManyPositionsParams
 {
     public Guid ExcludeId { get; set; }

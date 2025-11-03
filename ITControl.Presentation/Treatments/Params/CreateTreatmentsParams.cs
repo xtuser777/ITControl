@@ -13,6 +13,6 @@ public record CreateTreatmentsParams
         CreateTreatmentsParams parameters)
         => new()
         {
-            Params = parameters.CreateTreatmentsRequest,
+            Props = parameters.CreateTreatmentsRequest,
         };
 }

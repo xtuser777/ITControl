@@ -8,36 +8,39 @@ namespace ITControl.Presentation.Notifications.Views;
 
 public class NotificationsView : INotificationsView
 {
-    public IEnumerable<FindManyNotificationsResponse> FindMany(IEnumerable<Notification>? notifications)
+    public IEnumerable<FindManyNotificationsResponse> FindMany(
+        IEnumerable<Notification>? notifications)
     {
         if (notifications is null)
         {
             return [];
         }
 
-        return notifications.Select(n => new FindManyNotificationsResponse
-        {
-            Id = n.Id,
-            Title = n.Title,
-            Message = n.Message,
-            Type = new TranslatableField
-            {
-                Value = n.Type.ToString(),
-                DisplayValue = n.Type.GetDisplayValue()
-            },
-            Reference = new TranslatableField
-            {
-                Value = n.Reference.ToString(),
-                DisplayValue = n.Reference.GetDisplayValue()
-            },
-            IsRead = n.IsRead,
-            UserId = n.UserId,
-            CallId = n.CallId,
-            AppointmentId = n.AppointmentId,
-            TreatmentId = n.TreatmentId,
-            CreatedAt = n.CreatedAt,
-            ReadAt = n.UpdatedAt
-        });
+        return notifications
+            .Select(n => 
+                new FindManyNotificationsResponse
+                {
+                    Id = n.Id,
+                    Title = n.Title,
+                    Message = n.Message,
+                    Type = new TranslatableField
+                    {
+                        Value = n.Type.ToString()!,
+                        DisplayValue = n.Type!.GetDisplayValue()
+                    },
+                    Reference = new TranslatableField
+                    {
+                        Value = n.Reference.ToString()!,
+                        DisplayValue = n.Reference!.GetDisplayValue()
+                    },
+                    IsRead = n.IsRead,
+                    UserId = n.UserId,
+                    CallId = n.CallId,
+                    AppointmentId = n.AppointmentId,
+                    TreatmentId = n.TreatmentId,
+                    CreatedAt = n.CreatedAt,
+                    ReadAt = n.UpdatedAt
+                });
     }
 
     public FindOneNotificationsResponse? FindOne(Notification? notification)
@@ -54,13 +57,13 @@ public class NotificationsView : INotificationsView
             Message = notification.Message,
             Type = new TranslatableField
             {
-                Value = notification.Type.ToString(),
-                DisplayValue = notification.Type.GetDisplayValue()
+                Value = notification.Type.ToString()!,
+                DisplayValue = notification.Type!.GetDisplayValue()
             },
             Reference = new TranslatableField
             {
-                Value = notification.Reference.ToString(),
-                DisplayValue = notification.Reference.GetDisplayValue()
+                Value = notification.Reference.ToString()!,
+                DisplayValue = notification.Reference!.GetDisplayValue()
             },
             IsRead = notification.IsRead,
             UserId = notification.UserId,

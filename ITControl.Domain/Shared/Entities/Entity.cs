@@ -4,9 +4,9 @@ namespace ITControl.Domain.Shared.Entities;
 
 public abstract class Entity
 {
-    public Guid Id { get; set; } = Guid.NewGuid();
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public Guid? Id { get; set; }
+    public DateTime? CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
     
     protected void Assign(Entity entity)
     {
@@ -16,17 +16,28 @@ public abstract class Entity
         {
             prop.SetValue(this, prop.GetValue(entity));
         }
+        Id = Guid.NewGuid(); 
+        CreatedAt = DateTime.Now;   
+        UpdatedAt = DateTime.Now;
     }
     
-    public Entity Convert(EntityParams parameters)
+    protected void AssignUpdate(Entity entity)
     {
         var selfProperties = this.GetType().GetProperties();
-        var parametersProperties = parameters.GetType().GetProperties();
+        var entityProperties = entity.GetType().GetProperties();
         foreach (var prop in selfProperties)
         {
-            prop.SetValue(this, prop.GetValue(parameters));
+            switch (prop.Name)
+            {
+                case nameof(Id):
+                case nameof(CreatedAt):
+                case nameof(UpdatedAt):
+                    continue;
+                default:
+                    prop.SetValue(this, prop.GetValue(entity));
+                    break;
+            }
         }
-
-        return this;
+        UpdatedAt = DateTime.Now;
     }
 }

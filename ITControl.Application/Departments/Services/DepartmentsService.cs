@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Params;
+using ITControl.Domain.Departments.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Departments.Services;
@@ -23,17 +24,15 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
     public async Task<IEnumerable<Department>> FindManyAsync(
         FindManyServiceParams parameters)
     {
-        var entities = await unitOfWork.DepartmentsRepository
+        return await unitOfWork.DepartmentsRepository
             .FindManyAsync(parameters);
-        
-        return entities.Cast<Department>();
     }
 
     public async Task<PaginationModel?> FindManyPagination(
         FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.DepartmentsRepository.CountAsync(
-            parameters.CountParams);
+            parameters.CountProps);
         var pagination = Pagination.Build(parameters.PaginationParams, count);
         
         return pagination;
@@ -42,7 +41,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
     public async Task<Department?> CreateAsync(CreateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var department = new Department((DepartmentParams)parameters.Params);
+        var department = new Department((DepartmentProps)parameters.Props);
         await unitOfWork.DepartmentsRepository.CreateAsync(department);
         await unitOfWork.Commit(transaction);
 
@@ -52,7 +51,7 @@ public class DepartmentsService(IUnitOfWork unitOfWork) : IDepartmentsService
     public async Task UpdateAsync(UpdateServiceParams parameters)
     {
         var department = await FindOneAsync(parameters);
-        department.Update((UpdateDepartmentParams)parameters.Params);
+        department.Update((DepartmentProps)parameters.Props);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.DepartmentsRepository.Update(department);
         await unitOfWork.Commit(transaction);

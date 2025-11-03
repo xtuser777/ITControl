@@ -1,59 +1,23 @@
-﻿using ITControl.Domain.Shared.Entities;
-using ITControl.Domain.Validation;
+﻿using ITControl.Domain.Calls.Props;
 
 namespace ITControl.Domain.Calls.Entities;
 
-public sealed class CallStatus : Entity
+public sealed class CallStatus : CallStatusProps
 {
-    private Enums.CallStatus _status;
-    private string _description = string.Empty;
-
-    public Enums.CallStatus Status 
-    { 
-        get => _status; 
-        set
-        {
-            DomainExceptionValidation
-                .When(!Enum.IsDefined(typeof(Enums.CallStatus), value))
-                .Property("Status")
-                .MustBeAOneOfFollowingValues(typeof(Enums.CallStatus).ToString());
-            _status = value;
-        }
-    }
-    public string Description
-    {
-        get => _description;
-        set
-        {
-            DomainExceptionValidation
-                .When(string.IsNullOrEmpty(value))
-                .Property("Description")
-                .MustNotBeEmpty();
-            DomainExceptionValidation
-                .When(value.Length > 255)
-                .Property("Description")
-                .LengthMustBeLessThanOrEqualTo(255);
-            _description = value;
-        }
-    }
-
-    public CallStatus(
-        Enums.CallStatus status, 
-        string description)
+    public CallStatus()
     {
         Id = Guid.NewGuid();
-        Status = status;
-        Description = description;
         CreatedAt = DateTime.Now;
         UpdatedAt = DateTime.Now;
     }
-
-    public void Update(
-        Enums.CallStatus? status = null, 
-        string? description = null)
+    
+    public CallStatus(CallStatusProps @params)
     {
-        Status = status ?? Status;
-        Description = description ?? Description;
-        UpdatedAt = DateTime.Now;
+        Assign(@params);
+    }
+
+    public void Update(CallStatusProps @params)
+    {
+        AssignUpdate(@params);
     }
 }

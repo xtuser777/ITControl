@@ -60,7 +60,7 @@ public record IndexContractsParams : PaginationParams
         IndexContractsParams index)
         => new()
         {
-            FindManyParams = index,
+            FindManyProps= index,
             OrderByParams = index,
             PaginationParams = index,
         };
@@ -69,7 +69,7 @@ public record IndexContractsParams : PaginationParams
         IndexContractsParams index)
         => new()
         {
-            CountParams = index,
+            CountProps = index,
             PaginationParams = index,
         };
 }

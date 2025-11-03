@@ -17,6 +17,6 @@ public record UpdatePositionsParams
         new()
         {
             Id = paramsModel.Id,
-            Params = paramsModel.Request
+            Props = paramsModel.Request
         };
 }

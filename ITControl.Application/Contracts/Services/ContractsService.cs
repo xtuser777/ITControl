@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Contracts.Entities;
 using ITControl.Domain.Contracts.Params;
+using ITControl.Domain.Contracts.Props;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Contracts.Services;
@@ -13,37 +14,37 @@ namespace ITControl.Application.Contracts.Services;
 public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
 {
     public async Task<Contract> FindOneAsync(
-        FindOneServiceParams findOneParams)
+        FindOneServiceParams parameters)
     {
         return await unitOfWork
             .ContractsRepository
-            .FindOneAsync(findOneParams) 
+            .FindOneAsync(parameters) 
                ?? throw new NotFoundException(Errors.CONTRACT_NOT_FOUND);
     }
 
     public async Task<IEnumerable<Contract>> FindManyAsync(
-        FindManyServiceParams findManyParams)
+        FindManyServiceParams parameters)
     {
         return await unitOfWork.ContractsRepository
-            .FindManyAsync(findManyParams);
+            .FindManyAsync(parameters);
     }
 
     public async Task<PaginationModel?> FindManyPaginationAsync(
-        FindManyPaginationServiceParams paginationParams)
+        FindManyPaginationServiceParams parameters)
     {
         var count = await unitOfWork.ContractsRepository
-            .CountAsync(paginationParams.CountParams);
+            .CountAsync(parameters.CountProps);
         var pagination = 
-            Pagination.Build(paginationParams.PaginationParams, count);
+            Pagination.Build(parameters.PaginationParams, count);
         return pagination;
     }
 
     public async Task<Contract?> CreateAsync(
-        CreateServiceParams createParams)
+        CreateServiceParams parameters)
     {
-        var contract = new Contract((ContractParams)createParams.Params);
+        var contract = new Contract((ContractProps)parameters.Props);
         var contractsContacts = 
-            ((ContractParams)createParams.Params).ContractContacts.ToList();
+            ((ContractProps)parameters.Props).ContractContacts!.ToList();
         contractsContacts.ForEach(cc => cc.ContractId = contract.Id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsRepository.CreateAsync(contract);
@@ -55,12 +56,12 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
     }
 
     public async Task UpdateAsync(
-        UpdateServiceParams updateParams)
+        UpdateServiceParams parameters)
     {
-        var contract = await FindOneAsync(updateParams);
-        contract.Update((UpdateContractParams)updateParams.Params);
+        var contract = await FindOneAsync(parameters);
+        contract.Update((ContractProps)parameters.Props);
         var contractsContacts = 
-            ((UpdateContractParams)updateParams.Params).ContractContacts.ToList();
+            ((ContractProps)parameters.Props).ContractContacts!.ToList();
         contractsContacts.ForEach(cc => cc.ContractId = contract.Id);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsContactsRepository
@@ -72,9 +73,9 @@ public class ContractsService(IUnitOfWork unitOfWork) : IContractsService
     }
 
     public async Task DeleteAsync(
-        DeleteServiceParams deleteParams)
+        DeleteServiceParams parameters)
     {
-        var contract = await FindOneAsync(deleteParams);
+        var contract = await FindOneAsync(parameters);
         await using var transaction = unitOfWork.BeginTransaction;
         await unitOfWork.ContractsContactsRepository
             .DeleteManyByContractAsync(contract);

@@ -41,7 +41,7 @@ public record IndexRolesParams : PaginationParams
         IndexRolesParams param)
         => new()
         {
-            FindManyParams = param,
+            FindManyProps = param,
             OrderByParams = param,
             PaginationParams = param
         };
@@ -50,7 +50,7 @@ public record IndexRolesParams : PaginationParams
         IndexRolesParams param)
         => new()
         {
-            CountParams = param,
+            CountProps = param,
             PaginationParams = param
         };
 }

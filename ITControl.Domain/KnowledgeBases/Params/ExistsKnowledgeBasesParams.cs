@@ -1,4 +1,4 @@
 ﻿namespace ITControl.Domain.KnowledgeBases.Params;
 
-public record ExistsKnowledgeBasesParams :
+public class ExistsKnowledgeBasesParams :
     CountKnowledgeBasesParams;
