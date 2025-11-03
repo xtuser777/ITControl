@@ -10,7 +10,9 @@ using ITControl.Domain.Users.Props;
 
 namespace ITControl.Application.Users.Services;
 
-public class UsersService(IUnitOfWork unitOfWork) : IUsersService
+public class UsersService(
+    IUnitOfWork unitOfWork, 
+    ICryptService cryptService) : IUsersService
 {
     public async Task<User> FindOneAsync(
             FindOneServiceParams parameters)
@@ -40,6 +42,7 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var user = new User((UserProps)parameters.Props);
+        user.Password = cryptService.HashPassword(user.Password!);
         var usersEquipments = 
             ((UserProps)parameters.Props).UsersEquipments!.ToList();
         usersEquipments.ForEach(ue => ue.UserId = user.Id);
@@ -60,10 +63,11 @@ public class UsersService(IUnitOfWork unitOfWork) : IUsersService
     public async Task UpdateAsync(
         UpdateServiceParams parameters)
     {
-        
         await using var transaction = unitOfWork.BeginTransaction;
         var user = await FindOneAsync(parameters);
         user.Update((UserProps)parameters.Props);
+        if (((UserProps)parameters.Props).Password is not null)
+            user.Password = cryptService.HashPassword(user.Password!);
         var usersEquipments = 
             ((UserProps)parameters.Props).UsersEquipments!.ToList();
         usersEquipments.ForEach(ue => ue.UserId = user.Id);

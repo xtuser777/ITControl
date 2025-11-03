@@ -6,5 +6,4 @@ public interface ICryptService
 {
     string HashPassword(string password);
     bool VerifyHashedPassword(string hashedPassword, string password);
-    bool Test();
 }
