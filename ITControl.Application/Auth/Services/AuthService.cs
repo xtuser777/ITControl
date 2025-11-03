@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 namespace ITControl.Application.Auth.Services;
 
 public class AuthService(
+    ICryptService cryptService,
     ITokenService tokenService, 
     IUnitOfWork unitOfWork, 
     IConfiguration configuration) : IAuthService
@@ -84,7 +85,7 @@ public class AuthService(
         {
             throw new UnauthorizedAccessException(Errors.AUTH_INACTIVE_USER);
         }
-        return !Crypt.VerifyHashedPassword(user.Password!, password) 
+        return !cryptService.VerifyHashedPassword(user.Password!, password) 
             ? throw new UnauthorizedAccessException(Errors.AUTH_INVALID_PASSWORD) 
             : user;
     }

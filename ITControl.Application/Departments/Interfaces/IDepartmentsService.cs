@@ -1,6 +1,6 @@
 using ITControl.Application.Shared.Params;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Departments.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Application.Departments.Interfaces;
 

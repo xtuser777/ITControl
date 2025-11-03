@@ -1,11 +1,11 @@
 using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Domain.Users.Params;
 using ITControl.Domain.Users.Props;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
 
 namespace ITControl.Presentation.Users.Requests;
 

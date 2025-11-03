@@ -1,12 +1,12 @@
 using ITControl.Application.Roles.Interfaces;
 using ITControl.Presentation.Roles.Interfaces;
-using ITControl.Presentation.Roles.Responses;
 using ITControl.Presentation.Roles.Params;
+using ITControl.Presentation.Roles.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Roles.Controllers
 {

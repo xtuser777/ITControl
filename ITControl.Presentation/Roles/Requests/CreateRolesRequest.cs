@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Interfaces;
 using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Roles.Props;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
 
 namespace ITControl.Presentation.Roles.Requests;
 

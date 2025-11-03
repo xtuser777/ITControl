@@ -1,6 +1,6 @@
-﻿using ITControl.Presentation.Equipments.Interfaces;
-using ITControl.Domain.Equipments.Enums;
+﻿using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Shared.Extensions;
+using ITControl.Presentation.Equipments.Interfaces;
 using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Equipments.Views;

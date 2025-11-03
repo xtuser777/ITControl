@@ -1,12 +1,12 @@
 using ITControl.Application.Equipments.Interfaces;
 using ITControl.Presentation.Equipments.Interfaces;
-using ITControl.Presentation.Equipments.Responses;
 using ITControl.Presentation.Equipments.Params;
+using ITControl.Presentation.Equipments.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Equipments.Controllers
 {

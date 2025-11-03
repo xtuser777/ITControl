@@ -1,4 +1,5 @@
 using ITControl.Application.Appointments.Interfaces;
+using ITControl.Presentation.Appointments.Interfaces;
 using ITControl.Presentation.Appointments.Params;
 using ITControl.Presentation.Appointments.Responses;
 using ITControl.Presentation.Shared.Filters;
@@ -6,7 +7,6 @@ using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Appointments.Interfaces;
 
 namespace ITControl.Presentation.Appointments.Controllers
 {

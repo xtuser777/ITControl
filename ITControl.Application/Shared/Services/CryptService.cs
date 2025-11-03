@@ -1,25 +1,31 @@
 using System.Security.Cryptography;
+using System.Text;
 using ITControl.Application.Shared.Interfaces;
+using ITControl.Domain.Users.Entities;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 
 namespace ITControl.Application.Shared.Services;
 
-public class CryptService : ICryptService
+public class CryptService(IConfiguration configuration) : ICryptService
 {
     public string HashPassword(string password)
     {
-        byte[] salt;
-        byte[] buffer2;
-        ArgumentNullException.ThrowIfNull(password);
-        using (var bytes = new Rfc2898DeriveBytes(
-                   password, 0x10, 0x3e8, HashAlgorithmName.SHA256))
-        {
-            salt = bytes.Salt;
-            buffer2 = bytes.GetBytes(0x20);
-        }
-        var dst = new byte[0x31];
-        Buffer.BlockCopy(salt, 0, dst, 1, 0x10);
-        Buffer.BlockCopy(buffer2, 0, dst, 0x11, 0x20);
-        return Convert.ToBase64String(dst);
+        var salt = configuration["Hash:Salt"]!;
+        var saltBytes = Convert.FromBase64String(salt);
+        var iterations = int.Parse(configuration["Hash:Iterations"]!);
+        var size = int.Parse(configuration["Hash:Size"]!);
+        Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(
+            password,
+            saltBytes,
+            iterations,
+            HashAlgorithmName.SHA256 // Or other hash algorithm used
+        );
+
+        byte[] key = pbkdf2.GetBytes(size);
+        
+        return Convert.ToBase64String(key);
     }
 
     private static bool ByteArraysEqual(byte[] b1, byte[] b2)
@@ -28,26 +34,65 @@ public class CryptService : ICryptService
         if (b1.Length != b2.Length) return false;
         return !b1.Where((t, i) => t != b2[i]).Any();
     }
+    
+    public static byte[] ComputeSha256HashAndBase64Encode(string rawData)
+    {
+        // Create a SHA256 hash object
+        using (SHA256 sha256Hash = SHA256.Create())
+        {
+            // ComputeHash - returns byte array
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+            return bytes;
+        }
+    }
 
     public bool VerifyHashedPassword(string hashedPassword, string password)
     {
-        byte[] buffer4;
-        ArgumentNullException.ThrowIfNull(password);
-        var src = Convert.FromBase64String(hashedPassword);
-        if ((src.Length != 0x31) || (src[0] != 0))
-        {
-            return false;
-        }
-        var dst = new byte[0x10];
-        Buffer.BlockCopy(src, 1, dst, 0, 0x10);
-        var buffer3 = new byte[0x20];
-        Buffer.BlockCopy(src, 0x11, buffer3, 0, 0x20);
+        byte[] encryptedData = Convert.FromBase64String(hashedPassword);
+        var salt = configuration["Hash:Salt"]!;
+        var saltBytes = Convert.FromBase64String(salt);
+        var iterations = int.Parse(configuration["Hash:Iterations"]!);
+        var size = int.Parse(configuration["Hash:Size"]!);
+        Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(
+            password,
+            saltBytes,
+            iterations,
+            HashAlgorithmName.SHA256 // Or other hash algorithm used
+        );
 
-        using (var bytes = new Rfc2898DeriveBytes(
-                   password, dst, 0x3e8, HashAlgorithmName.SHA256))
-        {
-            buffer4 = bytes.GetBytes(0x20);
-        }
-        return ByteArraysEqual(buffer3, buffer4);
+        byte[] key = pbkdf2.GetBytes(size);
+
+        return ByteArraysEqual(encryptedData, key);
+    }
+
+    public bool Test()
+    {
+        var password = "1nf0.pmr";
+        var salt = configuration["Hash:Salt"]!;
+        var saltBytes = Convert.FromBase64String(salt);
+        var iterations = int.Parse(configuration["Hash:Iterations"]!);
+        var size = int.Parse(configuration["Hash:Size"]!);
+        Rfc2898DeriveBytes pbkdf21 = new Rfc2898DeriveBytes(
+            password,
+            saltBytes,
+            iterations,
+            HashAlgorithmName.SHA256 // Or other hash algorithm used
+        );
+
+        byte[] key1 = pbkdf21.GetBytes(size);
+        
+        var hashedPassword = Convert.ToBase64String(key1);
+        byte[] encryptedData = Convert.FromBase64String(hashedPassword);
+        Rfc2898DeriveBytes pbkdf22 = new Rfc2898DeriveBytes(
+            password,
+            saltBytes,
+            iterations,
+            HashAlgorithmName.SHA256 // Or other hash algorithm used
+        );
+
+        byte[] key2 = pbkdf22.GetBytes(size);
+
+        return ByteArraysEqual(encryptedData, key2);
     }
 }

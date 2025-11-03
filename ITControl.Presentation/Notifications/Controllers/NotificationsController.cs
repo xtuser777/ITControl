@@ -1,12 +1,12 @@
 ﻿using ITControl.Application.Notifications.Interfaces;
 using ITControl.Presentation.Notifications.Interfaces;
-using ITControl.Presentation.Notifications.Responses;
 using ITControl.Presentation.Notifications.Params;
+using ITControl.Presentation.Notifications.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Notifications.Controllers;
 

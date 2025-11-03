@@ -1,12 +1,12 @@
 using ITControl.Application.Departments.Interfaces;
-using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Departments.Entities;
 using ITControl.Domain.Departments.Params;
 using ITControl.Domain.Departments.Props;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 
 namespace ITControl.Application.Departments.Services;

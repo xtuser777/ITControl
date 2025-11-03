@@ -1,4 +1,3 @@
-using ITControl.Application.Pages.Translators;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Presentation.Pages.Interfaces;
 using ITControl.Presentation.Pages.Response;
@@ -11,7 +10,7 @@ public class PagesView : IPagesView
     {
         if (page is null) return null;
 
-        return new CreatePagesResponse()
+        return new CreatePagesResponse
         {
             Id = page.Id,
         };
@@ -21,11 +20,11 @@ public class PagesView : IPagesView
     {
         if (page is null) return null;
 
-        return new FindOnePagesResponse()
+        return new FindOnePagesResponse
         {
             Id = page.Id,
             Name = page.Name,
-            DisplayName = PagesTranslator.ToDisplayValue(page.Name),
+            DisplayName = page.DisplayName,
         };
     }
 
@@ -34,11 +33,11 @@ public class PagesView : IPagesView
         if (pages is null) return [];
 
         return from page in pages
-            select new FindManyPagesResponse()
+            select new FindManyPagesResponse
             {
                 Id = page.Id,
                 Name = page.Name,
-                DisplayName = PagesTranslator.ToDisplayValue(page.Name),
+                DisplayName = page.DisplayName,
             }; 
     }
 }

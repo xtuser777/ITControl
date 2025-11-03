@@ -1,7 +1,7 @@
-using ITControl.Presentation.Equipments.Interfaces;
-using ITControl.Presentation.Equipments.Responses;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Shared.Extensions;
+using ITControl.Presentation.Equipments.Interfaces;
+using ITControl.Presentation.Equipments.Responses;
 using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Equipments.Views;

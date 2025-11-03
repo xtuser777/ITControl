@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
-using ITControl.Presentation.Shared.Utils;
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
 using ITControl.Domain.Treatments.Props;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
+using ITControl.Presentation.Shared.Utils;
 
 namespace ITControl.Presentation.Treatments.Requests;
 

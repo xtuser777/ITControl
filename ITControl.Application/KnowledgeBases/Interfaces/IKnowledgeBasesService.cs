@@ -1,6 +1,6 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.KnowledgeBases.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Application.KnowledgeBases.Interfaces;
 

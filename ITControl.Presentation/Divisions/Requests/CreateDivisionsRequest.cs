@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Divisions.Interfaces;
 using ITControl.Domain.Divisions.Params;
 using ITControl.Domain.Divisions.Props;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
 
 namespace ITControl.Presentation.Divisions.Requests;
 

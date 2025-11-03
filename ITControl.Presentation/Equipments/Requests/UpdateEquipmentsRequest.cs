@@ -1,13 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
-using ITControl.Presentation.Shared.Utils;
 using ITControl.Domain.Equipments.Entities;
 using ITControl.Domain.Equipments.Enums;
 using ITControl.Domain.Equipments.Interfaces;
 using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Equipments.Props;
 using ITControl.Domain.Shared.Messages;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
+using ITControl.Presentation.Shared.Utils;
 
 namespace ITControl.Presentation.Equipments.Requests;
 

@@ -1,12 +1,12 @@
 using ITControl.Application.Positions.Interfaces;
 using ITControl.Presentation.Positions.Interfaces;
-using ITControl.Presentation.Positions.Responses;
 using ITControl.Presentation.Positions.Params;
+using ITControl.Presentation.Positions.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Positions.Controllers;
 

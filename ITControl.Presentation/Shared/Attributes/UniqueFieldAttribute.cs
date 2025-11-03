@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Interfaces;
 using ITControl.Domain.Shared.Messages;
 using ITControl.Domain.Shared.Params;
@@ -33,8 +34,8 @@ public class UniqueFieldAttribute<TEntity> : ValidationAttribute
         if (method == HttpMethods.Post)
         {
             var existsParams = 
-                (FindManyParams)_paramsType.GetConstructor(Type.EmptyTypes)!
-                .Invoke(Array.Empty<object?>())!;
+                (Entity)_paramsType.GetConstructor(Type.EmptyTypes)!
+                .Invoke([])!;
             existsParams.GetType().GetProperty(propertyName)!
                 .SetValue(existsParams, value.ToString()!);
             var existsTask = repository.ExistsAsync(existsParams);
@@ -51,8 +52,8 @@ public class UniqueFieldAttribute<TEntity> : ValidationAttribute
             if (Guid.TryParse(idString, out var id))
             {
                 var exclusiveParams =
-                    (FindManyParams)_paramsType.GetConstructor(Type.EmptyTypes)!
-                    .Invoke(Array.Empty<object?>())!;
+                    (Entity)_paramsType.GetConstructor(Type.EmptyTypes)!
+                    .Invoke([])!;
                 exclusiveParams.GetType().GetProperty("ExcludeId")!
                     .SetValue(exclusiveParams, id);
                 exclusiveParams.GetType().GetProperty(propertyName)!

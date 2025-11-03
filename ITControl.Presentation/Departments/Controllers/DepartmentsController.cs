@@ -1,9 +1,9 @@
 using ITControl.Application.Departments.Interfaces;
-using ITControl.Presentation.Shared.Responses;
 using ITControl.Presentation.Departments.Interfaces;
 using ITControl.Presentation.Departments.Params;
 using ITControl.Presentation.Departments.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

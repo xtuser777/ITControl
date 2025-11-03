@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Mvc;
 using ITControl.Presentation.Shared.Responses;
 using ITControl.Presentation.Treatments.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Treatments.Controllers
 {

@@ -1,6 +1,6 @@
 using ITControl.Presentation.Equipments.Interfaces;
-using Microsoft.AspNetCore.Mvc;
 using ITControl.Presentation.Shared.Responses;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Equipments.Controllers
 {

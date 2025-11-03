@@ -1,12 +1,12 @@
 ﻿using ITControl.Application.KnowledgeBases.Interfaces;
 using ITControl.Presentation.KnowledgeBases.Interfaces;
-using ITControl.Presentation.KnowledgeBases.Responses;
 using ITControl.Presentation.KnowledgeBases.Params;
+using ITControl.Presentation.KnowledgeBases.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.KnowledgeBases.Controllers;
 [Route("knowledge-bases")]

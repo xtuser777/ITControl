@@ -52,6 +52,7 @@ using ITControl.Domain.SupplementsMovements.Interfaces;
 using ITControl.Domain.Systems.Interfaces;
 using ITControl.Domain.Treatments.Interfaces;
 using ITControl.Domain.Units.Interfaces;
+using ITControl.Domain.Users.Entities;
 using ITControl.Domain.Users.Interfaces;
 using ITControl.Infrastructure.Appointments.Repositories;
 using ITControl.Infrastructure.Calls.Repositories;
@@ -72,6 +73,7 @@ using ITControl.Infrastructure.Systems.Repositories;
 using ITControl.Infrastructure.Treatments.Repositories;
 using ITControl.Infrastructure.Units.Repositories;
 using ITControl.Infrastructure.Users.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -85,13 +87,16 @@ public static class DependencyInjectionApi
         IConfiguration configuration)
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        services.AddDbContext<ApplicationDbContext>((options) => options
-                .UseSqlServer(connectionString)
-                .UseAsyncSeeding(async (context, _, cancellationToken) =>
-                    await new ApplicationSeed(configuration)
-                        .SeedAsync(context, cancellationToken))
-                .UseSeeding((context, _) => 
-                    new ApplicationSeed(configuration).Seed(context))
+        services.AddDbContext<ApplicationDbContext>((options) =>
+            {
+                options
+                    .UseSqlServer(connectionString)
+                    .UseAsyncSeeding(async (context, _, cancellationToken) =>
+                        await new ApplicationSeed(configuration)
+                            .SeedAsync(context, cancellationToken))
+                    .UseSeeding((context, _) =>
+                        new ApplicationSeed(configuration).Seed(context));
+            }
         );
 
         services.AddSingleton<IWebSocketService, WebSocketService>();

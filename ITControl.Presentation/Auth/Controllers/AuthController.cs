@@ -1,8 +1,8 @@
 ﻿using ITControl.Application.Auth.Interfaces;
+using ITControl.Domain.Shared.Exceptions;
 using ITControl.Presentation.Auth.Interfaces;
 using ITControl.Presentation.Auth.Requests;
 using ITControl.Presentation.Auth.Responses;
-using ITControl.Domain.Shared.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITControl.Presentation.Auth.Controllers

@@ -1,6 +1,6 @@
-﻿using ITControl.Presentation.Supplements.Interfaces;
+﻿using ITControl.Presentation.Shared.Responses;
+using ITControl.Presentation.Supplements.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Supplements.Controllers;
 

@@ -3,7 +3,6 @@ using ITControl.Domain.Divisions.Entities;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Roles.Entities;
-using ITControl.Domain.Shared.Utils;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Users.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +12,17 @@ namespace ITControl.Infrastructure.Shared.Seeds;
 
 public class ApplicationSeed
 {
-    private List<Page> _pages;
-    private List<Role> _roles;
-    private List<RolePage> _rolesPages;
-    private List<Unit> _units;
-    private List<User> _users;
-    private List<Position> _positions;
-    private List<Department> _departments;
-    private List<Division> _divisions;
+    private readonly List<Page> _pages;
+    private readonly List<Role> _roles;
+    private readonly List<RolePage> _rolesPages;
+    private readonly List<Unit> _units;
+    private readonly List<User> _users;
+    private readonly List<Position> _positions;
+    private readonly List<Department> _departments;
+    private readonly List<Division> _divisions;
 
-    public ApplicationSeed(IConfiguration configuration)
+    public ApplicationSeed(
+        IConfiguration configuration)
     {
         _pages = [
             new Page { Name = "users", DisplayName = "Usuários" },
@@ -159,7 +159,7 @@ public class ApplicationSeed
             {
                 Name = "Informática",
                 Username = configuration["InfoUser:Username"] ?? "",
-                Password = Crypt.HashPassword(configuration["InfoUser:Password"] ?? ""),
+                Password = configuration["InfoUser:Password"] ?? "",
                 Document = "02912383005",
                 Email = configuration["InfoUser:Email"] ?? "",
                 Enrollment = 9999,

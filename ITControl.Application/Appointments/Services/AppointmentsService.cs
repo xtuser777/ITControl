@@ -1,8 +1,8 @@
 using ITControl.Application.Appointments.Interfaces;
-using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
+using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Appointments.Entities;
 using ITControl.Domain.Appointments.Params;

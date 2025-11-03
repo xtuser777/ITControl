@@ -1,5 +1,5 @@
-using ITControl.Presentation.Equipments.Responses;
 using ITControl.Domain.Equipments.Entities;
+using ITControl.Presentation.Equipments.Responses;
 
 namespace ITControl.Presentation.Equipments.Interfaces;
 

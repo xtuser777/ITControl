@@ -1,6 +1,6 @@
 ﻿using ITControl.Application.Shared.Params;
-using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Notifications.Entities;
+using ITControl.Domain.Shared.Entities;
 
 namespace ITControl.Application.Notifications.Interfaces;
 

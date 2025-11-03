@@ -1,9 +1,9 @@
 using ITControl.Application.Contracts.Interfaces;
 using ITControl.Presentation.Contracts.Interfaces;
-using ITControl.Presentation.Shared.Responses;
 using ITControl.Presentation.Contracts.Params;
 using ITControl.Presentation.Contracts.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

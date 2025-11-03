@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Shared.Messages;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
-using ITControl.Domain.Shared.Messages;
 
 namespace ITControl.Presentation.Users.Requests;
 

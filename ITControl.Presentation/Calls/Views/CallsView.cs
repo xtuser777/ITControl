@@ -1,8 +1,8 @@
-﻿using ITControl.Presentation.Shared.Responses;
-using ITControl.Domain.Calls.Entities;
+﻿using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Shared.Extensions;
 using ITControl.Presentation.Calls.Interfaces;
 using ITControl.Presentation.Calls.Responses;
+using ITControl.Presentation.Shared.Responses;
 
 namespace ITControl.Presentation.Calls.Views;
 public class CallsView : ICallsView

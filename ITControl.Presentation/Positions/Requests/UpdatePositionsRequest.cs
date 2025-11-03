@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using ITControl.Presentation.Shared.Attributes;
-using ITControl.Presentation.Shared.Resources;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Positions.Interfaces;
 using ITControl.Domain.Positions.Params;
 using ITControl.Domain.Positions.Props;
+using ITControl.Presentation.Shared.Attributes;
+using ITControl.Presentation.Shared.Resources;
 
 namespace ITControl.Presentation.Positions.Requests;
 

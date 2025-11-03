@@ -1,12 +1,12 @@
 ﻿using ITControl.Application.Treatments.Interfaces;
-using ITControl.Presentation.Treatments.Responses;
 using ITControl.Presentation.Shared.Filters;
+using ITControl.Presentation.Shared.Responses;
+using ITControl.Presentation.Treatments.Interfaces;
 using ITControl.Presentation.Treatments.Params;
+using ITControl.Presentation.Treatments.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ITControl.Presentation.Shared.Responses;
-using ITControl.Presentation.Treatments.Interfaces;
 
 namespace ITControl.Presentation.Treatments.Controllers;
 
