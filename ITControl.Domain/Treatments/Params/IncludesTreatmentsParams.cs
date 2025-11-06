@@ -10,10 +10,11 @@ public record IncludesTreatmentsParams : IncludesParams
 
 public record IncludesTreatmentsCallParams
 {
+    public bool? CallStatus { get; set; }
     public IncludesTreatmentsCallUserParams? User { get; set; }
 }
 
-    public record IncludesTreatmentsCallUserParams
+public record IncludesTreatmentsCallUserParams
 {
     public bool? Unit { get; set; }
     public bool? Department { get; set; }

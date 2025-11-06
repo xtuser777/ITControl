@@ -76,26 +76,30 @@ public class UpdateUsersRequest
 
     [RequiredField]
     [Display(Name = nameof(Equipments), ResourceType = typeof(DisplayNames))]
-    public IEnumerable<CreateUsersEquipmentsRequest> Equipments { get; set; } = [];
+    public ICollection<CreateUsersEquipmentsRequest> Equipments { get; set; } = [];
 
     [RequiredField]
     [Display(Name = nameof(Systems), ResourceType = typeof(DisplayNames))]
-    public IEnumerable<CreateUsersSystemsRequest> Systems { get; set; } = [];
+    public ICollection<CreateUsersSystemsRequest> Systems { get; set; } = [];
 
     public static implicit operator UserProps(
         UpdateUsersRequest request) => new()
-    {
-        Username = request.Username,
-        Name = request.Name,
-        Email = request.Email,
-        Password = request.Password,
-        Document = request.Document,
-        Enrollment = request.Enrollment,
-        Active = request.Active,
-        PositionId = request.PositionId,
-        RoleId = request.RoleId,
-        UnitId = request.UnitId,
-        DepartmentId = request.DepartmentId,
-        DivisionId = request.DivisionId,
-    };
+        {
+            Username = request.Username,
+            Name = request.Name,
+            Email = request.Email,
+            Password = request.Password,
+            Document = request.Document,
+            Enrollment = request.Enrollment,
+            Active = request.Active,
+            PositionId = request.PositionId,
+            RoleId = request.RoleId,
+            UnitId = request.UnitId,
+            DepartmentId = request.DepartmentId,
+            DivisionId = request.DivisionId,
+            UsersEquipments = (ICollection<UserEquipment>)
+            [.. request.Equipments.Select(e => (UserEquipment)e)],
+            UsersSystems = (ICollection<UserSystem>)
+            [.. request.Systems.Select(s => (UserSystem)s)]
+        };
 }

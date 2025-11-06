@@ -27,6 +27,6 @@ public class UserProps : Entity
     public Unit? Unit { get; set; }
     public Department? Department { get; set; }
     public Division? Division { get; set; }
-    public IEnumerable<UserEquipment>? UsersEquipments { get; set; }
-    public IEnumerable<UserSystem>? UsersSystems { get; set; }    
+    public ICollection<UserEquipment>? UsersEquipments { get; set; }
+    public ICollection<UserSystem>? UsersSystems { get; set; }    
 }

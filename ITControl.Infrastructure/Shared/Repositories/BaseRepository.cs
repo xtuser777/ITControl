@@ -61,16 +61,8 @@ public abstract class BaseRepository
             {
                 var value = property.GetValue(@params);
                 if (value is null) continue;
-                if (property.Name.StartsWith("Exclude"))
-                {
-                    query = query.Where(x =>
-                    EF.Property<object>(x!, property.Name.Remove(0, 7)) != value);
-                }
-                else 
-                {
-                    query = query.Where(x =>
+                query = query.Where(x =>
                     EF.Property<string>(x!, property.Name).Contains((string)value));
-                }
             }
             else if (property.PropertyType.FullName!.StartsWith("ITControl"))
             {
@@ -100,8 +92,17 @@ public abstract class BaseRepository
             {
                 var value = property.GetValue(@params);
                 if (value is null) continue;
-                query = query.Where(x =>
+
+                if (property.Name.StartsWith("Exclude"))
+                {
+                    query = query.Where(x =>
+                    EF.Property<object>(x!, property.Name.Remove(0, 7)) != value);
+                }
+                else
+                {
+                    query = query.Where(x =>
                     EF.Property<object>(x!, property.Name) == value);
+                }
             }
 
         }

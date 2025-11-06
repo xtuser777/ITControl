@@ -12,6 +12,7 @@ using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Enums;
+using ITControl.Domain.Treatments.Params;
 using ITControl.Domain.Treatments.Props;
 using CallStatus = ITControl.Domain.Calls.Enums.CallStatus;
 
@@ -91,7 +92,20 @@ public class TreatmentsService(
         UpdateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var treatment = await FindOneAsync(parameters);
+        var props = (TreatmentProps)parameters.Props;
+        var findOneParams = new FindOneServiceParams
+        {
+            Id = parameters.Id,
+            Includes = new IncludesTreatmentsParams
+            {
+                Call = new IncludesTreatmentsCallParams
+                {
+                    CallStatus = true
+                },
+                User = true,
+            }
+        };
+        var treatment = await FindOneAsync(findOneParams);
         var call = treatment.Call
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
         var callStatus = call.CallStatus!;
@@ -99,7 +113,7 @@ public class TreatmentsService(
                    ?? throw new NotFoundException(Errors.USER_NOT_FOUND);
         var message = "";
         var type = NotificationType.Info;
-        switch (treatment.Status)
+        switch (props.Status)
         {
             case TreatmentStatus.Started:
                 message = string.Format(
@@ -124,7 +138,7 @@ public class TreatmentsService(
                 break;
             case TreatmentStatus.Finished:
                 message = string.Format(
-                    Messages.TREATMENTS_FINISHED, call.Title, user.Name);
+                    Messages.TREATMENTS_FINISHED, treatment.Protocol, call.Title, user.Name);
                 type = NotificationType.Success;
                 callStatus.Update(new ()
                 {
@@ -138,7 +152,7 @@ public class TreatmentsService(
                 throw new ArgumentOutOfRangeException();
         }
 
-        treatment.Update((TreatmentProps)parameters.Props);
+        treatment.Update(props);
         unitOfWork.TreatmentsRepository.Update(treatment);
         unitOfWork.CallsStatusesRepository.Update(callStatus);
         await CreateNotification(

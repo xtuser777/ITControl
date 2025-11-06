@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using ITControl.Domain.Users.Entities;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 
@@ -20,4 +21,7 @@ public class CreateUsersEquipmentsRequest
     [DateValue]
     [Display(Name = nameof(EndedAt), ResourceType = typeof(DisplayNames))]
     public DateOnly? EndedAt { get; set; }
+
+    public static implicit operator UserEquipment(CreateUsersEquipmentsRequest request)
+        => new (Guid.Empty, request.EquipmentId, request.StartedAt, request.EndedAt);
 }

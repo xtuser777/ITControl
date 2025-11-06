@@ -103,18 +103,24 @@ public class TreatmentsController(
         [AsParameters] UpdateTreatmentsParams parameters)
     {
         await treatmentsService.UpdateAsync(parameters);
-        var callId = parameters.UpdateTreatmentsRequest.CallId ?? Guid.Empty;
-        var call = await callsService.FindOneAsync(new FindOneServiceParams { Id = callId });
-        if (call != null) 
+        var findOneParams = new FindOneServiceParams
         {
-            var userId = call.UserId ?? Guid.Empty;
+            Id = parameters.Id,
+            Includes = new IncludesTreatmentsParams
+            {
+                Call = new IncludesTreatmentsCallParams()
+            }
+        };
+        var treatment = await treatmentsService.FindOneAsync(findOneParams);
+        if (treatment != null)
+        {
+            var userId = ((Call)treatment.Call!).UserId ?? Guid.Empty;
             if (webSocketService.ContainsKey(userId.ToString()))
             {
                 var count = await notificationsService.CountUnreadAsync(userId);
                 await webSocketService.EchoAsync(userId.ToString(), count.ToString());
             }
         }
-
         return NoContent();
     }
 

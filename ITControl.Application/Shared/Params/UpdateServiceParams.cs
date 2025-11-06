@@ -16,10 +16,6 @@ public record UpdateServiceParams
         => new()
         {
             Id = parameters.Id,
-            Includes = new IncludesAppointmentsParams
-            {
-                Call = true,
-                User = true,
-            }
+            Includes = new IncludesParams()
         };
 }

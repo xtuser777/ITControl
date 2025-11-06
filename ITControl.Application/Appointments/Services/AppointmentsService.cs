@@ -5,6 +5,7 @@ using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Appointments.Entities;
+using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Appointments.Props;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
@@ -83,7 +84,17 @@ public class AppointmentsService(
     public async Task UpdateAsync(UpdateServiceParams parameters)
     {
         await using var transaction = unitOfWork.BeginTransaction;
-        var appointment = await FindOneAsync(parameters);
+        var props = (AppointmentProps)parameters.Props;
+        var findOneParams = new FindOneServiceParams
+        {
+            Id = parameters.Id,
+            Includes = new IncludesAppointmentsParams
+            {
+                Call = true,
+                User = true,
+            },
+        };
+        var appointment = await FindOneAsync(findOneParams);
         appointment.Update((AppointmentProps)parameters.Props);
         unitOfWork.AppointmentsRepository.Update(appointment);
         var call = appointment.Call
