@@ -64,11 +64,14 @@ public class CallsController(
         var data = callsView.Create(call);
         if (call != null)
         {
-            var count = await notificationsService
-                .CountUnreadAsync(@params.UserId);
-            await webSocketService.EchoAsync(
-                @params.UserId.ToString(), 
-                count.ToString());
+            if (webSocketService.ContainsKey(@params.UserId.ToString()))
+            {
+                var count = await notificationsService
+                    .CountUnreadAsync(@params.UserId);
+                await webSocketService.EchoAsync(
+                    @params.UserId.ToString(),
+                    count.ToString());
+            }
         }
         var url = $"/calls/{data?.Id}";
         return Created(url, new { Data = data });
@@ -86,11 +89,14 @@ public class CallsController(
         [AsParameters] DeleteCallsParams @params)
     {
         await callsService.DeleteAsync(@params);
-        var count = await notificationsService
+        if (webSocketService.ContainsKey(@params.UserId.ToString()))
+        {
+            var count = await notificationsService
                 .CountUnreadAsync(@params.UserId);
-        await webSocketService.EchoAsync(
-            @params.UserId.ToString(),
-            count.ToString());
+            await webSocketService.EchoAsync(
+                @params.UserId.ToString(),
+                count.ToString());
+        }
         return NoContent();
     }
 }

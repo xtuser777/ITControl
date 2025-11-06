@@ -1,4 +1,10 @@
-﻿using ITControl.Application.Treatments.Interfaces;
+﻿using ITControl.Application.Calls.Interfaces;
+using ITControl.Application.Notifications.Interfaces;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Params;
+using ITControl.Application.Treatments.Interfaces;
+using ITControl.Domain.Calls.Entities;
+using ITControl.Domain.Treatments.Params;
 using ITControl.Presentation.Shared.Filters;
 using ITControl.Presentation.Shared.Responses;
 using ITControl.Presentation.Treatments.Interfaces;
@@ -16,11 +22,14 @@ namespace ITControl.Presentation.Treatments.Controllers;
 [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
 public class TreatmentsController(
     ITreatmentsService treatmentsService,
-    ITreatmentsView treatmentsView) : ControllerBase
+    ITreatmentsView treatmentsView,
+    IWebSocketService webSocketService,
+    INotificationsService notificationsService,
+    ICallsService callsService) : ControllerBase
 {
     [HttpGet]
     [ProducesResponseType(
-        typeof(Shared.Responses.FindManyResponse<FindManyTreatmentsResponse>), StatusCodes.Status200OK)]
+        typeof(FindManyResponse<FindManyTreatmentsResponse>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -41,7 +50,7 @@ public class TreatmentsController(
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(
-        typeof(Shared.Responses.FindOneResponse<FindOneTreatmentsResponse?>), StatusCodes.Status200OK)]
+        typeof(FindOneResponse<FindOneTreatmentsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -59,7 +68,7 @@ public class TreatmentsController(
 
     [HttpPost]
     [ProducesResponseType(
-        typeof(Shared.Responses.FindOneResponse<CreateTreatmentsResponse>), StatusCodes.Status201Created)]
+        typeof(FindOneResponse<CreateTreatmentsResponse>), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
@@ -69,6 +78,15 @@ public class TreatmentsController(
         var treatment = await treatmentsService.CreateAsync(parameters);
         var data = treatmentsView.Create(treatment);
         var uri = $"/treatments/{treatment?.Id}";
+        if (treatment is not null)
+        {
+            var userId = ((Call)treatment.Call!).UserId ?? Guid.Empty;
+            if (webSocketService.ContainsKey(userId.ToString()))
+            {
+                var count = await notificationsService.CountUnreadAsync(userId);
+                await webSocketService.EchoAsync(userId.ToString(), count.ToString());
+            }
+        }
         return Created(uri, new
         {
             Data = data,
@@ -85,6 +103,18 @@ public class TreatmentsController(
         [AsParameters] UpdateTreatmentsParams parameters)
     {
         await treatmentsService.UpdateAsync(parameters);
+        var callId = parameters.UpdateTreatmentsRequest.CallId ?? Guid.Empty;
+        var call = await callsService.FindOneAsync(new FindOneServiceParams { Id = callId });
+        if (call != null) 
+        {
+            var userId = call.UserId ?? Guid.Empty;
+            if (webSocketService.ContainsKey(userId.ToString()))
+            {
+                var count = await notificationsService.CountUnreadAsync(userId);
+                await webSocketService.EchoAsync(userId.ToString(), count.ToString());
+            }
+        }
+
         return NoContent();
     }
 
@@ -98,6 +128,24 @@ public class TreatmentsController(
         [AsParameters] DeleteTreatmentsParams parameters)
     {
         await treatmentsService.DeleteAsync(parameters);
+        var findOneParams = new FindOneServiceParams 
+        { 
+            Id =  parameters.Id, 
+            Includes = new IncludesTreatmentsParams 
+            { 
+                Call = new IncludesTreatmentsCallParams()
+            } 
+        };
+        var treatment = await treatmentsService.FindOneAsync(findOneParams);
+        if (treatment != null) 
+        {
+            var userId = ((Call)treatment.Call!).UserId ?? Guid.Empty;
+            if (webSocketService.ContainsKey(userId.ToString()))
+            {
+                var count = await notificationsService.CountUnreadAsync(userId);
+                await webSocketService.EchoAsync(userId.ToString(), count.ToString());
+            }
+        }
         return NoContent();
     }
 }

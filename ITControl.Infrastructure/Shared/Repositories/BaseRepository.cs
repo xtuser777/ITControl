@@ -23,6 +23,7 @@ public abstract class BaseRepository
                     if (subValue is null) continue;
                     if (subProperty.PropertyType.BaseType == typeof(object))
                     {
+                        query = query.Include($"{property.Name}.{subProperty.Name}");
                         foreach (var subSubProperty in subProperty.PropertyType.GetProperties())
                         {
                             var subSubValue = subSubProperty.GetValue(subProperty.GetValue(property.GetValue(@params)));

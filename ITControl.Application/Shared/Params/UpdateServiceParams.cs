@@ -1,3 +1,4 @@
+using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Params;
 
@@ -15,5 +16,10 @@ public record UpdateServiceParams
         => new()
         {
             Id = parameters.Id,
+            Includes = new IncludesAppointmentsParams
+            {
+                Call = true,
+                User = true,
+            }
         };
 }

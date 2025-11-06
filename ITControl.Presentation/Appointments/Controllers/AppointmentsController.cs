@@ -1,4 +1,10 @@
 using ITControl.Application.Appointments.Interfaces;
+using ITControl.Application.Calls.Interfaces;
+using ITControl.Application.Notifications.Interfaces;
+using ITControl.Application.Shared.Interfaces;
+using ITControl.Application.Shared.Params;
+using ITControl.Domain.Appointments.Entities;
+using ITControl.Domain.Appointments.Params;
 using ITControl.Presentation.Appointments.Interfaces;
 using ITControl.Presentation.Appointments.Params;
 using ITControl.Presentation.Appointments.Responses;
@@ -16,7 +22,10 @@ namespace ITControl.Presentation.Appointments.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class AppointmentsController(
         IAppointmentsService appointmentsService,
-        IAppointmentsView appointmentsView) : ControllerBase
+        IAppointmentsView appointmentsView,
+        IWebSocketService webSocketService,
+        INotificationsService notificationsService,
+        ICallsService callsService) : ControllerBase
     {
         [HttpGet]
         [ProducesResponseType(
@@ -60,6 +69,18 @@ namespace ITControl.Presentation.Appointments.Controllers
             var appointment = await appointmentsService.CreateAsync(@params);
             var data = appointmentsView.Create(appointment);
             var uri = $"/appointments/{appointment?.Id}";
+            if (appointment is not null)
+            {
+                var userId = appointment.Call?.UserId ?? Guid.Empty;
+                var unreadNotifications = 
+                    await notificationsService.CountUnreadAsync(userId);
+                if (webSocketService.ContainsKey(userId.ToString()))
+                {
+                    await webSocketService.EchoAsync(
+                        userId.ToString(), 
+                        unreadNotifications.ToString());
+                }
+            }
             return Created(uri, new { Data = data });
         }
 
@@ -73,6 +94,22 @@ namespace ITControl.Presentation.Appointments.Controllers
             [AsParameters] UpdateAppointmentsParams @params)
         {
             await appointmentsService.UpdateAsync(@params);
+            var call = await callsService.FindOneAsync(
+                new FindOneServiceParams { 
+                    Id = (Guid)@params.Request.CallId!
+                });
+            if (call is not null)
+            {
+                var userId = call.UserId ?? Guid.Empty;
+                var unreadNotifications =
+                    await notificationsService.CountUnreadAsync(userId);
+                if (webSocketService.ContainsKey(userId.ToString()))
+                {
+                    await webSocketService.EchoAsync(
+                        userId.ToString(),
+                        unreadNotifications.ToString());
+                }
+            }
             return NoContent();
         }
 
@@ -86,6 +123,34 @@ namespace ITControl.Presentation.Appointments.Controllers
             [AsParameters] DeleteAppointmentsParams @params)
         {
             await appointmentsService.DeleteAsync(@params);
+            var findOneParams = new FindOneServiceParams { Id = @params.Id };
+            var appointment = await appointmentsService.FindOneAsync(findOneParams);
+            var call = await callsService.FindOneAsync(
+                new FindOneServiceParams
+                {
+                    Id = (Guid)appointment.CallId!
+                });
+            if (call is not null)
+            {
+                var userId = call.UserId ?? Guid.Empty;
+                var unreadNotifications =
+                    await notificationsService.CountUnreadAsync(userId);
+                if (webSocketService.ContainsKey(userId.ToString()))
+                {
+                    await webSocketService.EchoAsync(
+                        userId.ToString(),
+                        unreadNotifications.ToString());
+                }
+            }
+            var userId1 = @params.UserId;
+            var unreadNotifications1 =
+                await notificationsService.CountUnreadAsync(userId1);
+            if (webSocketService.ContainsKey(userId1.ToString()))
+            {
+                await webSocketService.EchoAsync(
+                    userId1.ToString(),
+                    unreadNotifications1.ToString());
+            }
             return NoContent();
         }
     }

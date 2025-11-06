@@ -121,8 +121,12 @@ public class CallsService(
             FindManyProps = 
             new NotificationProps { CallId = callId } 
         };
-        var notifications = await unitOfWork.NotificationsRepository
+        var notifications = await unitOfWork
+            .NotificationsRepository
             .FindManyAsync(findManyParams);
-        unitOfWork.NotificationsRepository.DeleteMany(notifications);
+        if (notifications.Any())
+        {
+            unitOfWork.NotificationsRepository.DeleteMany(notifications);
+        }
     }
 }

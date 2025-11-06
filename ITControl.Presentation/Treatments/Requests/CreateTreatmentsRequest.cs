@@ -35,22 +35,19 @@ public class CreateTreatmentsRequest
     [Display(Name = nameof(EndedIn), ResourceType = typeof(DisplayNames))]
     public TimeOnly? EndedIn { get; set; }
 
-    [RequiredField]
     [EnumValue(typeof(TreatmentStatus))]
     [Display(Name = nameof(Status), ResourceType = typeof(DisplayNames))]
-    public string Status { get; set; } = string.Empty;
+    public string Status { get; set; } = TreatmentStatus.Started.ToString();
 
     [RequiredField]
     [EnumValue(typeof(TreatmentType))]
     [Display(Name = nameof(Type), ResourceType = typeof(DisplayNames))]
     public string Type { get; set; } = string.Empty;
 
-    [RequiredField]
     [StringMaxLength(255)]
     [Display(Name = nameof(Observation), ResourceType = typeof(DisplayNames))]
     public string Observation { get; set; } = string.Empty;
 
-    [RequiredField]
     [StringMaxLength(50)]
     [Display(Name = nameof(ExternalProtocol), ResourceType = typeof(DisplayNames))]
     public string ExternalProtocol { get; set; } = string.Empty;

@@ -57,6 +57,7 @@ public class TreatmentsService(
         var call = await unitOfWork.CallsRepository
                        .FindOneAsync(findOneCallParams) 
                    ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
+        treatment.Call = call;
         var callStatus = call.CallStatus!;
         var user = await unitOfWork.UsersRepository
                        .FindOneAsync(
@@ -77,7 +78,7 @@ public class TreatmentsService(
         unitOfWork.CallsStatusesRepository.Update(callStatus);
         await CreateNotification(
             treatment.Id ?? Guid.Empty, 
-            ((TreatmentProps)parameters.Props).UserId ?? Guid.Empty, 
+            call.UserId ?? Guid.Empty, 
             Titles.TREATMENTS_STARTED, 
             message, 
             NotificationType.Info);
@@ -152,6 +153,7 @@ public class TreatmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var treatment = await FindOneAsync(parameters);
+        await RemoveNotifications(parameters.Id);
         unitOfWork.TreatmentsRepository.Delete(treatment);
         await unitOfWork.Commit(transaction);
     }
@@ -175,5 +177,21 @@ public class TreatmentsService(
             });
         await unitOfWork.NotificationsRepository
             .CreateAsync(notification);
+    }
+
+    private async Task RemoveNotifications(Guid treatmentId)
+    {
+        var findManyParams = new FindManyRepositoryParams
+        {
+            FindManyProps =
+            new NotificationProps { TreatmentId = treatmentId }
+        };
+        var notifications = await unitOfWork
+            .NotificationsRepository
+            .FindManyAsync(findManyParams);
+        if (notifications.Any())
+        {
+            unitOfWork.NotificationsRepository.DeleteMany(notifications);
+        }
     }
 }

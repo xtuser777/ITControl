@@ -5,11 +5,9 @@ using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
 using ITControl.Domain.Appointments.Entities;
-using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Appointments.Props;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
-using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
@@ -59,6 +57,7 @@ public class AppointmentsService(
                 Id = ((AppointmentProps)parameters.Props).CallId ?? Guid.Empty
             })  
             ?? throw new NotFoundException(Errors.CALL_NOT_FOUND);
+        appointment.Call = call;
         var user = await unitOfWork.UsersRepository.FindOneAsync(
             new FindOneRepositoryParams
             {
@@ -98,7 +97,7 @@ public class AppointmentsService(
             ((AppointmentProps)parameters.Props).ScheduledIn);
         await CreateNotification(
             appointment.Id,
-            user.Id,
+            call.UserId,
             Titles.APPOINTMENTS_UPDATED,
             message,
             NotificationType.Info);
@@ -109,6 +108,7 @@ public class AppointmentsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var appointment = await FindOneAsync(parameters);
+        await RemoveNotifications(parameters.Id);
         unitOfWork.AppointmentsRepository.Delete(appointment);
         await unitOfWork.Commit(transaction);
     }
@@ -131,5 +131,20 @@ public class AppointmentsService(
                 AppointmentId = referenceId
             });
         await unitOfWork.NotificationsRepository.CreateAsync(notification);
+    }
+
+    private async Task RemoveNotifications(Guid appointmentId)
+    {
+        var findManyParams = new FindManyRepositoryParams
+        {
+            FindManyProps =
+            new NotificationProps { AppointmentId = appointmentId }
+        };
+        var notifications = await unitOfWork.NotificationsRepository
+            .FindManyAsync(findManyParams);
+        if (notifications.Any())
+        {
+            unitOfWork.NotificationsRepository.DeleteMany(notifications);
+        }
     }
 }

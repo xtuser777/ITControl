@@ -17,7 +17,15 @@ public record ShowTreatmentsParams
             Id = parameters.Id,
             Includes = new IncludesTreatmentsParams()
             {
-                Call = parameters.IncludeCall,
+                Call = new IncludesTreatmentsCallParams 
+                { 
+                    User = new IncludesTreatmentsCallUserParams 
+                    { 
+                        Department = parameters.IncludeCall, 
+                        Unit = parameters.IncludeCall, 
+                        Division = parameters.IncludeCall 
+                    } 
+                },
                 User = parameters.IncludeUser
             }
         };

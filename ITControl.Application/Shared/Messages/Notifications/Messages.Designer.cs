@@ -61,7 +61,7 @@ namespace ITControl.Application.Shared.Messages.Notifications {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a O agendamento foi criado para o chamado {0} por {1} para {2} às (3}..
+        ///   Consulta uma cadeia de caracteres localizada semelhante a O agendamento foi criado para o chamado {0} por {1} para {2} às {3}..
         /// </summary>
         internal static string APPOINTMENTS_CREATED {
             get {
