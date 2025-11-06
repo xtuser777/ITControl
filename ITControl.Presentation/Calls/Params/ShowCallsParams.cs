@@ -22,7 +22,13 @@ public record ShowCallsParams
             Id = param.Id,
             Includes = new IncludesCallsParams()
             {
-                User = param.IncludeUser,
+                User = new ()
+                {
+                    Unit = param.IncludeUser,
+                    Position = param.IncludeUser,
+                    Department = param.IncludeUser,
+                    Division = param.IncludeUser,
+                },
                 Equipment = param.IncludeEquipment,
                 System = param.IncludeSystem
             }

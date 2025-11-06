@@ -38,7 +38,7 @@ public class CallsController(
 
     [HttpGet("{id:guid}")]
     [ProducesResponseType(
-        typeof(Shared.Responses.FindOneResponse<FindOneCallsResponse?>), StatusCodes.Status200OK)]
+        typeof(FindOneResponse<FindOneCallsResponse?>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
@@ -65,9 +65,9 @@ public class CallsController(
         if (call != null)
         {
             var count = await notificationsService
-                .CountUnreadAsync((Guid)call.UserId!);
+                .CountUnreadAsync(@params.UserId);
             await webSocketService.EchoAsync(
-                call.UserId.ToString()!, 
+                @params.UserId.ToString(), 
                 count.ToString());
         }
         var url = $"/calls/{data?.Id}";
@@ -76,14 +76,21 @@ public class CallsController(
 
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(
+        typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
     public async Task<IActionResult> DeleteAsync(
         [AsParameters] DeleteCallsParams @params)
     {
         await callsService.DeleteAsync(@params);
+        var count = await notificationsService
+                .CountUnreadAsync(@params.UserId);
+        await webSocketService.EchoAsync(
+            @params.UserId.ToString(),
+            count.ToString());
         return NoContent();
     }
 }

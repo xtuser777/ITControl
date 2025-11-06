@@ -43,6 +43,11 @@ public class NotificationsRepository(
         context.Notifications.Update(notification);
     }
 
+    public void DeleteMany(IEnumerable<Notification> notifications)
+    {
+        context.Notifications.RemoveRange(notifications);
+    }
+
     public Task<int> CountAsync(Entity parameters)
     {
         query = context.Notifications.AsNoTracking();

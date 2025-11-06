@@ -50,7 +50,6 @@ public class CreateSupplementsMovementsRequest
     [Display(Name = nameof(DepartmentId), ResourceType = typeof(DisplayNames))]
     public Guid DepartmentId { get; set; }
 
-    [RequiredField]
     [GuidValue]
     [DivisionConnection]
     [Display(Name = nameof(DivisionId), ResourceType = typeof(DisplayNames))]

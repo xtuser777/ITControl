@@ -49,7 +49,10 @@ public class CallsRepository(
 
     public Task<int> CountAsync(Entity parameters)
     {
-        query = context.Calls.AsNoTracking();
+        query = context.Calls
+            .Include(c => c.CallStatus)
+            .Include(c => c.User)
+            .AsNoTracking();
         BuildQuery(parameters);
         return query.CountAsync();
     }

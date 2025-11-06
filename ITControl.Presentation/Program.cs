@@ -151,7 +151,6 @@ builder.Services.AddAuthorization();
 builder.Services.AddMvc(options =>
 {
     options.Filters.Add(typeof(ExceptionFilter));
-    //options.Filters.Add(typeof(PermissionsFilter));
 });
 
 builder.Services.AddHttpContextAccessor();

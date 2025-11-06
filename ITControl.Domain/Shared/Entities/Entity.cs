@@ -34,7 +34,8 @@ public abstract class Entity
                 case nameof(UpdatedAt):
                     continue;
                 default:
-                    prop.SetValue(this, prop.GetValue(entity));
+                    if (prop.GetValue(entity) is not null)
+                        prop.SetValue(this, prop.GetValue(entity));
                     break;
             }
         }

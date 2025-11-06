@@ -42,8 +42,8 @@ public record CreateContractsRequest
             ObjectName = request.ObjectName,
             StartedAt = request.StartedAt,
             EndedAt = request.EndedAt,
-            ContractContacts = request.Contacts
+            ContractContacts = [.. request.Contacts
                 .Select(c => new ContractContact(
-                    Guid.Empty, c))
+                    Guid.Empty, c))]
         };
 }

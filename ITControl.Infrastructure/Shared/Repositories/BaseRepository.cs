@@ -56,16 +56,53 @@ public abstract class BaseRepository
         if (@params is null) return;
         foreach (var property in @params.GetType().GetProperties())
         {
-            var value = property.GetValue(@params);
-            if (value is null) continue;
-            query = property.PropertyType == typeof(string) 
-                ? query.Where(x => 
-                    EF.Property<string>(x!, property.Name).Contains((string)value)) 
-                : property.Name.StartsWith("Exclude") 
-                ? query.Where(x => 
-                    EF.Property<object>(x!, property.Name.Remove(0, 7)) != value)
-                : query.Where(x => 
+            if (property.PropertyType == typeof(string))
+            {
+                var value = property.GetValue(@params);
+                if (value is null) continue;
+                if (property.Name.StartsWith("Exclude"))
+                {
+                    query = query.Where(x =>
+                    EF.Property<object>(x!, property.Name.Remove(0, 7)) != value);
+                }
+                else 
+                {
+                    query = query.Where(x =>
+                    EF.Property<string>(x!, property.Name).Contains((string)value));
+                }
+            }
+            else if (property.PropertyType.FullName!.StartsWith("ITControl"))
+            {
+                var value = property.GetValue(@params);
+                if (value is null) continue;
+                foreach (var subProperty in value.GetType().GetProperties())
+                {
+                    var subValue = subProperty.GetValue(property.GetValue(@params));
+                    if (subValue is null) continue;
+                    if (subProperty.PropertyType == typeof(string))
+                    {
+                        query = query.Where(x =>
+                        EF.Property<string>(
+                            EF.Property<object>(x!, property.Name), subProperty.Name)
+                        .Contains((string)subValue));
+                    }
+                    else
+                    {
+                        query = query.Where(x =>
+                        EF.Property<object>(
+                            EF.Property<object>(x!, property.Name), 
+                            subProperty.Name) == subValue);
+                    }
+                }
+            }
+            else
+            {
+                var value = property.GetValue(@params);
+                if (value is null) continue;
+                query = query.Where(x =>
                     EF.Property<object>(x!, property.Name) == value);
+            }
+
         }
     }
 

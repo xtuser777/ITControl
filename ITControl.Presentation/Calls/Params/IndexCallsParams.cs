@@ -47,7 +47,11 @@ public record IndexCallsParams : PaginationParams
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
             CallStatus = new CallStatus
             {
-                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status)
+                Id = null,
+                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
+                Description = null,
+                CreatedAt = null,
+                UpdatedAt = null,
             },
             UserId = request.UserId,
         };
@@ -61,7 +65,11 @@ public record IndexCallsParams : PaginationParams
             Reason = Parser.ToEnumOptional<CallReason>(request.Reason),
             CallStatus = new CallStatus
             {
-                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status)
+                Id = null,
+                Status = Parser.ToEnumOptional<Domain.Calls.Enums.CallStatus>(request.Status),
+                Description = null,
+                CreatedAt = null,
+                UpdatedAt = null,
             },
             UserId = request.UserId,
         };

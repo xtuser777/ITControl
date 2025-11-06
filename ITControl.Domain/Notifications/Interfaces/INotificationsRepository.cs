@@ -5,4 +5,5 @@ namespace ITControl.Domain.Notifications.Interfaces;
 
 public interface INotificationsRepository : IRepository<Notification>
 {
+    void DeleteMany(IEnumerable<Notification> notifications);
 }

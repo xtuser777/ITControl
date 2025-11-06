@@ -12,13 +12,12 @@ public class CryptService(IConfiguration configuration) : ICryptService
         var saltBytes = Convert.FromBase64String(salt);
         var iterations = int.Parse(configuration["Hash:Iterations"]!);
         var size = int.Parse(configuration["Hash:Size"]!);
-        Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(
+        var pbkdf2 = new Rfc2898DeriveBytes(
             password,
             saltBytes,
             iterations,
             HashAlgorithmName.SHA256 // Or other hash algorithm used
         );
-
         var key = pbkdf2.GetBytes(size);
         
         return Convert.ToBase64String(key);
@@ -34,7 +33,6 @@ public class CryptService(IConfiguration configuration) : ICryptService
     public bool VerifyHashedPassword(string hashedPassword, string password)
     {
         var encryptedData = Convert.FromBase64String(hashedPassword);
-
         var keyStr = HashPassword(password);
         var key = Convert.FromBase64String(keyStr);
 

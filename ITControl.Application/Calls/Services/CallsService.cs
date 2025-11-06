@@ -12,6 +12,7 @@ using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
+using ITControl.Domain.Shared.Params;
 using ITControl.Domain.Users.Params;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
@@ -75,6 +76,7 @@ public class CallsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var call = await FindOneAsync(parameters);
+        await RemoveNotifications(parameters.Id);
         unitOfWork.CallsStatusesRepository.Delete(call.CallStatus!);
         unitOfWork.CallsRepository.Delete(call);
         await unitOfWork.Commit(transaction);
@@ -110,5 +112,17 @@ public class CallsService(
             await unitOfWork.NotificationsRepository
                 .CreateAsync(notification);
         }
+    }
+
+    private async Task RemoveNotifications(Guid callId)
+    {
+        var findManyParams = new FindManyRepositoryParams 
+        { 
+            FindManyProps = 
+            new NotificationProps { CallId = callId } 
+        };
+        var notifications = await unitOfWork.NotificationsRepository
+            .FindManyAsync(findManyParams);
+        unitOfWork.NotificationsRepository.DeleteMany(notifications);
     }
 }
