@@ -23,7 +23,6 @@ public record UpdateEquipmentsRequest
     [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string? Description { get; set; }
 
-    [StringMinLength(15)]
     [StringMaxLength(15)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
@@ -31,7 +30,6 @@ public record UpdateEquipmentsRequest
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string? Ip { get; set; }
 
-    [StringMinLength(17)]
     [StringMaxLength(17)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 

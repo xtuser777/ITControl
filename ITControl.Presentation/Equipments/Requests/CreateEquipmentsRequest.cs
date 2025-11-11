@@ -22,7 +22,6 @@ public record CreateEquipmentsRequest
     [Display(Name = nameof(Description), ResourceType = typeof(DisplayNames))]
     public string Description { get; set; } = string.Empty;
 
-    [RequiredField]
     [StringMaxLength(15)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
@@ -30,7 +29,6 @@ public record CreateEquipmentsRequest
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
     public string Ip { get; set; } = string.Empty;
 
-    [RequiredField]
     [StringMaxLength(17)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 

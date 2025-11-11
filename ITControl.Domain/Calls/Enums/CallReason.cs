@@ -11,10 +11,14 @@ public enum CallReason
     SystemsUsersPermissions = 2,
     [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.SoftwareInstallation))]
     SoftwareInstallation = 3,
+    [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.SoftwareIssue))]
+    SoftwareIssue = 8,
     [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.Network))]
     Network = 4,
     [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.Printer))]
     Printer = 5,
+    [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.Hardware))]
+    Hardware = 6,
     [DisplayValue(typeof(CallsReasons), nameof(CallsReasons.Other))]
-    Other = 6,
+    Other = 7,
 }

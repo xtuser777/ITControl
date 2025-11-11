@@ -21,7 +21,7 @@ public class UniqueFieldAttribute<TEntity> : ValidationAttribute
 
     protected override ValidationResult? IsValid(object? value, ValidationContext context)
     {
-        if (value is null)
+        if (value is null || (string)value == "")
         {
             return ValidationResult.Success;
         }

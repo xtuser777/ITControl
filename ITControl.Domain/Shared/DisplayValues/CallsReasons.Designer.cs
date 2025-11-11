@@ -61,6 +61,15 @@ namespace ITControl.Domain.Shared.DisplayValues {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Problemas relacionados a peças ou periféricos de computador.
+        /// </summary>
+        internal static string Hardware {
+            get {
+                return ResourceManager.GetString("Hardware", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Problemas relacionados à internet.
         /// </summary>
         internal static string Network {
@@ -93,6 +102,15 @@ namespace ITControl.Domain.Shared.DisplayValues {
         internal static string SoftwareInstallation {
             get {
                 return ResourceManager.GetString("SoftwareInstallation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Problemas relacionados ao funcionamento de programas..
+        /// </summary>
+        internal static string SoftwareIssue {
+            get {
+                return ResourceManager.GetString("SoftwareIssue", resourceCulture);
             }
         }
         
