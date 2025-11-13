@@ -26,8 +26,8 @@ public record CreateRolesRequest
         {
             Name = request.Name,
             Active = true,
-            RolesPages = request.RolesPages
+            RolesPages = [.. request.RolesPages
                 .Select(p => new RolePage(
-                    Guid.Empty, p.PageId)) as ICollection<RolePage>
+                    Guid.Empty, p.PageId))]
         };
 }

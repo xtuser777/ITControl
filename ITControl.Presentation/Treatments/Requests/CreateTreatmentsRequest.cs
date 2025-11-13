@@ -2,6 +2,7 @@
 using ITControl.Domain.Treatments.Enums;
 using ITControl.Domain.Treatments.Params;
 using ITControl.Domain.Treatments.Props;
+using ITControl.Presentation.Calls.Requests;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
 
@@ -52,17 +53,18 @@ public class CreateTreatmentsRequest
     [Display(Name = nameof(ExternalProtocol), ResourceType = typeof(DisplayNames))]
     public string ExternalProtocol { get; set; } = string.Empty;
 
-    [RequiredField]
     [GuidValue]
     [CallConnection]
     [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
-    public Guid CallId { get; set; }
+    public Guid? CallId { get; set; }
 
     [RequiredField]
     [GuidValue]
     [UserConnection]
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
+
+    public CreateCallsRequest? Call { get; set; }
 
     public static implicit operator TreatmentProps(
         CreateTreatmentsRequest request) =>

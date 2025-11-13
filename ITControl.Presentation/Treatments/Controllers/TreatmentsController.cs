@@ -75,6 +75,22 @@ public class TreatmentsController(
     public async Task<IActionResult> CreateAsync(
         [AsParameters] CreateTreatmentsParams parameters)
     {
+        if (parameters.CreateTreatmentsRequest.CallId == null)
+        {
+            if (parameters.CreateTreatmentsRequest.Call != null)
+            {
+                var createParams = new CreateServiceParams
+                {
+                    Props = parameters.CreateTreatmentsRequest.Call,
+                };
+                var call = await callsService.CreateAsync(createParams);
+                parameters.CreateTreatmentsRequest.CallId = call?.Id;
+            }
+            else
+            {
+                throw new ArgumentException("Either CallId or Call must be provided.");
+            }
+        }
         var treatment = await treatmentsService.CreateAsync(parameters);
         var data = treatmentsView.Create(treatment);
         var uri = $"/treatments/{treatment?.Id}";
