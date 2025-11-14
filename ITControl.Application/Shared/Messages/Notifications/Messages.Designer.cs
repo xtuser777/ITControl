@@ -70,6 +70,15 @@ namespace ITControl.Application.Shared.Messages.Notifications {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Você tem um agendamento de atendimeento para {0}.
+        /// </summary>
+        internal static string APPOINTMENTS_REMINDER {
+            get {
+                return ResourceManager.GetString("APPOINTMENTS_REMINDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a O agendamento foi atualizado para o chamado {0} por {1} para {2} às {3}..
         /// </summary>
         internal static string APPOINTMENTS_UPDATED {

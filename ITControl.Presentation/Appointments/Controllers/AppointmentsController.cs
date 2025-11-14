@@ -8,6 +8,7 @@ using ITControl.Domain.Appointments.Params;
 using ITControl.Presentation.Appointments.Interfaces;
 using ITControl.Presentation.Appointments.Params;
 using ITControl.Presentation.Appointments.Responses;
+using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Filters;
 using ITControl.Presentation.Shared.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,12 +50,24 @@ namespace ITControl.Presentation.Appointments.Controllers
         [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
-        public async Task<IActionResult> FindOneAsync(
+        public async Task<IActionResult> ShowAsync(
             [AsParameters] ShowAppointmentsParams @params)
         {
             var appointment = await appointmentsService.FindOneAsync(@params);
             var data = appointmentsView.FindOne(appointment);
             return Ok(new { Data = data });
+        }
+
+        [HttpGet("check-todays")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status403Forbidden)]
+        public async Task<IActionResult> CheckTodaysAsync([ModelBinder(BinderType = typeof(UserIdAttribute))] Guid userId)
+        {
+            await appointmentsService.CheckTodaysAsync(userId);
+            return NoContent();
         }
 
         [HttpPost]

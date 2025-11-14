@@ -61,6 +61,15 @@ namespace ITControl.Application.Shared.Messages.Notifications {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Agendamento de atendimento próximo.
+        /// </summary>
+        internal static string APPOINTMENTS_REMINDER {
+            get {
+                return ResourceManager.GetString("APPOINTMENTS_REMINDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Novo agendamento criado.
         /// </summary>
         internal static string APPOINTMENTS_STARTED {

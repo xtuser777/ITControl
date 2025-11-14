@@ -135,4 +135,7 @@
   <data name="TREATMENTS_FINISHED" xml:space="preserve">
     <value>O atendimento com o protocolo {0} foi finalizado para o chamado {1} por {2}.</value>
   </data>
+  <data name="APPOINTMENTS_REMINDER" xml:space="preserve">
+    <value>Você tem um agendamento de atendimeento para {0}</value>
+  </data>
 </root>

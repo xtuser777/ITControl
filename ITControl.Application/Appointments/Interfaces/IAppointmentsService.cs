@@ -15,4 +15,5 @@ public interface IAppointmentsService
     Task<Appointment?> CreateAsync(CreateServiceParams @params);
     Task UpdateAsync(UpdateServiceParams @params);
     Task DeleteAsync(DeleteServiceParams @params);
+    Task CheckTodaysAsync(Guid userId);
 }

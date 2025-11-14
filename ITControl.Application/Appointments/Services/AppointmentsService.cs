@@ -124,6 +124,47 @@ public class AppointmentsService(
         await unitOfWork.Commit(transaction);
     }
 
+    public async Task CheckTodaysAsync(Guid userId)
+    {
+        var findManyParams = new FindManyRepositoryParams
+        {
+            FindManyProps = new FindManyAppointmentsParams 
+            {
+                UserId = userId,
+                ScheduledAt = DateOnly.FromDateTime(DateTime.Now)
+            }
+        };
+        var appointments = 
+            await unitOfWork.AppointmentsRepository.FindManyAsync(
+                findManyParams);
+        foreach (var appointment in appointments)
+        {
+            var message = string.Format(
+                    Messages.APPOINTMENTS_REMINDER,
+                appointment.ScheduledIn);
+            var existsNotificationsParams = new FindManyRepositoryParams
+            {
+                FindManyProps = new NotificationProps
+                {
+                    AppointmentId = appointment.Id,
+                    UserId = appointment.UserId,
+                    Title = Titles.APPOINTMENTS_REMINDER,
+                    Message = message,
+                }
+            };
+            var existingNotifications = await unitOfWork
+                .NotificationsRepository
+                .FindManyAsync(existsNotificationsParams);
+            if (!existingNotifications.Any())
+                await CreateNotification(
+                    appointment.Id,
+                    appointment.UserId,
+                    Titles.APPOINTMENTS_REMINDER,
+                    message,
+                    NotificationType.Warning);
+        }
+    }
+
     private async Task CreateNotification(
         Guid? referenceId,
         Guid? userId,
