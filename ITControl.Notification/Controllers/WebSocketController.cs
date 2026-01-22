@@ -3,7 +3,7 @@ using ITControl.Application.Notifications.Interfaces;
 using ITControl.Application.Shared.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ITControl.Presentation.Shared.Controllers;
+namespace ITControl.Notification.Controllers;
 
 [ApiExplorerSettings(IgnoreApi = true)]
 public class WebSocketController(

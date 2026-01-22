@@ -1,0 +1,6 @@
+@ITControl.Notification_HostAddress = http://localhost:5039
+
+GET {{ITControl.Notification_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
