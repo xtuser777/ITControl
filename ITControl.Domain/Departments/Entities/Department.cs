@@ -4,7 +4,12 @@ namespace ITControl.Domain.Departments.Entities;
 
 public class Department : DepartmentProps
 {
-    public Department() { }
+    public Department()
+    {
+        Id = Guid.NewGuid();
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
+    }
 
     public Department(DepartmentProps @params)
     {

@@ -4,7 +4,12 @@ namespace ITControl.Domain.Pages.Entities;
 
 public class Page : PageProps
 {
-    public Page() {}
+    public Page() 
+    {
+        Id = Guid.NewGuid();
+        CreatedAt = DateTime.Now;
+        UpdatedAt = DateTime.Now;
+    }
 
     public Page(PageProps props)
     {

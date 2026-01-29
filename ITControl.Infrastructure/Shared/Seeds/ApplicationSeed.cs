@@ -34,7 +34,7 @@ public class ApplicationSeed
             new Page { Name = "units", DisplayName = "Unidades" },
             new Page { Name = "contracts", DisplayName = "Contratos" },
             new Page { Name = "equipments", DisplayName = "Equipamentos" },
-            new Page { Name = "systems", DisplayName = "Systemas" },
+            new Page { Name = "systems", DisplayName = "Sistemas" },
             new Page { Name = "calls", DisplayName = "Chamados" },
             new Page { Name = "appointments", DisplayName = "Agendamentos" },
             new Page { Name = "treatments", DisplayName = "Atendimentos" },
@@ -50,7 +50,19 @@ public class ApplicationSeed
         _rolesPages = _pages.Select(p => new RolePage(
             _roles[0].Id, p.Id)).ToList();
         _positions = [
-            new Position { Name = "Analista de Sistemas" }
+            new Position { Name = "Analista de Sistemas" },
+            new Position { Name = "Técnico de TI" },
+            new Position { Name = "Monitor(a) de Informática" },
+            new Position { Name = "Auxiliar Administrativo" },
+            new Position { Name = "Secretário(a)" },
+            new Position { Name = "Subsecretário(a)" },
+            new Position { Name = "Coordenador(a)" },
+            new Position { Name = "Estagiário(a)" },
+            new Position { Name = "Emfermeiro(a)" },
+            new Position { Name = "Médico(a)" },
+            new Position { Name = "Dentista" },
+            new Position { Name = "ACS" },
+            new Position { Name = "Serviços Gerais" },
         ];
         _units = [
             new(new()
@@ -144,15 +156,396 @@ public class ApplicationSeed
                 Alias = "GABINETE",
                 Name = "Gabinete do Prefeito",
             },
+            new Department
+            {
+                Alias = "OUVIDORIA",
+                Name = "Ouvidoria Geral do Município",
+            },
+            new Department
+            {
+                Alias = "CONSELHOS",
+                Name = "Conselhos Municipais",
+            },
         ];
         _divisions = [
             new(new()
             {
-                Name = "Divisão Municipal de Informática",
+                Name = "Divisão de Tecnologia da Informação",
                 DepartmentId = _departments
                                    .Find(x => x.Alias == "SEMAD")?.Id
                                ?? Guid.Empty
-            })
+            }),
+            new(new()
+            {
+                Name = "Divisão de Patrimônio e Arquivo Público",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAD")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Recursos Humanos",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAD")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Almoxarifado",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAD")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Imprensa e Comunicação Oficial",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEGOV")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Convênios",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEPLAD")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Desenvolvimento Econômico",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEPLAD")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Alimentação Escolar",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão Administrativa de Educação",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Educação Infantil",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Educação Especial",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Ensino Fundamental",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Transporte Escolar",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Formação",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEDUC")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Controle de Vetores",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão Administrativa de Saúde",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Enfermagem",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Enfermagem ESFs",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de ESF",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Saúde Bucal",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão Técnica da Saúde",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Vigilância Sanitária",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Vigilância Epidemiológica",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Farmácia",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Transporte Sanitário",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Saúde Mental",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMSA")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Manutenção de Vias Públicas e Estradas",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAG")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Transportes e Manutenção de Frotas",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAG")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Limpeza Pública, Manutenção e Limpeza do Balneário",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAG")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão dos Distritos de Ajicê e Gardênia",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAG")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Cultura",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SECULT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Turismo",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SECULT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Assistência Social",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEACT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Vigilância Socioassistencial, Cadastro Único e Bolsa Família",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEACT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Proteção Social Básica - CRAS",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEACT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Proteção Social Especial - CREAS",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEACT")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Esportes e Lazer",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMEL")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Arrecadação",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEFAZ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Compras",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEFAZ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Fiscalização",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEFAZ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Contabilidade",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEFAZ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Cadastro Imobiliário Urbano e Rural",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEFAZ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "PROCON",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAJ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "PROCURADORIA DO MUNICÍPIO",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAJ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Licitação",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAJ")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Produção, Abastecimento e Comercialização - Agronegócios",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAM")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Meio Ambiente e Micro Bacias",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAM")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Defesa Animal",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SEMAM")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Defesa Civil, Corpo de Bombeiros e Vigilância",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SMSP")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Mobilidade Urbana",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SMSP")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Guarda Civil",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SMSP")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Planejamento Urbano, Habitação e Fiscalização de Obras Públicas",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SOURB")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Equipamentos Públicos Urbanos e Comunitários",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SOURB")?.Id
+                               ?? Guid.Empty
+            }),
+            new(new()
+            {
+                Name = "Divisão de Serviços de Água e Esgoto",
+                DepartmentId = _departments
+                                   .Find(x => x.Alias == "SOURB")?.Id
+                               ?? Guid.Empty
+            }),
         ];
         _users = [
             new(new()
