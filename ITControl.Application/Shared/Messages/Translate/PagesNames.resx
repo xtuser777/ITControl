@@ -165,11 +165,11 @@
   <data name="Profile" xml:space="preserve">
     <value>Perfil do usuário</value>
   </data>
-  <data name="Supplements" xml:space="preserve">
-    <value>Suplementos</value>
+  <data name="Supplies" xml:space="preserve">
+    <value>Suprimentos</value>
   </data>
-  <data name="SupplementsMovements" xml:space="preserve">
-    <value>Movimentos de Suplementos</value>
+  <data name="SuppliesMovements" xml:space="preserve">
+    <value>Movimentos de Suprimentos</value>
   </data>
   <data name="KnowledgeBases" xml:space="preserve">
     <value>Bases de Conhecimento</value>

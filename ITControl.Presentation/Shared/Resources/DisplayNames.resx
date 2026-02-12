@@ -267,8 +267,8 @@
   <data name="StreetName" xml:space="preserve">
     <value>logradouro</value>
   </data>
-  <data name="SupplementId" xml:space="preserve">
-    <value>suplemento</value>
+  <data name="SupplyId" xml:space="preserve">
+    <value>suprimento</value>
   </data>
   <data name="SystemId" xml:space="preserve">
     <value>sistema</value>

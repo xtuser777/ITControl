@@ -28,8 +28,8 @@ public class UsersEquipmentsRepository(
     public async Task DeleteManyByUserAsync(User user)
     {
         var ues = await context.UsersEquipments
+            .AsQueryable()
             .Where(x => x.UserId == user.Id)
-            .ToListAsync();
-        context.UsersEquipments.RemoveRange(ues);
+            .ExecuteDeleteAsync();
     }
 }

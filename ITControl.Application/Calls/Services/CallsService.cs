@@ -4,6 +4,7 @@ using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Messages.Notifications;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
+using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Calls.Entities;
 using ITControl.Domain.Calls.Props;
 using ITControl.Domain.Notifications.Entities;
@@ -13,6 +14,7 @@ using ITControl.Domain.Roles.Params;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
 using ITControl.Domain.Shared.Params;
+using ITControl.Domain.Treatments.Params;
 using ITControl.Domain.Users.Params;
 using CallStatus = ITControl.Domain.Calls.Entities.CallStatus;
 
@@ -76,6 +78,7 @@ public class CallsService(
     {
         await using var transaction = unitOfWork.BeginTransaction;
         var call = await FindOneAsync(parameters);
+        await CheckDependenciesAsync(call.Id ?? Guid.Empty);
         await RemoveNotifications(parameters.Id);
         unitOfWork.CallsStatusesRepository.Delete(call.CallStatus!);
         unitOfWork.CallsRepository.Delete(call);
@@ -127,6 +130,42 @@ public class CallsService(
         if (notifications.Any())
         {
             unitOfWork.NotificationsRepository.DeleteMany(notifications);
+        }
+    }
+
+    private async Task CheckDependenciesAsync(Guid callId)
+    {
+        await CheckAppointmentDependenciesAsync(callId);
+        await CheckTreatmentDependenciesAsync(callId);
+    }
+
+    private async Task CheckAppointmentDependenciesAsync(
+        Guid callId)
+    {
+        var appointmentCount = await unitOfWork.AppointmentsRepository
+            .CountAsync(new FindManyAppointmentsParams
+            {
+                CallId = callId
+            });
+        if (appointmentCount > 0)
+        {
+            throw new BadRequestException(
+                $"O chamado tem {appointmentCount} agendamentos");
+        }
+    }
+
+    private async Task CheckTreatmentDependenciesAsync(
+        Guid callId)
+    {
+        var treatmentCount = await unitOfWork.TreatmentsRepository
+            .CountAsync(new FindManyTreatmentsParams
+            {
+                CallId = callId
+            });
+        if (treatmentCount > 0)
+        {
+            throw new BadRequestException(
+                $"O chamado possui {treatmentCount} atendimentos");
         }
     }
 }

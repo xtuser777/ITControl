@@ -213,10 +213,10 @@
   <data name="USER_LOGGED_ID_EQUALS" xml:space="preserve">
     <value>Não é permitido remover a si mesmo</value>
   </data>
-  <data name="SUPPLEMENT_NOT_FOUND" xml:space="preserve">
-    <value>Suplemento não encontrado</value>
+  <data name="SUPPLY_NOT_FOUND" xml:space="preserve">
+    <value>Suprimento não encontrado</value>
   </data>
-  <data name="SupplementMovimentNotFound" xml:space="preserve">
+  <data name="SupplyMovimentNotFound" xml:space="preserve">
     <value>Movimento de suprimento não encontrado.</value>
   </data>
   <data name="KnowledgeBaseNotFound" xml:space="preserve">

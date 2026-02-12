@@ -27,22 +27,21 @@ public record CreateEquipmentsRequest
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Ip), ResourceType = typeof(DisplayNames))]
-    public string Ip { get; set; } = string.Empty;
+    public string? Ip { get; set; }
 
     [StringMaxLength(17)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Mac), ResourceType = typeof(DisplayNames))]
-    public string Mac { get; set; } = string.Empty;
+    public string? Mac { get; set; }
 
-    [RequiredField]
     [StringMaxLength(50)]
     [UniqueField<Equipment>(
         typeof(IEquipmentsRepository), 
         typeof(ExistsEquipmentsParams))]
     [Display(Name = nameof(Tag), ResourceType = typeof(DisplayNames))]
-    public string Tag { get; set; } = string.Empty;
+    public string? Tag { get; set; }
 
     [RequiredField]
     [EnumValue(typeof(EquipmentType))]

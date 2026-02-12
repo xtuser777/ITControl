@@ -4,6 +4,7 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Domain.Calls.Entities;
+using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Treatments.Params;
 using ITControl.Presentation.Shared.Filters;
 using ITControl.Presentation.Shared.Responses;
@@ -109,6 +110,13 @@ public class TreatmentsController(
         });
     }
 
+    [HttpPost("clone")]
+    public async Task<IActionResult> CloneAsync([FromBody] CloneTreatmentsParams parameters)
+    {
+        await treatmentsService.CloneAsync(parameters.Id);
+        return NoContent();
+    }
+
     [HttpPut("{id:guid}")]
     [ProducesResponseType(typeof(void), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(ErrorJsonResponse), StatusCodes.Status400BadRequest)]
@@ -158,16 +166,17 @@ public class TreatmentsController(
                 Call = new IncludesTreatmentsCallParams()
             } 
         };
-        var treatment = await treatmentsService.FindOneAsync(findOneParams);
-        if (treatment != null) 
+        var userId = parameters.UserId;
+        if (webSocketService.ContainsKey(userId.ToString()))
         {
-            var userId = ((Call)treatment.Call!).UserId ?? Guid.Empty;
-            if (webSocketService.ContainsKey(userId.ToString()))
-            {
-                var count = await notificationsService.CountUnreadAsync(userId);
-                await webSocketService.EchoAsync(userId.ToString(), count.ToString());
-            }
+            var count = await notificationsService.CountUnreadAsync(userId);
+            await webSocketService.EchoAsync(userId.ToString(), count.ToString());
         }
         return NoContent();
     }
+}
+
+public record CloneTreatmentsParams
+{
+    public Guid Id { get; set; }
 }

@@ -19,7 +19,7 @@ namespace ITControl.Application.Shared.Messages.Translate {
     // através de uma ferramenta como ResGen ou Visual Studio.
     // Para adicionar ou remover um associado, edite o arquivo .ResX e execute ResGen novamente
     // com a opção /str, ou recrie o projeto do VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class PagesNames {
@@ -178,20 +178,20 @@ namespace ITControl.Application.Shared.Messages.Translate {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Suplementos.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Suprimentos.
         /// </summary>
-        public static string Supplements {
+        public static string Supplies {
             get {
-                return ResourceManager.GetString("Supplements", resourceCulture);
+                return ResourceManager.GetString("Supplies", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Movimentos de Suplementos.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Movimentos de Suprimentos.
         /// </summary>
-        public static string SupplementsMovements {
+        public static string SuppliesMovements {
             get {
-                return ResourceManager.GetString("SupplementsMovements", resourceCulture);
+                return ResourceManager.GetString("SuppliesMovements", resourceCulture);
             }
         }
         

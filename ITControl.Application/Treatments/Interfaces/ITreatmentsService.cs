@@ -13,6 +13,7 @@ public interface ITreatmentsService
         FindManyPaginationServiceParams parameters);
     Task<Treatment?> CreateAsync(
         CreateServiceParams parameters);
+    Task CloneAsync(Guid id);
     Task UpdateAsync(
         UpdateServiceParams parameters);
     Task DeleteAsync(DeleteServiceParams parameters);

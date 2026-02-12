@@ -27,8 +27,8 @@ public class RolesPagesRepository(ApplicationDbContext context) : IRolesPagesRep
     public async Task DeleteManyByRoleAsync(Role role)
     {
         var rps = await context.RolesPages
+            .AsQueryable()
             .Where(x => x.RoleId == role.Id)
-            .ToListAsync();
-        context.RolesPages.RemoveRange(rps);
+            .ExecuteDeleteAsync();
     }
 }

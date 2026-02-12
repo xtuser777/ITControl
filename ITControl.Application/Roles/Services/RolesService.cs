@@ -7,6 +7,7 @@ using ITControl.Domain.Roles.Entities;
 using ITControl.Domain.Roles.Props;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
+using System.Runtime.CompilerServices;
 
 namespace ITControl.Application.Roles.Services;
 
@@ -72,8 +73,28 @@ public class RolesService(IUnitOfWork unitOfWork) : IRolesService
         DeleteServiceParams parameters)
     {
         var role = await FindOneAsync(parameters);
+        await CheckDependenciesAsync(role.Id ?? Guid.Empty);
         await using var transaction = unitOfWork.BeginTransaction;
+        await unitOfWork.RolesPagesRepository.DeleteManyByRoleAsync(role);
         unitOfWork.RolesRepository.Delete(role);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckDependenciesAsync(Guid roleId)
+    {
+        await CheckUserDependenciesAsync(roleId);
+    }
+
+    private async Task CheckUserDependenciesAsync(Guid roleId)
+    {
+        var users = await unitOfWork.UsersRepository
+            .CountAsync(new Domain.Users.Props.UserProps
+            {
+                RoleId = roleId
+            });
+        if (users > 0)
+        {
+            throw new BadRequestException($"O perfil possui vínculo com {users} usuários");
+        }
     }
 }

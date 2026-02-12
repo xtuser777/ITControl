@@ -11,9 +11,9 @@ public class EquipmentConfiguration : IEntityTypeConfiguration<Equipment>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Name).HasMaxLength(100).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(255).IsRequired();
-        builder.Property(x => x.Ip).HasMaxLength(15).IsRequired();
-        builder.Property(x => x.Mac).HasMaxLength(17).IsRequired();
-        builder.Property(x => x.Tag).HasMaxLength(15).IsRequired();
+        builder.Property(x => x.Ip).HasMaxLength(15).IsRequired(false);
+        builder.Property(x => x.Mac).HasMaxLength(17).IsRequired(false);
+        builder.Property(x => x.Tag).HasMaxLength(15).IsRequired(false);
         builder.Property(x => x.Type).IsRequired();
         builder.Property(x=> x.Rented).IsRequired();
         builder.Property(x => x.CreatedAt).IsRequired();

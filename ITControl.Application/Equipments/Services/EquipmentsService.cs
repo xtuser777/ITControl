@@ -3,8 +3,8 @@ using ITControl.Application.Shared.Interfaces;
 using ITControl.Application.Shared.Messages;
 using ITControl.Application.Shared.Params;
 using ITControl.Application.Shared.Tools;
+using ITControl.Domain.Calls.Params;
 using ITControl.Domain.Equipments.Entities;
-using ITControl.Domain.Equipments.Params;
 using ITControl.Domain.Equipments.Props;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
@@ -64,8 +64,41 @@ public class EquipmentsService(IUnitOfWork unitOfWork) : IEquipmentsService
         DeleteServiceParams parameters)
     {
         var equipment = await FindOneAsync(parameters);
+        await CheckDependenciesAsync(equipment.Id ?? Guid.Empty);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.EquipmentsRepository.Delete(equipment);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckDependenciesAsync(Guid equipmentId)
+    {
+        await CheckCallDependenciesAsync(equipmentId);
+        await CheckUserEquipmentDependenciesAsync(equipmentId);
+    }
+
+    private async Task CheckCallDependenciesAsync(Guid equipmentId)
+    {
+        var callCount = await unitOfWork.CallsRepository
+            .CountAsync(new FindManyCallsParams
+            {
+                EquipmentId = equipmentId
+            });
+        if (callCount > 0)
+        {
+            throw new BadRequestException(
+                $"O equipamento tem {callCount} chamados");
+        }
+    }
+
+    private async Task CheckUserEquipmentDependenciesAsync(Guid equipmentId)
+    {
+        var usersEquipments = await unitOfWork
+            .UsersEquipmentsRepository
+            .FindManyAsync(equipmentId: equipmentId);
+        if (usersEquipments.Any())
+        {
+            throw new BadRequestException(
+                $"O equipamento tem vínculo com {usersEquipments.Count()} usuários");
+        }
     }
 }

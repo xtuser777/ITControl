@@ -60,8 +60,27 @@ public class PositionsService(IUnitOfWork unitOfWork) : IPositionsService
     public async Task DeleteAsync(DeleteServiceParams parameters)
     {
         var position = await FindOneAsync(parameters);
+        await CheckDependenciesAsync(position.Id ?? Guid.Empty);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PositionsRepository.Delete(position);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckDependenciesAsync(Guid positionId)
+    {
+        await CheckUserDependenciesAsync(positionId);
+    }
+
+    private async Task CheckUserDependenciesAsync(Guid positionId)
+    {
+        var users = await unitOfWork.UsersRepository
+            .CountAsync(new Domain.Users.Props.UserProps
+            {
+                PositionId = positionId
+            });
+        if (users > 0)
+        {
+            throw new BadRequestException($"O cargo possui vínculo com {users} usuários");
+        }
     }
 }

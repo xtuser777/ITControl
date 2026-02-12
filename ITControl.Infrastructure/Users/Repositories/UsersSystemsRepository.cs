@@ -28,8 +28,8 @@ public class UsersSystemsRepository(
     public async Task DeleteManyByUserAsync(User user)
     {
         var uss = await context.UsersSystems
+            .AsQueryable()
             .Where(x => x.UserId == user.Id)
-            .ToListAsync();
-        context.UsersSystems.RemoveRange(uss);
+            .ExecuteDeleteAsync();
     }
 }

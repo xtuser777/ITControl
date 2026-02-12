@@ -24,8 +24,8 @@ public abstract class PagesTranslator
             "treatments" => PagesNames.Treatments,
             "notifications" => PagesNames.Notifications,
             "profile" => PagesNames.Profile,
-            "supplements" => PagesNames.Supplements,
-            "supplements-movements" => PagesNames.SupplementsMovements,
+            "supplies" => PagesNames.Supplies,
+            "supplies-movements" => PagesNames.SuppliesMovements,
             "knowledge-bases" => PagesNames.KnowledgeBases,
             _ => value,
         };

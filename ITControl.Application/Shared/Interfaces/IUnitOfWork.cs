@@ -9,8 +9,8 @@ using ITControl.Domain.Notifications.Interfaces;
 using ITControl.Domain.Pages.Interfaces;
 using ITControl.Domain.Positions.Interfaces;
 using ITControl.Domain.Roles.Interfaces;
-using ITControl.Domain.Supplements.Interfaces;
-using ITControl.Domain.SupplementsMovements.Interfaces;
+using ITControl.Domain.Supplies.Interfaces;
+using ITControl.Domain.SuppliesMovements.Interfaces;
 using ITControl.Domain.Systems.Interfaces;
 using ITControl.Domain.Treatments.Interfaces;
 using ITControl.Domain.Units.Interfaces;
@@ -43,8 +43,8 @@ public interface IUnitOfWork
     ITreatmentsRepository TreatmentsRepository { get; }
     IAppointmentsRepository AppointmentsRepository { get; }
     INotificationsRepository NotificationsRepository { get; }
-    ISupplementsRepository SupplementsRepository { get; }
-    ISupplementsMovementsRepository SupplementsMovementsRepository { get; }
+    ISuppliesRepository SuppliesRepository { get; }
+    ISuppliesMovementsRepository SuppliesMovementsRepository { get; }
     IKnowledgeBasesRepository KnowledgeBasesRepository { get; }
     Task Commit(IDbContextTransaction transaction);
     void Dispose();

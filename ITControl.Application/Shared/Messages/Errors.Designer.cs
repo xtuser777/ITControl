@@ -19,7 +19,7 @@ namespace ITControl.Application.Shared.Messages {
     // através de uma ferramenta como ResGen ou Visual Studio.
     // Para adicionar ou remover um associado, edite o arquivo .ResX e execute ResGen novamente
     // com a opção /str, ou recrie o projeto do VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Errors {
@@ -277,20 +277,20 @@ namespace ITControl.Application.Shared.Messages {
         }
         
         /// <summary>
-        ///   Consulta uma cadeia de caracteres localizada semelhante a Suplemento não encontrado.
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Suprimento não encontrado.
         /// </summary>
-        internal static string SUPPLEMENT_NOT_FOUND {
+        internal static string SUPPLY_NOT_FOUND {
             get {
-                return ResourceManager.GetString("SUPPLEMENT_NOT_FOUND", resourceCulture);
+                return ResourceManager.GetString("SUPPLY_NOT_FOUND", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Movimento de suprimento não encontrado..
         /// </summary>
-        internal static string SupplementMovimentNotFound {
+        internal static string SupplyMovimentNotFound {
             get {
-                return ResourceManager.GetString("SupplementMovimentNotFound", resourceCulture);
+                return ResourceManager.GetString("SupplyMovimentNotFound", resourceCulture);
             }
         }
         

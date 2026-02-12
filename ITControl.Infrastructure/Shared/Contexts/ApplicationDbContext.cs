@@ -9,8 +9,8 @@ using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Pages.Entities;
 using ITControl.Domain.Positions.Entities;
 using ITControl.Domain.Roles.Entities;
-using ITControl.Domain.Supplements.Entities;
-using ITControl.Domain.SupplementsMovements.Entities;
+using ITControl.Domain.Supplies.Entities;
+using ITControl.Domain.SuppliesMovements.Entities;
 using ITControl.Domain.Treatments.Entities;
 using ITControl.Domain.Units.Entities;
 using ITControl.Domain.Users.Entities;
@@ -41,8 +41,8 @@ public class ApplicationDbContext(
     public DbSet<Treatment> Treatments { get; set; }
     public DbSet<Appointment> Appointments { get; set; }
     public DbSet<Notification> Notifications { get; set; }
-    public DbSet<Supplement> Supplements { get; set; }
-    public DbSet<SupplementMovement> SupplementsMovements { get; set; }
+    public DbSet<Supply> Supplies { get; set; }
+    public DbSet<SupplyMovement> SuppliesMovements { get; set; }
     public DbSet<KnowledgeBase> KnowledgeBases { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)

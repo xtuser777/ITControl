@@ -41,14 +41,14 @@ public class ApplicationSeed
             new Page { Name = "notifications", DisplayName = "Notificações" },
             new Page { Name = "knowledge-bases", DisplayName = "Bases de Conhecimento" },
             new Page { Name = "profile", DisplayName = "Perfil do Usuário" },
-            new Page { Name = "supplements", DisplayName = "Suplementos" },
-            new Page { Name = "supplements-movements", DisplayName = "Movimentos de Suplementos" }
+            new Page { Name = "supplies", DisplayName = "Suprimentos" },
+            new Page { Name = "supplies-movements", DisplayName = "Movimentos de Suprimentos" }
         ];
         _roles = [
             new Role(new() { Name = "Master", Active = true })
         ];
-        _rolesPages = _pages.Select(p => new RolePage(
-            _roles[0].Id, p.Id)).ToList();
+        _rolesPages = [.. _pages.Select(p => new RolePage(
+            _roles[0].Id, p.Id))];
         _positions = [
             new Position { Name = "Analista de Sistemas" },
             new Position { Name = "Técnico de TI" },
@@ -548,7 +548,7 @@ public class ApplicationSeed
             }),
         ];
         _users = [
-            new(new()
+            new()
             {
                 Name = "Informática",
                 Username = configuration["InfoUser:Username"] ?? "",
@@ -556,6 +556,7 @@ public class ApplicationSeed
                 Document = "02912383005",
                 Email = configuration["InfoUser:Email"] ?? "",
                 Enrollment = 9999,
+                Active = true,
                 RoleId = _roles[0].Id,
                 PositionId = _positions[0].Id,
                 UnitId = _units[0].Id,
@@ -563,7 +564,7 @@ public class ApplicationSeed
                                    .Find(x => x.Alias == "SEMAD")?.Id
                                ?? Guid.Empty,
                 DivisionId = _divisions[0].Id,
-            })
+            }
         ];
     }
     

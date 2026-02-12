@@ -1,8 +1,8 @@
-using System.ComponentModel.DataAnnotations;
-using ITControl.Domain.Appointments.Params;
 using ITControl.Domain.Appointments.Props;
+using ITControl.Presentation.Calls.Requests;
 using ITControl.Presentation.Shared.Attributes;
 using ITControl.Presentation.Shared.Resources;
+using System.ComponentModel.DataAnnotations;
 
 namespace ITControl.Presentation.Appointments.Requests;
 
@@ -35,11 +35,12 @@ public record CreateAppointmentsRequest
     [Display(Name = nameof(UserId), ResourceType = typeof(DisplayNames))]
     public Guid UserId { get; set; }
 
-    [RequiredField]
     [GuidValue]
     [CallConnection]
     [Display(Name = nameof(CallId), ResourceType = typeof(DisplayNames))]
-    public Guid CallId { get; set; }
+    public Guid? CallId { get; set; }
+
+    public CreateCallsRequest? Call { get; set; }
 
     public static implicit operator AppointmentProps(
         CreateAppointmentsRequest request) =>

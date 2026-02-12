@@ -79,6 +79,22 @@ namespace ITControl.Presentation.Appointments.Controllers
         public async Task<IActionResult> CreateAsync(
             [AsParameters] CreateAppointmentsParams @params)
         {
+            if (@params.Request.CallId == null)
+            {
+                if (@params.Request.Call != null)
+                {
+                    var createParams = new CreateServiceParams
+                    {
+                        Props = @params.Request.Call,
+                    };
+                    var call = await callsService.CreateAsync(createParams);
+                    @params.Request.CallId = call?.Id;
+                }
+                else
+                {
+                    throw new ArgumentException("Either CallId or Call must be provided.");
+                }
+            }
             var appointment = await appointmentsService.CreateAsync(@params);
             var data = appointmentsView.Create(appointment);
             var uri = $"/appointments/{appointment?.Id}";
@@ -135,13 +151,14 @@ namespace ITControl.Presentation.Appointments.Controllers
         public async Task<IActionResult> DeleteAsync(
             [AsParameters] DeleteAppointmentsParams @params)
         {
-            await appointmentsService.DeleteAsync(@params);
             var findOneParams = new FindOneServiceParams { Id = @params.Id };
             var appointment = await appointmentsService.FindOneAsync(findOneParams);
+            var callId = appointment!.CallId;
+            await appointmentsService.DeleteAsync(@params);
             var call = await callsService.FindOneAsync(
                 new FindOneServiceParams
                 {
-                    Id = (Guid)appointment.CallId!
+                    Id = (Guid)callId!
                 });
             if (call is not null)
             {

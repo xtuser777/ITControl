@@ -538,7 +538,7 @@ namespace ITControl.Infrastructure.Shared.Migrations
                     b.ToTable("RolesPages");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.Supplements.Entities.Supplement", b =>
+            modelBuilder.Entity("ITControl.Domain.Supplies.Entities.Supply", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -568,10 +568,10 @@ namespace ITControl.Infrastructure.Shared.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Supplements", (string)null);
+                    b.ToTable("Supplies", (string)null);
                 });
 
-            modelBuilder.Entity("ITControl.Domain.SupplementsMovements.Entities.SupplementMovement", b =>
+            modelBuilder.Entity("ITControl.Domain.SuppliesMovements.Entities.SupplyMovement", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -597,7 +597,7 @@ namespace ITControl.Infrastructure.Shared.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("SupplementId")
+                    b.Property<Guid>("SupplyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("UnitId")
@@ -615,13 +615,13 @@ namespace ITControl.Infrastructure.Shared.Migrations
 
                     b.HasIndex("DivisionId");
 
-                    b.HasIndex("SupplementId");
+                    b.HasIndex("SupplyId");
 
                     b.HasIndex("UnitId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SupplementsMovements", (string)null);
+                    b.ToTable("SuppliesMovements", (string)null);
                 });
 
             modelBuilder.Entity("ITControl.Domain.Systems.Entities.System", b =>
@@ -1072,7 +1072,7 @@ namespace ITControl.Infrastructure.Shared.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("ITControl.Domain.SupplementsMovements.Entities.SupplementMovement", b =>
+            modelBuilder.Entity("ITControl.Domain.SuppliesMovements.Entities.SupplyMovement", b =>
                 {
                     b.HasOne("ITControl.Domain.Departments.Entities.Department", "Department")
                         .WithMany()
@@ -1085,9 +1085,9 @@ namespace ITControl.Infrastructure.Shared.Migrations
                         .HasForeignKey("DivisionId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("ITControl.Domain.Supplements.Entities.Supplement", "Supplement")
+                    b.HasOne("ITControl.Domain.Supplies.Entities.Supply", "Supply")
                         .WithMany()
-                        .HasForeignKey("SupplementId")
+                        .HasForeignKey("SupplyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -1107,7 +1107,7 @@ namespace ITControl.Infrastructure.Shared.Migrations
 
                     b.Navigation("Division");
 
-                    b.Navigation("Supplement");
+                    b.Navigation("Supply");
 
                     b.Navigation("Unit");
 

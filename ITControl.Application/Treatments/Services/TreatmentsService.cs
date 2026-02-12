@@ -6,6 +6,7 @@ using ITControl.Application.Shared.Tools;
 using ITControl.Application.Treatments.Interfaces;
 using ITControl.Domain.Notifications.Entities;
 using ITControl.Domain.Notifications.Enums;
+using ITControl.Domain.Notifications.Params;
 using ITControl.Domain.Notifications.Props;
 using ITControl.Domain.Shared.Entities;
 using ITControl.Domain.Shared.Exceptions;
@@ -86,6 +87,29 @@ public class TreatmentsService(
         await unitOfWork.Commit(transaction);
 
         return treatment;
+    }
+
+    public async Task CloneAsync(Guid id)
+    {
+        await using var transaction = unitOfWork.BeginTransaction;
+        var findOneParams = new FindOneServiceParams
+        {
+            Id = id,
+        };
+        var treatment = await FindOneAsync(findOneParams);
+        var protocolCount = await unitOfWork.TreatmentsRepository.CountAsync(
+            new TreatmentProps
+                {
+                    CallId = treatment.CallId,
+                    Protocol = treatment.Protocol
+                });
+        var cloneTreatment = new Treatment(treatment)
+        {
+            Protocol = $"{treatment.Protocol}-{protocolCount}",
+            Description = $"{treatment.Description} (Duplicado)"
+        };
+        await unitOfWork.TreatmentsRepository.CreateAsync(cloneTreatment);
+        await unitOfWork.Commit(transaction);
     }
 
     public async Task UpdateAsync(

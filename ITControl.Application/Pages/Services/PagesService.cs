@@ -62,8 +62,23 @@ public class PagesService(IUnitOfWork unitOfWork) : IPagesService
         DeleteServiceParams parameters)
     {
         var page = await FindOneAsync(parameters);
+        await CheckDependenciesAsync(page.Id ?? Guid.Empty);
         await using var transaction = unitOfWork.BeginTransaction;
         unitOfWork.PagesRepository.Delete(page);
         await unitOfWork.Commit(transaction);
+    }
+
+    private async Task CheckDependenciesAsync(Guid pageId)
+    {
+        await CheckRolePageDependenciesAsync(pageId);
+    }
+
+    private async Task CheckRolePageDependenciesAsync(Guid pageId)
+    {
+        var rolesPages = await unitOfWork.RolesPagesRepository.FindManyAsync(pageId: pageId);
+        if (rolesPages.Any())
+        {
+            throw new BadRequestException($"A página possui vínculo com {rolesPages} perfis");
+        }
     }
 }

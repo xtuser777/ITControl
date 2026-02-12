@@ -27,10 +27,10 @@ using ITControl.Presentation.Roles.Interfaces;
 using ITControl.Presentation.Roles.Views;
 using ITControl.Presentation.Shared.Converters;
 using ITControl.Presentation.Shared.Filters;
-using ITControl.Presentation.Supplements.Interfaces;
-using ITControl.Presentation.Supplements.Views;
-using ITControl.Presentation.SupplementsMovements.Interfaces;
-using ITControl.Presentation.SupplementsMovements.Views;
+using ITControl.Presentation.Supplies.Interfaces;
+using ITControl.Presentation.Supplies.Views;
+using ITControl.Presentation.SuppliesMovements.Interfaces;
+using ITControl.Presentation.SuppliesMovements.Views;
 using ITControl.Presentation.Systems.Interfaces;
 using ITControl.Presentation.Systems.Views;
 using ITControl.Presentation.Treatments.Interfaces;
@@ -128,9 +128,9 @@ builder.Services.AddScoped<ITreatmentsTypesView, TreatmentsTypesView>();
 builder.Services.AddScoped<INotificationsView, NotificationsView>();
 builder.Services.AddScoped<INotificationsTypesView, NotificationsTypesView>();
 builder.Services.AddScoped<INotificationsReferencesView, NotificationsReferencesView>();
-builder.Services.AddScoped<ISupplementsView, SupplementsView>();
-builder.Services.AddScoped<ISupplementsTypesView, SupplementsTypesView>();
-builder.Services.AddScoped<ISupplementsMovementsView, SupplementsMovementsView>();
+builder.Services.AddScoped<ISuppliesView, SuppliesView>();
+builder.Services.AddScoped<ISuppliesTypesView, SuppliesTypesView>();
+builder.Services.AddScoped<ISuppliesMovementsView, SuppliesMovementsView>();
 builder.Services.AddScoped<IKnowledgeBasesView, KnowledgeBasesView>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
